@@ -1,2 +1,2 @@
 include versioneer.py
-include _event_model_version.py
+include event_model/_version.py

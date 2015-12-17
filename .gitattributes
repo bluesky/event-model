@@ -1,2 +1,1 @@
-_event_schema_version.py export-subst
-_event_model_version.py export-subst
+event_model/_version.py export-subst

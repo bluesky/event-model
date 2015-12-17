@@ -10,12 +10,12 @@ for more on jsonschema.
 
 ## Usage
 
-The schemas are packaged with Python API. (In the future, they will probably be
-packaged for other languaged. Get in touch if you are interested in this.)
+The schemas are packaged with a Python API. (In the future, they will probably
+be packaged for other languages. Get in touch if you are interested in this.)
 Because of its use of the new Enum type, this package requires Python 3.4+.
 
-There are two variables in the public API, an ``Enum`` called ``DocumentNames``
-and a dictionary called ``schemas`` that is keyed on the values of
+There are two variables in the public API, an Enum called ``DocumentNames`` and
+a dictionary called ``schemas`` that is keyed on the values of
 ``DocumentNames``.
 
 ```python
@@ -42,6 +42,6 @@ Out[2]:
  'type': 'object'}
 ```
 
-Use it is conjunction with the
+Use it in conjunction with the
 [jsonschema](https://pypi.python.org/pypi/jsonschema) package to validate
 documents in Python.
