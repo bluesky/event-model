@@ -5,7 +5,7 @@ data model used at NSLS-II. Other projects in the organization use this model;
 it is their common way of organizing event-based data.
 
 See [this page of the NSLS-II
-documentation](nsls-ii.github.io/architecture-overview.html) for an illustrated
+documentation](https://nsls-ii.github.io/architecture-overview.html) for an illustrated
 overview of the model.
 
 The documents are specified using jsonschema. See this
