@@ -12,6 +12,12 @@ The documents are specified using jsonschema. See this
 [excellent tutorial](http://spacetelescope.github.io/understanding-json-schema/)
 for more on jsonschema.
 
+## Conda Recipes
+
+[tag](https://github.com/NSLS-II/lightsource2-recipes/tree/master/recipes-tag/event-model)
+
+[dev](https://github.com/NSLS-II/lightsource2-recipes/tree/master/recipes-dev/event-model)
+
 ## Usage
 
 The schemas are packaged with a Python API. (In the future, they will probably
