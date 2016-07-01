@@ -14,9 +14,11 @@ for more on jsonschema.
 
 ## Conda Recipes
 
-[tag](https://github.com/NSLS-II/lightsource2-recipes/tree/master/recipes-tag/event-model)
+Install the most recent tagged build: `conda install event-model -c lightsource2-tag`
 
-[dev](https://github.com/NSLS-II/lightsource2-recipes/tree/master/recipes-dev/event-model)
+Install the most recent tagged build: `conda install event-model -c lightsource2-dev`
+
+Find the tagged recipe [here](https://github.com/NSLS-II/lightsource2-recipes/tree/master/recipes-tag/event-model) and the dev recipe [here](https://github.com/NSLS-II/lightsource2-recipes/tree/master/recipes-dev/event-model)
 
 ## Usage
 
