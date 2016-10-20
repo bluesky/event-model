@@ -29,6 +29,9 @@
             "description": "Unix owner to associate this data with"
         }
     },
+    "patternProperties": {
+        "^([^\.]+)$": { "type": ["object", "integer", "string", "number", "array"] }},
+    "additionalProperties": false,
     "required": [
         "uid",
         "time"

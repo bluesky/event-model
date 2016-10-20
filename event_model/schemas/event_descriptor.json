@@ -62,6 +62,9 @@
                 "description": "Creation time of the document as unix epoch time."
             }
         },
+        "patternProperties": {
+            "^([^\.]+)$": { "type": ["object", "integer", "string", "number", "array"] }},
+        "additionalProperties": false,
         "required": [
             "uid",
             "data_keys",
