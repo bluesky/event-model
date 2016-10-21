@@ -63,7 +63,7 @@
             }
         },
         "patternProperties": {
-            "^([^\.]+)$": { "type": ["object", "integer", "string", "number", "array"] }},
+            "^([^\.]+)$": {}},
         "additionalProperties": false,
         "required": [
             "uid",
