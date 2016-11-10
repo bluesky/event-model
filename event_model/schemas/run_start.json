@@ -2,8 +2,8 @@
     "definitions": {
         "data_type": {
             "title" : "data_type",
-            "patternProperties": {"^([^\.]+)$": {"$ref": "#/definitions/data_type"}},
-            "additionalProperties": false,
+            "patternProperties": {"^([^.]+)$": {"$ref": "#/definitions/data_type"}},
+            "additionalProperties": false
         }
     },
     "properties": {
@@ -37,7 +37,7 @@
         }
     },
     "patternProperties": {
-        "^([^\.]+)$": {"$ref": "#/definitions/data_type"}},
+        "^([^.]+)$": {"$ref": "#/definitions/data_type"}},
     "additionalProperties": false,
     "required": [
         "uid",
