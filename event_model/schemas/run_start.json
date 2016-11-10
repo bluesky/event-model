@@ -1,4 +1,11 @@
 {
+    "definitions": {
+        "data_type": {
+            "title" : "data_type",
+            "patternProperties": {"^([^\.]+)$": {"$ref": "#/definitions/data_type"}},
+            "additionalProperties": false,
+        }
+    },
     "properties": {
         "project": {
             "type": "string",
@@ -30,7 +37,7 @@
         }
     },
     "patternProperties": {
-        "^([^\.]+)$": {}},
+        "^([^\.]+)$": {"$ref": "#/definitions/data_type"}},
     "additionalProperties": false,
     "required": [
         "uid",
