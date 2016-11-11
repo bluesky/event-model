@@ -1,4 +1,11 @@
 {
+    "definitions": {
+        "data_type": {
+            "title" : "data_type",
+            "patternProperties": {"^([^.]+)$": {"$ref": "#/definitions/data_type"}},
+            "additionalProperties": false
+        }
+    },
     "properties": {
         "project": {
             "type": "string",
@@ -29,6 +36,9 @@
             "description": "Unix owner to associate this data with"
         }
     },
+    "patternProperties": {
+        "^([^.]+)$": {"$ref": "#/definitions/data_type"}},
+    "additionalProperties": false,
     "required": [
         "uid",
         "time"
