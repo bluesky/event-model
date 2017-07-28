@@ -1,2 +1,3 @@
 include versioneer.py
 include event_model/_version.py
+include event_model/schemas/*.json
