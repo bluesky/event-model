@@ -27,6 +27,12 @@
         "uid": {
             "type": "string",
             "description": "Globally unique ID for tihs run"
+        },
+        "num_events": {
+            "type": "object",
+            "properties": {},
+            "additionalProperties": { "type": "integer" },
+            "description": "Number of Events per named stream"
         }
     },
     "patternProperties": {
