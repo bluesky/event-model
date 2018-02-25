@@ -12,6 +12,8 @@ class DocumentNames(Enum):
     descriptor = 'descriptor'
     event = 'event'
     bulk_events = 'bulk_events'
+    datum = 'datum'
+    resource = 'resource'
 
 
 SCHEMA_PATH = 'schemas'
@@ -19,7 +21,9 @@ SCHEMA_NAMES = {DocumentNames.start: 'schemas/run_start.json',
                 DocumentNames.stop: 'schemas/run_stop.json',
                 DocumentNames.event: 'schemas/event.json',
                 DocumentNames.bulk_events: 'schemas/bulk_events.json',
-                DocumentNames.descriptor: 'schemas/event_descriptor.json'}
+                DocumentNames.descriptor: 'schemas/event_descriptor.json',
+                DocumentNames.datum: 'schemas/datum.json',
+                DocumentNames.resource: 'schemas/resource.json'}
 schemas = {}
 for name, filename in SCHEMA_NAMES.items():
     with open(rs_fn('event_model', filename)) as fin:
