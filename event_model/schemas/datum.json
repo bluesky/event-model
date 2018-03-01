@@ -1,0 +1,25 @@
+{
+    "properties": {
+        "datum_kwargs": {
+            "type": "object",
+            "description": "Arguments to pass to the Handler to retrieve one quanta of data"
+        },
+        "resource": {
+            "type": "string",
+            "description": "The UID of the Resource to which this Datum belongs"
+        },
+        "datum_id": {
+            "type": "string",
+            "description": "Globally unique identifier for this Datum (akin to 'uid' for other Document types), typically formatted as '<resource>/<integer>'"
+        }
+    },
+    "required": [
+        "datum_kwargs",
+        "resource",
+        "datum_id"
+    ],
+    "additionalProperties": false,
+    "type": "object",
+    "title": "datum",
+    "description": "Document to reference a quanta of externally-stored data"
+}
