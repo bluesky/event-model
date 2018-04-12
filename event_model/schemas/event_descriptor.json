@@ -21,6 +21,7 @@
                         "description": "Where the data is stored if it is stored external to the events."
                     },
                     "shape": {
+                        "type": "array",
                         "items": {
                             "type": "integer"
                         },
