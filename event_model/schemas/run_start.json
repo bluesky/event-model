@@ -34,6 +34,41 @@
         "owner": {
             "type": "string",
             "description": "Unix owner to associate this data with"
+        },
+        "hints": {
+            "type": "object",
+            "description": "Start-level hints",
+            "properties": {
+                "dimensions": {
+                    "type": "array",
+                    "description": "The indepented axes of the experiment.  Ordered slow to fast",
+                    "items": {
+                        "type": "array",
+                        "description": "Each entry in this list is of the from ([<FIELD>, ...], <STREAM>).  A 1d scan will have 1 such entry, a scan with 3 independent entries would have 3",
+                        "items": [
+                            {
+                                "type": "array",
+                                "description": "The data key(s) for the given dimension.",
+                                "items":
+                                {
+                                    "type": "string"
+                                }
+                            },
+                            {
+                                "type": "string",
+                                "description": "The stream to find the datakeys in."
+
+                            }
+                        ],
+                        "additionalItems": false,
+                        "minItems": 2
+
+                    }
+                }
+            },
+            "patternProperties": {
+                "^([^.]+)$": {"$ref": "#/definitions/data_type"}},
+            "additionalProperties": false
         }
     },
     "patternProperties": {
