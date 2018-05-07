@@ -21,6 +21,7 @@
                         "description": "Where the data is stored if it is stored external to the events."
                     },
                     "shape": {
+                        "type": "array",
                         "items": {
                             "type": "integer"
                         },
@@ -42,6 +43,24 @@
                 "title" : "data_type",
                 "patternProperties": {"^([^./]+)$": {"$ref": "#/definitions/data_type"}},
                 "additionalProperties": false
+            },
+            "object_hints": {
+                "title": "Object Hints",
+                "patternProperties": {"^([^./]+)$": {"$ref": "#/definitions/per_object_hint"}},
+                "additionalProperties": false
+            },
+            "per_object_hint": {
+                "type": "object",
+                "properties": {
+                    "fields":
+                    {
+                        "description": "The 'interesting' data keys for this device.",
+                        "type": "array",
+                        "items":{
+                            "type": "string"
+                        }
+                    }
+                }
             }
         },
         "properties": {
@@ -65,6 +84,9 @@
             "time": {
                 "type": "number",
                 "description": "Creation time of the document as unix epoch time."
+            },
+            "hints": {
+                "$ref": "#/definitions/object_hints"
             }
         },
         "patternProperties": {
