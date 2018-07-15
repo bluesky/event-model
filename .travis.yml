@@ -13,6 +13,6 @@ script:
   - set -e
   - pushd doc
   - make html
-  - popd doc
+  - popd
   - pip install doctr
   - doctr deploy --deploy-repo NSLS-II/NSLS-II.github.io --deploy-branch-name master event-model
