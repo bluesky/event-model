@@ -1,0 +1,15 @@
+env:
+  global:
+    # Doctr deploy key for NSLS-II/event-model
+    - secure: "NC/84xDgjGDIQ2EboQDkWsTp9Smk1DwzyNytAFFAlMRnZwKk6pjOV06nTNAJC4kYn0TuS0nsboRl/aKSNrf+zJn5zn4EpZ4xEVOwQqzZ6GSZjBcnFYaPh3g34lVCu7Ukn/OnMg/qPxfqWZiSyBST/CB33otlVB0tdk7G01ufOLd3MzR7ynu33DJ/RWbFEmqGrNl+0AdSs7tYHYTugd4ZHhBgD0fbYIckGQxADxOKZ+SDn/c2LQDXwtiv/SJUB6h4oV2jnTisEDfa214j/6jM1+TYJuB6fIWYaUoOkuMvkynkXfEwe4EMXCS7ALitMMbF17Tny0MFGviKnplG4v/Eku0hN3kRtapaSDcP/LpfOkQDtDrVDOLIEz9EtCvae00xXenVBU2L/I+dIH17zQuXoqqNmRMNUlH2Otmy0X0NfUQAoTTQvTqffE+N8GpGvcGvrfj/ztBuc/wga5gzMFPRpVP15/KyjzVuod45zSTeck833DZSHjnDR6goQ48Pj4jZ9IYH1gDs+98ofsc0omUYzBwL3b+HJrCEVl+5g9CpJ5nEK724lxJdL0aSbFjyohLiJpg+a56uSBj1op4gGd0dLFsaH289EPI68jCNiHNYEd1iLwr2QGG1IsqO3AXoCvF5HOOjCiVtq9B0STrDdoZMqHE1C3EeCgAer47JdMou0k4="
+
+install:
+  - pip install -r dev-requirements.txt
+
+script:
+  - set -e
+  - pushd doc
+  - make html
+  - popd doc
+  - pip install doctr
+  - doctr deploy --deploy-repo NSLS-II/NSLS-II.github.io --deploy-branch-name master event-model

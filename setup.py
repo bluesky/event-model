@@ -1,7 +1,6 @@
 import versioneer
 from setuptools import setup
 
-
 setup(name='event_model',
       packages=['event_model'],
       author='Brookhaven National Laboratory',
