@@ -87,6 +87,10 @@
             },
             "hints": {
                 "$ref": "#/definitions/object_hints"
+            },
+            "name": {
+                "type": "string",
+                "description": "A human-friendly name for this data stream, such as 'primary' or 'baseline'."
             }
         },
         "patternProperties": {
