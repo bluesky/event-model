@@ -41,4 +41,4 @@
     "type": "object",
     "title": "event",
     "description": "Document to record a quanta of collected data"
-}:
+}
