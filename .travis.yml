@@ -1,0 +1,18 @@
+language: python
+python:
+  - 3.6
+
+cache:
+  directories:
+    - $HOME/.cache/pip
+    - $HOME/.ccache  # https://github.com/travis-ci/travis-ci/issues/5853
+
+install:
+  # Install this package and the packages listed in requirements.txt.
+  - pip install .
+  # Install extra requirements for running tests
+  - pip install codecov coverage flake8 pytest
+
+script:
+  - coverage run -m pytest  # Run the tests and check for test coverage.
+  - flake8 --max-line-length=115  # Enforce code style (but relax line length limit a bit).
