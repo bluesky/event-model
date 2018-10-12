@@ -1,7 +1,7 @@
 import json
 from enum import Enum
 from pkg_resources import resource_filename as rs_fn
-
+from ._version import get_versions
 
 __all__ = ['DocumentNames', 'schemas']
 
@@ -29,6 +29,5 @@ for name, filename in SCHEMA_NAMES.items():
     with open(rs_fn('event_model', filename)) as fin:
         schemas[name] = json.load(fin)
 
-from ._version import get_versions
 __version__ = get_versions()['version']
 del get_versions

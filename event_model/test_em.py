@@ -1,5 +1,6 @@
 import event_model
 
+
 def test_documents():
     dn = event_model.DocumentNames
     for k in ('stop', 'start', 'descriptor',
