@@ -32,7 +32,7 @@
                         "items": {
                             "type": "string"
                         },
-                        "description": "The names for dimensions of the data. Null and empty list if scalar data"
+                        "description": "The names for dimensions of the data. Null or empty list if scalar data"
                     },
                     "source": {
                         "type": "string",
