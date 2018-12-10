@@ -1,3 +1,4 @@
+from collections import namedtuple
 import json
 import jsonschema
 from enum import Enum
@@ -46,6 +47,14 @@ for name, filename in SCHEMA_NAMES.items():
 __version__ = get_versions()['version']
 del get_versions
 
+CreateRunBundle = namedtuple('CreateRunBundle',
+                             'start_doc create_desriptor create_resource create_stop')
+CreateDescriptorBundle = namedtuple('CreateDescriptorBundle',
+                                    'descriptor_doc create_event')
+CreateResourceBundle = namedtuple('CreateResourceBundle',
+                                  'resource_doc create_datum')
+
+
 
 def create_datum(*, resource, counter, datum_kwargs, validate=True):
     resource_uid = resource['uid']
@@ -71,8 +80,9 @@ def create_resource(*, start, spec, root, resource_path, resource_kwargs,
            'path_semantics': path_semantics}
     if validate:
         jsonschema.validate(DocumentNames.resource, doc)
-    return (doc,
-            partial(create_datum, resource=doc, counter=counter))
+    return CreateResourceBundle(
+        doc,
+        partial(create_datum, resource=doc, counter=counter))
 
 
 def create_stop(*, start, event_counter, poison_pill,
@@ -162,8 +172,9 @@ def create_descriptor(*, start, streams, event_counter,
     if name not in streams:
         streams[name] = set(data_keys)
         event_counter[name] = 0
-    return (doc,
-            partial(create_event, descriptor=doc, event_counter=event_counter))
+    return CreateDescriptorBundle(
+        doc,
+        partial(create_event, descriptor=doc, event_counter=event_counter))
 
 
 def create_run(*, uid=None, time=None, metadata=None, validate=True):
@@ -194,8 +205,9 @@ def create_run(*, uid=None, time=None, metadata=None, validate=True):
     poison_pill = []
     if validate:
         jsonschema.validate(DocumentNames.start, doc)
-    return (doc,
-            partial(create_descriptor, start=doc, streams=streams, event_counter={}),
-            partial(create_resource, start=doc),
-            partial(create_stop, start=doc, event_counter=event_counter,
-                    poison_pill=poison_pill))
+    return CreateRunBundle(
+        doc,
+        partial(create_descriptor, start=doc, streams=streams, event_counter={}),
+        partial(create_resource, start=doc),
+        partial(create_stop, start=doc, event_counter=event_counter,
+                poison_pill=poison_pill))
