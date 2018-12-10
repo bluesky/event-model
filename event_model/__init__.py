@@ -48,12 +48,12 @@ __version__ = get_versions()['version']
 del get_versions
 
 ComposeRunBundle = namedtuple('ComposeRunBundle',
-                             'start_doc compose_descriptor compose_resource compose_stop')
+                              'start_doc compose_descriptor compose_resource '
+                              'compose_stop')
 ComposeDescriptorBundle = namedtuple('ComposeDescriptorBundle',
-                                    'descriptor_doc compose_event')
+                                     'descriptor_doc compose_event')
 ComposeResourceBundle = namedtuple('ComposeResourceBundle',
-                                  'resource_doc compose_datum')
-
+                                   'resource_doc compose_datum')
 
 
 def compose_datum(*, resource, counter, datum_kwargs, validate=True):
@@ -67,7 +67,7 @@ def compose_datum(*, resource, counter, datum_kwargs, validate=True):
 
 
 def compose_resource(*, start, spec, root, resource_path, resource_kwargs,
-                    path_semantics=os.name, uid=None, validate=True):
+                     path_semantics=os.name, uid=None, validate=True):
     if uid is None:
         uid = str(uuid.uuid4())
     counter = itertools.count()
@@ -86,9 +86,9 @@ def compose_resource(*, start, spec, root, resource_path, resource_kwargs,
 
 
 def compose_stop(*, start, event_counter, poison_pill,
-                exit_status='success', reason='',
-                uid=None, time=None,
-                validate=True):
+                 exit_status='success', reason='',
+                 uid=None, time=None,
+                 validate=True):
     if poison_pill:
         raise EventModelError("Already composed a RunStop document for run "
                               "{!r}.".format(start['uid']))
@@ -109,7 +109,7 @@ def compose_stop(*, start, event_counter, poison_pill,
 
 
 def compose_event(*, descriptor, event_counter, data, timestamps, seq_num,
-                 filled=None, uid=None, time=None, validate=True):
+                  filled=None, uid=None, time=None, validate=True):
     if uid is None:
         uid = str(uuid.uuid4())
     if time is None:
@@ -140,9 +140,9 @@ def compose_event(*, descriptor, event_counter, data, timestamps, seq_num,
 
 
 def compose_descriptor(*, start, streams, event_counter,
-                      name, data_keys, uid=None, time=None,
-                      object_names=None, configuration=None, hints=None,
-                      validate=True):
+                       name, data_keys, uid=None, time=None,
+                       object_names=None, configuration=None, hints=None,
+                       validate=True):
     if uid is None:
         uid = str(uuid.uuid4())
     if time is None:

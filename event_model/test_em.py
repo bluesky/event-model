@@ -38,13 +38,14 @@ def test_compose_run():
     assert bundle.descriptor_doc is descriptor_doc
     assert bundle.compose_event is compose_event
     bundle = compose_resource(
-    spec='TIFF', root='/tmp', resource_path='stack.tiff', resource_kwargs={})                                                                        
+        spec='TIFF', root='/tmp', resource_path='stack.tiff',
+        resource_kwargs={})
     resource_doc, compose_datum = bundle
     assert bundle.resource_doc is resource_doc
     assert bundle.compose_datum is compose_datum
     datum_doc = compose_datum(datum_kwargs={'slice': 5})
-    event_doc = compose_event(
+    compose_event(
         data={'motor': 0, 'image': datum_doc['datum_id']},
         timestamps={'motor': 0, 'image': 0}, filled={'image': False},
-        seq_num=1)                                          
-    stop_doc = compose_stop()
+        seq_num=1)
+    compose_stop()
