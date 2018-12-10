@@ -10,7 +10,7 @@ import time as ttime
 import uuid
 from ._version import get_versions
 
-__all__ = ['DocumentNames', 'schemas', 'create_run']
+__all__ = ['DocumentNames', 'schemas', 'compose_run']
 
 
 class DocumentNames(Enum):
@@ -47,16 +47,16 @@ for name, filename in SCHEMA_NAMES.items():
 __version__ = get_versions()['version']
 del get_versions
 
-CreateRunBundle = namedtuple('CreateRunBundle',
-                             'start_doc create_desriptor create_resource create_stop')
-CreateDescriptorBundle = namedtuple('CreateDescriptorBundle',
-                                    'descriptor_doc create_event')
-CreateResourceBundle = namedtuple('CreateResourceBundle',
-                                  'resource_doc create_datum')
+ComposeRunBundle = namedtuple('ComposeRunBundle',
+                             'start_doc compose_descriptor compose_resource compose_stop')
+ComposeDescriptorBundle = namedtuple('ComposeDescriptorBundle',
+                                    'descriptor_doc compose_event')
+ComposeResourceBundle = namedtuple('ComposeResourceBundle',
+                                  'resource_doc compose_datum')
 
 
 
-def create_datum(*, resource, counter, datum_kwargs, validate=True):
+def compose_datum(*, resource, counter, datum_kwargs, validate=True):
     resource_uid = resource['uid']
     doc = {'resource': resource_uid,
            'datum_kwargs': datum_kwargs,
@@ -66,7 +66,7 @@ def create_datum(*, resource, counter, datum_kwargs, validate=True):
     return doc
 
 
-def create_resource(*, start, spec, root, resource_path, resource_kwargs,
+def compose_resource(*, start, spec, root, resource_path, resource_kwargs,
                     path_semantics=os.name, uid=None, validate=True):
     if uid is None:
         uid = str(uuid.uuid4())
@@ -80,17 +80,17 @@ def create_resource(*, start, spec, root, resource_path, resource_kwargs,
            'path_semantics': path_semantics}
     if validate:
         jsonschema.validate(DocumentNames.resource, doc)
-    return CreateResourceBundle(
+    return ComposeResourceBundle(
         doc,
-        partial(create_datum, resource=doc, counter=counter))
+        partial(compose_datum, resource=doc, counter=counter))
 
 
-def create_stop(*, start, event_counter, poison_pill,
+def compose_stop(*, start, event_counter, poison_pill,
                 exit_status='success', reason='',
                 uid=None, time=None,
                 validate=True):
     if poison_pill:
-        raise EventModelError("Already created a RunStop document for run "
+        raise EventModelError("Already composed a RunStop document for run "
                               "{!r}.".format(start['uid']))
     poison_pill.append(object())
     if uid is None:
@@ -108,7 +108,7 @@ def create_stop(*, start, event_counter, poison_pill,
     return doc
 
 
-def create_event(*, descriptor, event_counter, data, timestamps, seq_num,
+def compose_event(*, descriptor, event_counter, data, timestamps, seq_num,
                  filled=None, uid=None, time=None, validate=True):
     if uid is None:
         uid = str(uuid.uuid4())
@@ -139,7 +139,7 @@ def create_event(*, descriptor, event_counter, data, timestamps, seq_num,
     return doc
 
 
-def create_descriptor(*, start, streams, event_counter,
+def compose_descriptor(*, start, streams, event_counter,
                       name, data_keys, uid=None, time=None,
                       object_names=None, configuration=None, hints=None,
                       validate=True):
@@ -165,21 +165,24 @@ def create_descriptor(*, start, streams, event_counter,
         jsonschema.validate(DocumentNames.descriptor, doc)
         if name in streams and streams[name] != set(data_keys):
             raise EventModelValidationError(
-                "A descriptor with the name {} has already been created with "
+                "A descriptor with the name {} has already been composed with "
                 "data_keys {}. The requested data_keys were {}. All "
                 "descriptors in a given stream must have the same "
                 "data_keys.".format(name, streams[name], set(data_keys)))
     if name not in streams:
         streams[name] = set(data_keys)
         event_counter[name] = 0
-    return CreateDescriptorBundle(
+    return ComposeDescriptorBundle(
         doc,
-        partial(create_event, descriptor=doc, event_counter=event_counter))
+        partial(compose_event, descriptor=doc, event_counter=event_counter))
 
 
-def create_run(*, uid=None, time=None, metadata=None, validate=True):
+def compose_run(*, uid=None, time=None, metadata=None, validate=True):
     """
-    Create a RunStart document and factory functions for related documents.
+    Compose a RunStart document and factory functions for related documents.
+
+    Parameters
+    ----------
     uid : string, optional
         Unique identifier for this run, conventionally a UUID4. If None is
         given, a UUID4 will be generated.
@@ -198,16 +201,16 @@ def create_run(*, uid=None, time=None, metadata=None, validate=True):
     if metadata is None:
         metadata = {}
     doc = dict(uid=uid, time=time, **metadata)
-    # Define some mutable state to be shared internally by the closures created
+    # Define some mutable state to be shared internally by the closures composed
     # below.
     streams = {}
     event_counter = {}
     poison_pill = []
     if validate:
         jsonschema.validate(DocumentNames.start, doc)
-    return CreateRunBundle(
+    return ComposeRunBundle(
         doc,
-        partial(create_descriptor, start=doc, streams=streams, event_counter={}),
-        partial(create_resource, start=doc),
-        partial(create_stop, start=doc, event_counter=event_counter,
+        partial(compose_descriptor, start=doc, streams=streams, event_counter={}),
+        partial(compose_resource, start=doc),
+        partial(compose_stop, start=doc, event_counter=event_counter,
                 poison_pill=poison_pill))
