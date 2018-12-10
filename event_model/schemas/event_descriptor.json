@@ -27,6 +27,13 @@
                         },
                         "description": "The shape of the data.  Null and empty list mean scalar data."
                     },
+                    "dims": {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "description": "The names for dimensions of the data. Null or empty list if scalar data"
+                    },
                     "source": {
                         "type": "string",
                         "description": "The source (ex piece of hardware) of the data."
