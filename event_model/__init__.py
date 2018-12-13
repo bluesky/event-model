@@ -14,6 +14,7 @@ __all__ = ['DocumentNames', 'schemas', 'compose_run']
 
 _validate = partial(jsonschema.validate, types={'array': (list, tuple)})
 
+
 class DocumentNames(Enum):
     stop = 'stop'
     start = 'start'
@@ -122,7 +123,8 @@ def compose_event(*, descriptor, event_counter, data, timestamps, seq_num,
            'data': data,
            'timestamps': timestamps,
            'seq_num': seq_num,
-           'filled': filled}
+           'filled': filled,
+           'descriptor': descriptor['uid']}
     if validate:
         jsonschema.validate(doc, schemas[DocumentNames.event])
         if not (descriptor['data_keys'].keys() == data.keys() == timestamps.keys()):
