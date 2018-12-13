@@ -12,6 +12,8 @@ from ._version import get_versions
 
 __all__ = ['DocumentNames', 'schemas', 'compose_run']
 
+_validate = partial(jsonschema.validate, types={'array': (list, tuple)})
+
 
 class DocumentNames(Enum):
     stop = 'stop'
@@ -62,7 +64,7 @@ def compose_datum(*, resource, counter, datum_kwargs, validate=True):
            'datum_kwargs': datum_kwargs,
            'datum_id': '{}/{}'.format(resource_uid, next(counter))}
     if validate:
-        jsonschema.validate(DocumentNames.datum, doc)
+        jsonschema.validate(doc, schemas[DocumentNames.datum])
     return doc
 
 
@@ -79,7 +81,7 @@ def compose_resource(*, start, spec, root, resource_path, resource_kwargs,
            'resource_kwargs': {},
            'path_semantics': path_semantics}
     if validate:
-        jsonschema.validate(DocumentNames.resource, doc)
+        jsonschema.validate(doc, schemas[DocumentNames.resource])
     return ComposeResourceBundle(
         doc,
         partial(compose_datum, resource=doc, counter=counter))
@@ -104,7 +106,7 @@ def compose_stop(*, start, event_counter, poison_pill,
            'reason': reason,
            'num_events': dict(event_counter)}
     if validate:
-        jsonschema.validate(DocumentNames.stop, doc)
+        jsonschema.validate(doc, schemas[DocumentNames.stop])
     return doc
 
 
@@ -121,9 +123,10 @@ def compose_event(*, descriptor, event_counter, data, timestamps, seq_num,
            'data': data,
            'timestamps': timestamps,
            'seq_num': seq_num,
-           'filled': filled}
+           'filled': filled,
+           'descriptor': descriptor['uid']}
     if validate:
-        jsonschema.validate(DocumentNames.event, doc)
+        jsonschema.validate(doc, schemas[DocumentNames.event])
         if not (descriptor['data_keys'].keys() == data.keys() == timestamps.keys()):
             raise EventModelValidationError(
                 "These sets of keys must match:\n"
@@ -162,13 +165,13 @@ def compose_descriptor(*, start, streams, event_counter,
            'hints': hints,
            'configuration': configuration}
     if validate:
-        jsonschema.validate(DocumentNames.descriptor, doc)
         if name in streams and streams[name] != set(data_keys):
             raise EventModelValidationError(
                 "A descriptor with the name {} has already been composed with "
                 "data_keys {}. The requested data_keys were {}. All "
                 "descriptors in a given stream must have the same "
                 "data_keys.".format(name, streams[name], set(data_keys)))
+        jsonschema.validate(doc, schemas[DocumentNames.descriptor])
     if name not in streams:
         streams[name] = set(data_keys)
         event_counter[name] = 0
@@ -207,7 +210,7 @@ def compose_run(*, uid=None, time=None, metadata=None, validate=True):
     event_counter = {}
     poison_pill = []
     if validate:
-        jsonschema.validate(DocumentNames.start, doc)
+        jsonschema.validate(doc, schemas[DocumentNames.start])
     return ComposeRunBundle(
         doc,
         partial(compose_descriptor, start=doc, streams=streams, event_counter={}),
