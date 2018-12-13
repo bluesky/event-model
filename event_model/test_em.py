@@ -30,9 +30,9 @@ def test_compose_run():
     assert bundle.compose_resource is compose_resource
     assert bundle.compose_stop is compose_stop
     bundle = compose_descriptor(
-        data_keys={'motor': {'shape': [], 'dtype': 'number'},
+        data_keys={'motor': {'shape': [], 'dtype': 'number', 'source': '...'},
                    'image': {'shape': [512, 512], 'dtype': 'number',
-                             'external': 'FILESTORE:'}},
+                             'source': '...', 'external': 'FILESTORE:'}},
         name='primary')
     descriptor_doc, compose_event = bundle
     assert bundle.descriptor_doc is descriptor_doc
