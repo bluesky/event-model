@@ -8,6 +8,7 @@ import os
 from pkg_resources import resource_filename as rs_fn
 import time as ttime
 import uuid
+import warnings
 from ._version import get_versions
 
 __all__ = ['DocumentNames', 'schemas', 'compose_run']
@@ -23,6 +24,82 @@ class DocumentNames(Enum):
     bulk_events = 'bulk_events'
     datum = 'datum'
     resource = 'resource'
+
+
+class DocumentRouter:
+    """
+    Route each document by type to a corresponding method.
+
+    When an instance is called with a document type and a document like::
+
+        router(name, doc)
+
+    the document is passed to the method of the corresponding name, as in
+
+        getattr(router, name)(doc)
+
+    The method is expected to return a valid document of the same type. It may
+    be the original instance (passed through), a copy, or a different dict
+    altogether.
+
+    Finally, the call to ``router(name, doc))`` returns::
+
+        (name, getattr(router, name)(doc))
+    """
+    def __call__(self, name, doc):
+        """
+        Process a document.
+
+        Parameters
+        ----------
+        name : string
+        doc : dict
+
+        Returns
+        -------
+        name, new_doc : string, dict
+            The same name as what was passed in, and a doc that may be the same
+            instance as doc, a copy of doc, or a different dict altogether.
+        """
+        return name, getattr(self, name)(doc)
+
+    def start(self, doc):
+        return doc
+
+    def stop(self, doc):
+        return doc
+
+    def descriptor(self, doc):
+        return doc
+
+    def resource(self, doc):
+        return doc
+
+    def event(self, doc):
+        return doc
+
+    def datum(self, doc):
+        return doc
+
+    def event_page(self, doc):
+        return doc
+
+    def datum_page(self, doc):
+        return doc
+
+    def bulk_event(self, doc):
+        # Do not modify this in a subclass. Use event_page.
+        warnings.warn(
+            "The name 'bulk_event' has been deprecated in favor of "
+            "'event_page'.")
+        return self.event_page(doc)
+
+    def bulk_datum(self, doc):
+        # Do not modify this in a subclass. Use event_page.
+        warnings.warn(
+            "The name 'bulk_datum' has been deprecated in favor of "
+            "'datum_page'.")
+        return self.datum_page(doc)
 
 
 class EventModelError(Exception):
