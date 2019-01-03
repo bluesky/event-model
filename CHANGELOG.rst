@@ -12,4 +12,4 @@ Added
   for each dimension of the data.
 * Convenience functions for composing valid documents have been added. These
   are experimental and may change in a future release in a
-  non-backward-compatbile way.
+  non-backward-compatible way.
