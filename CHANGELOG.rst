@@ -9,7 +9,7 @@ Added
 -----
 
 * The DataKey in an EventDescriptors may contain a 'dims' key, providing names
-for each dimension of the data.
+  for each dimension of the data.
 * Convenience functions for composing valid documents have been added. These
   are experimental and may change in a future release in a
   non-backward-compatbile way.
