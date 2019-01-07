@@ -21,9 +21,12 @@ class DocumentNames(Enum):
     start = 'start'
     descriptor = 'descriptor'
     event = 'event'
-    bulk_events = 'bulk_events'
     datum = 'datum'
     resource = 'resource'
+    event_page = 'event_page'
+    datum_page = 'datum_page'
+    bulk_datum = 'bulk_datum'  # deprecated
+    bulk_events = 'bulk_events'  # deprecated
 
 
 class DocumentRouter:
@@ -101,19 +104,19 @@ class DocumentRouter:
     def datum_page(self, doc):
         return doc
 
-    def bulk_event(self, doc):
+    def bulk_events(self, doc):
         # Do not modify this in a subclass. Use event_page.
         warnings.warn(
-            "The name 'bulk_event' has been deprecated in favor of "
-            "'event_page'.")
-        return self.event_page(doc)
+            "The document type 'bulk_events' has been deprecated in favor of "
+            "'event_page', whose structure is a transpose of 'bulk_events'.")
+        return self.event_page(bulk_events_to_event_page(doc))
 
     def bulk_datum(self, doc):
         # Do not modify this in a subclass. Use event_page.
         warnings.warn(
-            "The name 'bulk_datum' has been deprecated in favor of "
-            "'datum_page'.")
-        return self.datum_page(doc)
+            "The document type 'bulk_datum' has been deprecated in favor of "
+            "'datum_page', whose structure is a transpose of 'bulk_datum'.")
+        return self.datum_page(bulk_datum_to_datum_page(doc))
 
 
 class EventModelError(Exception):
@@ -330,4 +333,12 @@ def pack_datum_into_datum_page(datum):
 
 
 def unpack_datum_page_into_datum(datum_page):
+    ...
+
+
+def bulk_events_to_event_page(bulk_event):
+    ...
+
+
+def bulk_datum_to_datum_page(bulk_datum):
     ...
