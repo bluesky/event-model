@@ -46,7 +46,7 @@ class DocumentRouter:
 
         (name, getattr(router, name)(doc))
     """
-    def __call__(self, name, doc):
+    def __call__(self, name, doc, validate=False):
         """
         Process a document.
 
@@ -54,14 +54,22 @@ class DocumentRouter:
         ----------
         name : string
         doc : dict
+        validate : boolean
+            Apply jsonschema validation to the documents coming *out*. This is
+            False by default.
 
         Returns
         -------
-        name, new_doc : string, dict
+        name, output_doc : string, dict
             The same name as what was passed in, and a doc that may be the same
             instance as doc, a copy of doc, or a different dict altogether.
         """
-        return name, getattr(self, name)(doc)
+        ret = getattr(self, name)(doc)
+        output_doc = getattr(self, name)(doc)
+        if validate:
+            jsonschema.validate(output_doc,
+                                schemas[getattr(DocumentNames, name)])
+        return (name, output_doc) if output_doc is not None else output_doc
 
     def start(self, doc):
         return doc
@@ -76,10 +84,16 @@ class DocumentRouter:
         return doc
 
     def event(self, doc):
-        return doc
+        event_page = pack_event_into_event_page(doc)
+        output_event_page = self.event_page(event_page)
+        output_event = unpack_event_page_into_event(output_event_page)
+        return output_event
 
     def datum(self, doc):
-        return doc
+        datum_page = pack_datum_into_datum_page(doc)
+        output_datum_page = self.datum_page(datum_page)
+        output_datum = unpack_datum_page_into_datum(output_datum_page)
+        return output_datum
 
     def event_page(self, doc):
         return doc
@@ -294,3 +308,26 @@ def compose_run(*, uid=None, time=None, metadata=None, validate=True):
         partial(compose_resource, start=doc),
         partial(compose_stop, start=doc, event_counter=event_counter,
                 poison_pill=poison_pill))
+
+
+def pack_event_into_event_page(event):
+    return {'time': [event['time']],
+            'seq_num': [event['seq_num']],
+            'descriptor': [event['descriptor']],
+            'uid': [event['uid']],
+            'data': {key: [val] for key, val in event['data'].items()}
+            'timestamps': {key: [val] for key, val in event['timestamps'].items()}}
+
+
+def unpack_event_page_into_event(event_page):
+    ...
+
+
+def pack_datum_into_datum_page(datum):
+    return {'datum_id': [datum['datum_id']],
+            'datum_kwargs': [datum['datum_kwargs']],
+            'resource': [datum['resource']]}
+
+
+def unpack_datum_page_into_datum(datum_page):
+    ...
