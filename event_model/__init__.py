@@ -67,7 +67,6 @@ class DocumentRouter:
             The same name as what was passed in, and a doc that may be the same
             instance as doc, a copy of doc, or a different dict altogether.
         """
-        ret = getattr(self, name)(doc)
         output_doc = getattr(self, name)(doc)
         if validate:
             jsonschema.validate(output_doc,
@@ -109,17 +108,23 @@ class DocumentRouter:
         warnings.warn(
             "The document type 'bulk_events' has been deprecated in favor of "
             "'event_page', whose structure is a transpose of 'bulk_events'.")
-        return self.event_page(bulk_events_to_event_page(doc))
+        for page in bulk_events_to_event_pages(doc):
+            self.event_page(page)
 
     def bulk_datum(self, doc):
         # Do not modify this in a subclass. Use event_page.
         warnings.warn(
             "The document type 'bulk_datum' has been deprecated in favor of "
             "'datum_page', whose structure is a transpose of 'bulk_datum'.")
-        return self.datum_page(bulk_datum_to_datum_page(doc))
+        for page in bulk_datum_to_datum_page(doc):
+            self.datum_page(page)
 
 
 class EventModelError(Exception):
+    ...
+
+
+class EventModelValueError(EventModelError, ValueError):
     ...
 
 
@@ -314,31 +319,78 @@ def compose_run(*, uid=None, time=None, metadata=None, validate=True):
 
 
 def pack_event_into_event_page(event):
-    return {'time': [event['time']],
+    return {'descriptor': event['descriptor'],
+            'time': [event['time']],
             'seq_num': [event['seq_num']],
-            'descriptor': [event['descriptor']],
             'uid': [event['uid']],
-            'data': {key: [val] for key, val in event['data'].items()}
-            'timestamps': {key: [val] for key, val in event['timestamps'].items()}}
+            'data': {key: [val] for key, val in event['data'].items()},
+            'timestamps': {key: [val] for key, val in event['timestamps'].items()},
+            'filled': {key: [val] for key, val in event['filled'].items()}}
 
 
 def unpack_event_page_into_event(event_page):
-    ...
+    event = {'descriptor': event_page['descriptor']}
+    # Use sequence unpacking to validate that event_page has length 1.
+    try:
+        event['uid'], = event_page['uid']
+        event['time'], = event_page['time']
+        event['seq_num'], = event_page['seq_num']
+        event['data'] = {k: v for (k, (v,)) in event_page['data'].items()}
+        event['timestamps'] = {k: v for (k, (v,)) in event_page['timestamps'].items()}
+        event['filled'] = {k: v for (k, (v,)) in event_page['filled'].items()}
+    except ValueError:
+        raise EventModelValueError(
+            f"Cannot convert event_page to single event "
+            f"unless page length is 1. Erroneous event_page is: {event_page}")
+    return event
 
 
 def pack_datum_into_datum_page(datum):
-    return {'datum_id': [datum['datum_id']],
-            'datum_kwargs': [datum['datum_kwargs']],
-            'resource': [datum['resource']]}
+    return {'resource': datum['resource'],
+            'datum_id': [datum['datum_id']],
+            'datum_kwargs': {key: [val] for key, val in datum['datum_kwargs'].items()}}
 
 
 def unpack_datum_page_into_datum(datum_page):
-    ...
+    datum = {'resource': datum_page['resource']}
+    # Use sequence unpacking to validate that datum_page has length 1.
+    try:
+        datum['datum_id'], = datum_page['datum_id']
+        datum['datum_kwargs'] = {k: v for (k, (v,)) in datum_page['datum_kwargs'].items()}
+    except ValueError:
+        raise EventModelValueError(
+            f"Cannot convert datum_page to single datum "
+            f"unless page length is 1. Erroneous datum_page is: {datum_page}")
+    return datum
 
 
-def bulk_events_to_event_page(bulk_event):
-    ...
+def bulk_events_to_event_pages(bulk_events):
+    # This is for a deprecated document type, so we are not being fussy
+    # about efficiency/laziness here.
+    event_pages = {}  # descriptor uid mapped to page
+    for stream_name, event in bulk_events.items():
+        descriptor = event['descriptor']
+        try:
+            page = event_pages[descriptor]
+        except KeyError:
+            page = {'time': [], 'uid': [], 'seq_num': [],
+                    'descriptor': descriptor}
+            page['data'] = {k: [] for k in event['data']}
+            page['timestamps'] = {k: [] for k in event['timestamps']}
+            event_pages[descriptor] = page
+        page['uid'].append(event['uid'])
+        page['time'].append(event['time'])
+        page['seq_num'].append(event['seq_num'])
+        page_data = page['data']
+        for k, v in event['data'].items():
+            page_data[k].append(v)
+        page_timestamps = page['timestamps']
+        for k, v in event['timestamps'].items():
+            page_timestamps[k].append(v)
+    return list(event_pages.values())
 
 
 def bulk_datum_to_datum_page(bulk_datum):
-    ...
+    return {'datum_id': [datum['datum_id'] for datum in bulk_datum],
+            'datum_kwargs': [datum['datum_kwargs'] for datum in bulk_datum],
+            'resource': [datum['resource'] for datum in bulk_datum]}
