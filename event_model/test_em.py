@@ -70,15 +70,47 @@ def test_round_trip_pagination():
 
     # Round trip event -> event_page -> event.
     expected = event_doc
-    actual = event_model.unpack_event_page_into_event(
-        event_model.pack_event_into_event_page(expected))
+    actual, = event_model.unpack_event_page_into_events(
+        event_model.pack_events_into_event_page(expected))
     assert actual == expected
 
     # Round trip datum -> datum_page -> datum.
     expected = datum_doc
-    actual = event_model.unpack_datum_page_into_datum(
+    actual, = event_model.unpack_datum_page_into_datum(
         event_model.pack_datum_into_datum_page(expected))
     assert actual == expected
 
 
 def test_bulk_events_to_event_page():
+    run_bundle = event_model.compose_run()
+    desc_bundle = run_bundle.compose_descriptor(
+        data_keys={'motor': {'shape': [], 'dtype': 'number', 'source': '...'},
+                   'image': {'shape': [512, 512], 'dtype': 'number',
+                             'source': '...', 'external': 'FILESTORE:'}},
+        name='primary')
+    desc_bundle_baseline = run_bundle.compose_descriptor(
+        data_keys={'motor': {'shape': [], 'dtype': 'number', 'source': '...'}},
+        name='baseline')
+    res_bundle = run_bundle.compose_resource(
+        spec='TIFF', root='/tmp', resource_path='stack.tiff',
+        resource_kwargs={})
+    datum_doc1 = res_bundle.compose_datum(datum_kwargs={'slice': 5})
+    datum_doc2 = res_bundle.compose_datum(datum_kwargs={'slice': 10})
+    event1 = desc_bundle.compose_event(
+        data={'motor': 0, 'image': datum_doc1['datum_id']},
+        timestamps={'motor': 0, 'image': 0}, filled={'image': False},
+        seq_num=1)
+    event2 = desc_bundle.compose_event(
+        data={'motor': 0, 'image': datum_doc2['datum_id']},
+        timestamps={'motor': 0, 'image': 0}, filled={'image': False},
+        seq_num=2)
+    event3 = desc_bundle_baseline.compose_event(
+        data={'motor': 0}, 
+        timestamps={'motor': 0},
+        seq_num=1)
+
+    primary_event_page = event_model.pack_events_into_event_page(event1, event2)
+    baseline_event_page = event_model.pack_events_into_event_page(event3)
+    bulk_events = {'primary': [event1, event2], 'baseline': [event3]}
+    pages = event_model.bulk_events_to_event_pages(bulk_events)
+    assert tuple(pages) == (primary_event_page, baseline_event_page)

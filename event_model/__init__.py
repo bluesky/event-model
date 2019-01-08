@@ -321,83 +321,121 @@ def compose_run(*, uid=None, time=None, metadata=None, validate=True):
                 poison_pill=poison_pill))
 
 
-def pack_event_into_event_page(event):
-    return {'descriptor': event['descriptor'],
-            'time': [event['time']],
-            'seq_num': [event['seq_num']],
-            'uid': [event['uid']],
-            'data': {key: [val] for key, val in event['data'].items()},
-            'timestamps': {key: [val] for key, val in event['timestamps'].items()},
-            'filled': {key: [val] for key, val in event['filled'].items()}}
+def pack_events_into_event_page(*events):
+    time_list = []
+    uid_list = []
+    seq_num_list = []
+    data_list = []
+    filled_list = []
+    timestamps_list = []
+    for event in events:
+        time_list.append(event['time'])
+        uid_list.append(event['uid'])
+        seq_num_list.append(event['seq_num'])
+        filled_list.append(event['filled'])
+        data_list.append(event['data'])
+        timestamps_list.append(event['timestamps'])
+    event_page = {'time': time_list, 'uid': uid_list, 'seq_num': seq_num_list,
+                  'descriptor': event['descriptor'],
+                  'filled': _transpose_list_of_dicts(filled_list),
+                  'data': _transpose_list_of_dicts(data_list),
+                  'timestamps': _transpose_list_of_dicts(timestamps_list)}
+    return event_page
 
 
-def unpack_event_page_into_event(event_page):
-    event = {'descriptor': event_page['descriptor']}
-    # Use sequence unpacking to validate that event_page has length 1.
-    try:
-        event['uid'], = event_page['uid']
-        event['time'], = event_page['time']
-        event['seq_num'], = event_page['seq_num']
-        event['data'] = {k: v for (k, (v,)) in event_page['data'].items()}
-        event['timestamps'] = {k: v for (k, (v,)) in event_page['timestamps'].items()}
-        event['filled'] = {k: v for (k, (v,)) in event_page['filled'].items()}
-    except ValueError:
-        raise EventModelValueError(
-            f"Cannot convert event_page to single event "
-            f"unless page length is 1. Erroneous event_page is: {event_page}")
-    return event
+def unpack_event_page_into_events(event_page):
+    descriptor = event_page['descriptor']
+    data_list = _transpose_dict_of_lists(event_page['data'])
+    timestamps_list = _transpose_dict_of_lists(event_page['timestamps'])
+    filled_list = _transpose_dict_of_lists(event_page['filled'])
+    for uid, time, seq_num, data, timestamps, filled in zip(
+            event_page['uid'],
+            event_page['time'],
+            event_page['seq_num'],
+            data_list,
+            timestamps_list,
+            filled_list):
+        event = {'descriptor': descriptor,
+                 'uid': uid, 'time': time,'seq_num': seq_num,
+                 'data': data, 'timestamps': timestamps, 'filled': filled}
+        yield event
 
 
-def pack_datum_into_datum_page(datum):
-    return {'resource': datum['resource'],
-            'datum_id': [datum['datum_id']],
-            'datum_kwargs': {key: [val] for key, val in datum['datum_kwargs'].items()}}
+def pack_datum_into_datum_page(*datum):
+    datum_id_list = []
+    datum_kwargs_list = []
+    for datum_ in datum:
+        datum_id_list.append(datum_['datum_id'])
+        datum_kwargs_list.append(datum_['datum_kwargs'])
+    datum_page = {'resource': datum_['resource'],
+                  'datum_id': datum_id_list,
+                  'datum_kwargs': _transpose_list_of_dicts(datum_kwargs_list)}
+    return datum_page
 
 
 def unpack_datum_page_into_datum(datum_page):
-    datum = {'resource': datum_page['resource']}
-    # Use sequence unpacking to validate that datum_page has length 1.
-    try:
-        datum['datum_id'], = datum_page['datum_id']
-        datum['datum_kwargs'] = {k: v for (k, (v,)) in datum_page['datum_kwargs'].items()}
-    except ValueError:
-        raise EventModelValueError(
-            f"Cannot convert datum_page to single datum "
-            f"unless page length is 1. Erroneous datum_page is: {datum_page}")
-    return datum
+    resource = datum_page['resource']
+    datum_kwargs_list = _transpose_dict_of_lists(datum_page['datum_kwargs'])
+    for datum_id, datum_kwargs in zip(
+            datum_page['datum_id'],
+            datum_kwargs_list):
+        datum = {'datum_id': datum_id, 'datum_kwargs': datum_kwargs,
+                 'resource': resource}
+        yield datum
 
 
 def bulk_events_to_event_pages(bulk_events):
     # This is for a deprecated document type, so we are not being fussy
     # about efficiency/laziness here.
     event_pages = {}  # descriptor uid mapped to page
-    for stream_name, event in bulk_events.items():
-        descriptor = event['descriptor']
-        try:
-            page = event_pages[descriptor]
-        except KeyError:
-            page = {'time': [], 'uid': [], 'seq_num': [],
-                    'descriptor': descriptor}
-            page['data'] = {k: [] for k in event['data']}
-            page['timestamps'] = {k: [] for k in event['timestamps']}
-            event_pages[descriptor] = page
-        page['uid'].append(event['uid'])
-        page['time'].append(event['time'])
-        page['seq_num'].append(event['seq_num'])
-        page_data = page['data']
-        for k, v in event['data'].items():
-            page_data[k].append(v)
-        page_timestamps = page['timestamps']
-        for k, v in event['timestamps'].items():
-            page_timestamps[k].append(v)
+    for stream_name, events in bulk_events.items():
+        for event in events:
+            descriptor = event['descriptor']
+            try:
+                page = event_pages[descriptor]
+            except KeyError:
+                page = {'time': [], 'uid': [], 'seq_num': [],
+                        'descriptor': descriptor}
+                page['data'] = {k: [] for k in event['data']}
+                page['timestamps'] = {k: [] for k in event['timestamps']}
+                page['filled'] = {k: [] for k in event['filled']}
+                event_pages[descriptor] = page
+            page['uid'].append(event['uid'])
+            page['time'].append(event['time'])
+            page['seq_num'].append(event['seq_num'])
+            page_data = page['data']
+            for k, v in event['data'].items():
+                page_data[k].append(v)
+            page_timestamps = page['timestamps']
+            for k, v in event['timestamps'].items():
+                page_timestamps[k].append(v)
+            page_filled = page['filled']
+            for k, v in event['filled'].items():
+                page_filled[k].append(v)
     return list(event_pages.values())
 
 
 def bulk_datum_to_datum_page(bulk_datum):
-    datum_kwargs = defaultdict(list)
-    for dk in bulk_datum['data_kwargs_list']:
-        for k, v in dk.items():
-            datum_kwargs[k].append(v)
     datum_page = {'datum_id': bulk_datum['datum_ids'],
                   'resource': bulk_datum['resource'],
-                  'datum_kwargs': dict(datum_kwargs)}
+                  'datum_kwargs': _transpose_list_of_dicts(
+                      bulk_datum['datum_kwargs_list'])}
+    return datum_page
+
+
+def _transpose_list_of_dicts(list_of_dicts):
+    "Transform list-of-dicts into dict-of-lists (i.e. DataFrame-like)."
+    dict_of_lists = defaultdict(list)
+    for row in list_of_dicts:
+        for k, v in row.items():
+            dict_of_lists[k].append(v)
+    return dict(dict_of_lists)
+
+
+def _transpose_dict_of_lists(dict_of_lists):
+    "Transform dict-of-lists (i.e. DataFrame-like) into list-of-dicts."
+    list_of_dicts = []
+    keys = list(dict_of_lists)
+    for row in zip(*(dict_of_lists[k] for k in keys)):
+        list_of_dicts.append(dict(zip(keys, row)))
+    return list_of_dicts
