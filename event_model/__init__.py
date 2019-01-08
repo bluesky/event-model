@@ -136,10 +136,14 @@ SCHEMA_PATH = 'schemas'
 SCHEMA_NAMES = {DocumentNames.start: 'schemas/run_start.json',
                 DocumentNames.stop: 'schemas/run_stop.json',
                 DocumentNames.event: 'schemas/event.json',
-                DocumentNames.bulk_events: 'schemas/bulk_events.json',
+                DocumentNames.event_page: 'schemas/event_page.json',
                 DocumentNames.descriptor: 'schemas/event_descriptor.json',
                 DocumentNames.datum: 'schemas/datum.json',
-                DocumentNames.resource: 'schemas/resource.json'}
+                DocumentNames.datum_page: 'schemas/datum_page.json',
+                DocumentNames.resource: 'schemas/resource.json',
+                # DEPRECATED:
+                DocumentNames.bulk_events: 'schemas/bulk_events.json',
+                DocumentNames.bulk_datum: 'schemas/bulk_datum.json'}
 schemas = {}
 for name, filename in SCHEMA_NAMES.items():
     with open(rs_fn('event_model', filename)) as fin:

@@ -5,12 +5,12 @@ def test_documents():
     dn = event_model.DocumentNames
     for k in ('stop', 'start', 'descriptor',
               'event', 'bulk_events', 'datum',
-              'resource'):
+              'resource', 'bulk_datum', 'event_page', 'datum_page'):
         assert dn(k) == getattr(dn, k)
 
 
 def test_len():
-    assert 7 == len(event_model.DocumentNames)
+    assert 10 == len(event_model.DocumentNames)
 
 
 def test_schemas():
