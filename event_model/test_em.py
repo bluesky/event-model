@@ -131,3 +131,42 @@ def test_bulk_datum_to_datum_page():
                   'datum_ids': [datum1['datum_id'], datum2['datum_id']]}
     expected = event_model.bulk_datum_to_datum_page(bulk_datum)
     assert actual == expected
+
+
+def test_document_router_smoke_test():
+    dr = event_model.DocumentRouter()
+    run_bundle = event_model.compose_run()
+    dr('start', run_bundle.start_doc)
+    desc_bundle = run_bundle.compose_descriptor(
+        data_keys={'motor': {'shape': [], 'dtype': 'number', 'source': '...'},
+                   'image': {'shape': [512, 512], 'dtype': 'number',
+                             'source': '...', 'external': 'FILESTORE:'}},
+        name='primary')
+    dr('descriptor', desc_bundle.descriptor_doc)
+    desc_bundle_baseline = run_bundle.compose_descriptor(
+        data_keys={'motor': {'shape': [], 'dtype': 'number', 'source': '...'}},
+        name='baseline')
+    dr('descriptor', desc_bundle_baseline.descriptor_doc)
+    res_bundle = run_bundle.compose_resource(
+        spec='TIFF', root='/tmp', resource_path='stack.tiff',
+        resource_kwargs={})
+    datum_doc1 = res_bundle.compose_datum(datum_kwargs={'slice': 5})
+    datum_doc2 = res_bundle.compose_datum(datum_kwargs={'slice': 10})
+    dr('datum', datum_doc1)
+    dr('datum', datum_doc2)
+    event1 = desc_bundle.compose_event(
+        data={'motor': 0, 'image': datum_doc1['datum_id']},
+        timestamps={'motor': 0, 'image': 0}, filled={'image': False},
+        seq_num=1)
+    dr('event', event1)
+    event2 = desc_bundle.compose_event(
+        data={'motor': 0, 'image': datum_doc2['datum_id']},
+        timestamps={'motor': 0, 'image': 0}, filled={'image': False},
+        seq_num=2)
+    dr('event', event2)
+    event3 = desc_bundle_baseline.compose_event(
+        data={'motor': 0},
+        timestamps={'motor': 0},
+        seq_num=1)
+    dr('event', event3)
+    dr('stop', run_bundle.compose_stop())
