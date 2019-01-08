@@ -50,3 +50,32 @@ def test_compose_run():
         seq_num=1)
     assert 'descriptor' in event_doc
     compose_stop()
+
+
+def test_round_trip_pagination():
+    run_bundle = event_model.compose_run()
+    desc_bundle = run_bundle.compose_descriptor(
+        data_keys={'motor': {'shape': [], 'dtype': 'number', 'source': '...'},
+                   'image': {'shape': [512, 512], 'dtype': 'number',
+                             'source': '...', 'external': 'FILESTORE:'}},
+        name='primary')
+    res_bundle = run_bundle.compose_resource(
+        spec='TIFF', root='/tmp', resource_path='stack.tiff',
+        resource_kwargs={})
+    datum_doc = res_bundle.compose_datum(datum_kwargs={'slice': 5})
+    event_doc = desc_bundle.compose_event(
+        data={'motor': 0, 'image': datum_doc['datum_id']},
+        timestamps={'motor': 0, 'image': 0}, filled={'image': False},
+        seq_num=1)
+
+    # Round trip event -> event_page -> event.
+    expected = event_doc
+    actual = event_model.unpack_event_page_into_event(
+        event_model.pack_event_into_event_page(expected))
+    assert actual == expected
+
+    # Round trip datum -> datum_page -> datum.
+    expected = datum_doc
+    actual = event_model.unpack_datum_page_into_datum(
+        event_model.pack_datum_into_datum_page(expected))
+    assert actual == expected
