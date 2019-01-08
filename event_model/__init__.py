@@ -395,7 +395,7 @@ def bulk_events_to_event_pages(bulk_events):
 
 def bulk_datum_to_datum_page(bulk_datum):
     datum_kwargs = defaultdict(list)
-    for dk in data_kwargs_list:
+    for dk in bulk_datum['data_kwargs_list']:
         for k, v in dk.items():
             datum_kwargs[k].append(v)
     datum_page = {'datum_id': bulk_datum['datum_ids'],
