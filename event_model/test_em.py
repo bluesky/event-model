@@ -105,7 +105,7 @@ def test_bulk_events_to_event_page():
         timestamps={'motor': 0, 'image': 0}, filled={'image': False},
         seq_num=2)
     event3 = desc_bundle_baseline.compose_event(
-        data={'motor': 0}, 
+        data={'motor': 0},
         timestamps={'motor': 0},
         seq_num=1)
 
@@ -118,31 +118,11 @@ def test_bulk_events_to_event_page():
 
 def test_bulk_datum_to_datum_page():
     run_bundle = event_model.compose_run()
-    desc_bundle = run_bundle.compose_descriptor(
-        data_keys={'motor': {'shape': [], 'dtype': 'number', 'source': '...'},
-                   'image': {'shape': [512, 512], 'dtype': 'number',
-                             'source': '...', 'external': 'FILESTORE:'}},
-        name='primary')
-    desc_bundle_baseline = run_bundle.compose_descriptor(
-        data_keys={'motor': {'shape': [], 'dtype': 'number', 'source': '...'}},
-        name='baseline')
     res_bundle = run_bundle.compose_resource(
         spec='TIFF', root='/tmp', resource_path='stack.tiff',
         resource_kwargs={})
     datum1 = res_bundle.compose_datum(datum_kwargs={'slice': 5})
     datum2 = res_bundle.compose_datum(datum_kwargs={'slice': 10})
-    event1 = desc_bundle.compose_event(
-        data={'motor': 0, 'image': datum1['datum_id']},
-        timestamps={'motor': 0, 'image': 0}, filled={'image': False},
-        seq_num=1)
-    event2 = desc_bundle.compose_event(
-        data={'motor': 0, 'image': datum2['datum_id']},
-        timestamps={'motor': 0, 'image': 0}, filled={'image': False},
-        seq_num=2)
-    event3 = desc_bundle_baseline.compose_event(
-        data={'motor': 0},
-        timestamps={'motor': 0},
-        seq_num=1)
 
     actual = event_model.pack_datum_into_datum_page(datum1, datum2)
     bulk_datum = {'resource': res_bundle.resource_doc['uid'],
