@@ -44,7 +44,7 @@
                 ],
                 "additionalProperties": false,
                 "type": "object",
-                "title": "event",
+                "title": "bulk_events",
                 "description": "Document to record a quanta of collected data"
             }
         }

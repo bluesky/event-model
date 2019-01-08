@@ -22,6 +22,6 @@
     ],
     "additionalProperties": false,
     "type": "object",
-    "title": "datum",
+    "title": "bulk_datum",
     "description": "Document to reference a quanta of externally-stored data"
 }

@@ -54,6 +54,6 @@
     ],
     "additionalProperties": false,
     "type": "object",
-    "title": "event",
+    "title": "event_page",
     "description": "Page of documents to record a quanta of collected data"
 }
