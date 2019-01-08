@@ -1,4 +1,4 @@
-from collections import namedtuple
+from collections import defaultdict, namedtuple
 import json
 import jsonschema
 from enum import Enum
@@ -116,8 +116,7 @@ class DocumentRouter:
         warnings.warn(
             "The document type 'bulk_datum' has been deprecated in favor of "
             "'datum_page', whose structure is a transpose of 'bulk_datum'.")
-        for page in bulk_datum_to_datum_page(doc):
-            self.datum_page(page)
+        self.datum_page(bulk_datum_to_datum_page(doc))
 
 
 class EventModelError(Exception):
@@ -395,6 +394,10 @@ def bulk_events_to_event_pages(bulk_events):
 
 
 def bulk_datum_to_datum_page(bulk_datum):
-    return {'datum_id': [datum['datum_id'] for datum in bulk_datum],
-            'datum_kwargs': [datum['datum_kwargs'] for datum in bulk_datum],
-            'resource': [datum['resource'] for datum in bulk_datum]}
+    datum_kwargs = defaultdict(list)
+    for dk in data_kwargs_list:
+        for k, v in dk.items():
+            datum_kwargs[k].append(v)
+    datum_page = {'datum_id': bulk_datum['datum_ids'],
+                  'resource': bulk_datum['resource'],
+                  'datum_kwargs': dict(datum_kwargs)}

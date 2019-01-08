@@ -79,3 +79,6 @@ def test_round_trip_pagination():
     actual = event_model.unpack_datum_page_into_datum(
         event_model.pack_datum_into_datum_page(expected))
     assert actual == expected
+
+
+def test_bulk_events_to_event_page():
