@@ -1,7 +1,8 @@
 {
     "properties": {
         "datum_kwargs": {
-            "type": "object",
+            "type": "array",
+            "items": {"type": "object"},
             "description": "Arguments to pass to the Handler to retrieve one quanta of data"
         },
         "resource": {
@@ -9,7 +10,8 @@
             "description": "The UID of the Resource to which this Datum belongs"
         },
         "datum_id": {
-            "type": "string",
+            "type": "array",
+            "items": {"type": "string"},
             "description": "Globally unique identifier for this Datum (akin to 'uid' for other Document types), typically formatted as '<resource>/<integer>'"
         }
     },
