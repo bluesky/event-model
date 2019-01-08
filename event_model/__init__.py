@@ -356,7 +356,7 @@ def unpack_event_page_into_events(event_page):
             timestamps_list,
             filled_list or [{}] * len(data_list)):
         event = {'descriptor': descriptor,
-                 'uid': uid, 'time': time,'seq_num': seq_num,
+                 'uid': uid, 'time': time, 'seq_num': seq_num,
                  'data': data, 'timestamps': timestamps, 'filled': filled}
         yield event
 
