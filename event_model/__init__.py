@@ -86,15 +86,15 @@ class DocumentRouter:
         return doc
 
     def event(self, doc):
-        event_page = pack_events_into_event_page(doc)
+        event_page = pack_event_page(doc)
         output_event_page = self.event_page(event_page)
-        output_event, = unpack_event_page_into_events(output_event_page)
+        output_event, = unpack_event_page(output_event_page)
         return output_event
 
     def datum(self, doc):
-        datum_page = pack_datum_into_datum_page(doc)
+        datum_page = pack_datum_page(doc)
         output_datum_page = self.datum_page(datum_page)
-        output_datum, = unpack_datum_page_into_datum(output_datum_page)
+        output_datum, = unpack_datum_page(output_datum_page)
         return output_datum
 
     def event_page(self, doc):
@@ -321,7 +321,7 @@ def compose_run(*, uid=None, time=None, metadata=None, validate=True):
                 poison_pill=poison_pill))
 
 
-def pack_events_into_event_page(*events):
+def pack_event_page(*events):
     time_list = []
     uid_list = []
     seq_num_list = []
@@ -343,7 +343,7 @@ def pack_events_into_event_page(*events):
     return event_page
 
 
-def unpack_event_page_into_events(event_page):
+def unpack_event_page(event_page):
     descriptor = event_page['descriptor']
     data_list = _transpose_dict_of_lists(event_page['data'])
     timestamps_list = _transpose_dict_of_lists(event_page['timestamps'])
@@ -361,7 +361,7 @@ def unpack_event_page_into_events(event_page):
         yield event
 
 
-def pack_datum_into_datum_page(*datum):
+def pack_datum_page(*datum):
     datum_id_list = []
     datum_kwargs_list = []
     for datum_ in datum:
@@ -373,7 +373,7 @@ def pack_datum_into_datum_page(*datum):
     return datum_page
 
 
-def unpack_datum_page_into_datum(datum_page):
+def unpack_datum_page(datum_page):
     resource = datum_page['resource']
     datum_kwargs_list = _transpose_dict_of_lists(datum_page['datum_kwargs'])
     for datum_id, datum_kwargs in zip(
