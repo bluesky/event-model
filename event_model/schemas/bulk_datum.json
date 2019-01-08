@@ -1,18 +1,18 @@
 {
     "properties": {
-        "datum_kwargs": {
+        "datum_kwargs_list": {
             "type": "array",
             "items": {"type": "object"},
-            "description": "Arguments to pass to the Handler to retrieve one quanta of data"
+            "description": "Array of arguments to pass to the Handler to retrieve one quanta of data"
         },
         "resource": {
             "type": "string",
-            "description": "The UID of the Resource to which this Datum belongs"
+            "description": "UID of the Resource to which all these Datum documents belong"
         },
-        "datum_id": {
+        "datum_ids": {
             "type": "array",
             "items": {"type": "string"},
-            "description": "Globally unique identifier for this Datum (akin to 'uid' for other Document types), typically formatted as '<resource>/<integer>'"
+            "description": "Globally unique identifiers for each Datum (akin to 'uid' for other Document types), typically formatted as '<resource>/<integer>'"
         }
     },
     "required": [
