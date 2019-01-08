@@ -10,6 +10,7 @@
         },
         "filled": {
             "type": "object",
+            "additionalProperties": {"type": ["boolean", "string"]},
             "description": "Mapping the keys of externally-stored data to a boolean indicating whether that data has yet been loaded"
         },
         "descriptor": {
