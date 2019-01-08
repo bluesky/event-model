@@ -86,15 +86,15 @@ class DocumentRouter:
         return doc
 
     def event(self, doc):
-        event_page = pack_event_into_event_page(doc)
+        event_page = pack_events_into_event_page(doc)
         output_event_page = self.event_page(event_page)
-        output_event = unpack_event_page_into_event(output_event_page)
+        output_event, = unpack_event_page_into_events(output_event_page)
         return output_event
 
     def datum(self, doc):
         datum_page = pack_datum_into_datum_page(doc)
         output_datum_page = self.datum_page(datum_page)
-        output_datum = unpack_datum_page_into_datum(output_datum_page)
+        output_datum, = unpack_datum_page_into_datum(output_datum_page)
         return output_datum
 
     def event_page(self, doc):
