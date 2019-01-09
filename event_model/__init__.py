@@ -71,7 +71,7 @@ class DocumentRouter:
         if validate:
             jsonschema.validate(output_doc,
                                 schemas[getattr(DocumentNames, name)])
-        return (name, output_doc) if output_doc is not None else output_doc
+        return (name, output_doc if output_doc is not None else doc)
 
     def start(self, doc):
         return doc
