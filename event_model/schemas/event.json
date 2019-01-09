@@ -10,11 +10,12 @@
         },
         "filled": {
             "type": "object",
+            "additionalProperties": {"type": ["boolean", "string"]},
             "description": "Mapping the keys of externally-stored data to a boolean indicating whether that data has yet been loaded"
         },
         "descriptor": {
             "type": "string",
-            "description": "UID to point back to Descriptor for this event stream"
+            "description": "UID of the EventDescriptor to which this Event belongs"
         },
         "seq_num": {
             "type": "integer",
@@ -22,7 +23,7 @@
         },
         "time": {
             "type": "number",
-            "description": "The event time.  This maybe different than the timestamps on each of the data entries"
+            "description": "The event time. This maybe different than the timestamps on each of the data entries."
         },
         "uid": {
             "type": "string",

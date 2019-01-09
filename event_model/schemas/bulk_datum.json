@@ -1,0 +1,27 @@
+{
+    "properties": {
+        "datum_kwargs_list": {
+            "type": "array",
+            "items": {"type": "object"},
+            "description": "Array of arguments to pass to the Handler to retrieve one quanta of data"
+        },
+        "resource": {
+            "type": "string",
+            "description": "UID of the Resource to which all these Datum documents belong"
+        },
+        "datum_ids": {
+            "type": "array",
+            "items": {"type": "string"},
+            "description": "Globally unique identifiers for each Datum (akin to 'uid' for other Document types), typically formatted as '<resource>/<integer>'"
+        }
+    },
+    "required": [
+        "datum_kwargs",
+        "resource",
+        "datum_id"
+    ],
+    "additionalProperties": false,
+    "type": "object",
+    "title": "bulk_datum",
+    "description": "Document to reference a quanta of externally-stored data"
+}
