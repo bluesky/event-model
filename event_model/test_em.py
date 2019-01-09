@@ -126,8 +126,8 @@ def test_bulk_datum_to_datum_page():
 
     actual = event_model.pack_datum_page(datum1, datum2)
     bulk_datum = {'resource': res_bundle.resource_doc['uid'],
-                  'datum_kwargs_list': [datum1['datum_kwargs'],
-                                        datum2['datum_kwargs']],
+                  'datum_kwarg_list': [datum1['datum_kwargs'],
+                                       datum2['datum_kwargs']],
                   'datum_ids': [datum1['datum_id'], datum2['datum_id']]}
     expected = event_model.bulk_datum_to_datum_page(bulk_datum)
     assert actual == expected

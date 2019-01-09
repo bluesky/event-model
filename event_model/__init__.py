@@ -363,22 +363,22 @@ def unpack_event_page(event_page):
 
 def pack_datum_page(*datum):
     datum_id_list = []
-    datum_kwargs_list = []
+    datum_kwarg_list = []
     for datum_ in datum:
         datum_id_list.append(datum_['datum_id'])
-        datum_kwargs_list.append(datum_['datum_kwargs'])
+        datum_kwarg_list.append(datum_['datum_kwargs'])
     datum_page = {'resource': datum_['resource'],
                   'datum_id': datum_id_list,
-                  'datum_kwargs': _transpose_list_of_dicts(datum_kwargs_list)}
+                  'datum_kwargs': _transpose_list_of_dicts(datum_kwarg_list)}
     return datum_page
 
 
 def unpack_datum_page(datum_page):
     resource = datum_page['resource']
-    datum_kwargs_list = _transpose_dict_of_lists(datum_page['datum_kwargs'])
+    datum_kwarg_list = _transpose_dict_of_lists(datum_page['datum_kwargs'])
     for datum_id, datum_kwargs in zip(
             datum_page['datum_id'],
-            datum_kwargs_list):
+            datum_kwarg_list):
         datum = {'datum_id': datum_id, 'datum_kwargs': datum_kwargs,
                  'resource': resource}
         yield datum
@@ -419,7 +419,7 @@ def bulk_datum_to_datum_page(bulk_datum):
     datum_page = {'datum_id': bulk_datum['datum_ids'],
                   'resource': bulk_datum['resource'],
                   'datum_kwargs': _transpose_list_of_dicts(
-                      bulk_datum['datum_kwargs_list'])}
+                      bulk_datum['datum_kwarg_list'])}
     return datum_page
 
 
