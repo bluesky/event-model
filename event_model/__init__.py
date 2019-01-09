@@ -120,6 +120,74 @@ class DocumentRouter:
         self.datum_page(bulk_datum_to_datum_page(doc))
 
 
+
+class Filler:
+    """Pass documents through, loading any externally-referenced data."""
+    ATTEMPTS = 10
+
+    def __init__(self, handler_registry, handler_cache=None, datum_cache=None):
+        self.handler_registry = handler_registry
+        if handler_cache is None:
+            handler_cache = {}
+        if datum_cache is None:
+            datum_cache = {}
+        self.handlers = handler_cache
+        self.datums = datum_cache
+
+    def __call__(self, name, doc):
+        return name, getattr(self, name)(doc)
+
+    def start(self, doc):
+        return doc
+
+    def resource(self, doc):
+        handler_class = self.handler_registry[doc['spec']]
+        handler = handler_class(doc['resource_path'],
+                                root=doc['root'],
+                                **doc['resource_kwargs'])
+        self.handlers[doc['uid']] = handler
+        return doc
+
+    def datum(self, doc):
+        self.datums[doc['datum_id']] = doc
+        return doc
+
+    def event(self, doc):
+        for key, is_filled in doc['filled'].items():
+            if not is_filled:
+                datum_id = doc['data'][key]
+                datum_doc = self.datums[datum_id]
+                interval = 0.001
+                error = None
+                for i in range(self.ATTEMPTS):
+                    try:
+                        handler = self.handlers[datum_doc['resource']]
+                        actual_data = handler(**datum_doc['datum_kwargs'])
+                        doc['data'][key] = actual_data
+                        doc['filled'][key] = True
+                    except OSError as error_:
+                        # The file may not be visible on the network yet.
+                        # Wait and try again. Stash the error in a variable
+                        # that we can access later if we run out of attempts.
+                        error = error_
+                    else:
+                        break
+                    time.sleep(interval)
+                    # Back off how quickly we attempt each time.
+                    interval *= 2
+                else:
+                    # We have used up all our attempts. There seems to be an
+                    # actual problem. Raise the error stashed above.
+                    raise error
+        return doc
+
+    def descriptor(self, doc):
+        return doc
+
+    def stop(self, doc):
+        return doc
+
+
 class EventModelError(Exception):
     ...
 
