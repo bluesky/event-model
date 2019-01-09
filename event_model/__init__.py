@@ -172,7 +172,7 @@ class Filler:
                         error = error_
                     else:
                         break
-                    time.sleep(interval)
+                    ttime.sleep(interval)
                     # Back off how quickly we attempt each time.
                     interval *= 2
                 else:
