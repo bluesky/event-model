@@ -125,7 +125,8 @@ class Filler:
     """Pass documents through, loading any externally-referenced data."""
     ATTEMPTS = 10
 
-    def __init__(self, handler_registry, handler_cache=None, datum_cache=None):
+    def __init__(self, handler_registry, *,
+                 handler_cache=None, datum_cache=None):
         self.handler_registry = handler_registry
         if handler_cache is None:
             handler_cache = {}
