@@ -120,7 +120,6 @@ class DocumentRouter:
         self.datum_page(bulk_datum_to_datum_page(doc))
 
 
-
 class Filler:
     """Pass documents through, loading any externally-referenced data."""
     ATTEMPTS = 10
