@@ -26,7 +26,7 @@
         },
         "filled": {
             "type": "dataframe_for_filled",
-            "description": "Mapping the keys of externally-stored data to a boolean indicating whether that data has yet been loaded"
+            "description": "Mapping each of the keys of externally-stored data to an array containing the boolean False, indicating that the data has not been loaded, or to foreign keys (moved here from 'data' when the data was loaded)"
         },
         "seq_num": {
             "type": "array",
