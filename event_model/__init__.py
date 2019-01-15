@@ -1,4 +1,4 @@
- dictfrom collections import defaultdict, namedtuple
+from collections import defaultdict, namedtuple
 import json
 import jsonschema
 import numpy
@@ -550,4 +550,3 @@ def _apply_to_dict_recursively(dictionary, func):
 class UnfilledData(Exception):
     """raised when unfilled data is found"""
     pass
-
