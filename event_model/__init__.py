@@ -481,12 +481,12 @@ def verify_filled(event_page):
 
 
 def sanitize_doc(doc):
-    '''Return a copy with any numpy objects converted to built-in python types.
+    '''Return a copy with any numpy objects converted to built-in Python types.
 
     This function takes in an event-model document and returns a copy with any
-    numpy objects converted to buil-in python types. It is useful for sanitzing
-    documents prior to sending to any consumer that does not recognise numpy
-    types, such as a MongoDB database or a JSON encoder.
+    numpy objects converted to built-in Python types. It is useful for
+    sanitizing documents prior to sending to any consumer that does not
+    recognize numpy types, such as a MongoDB database or a JSON encoder.
 
     Parameters
     ----------
@@ -496,8 +496,8 @@ def sanitize_doc(doc):
     Returns
     -------
     sanitized_doc : event-model document
-        The event-model document with numpy objects converted to built-in pyton
-        types.
+        The event-model document with numpy objects converted to built-in
+        Python types.
     '''
     sanitized_doc = doc.copy()
     _apply_to_dict_recursively(doc, _sanitize_numpy)
@@ -516,7 +516,7 @@ def _sanitize_numpy(val):
     Returns
     -------
     val : object
-        The input parameter, converted to a built-in python type if it is a
+        The input parameter, converted to a built-in Python type if it is a
         numpy type.
     '''
     if isinstance(val, (numpy.generic, numpy.ndarray)):
