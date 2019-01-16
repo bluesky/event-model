@@ -120,13 +120,45 @@ class DocumentRouter:
         self.datum_page(bulk_datum_to_datum_page(doc))
 
 
-class Filler:
-    """Pass documents through, loading any externally-referenced data."""
+class Filler(DocumentRouter):
+    """Pass documents through, loading any externally-referenced data.
+
+    A 'handler class' may be any callable with the signature::
+
+        handler_class(resource_path, root, **resource_kwargs)
+
+    It is expected to return an object, a 'handler instance', which is also
+    callable and has the following signature::
+
+        handler_instance(**datum_kwargs)
+
+    As implied by the names, this is typically implemented using a class that
+    implements ``__init__`` and ``__call__``, with the respective signatures.
+    In general it may be any callable-that-returns-a-callable.
+
+    Parameters
+    ----------
+    handler_registry : dict
+        Maps each 'spec' (a string identifying a given type or external
+        resource) to a handler class
+    handler_cache : dict, optional
+        A cache mapping a Resource uid to a handler instance created for that
+        resource. That instance may hold on to certain expensive resources,
+        such as data in memory or an open file handle. If None, a dict is used
+        and cleared when :meth:`start` or :meth:`stop` are called. If a cache
+        is provided by the user, the user is in charge of clearing it.
+    datum_cache : dict, optional
+        A cache mapping a Datum id to a Datum document. If None, a dict is used
+        and cleared when :meth:`start` or :meth:`stop` are called. If a cache
+        is provided by the user, the user is in charge of clearing it.
+    """
     ATTEMPTS = 10
 
     def __init__(self, handler_registry, *,
                  handler_cache=None, datum_cache=None):
         self.handler_registry = handler_registry
+        self._auto_clear_handler_cache = handler_cache is None
+        self._auto_clear_datum_cache = datum_cache is None
         if handler_cache is None:
             handler_cache = {}
         if datum_cache is None:
@@ -134,10 +166,8 @@ class Filler:
         self.handlers = handler_cache
         self.datums = datum_cache
 
-    def __call__(self, name, doc):
-        return name, getattr(self, name)(doc)
-
     def start(self, doc):
+        self._auto_clear()
         return doc
 
     def resource(self, doc):
@@ -185,7 +215,18 @@ class Filler:
         return doc
 
     def stop(self, doc):
+        self._auto_clear()
         return doc
+
+    def _auto_clear(self):
+        # As documented in the Parameters section, the caches are cleared
+        # automatically upon start and stop if the default caches are used. If
+        # the user passes in a custom cache, they control the clearing
+        # behavior.
+        if self._auto_clear_handler_cache:
+            self.handler_cache.clear()
+        if self._auto_clear_datum_cache:
+            self.datum_cache.clear()
 
 
 class EventModelError(Exception):
