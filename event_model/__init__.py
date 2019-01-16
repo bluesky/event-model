@@ -194,7 +194,7 @@ class Filler(DocumentRouter):
                         handler = self.handlers[datum_doc['resource']]
                         actual_data = handler(**datum_doc['datum_kwargs'])
                         doc['data'][key] = actual_data
-                        doc['filled'][key] = True
+                        doc['filled'][key] = datum_id
                     except OSError as error_:
                         # The file may not be visible on the network yet.
                         # Wait and try again. Stash the error in a variable
