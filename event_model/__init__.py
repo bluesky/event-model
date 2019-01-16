@@ -217,9 +217,31 @@ class Filler(DocumentRouter):
         self._handler_cache[doc['uid']] = handler
         return doc
 
+    # Handlers operate document-wise, so we'll explode pages into individual
+    # documents.
+
+    def datum_page(self, doc):
+        datum = self.datum  # Avoid attribute lookup in hot loop.
+        for datum_doc in unpack_datum_page(doc):
+            datum(datum_doc)
+        return doc
+
     def datum(self, doc):
         self._datum_cache[doc['datum_id']] = doc
         return doc
+
+    def event_page(self, doc):
+        # TODO We may be able to fill a page in place, and that may be more
+        # efficient than unpacking the page in to Events, filling them, and the
+        # re-packing a new page. But that seems tricky in general since the
+        # page may be implemented as a DataFrame or dict, etc.
+
+        event = self.event  # Avoid attribute lookup in hot loop.
+        filled_events = []
+
+        for event_doc in unpack_event_page(doc):
+            filled_events.append(event(event_doc))
+        return pack_event_page(filled_events)
 
     def event(self, doc):
         for key, is_filled in doc['filled'].items():
