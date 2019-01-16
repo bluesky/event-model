@@ -1,6 +1,7 @@
 from collections import defaultdict, namedtuple
 import json
 import jsonschema
+import numpy
 from enum import Enum
 from functools import partial
 import itertools
@@ -128,6 +129,11 @@ class EventModelValueError(EventModelError, ValueError):
 
 
 class EventModelValidationError(EventModelError):
+    ...
+
+
+class UnfilledData(EventModelError):
+    """raised when unfilled data is found"""
     ...
 
 
@@ -439,3 +445,102 @@ def _transpose_dict_of_lists(dict_of_lists):
     for row in zip(*(dict_of_lists[k] for k in keys)):
         list_of_dicts.append(dict(zip(keys, row)))
     return list_of_dicts
+
+
+def verify_filled(event_page):
+    '''Take an event_page document and verify that it is completely filled.
+
+    Parameters
+    ----------
+    event_page : event_page document
+        The event page document to check
+
+    Raises
+    ------
+    UnfilledData
+        Raised if any of the data in the event_page is unfilled, when raised it
+        inlcudes a list of unfilled data objects in the exception message.
+    '''
+
+    if not all(map(all, event_page['filled'].values())):
+        # check that all event_page data is filled.
+        unfilled_data = []
+        for field in event_page['filled']:
+            if not event_page['filled'][field]:
+                for field, filled in event_page['filled'].items():
+                    if not all(filled):
+                        unfilled_data.append(field)
+                        # Note: As of this writing, this is a slightly
+                        # aspirational error message, as event_model.Filler has
+                        # not been merged yet. May need to be revisited if it
+                        # is renamed or kept elsewhere in the end.
+                        raise UnfilledData("unfilled data found in "
+                                           "{!r}. Try passing the parameter "
+                                           "`gen` through `event_model.Filler`"
+                                           " first.".format(unfilled_data))
+
+
+def sanitize_doc(doc):
+    '''Return a copy with any numpy objects converted to built-in Python types.
+
+    This function takes in an event-model document and returns a copy with any
+    numpy objects converted to built-in Python types. It is useful for
+    sanitizing documents prior to sending to any consumer that does not
+    recognize numpy types, such as a MongoDB database or a JSON encoder.
+
+    Parameters
+    ----------
+    doc : dict
+        The event-model document to be sanitized
+
+    Returns
+    -------
+    sanitized_doc : event-model document
+        The event-model document with numpy objects converted to built-in
+        Python types.
+    '''
+    sanitized_doc = doc.copy()
+    _apply_to_dict_recursively(doc, _sanitize_numpy)
+
+    return sanitized_doc
+
+
+def _sanitize_numpy(val):
+    '''Convert any numpy objects into built-in Python types.
+
+    Parameters
+    ----------
+    val : object
+        The potential numpy object to be converted.
+
+    Returns
+    -------
+    val : object
+        The input parameter, converted to a built-in Python type if it is a
+        numpy type.
+    '''
+    if isinstance(val, (numpy.generic, numpy.ndarray)):
+        if numpy.isscalar(val):
+            return val.item()
+        return val.tolist()
+    return val
+
+
+def _apply_to_dict_recursively(dictionary, func):
+    '''Recursively and apply a function to a dictionary of dictionaries.
+
+    Takes in a (potentially nested) dictionary and applies a function to each
+    value in the dictionary
+
+    Parameters
+    ----------
+    dictionary : dict
+        The (potentially nested) dictionary to be recursed.
+    func : function
+        A function to apply to each value in dictionary.
+    '''
+
+    for key, val in dictionary.items():
+        if hasattr(val, 'items'):
+            dictionary[key] = _apply_to_dict_recursively(val, func)
+        dictionary[key] = func(val)
