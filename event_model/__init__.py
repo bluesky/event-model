@@ -132,6 +132,11 @@ class EventModelValidationError(EventModelError):
     ...
 
 
+class UnfilledData(EventModelError):
+    """raised when unfilled data is found"""
+    ...
+
+
 SCHEMA_PATH = 'schemas'
 SCHEMA_NAMES = {DocumentNames.start: 'schemas/run_start.json',
                 DocumentNames.stop: 'schemas/run_stop.json',
@@ -443,25 +448,18 @@ def _transpose_dict_of_lists(dict_of_lists):
 
 
 def verify_filled(event_page):
-    '''Take an event_page document and verify that it is completley filled
+    '''Take an event_page document and verify that it is completely filled.
 
     Parameters
     ----------
     event_page : event_page document
         The event page document to check
 
-    Raise
-    -----
-    UnfilledData : exception
+    Raises
+    ------
+    UnfilledData
         Raised if any of the data in the event_page is unfilled, when raised it
         inlcudes a list of unfilled data objects in the exception message.
-
-    Returns
-    -------
-    verified : Boolean
-        To indicate if it is correctly filled, this is done make code easier to
-        read (i.e. use `if verified_filled(event_page) ...`) it will never
-        return False as it will raise an exception.
     '''
 
     if not all(map(all, event_page['filled'].values())):
@@ -480,17 +478,15 @@ def verify_filled(event_page):
                                            "{!r}. Try passing the parameter "
                                            "`gen` through `event_model.Filler`"
                                            " first.".format(unfilled_data))
-    else:
-        verified = True
-        return verified
 
 
 def sanitize_doc(doc):
-    '''Takes in an event-model document and returns a copy which has all the
-    numpy objects converted to built-in pyton versions.
+    '''Return a copy with any numpy objects converted to built-in python types.
 
-    This is useful for sanitzing documents prior to sending to a mongo database
-    or a json file.
+    This function takes in an event-model document and returns a copy with any
+    numpy objects converted to buil-in python types. It is useful for sanitzing
+    documents prior to sending to any consumer that does not recognise numpy
+    types, such as a MongoDB database or a JSON encoder.
 
     Parameters
     ----------
@@ -514,11 +510,13 @@ def _sanitize_numpy(val):
 
     Parameters
     ----------
-    val : The potential numpy object to be converted.
+    val : object
+        The potential numpy object to be converted.
 
     Returns
     -------
-    val : The input parameter, converted to a built-in python type if it is a
+    val : object
+        The input parameter, converted to a built-in python type if it is a
         numpy type.
     '''
     if isinstance(val, (numpy.generic, numpy.ndarray)):
@@ -529,9 +527,10 @@ def _sanitize_numpy(val):
 
 
 def _apply_to_dict_recursively(dictionary, func):
-    '''
-    step through a dictionary of dictionaries recursively and apply a function
-    to each value.
+    '''Recursively and apply a function to a dictionary of dictionaries.
+
+    Takes in a dictionary of dictionaries and applies a function to each value
+    in the dictionary
 
     Parameters
     ----------
@@ -545,8 +544,3 @@ def _apply_to_dict_recursively(dictionary, func):
         if hasattr(val, 'items'):
             dictionary[key] = _apply_to_dict_recursively(val, func)
         dictionary[key] = func(val)
-
-
-class UnfilledData(Exception):
-    """raised when unfilled data is found"""
-    pass
