@@ -529,13 +529,13 @@ def _sanitize_numpy(val):
 def _apply_to_dict_recursively(dictionary, func):
     '''Recursively and apply a function to a dictionary of dictionaries.
 
-    Takes in a dictionary of dictionaries and applies a function to each value
-    in the dictionary
+    Takes in a (potentially nested) dictionary and applies a function to each
+    value in the dictionary
 
     Parameters
     ----------
     dictionary : dict
-        The dictionary of dictionaries to be recursivly searched.
+        The (potentially nested) dictionary to be recursed.
     func : function
         A function to apply to each value in dictionary.
     '''
