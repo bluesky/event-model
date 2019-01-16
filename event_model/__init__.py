@@ -169,8 +169,8 @@ class Filler(DocumentRouter):
             handler_cache = {}
         if datum_cache is None:
             datum_cache = {}
-        self.handlers = handler_cache
-        self.datums = datum_cache
+        self._handler_cache = handler_cache
+        self._datum_cache = datum_cache
         if retry_intervals is None:
             # Total wait of about 2 seconds before giving up.
             # Max sleep, between the final two attempts, is about 1 second.
@@ -186,18 +186,18 @@ class Filler(DocumentRouter):
         handler = handler_class(doc['resource_path'],
                                 root=doc['root'],
                                 **doc['resource_kwargs'])
-        self.handlers[doc['uid']] = handler
+        self._handler_cache[doc['uid']] = handler
         return doc
 
     def datum(self, doc):
-        self.datums[doc['datum_id']] = doc
+        self._datum_cache[doc['datum_id']] = doc
         return doc
 
     def event(self, doc):
         for key, is_filled in doc['filled'].items():
             if not is_filled:
                 datum_id = doc['data'][key]
-                datum_doc = self.datums[datum_id]
+                datum_doc = self._datum_cache[datum_id]
                 error = None
                 # We are sure to attempt to read that data at least once and
                 # then perhaps additional times depending on the contents of
@@ -205,7 +205,7 @@ class Filler(DocumentRouter):
                 for interval in [0] + self.retry_intervals:
                     ttime.sleep(interval)
                     try:
-                        handler = self.handlers[datum_doc['resource']]
+                        handler = self._handler_cache[datum_doc['resource']]
                         actual_data = handler(**datum_doc['datum_kwargs'])
                         doc['data'][key] = actual_data
                         doc['filled'][key] = datum_id
@@ -235,9 +235,9 @@ class Filler(DocumentRouter):
         # the user passes in a custom cache, they control the clearing
         # behavior.
         if self._auto_clear_handler_cache:
-            self.handler_cache.clear()
+            self._handler_cache.clear()
         if self._auto_clear_datum_cache:
-            self.datum_cache.clear()
+            self._datum_cache.clear()
 
 
 class EventModelError(Exception):
