@@ -145,12 +145,12 @@ class Filler(DocumentRouter):
         A cache mapping a Resource uid to a handler instance created for that
         resource. That instance may hold on to certain expensive resources,
         such as data in memory or an open file handle. If None, a dict is used
-        and cleared when :meth:`start` or :meth:`stop` are called. If a cache
-        is provided by the user, the user is in charge of clearing it.
+        and cleared on ``__exit__`` from the context. If a cache is provided by
+        the user, the user is in charge of clearing it.
     datum_cache : dict, optional
         A cache mapping a Datum id to a Datum document. If None, a dict is used
-        and cleared when :meth:`start` or :meth:`stop` are called. If a cache
-        is provided by the user, the user is in charge of clearing it.
+        and cleared on ``__exit__`` from the context. If a cache is provided by
+        the user, the user is in charge of clearing it.
     retry_intervals : Iterable, optional
         If data is not found on the first try, there may a race between the
         I/O systems creating the external data and this stream of Documents
@@ -178,7 +178,6 @@ class Filler(DocumentRouter):
         self.retry_intervals = list(retry_intervals)
 
     def start(self, doc):
-        self._auto_clear()
         return doc
 
     def resource(self, doc):
@@ -226,14 +225,12 @@ class Filler(DocumentRouter):
         return doc
 
     def stop(self, doc):
-        self._auto_clear()
         return doc
 
-    def _auto_clear(self):
-        # As documented in the Parameters section, the caches are cleared
-        # automatically upon start and stop if the default caches are used. If
-        # the user passes in a custom cache, they control the clearing
-        # behavior.
+    def __enter__(self):
+        return self
+
+    def __exit__(self, *exc_details):
         if self._auto_clear_handler_cache:
             self._handler_cache.clear()
         if self._auto_clear_datum_cache:
