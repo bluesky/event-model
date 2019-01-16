@@ -126,7 +126,7 @@ class Filler(DocumentRouter):
     It is recommended to use the Filler as a context manager.  Because the
     Filler manages caches of potentially expensive resources (e.g. large data
     in memory) managing its lifecycle is important. If used as a context
-    manager, it will drops it references to its caches upon exit from the
+    manager, it will drop references to its caches upon exit from the
     context. Unless the user holds additionally references to those caches,
     they will be garbage collected.
 
@@ -162,7 +162,7 @@ class Filler(DocumentRouter):
         If data is not found on the first try, there may a race between the
         I/O systems creating the external data and this stream of Documents
         that reference it. If Filler encounters an ``IOError`` it will wait a
-        bit and retry. This list specifies how long tosleep (in seconds)
+        bit and retry. This list specifies how long to sleep (in seconds)
         between subsequent attempts. An empty list means, "Try only once." If
         None, a sensible default is used. That default should not be considered
         stable; it may change at any time as the authors tune it.
@@ -193,7 +193,7 @@ class Filler(DocumentRouter):
         self._handler_cache = handler_cache
         self._datum_cache = datum_cache
         if retry_intervals is None:
-            # Total wait of about 2 seconds before giving up.
+            # Total wait about 2 seconds before giving up.
             # Max sleep, between the final two attempts, is about 1 second.
             retry_intervals = 0.001 * numpy.array([2**i for i in range(11)])
         self.retry_intervals = list(retry_intervals)
