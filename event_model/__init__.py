@@ -189,7 +189,7 @@ class Filler(DocumentRouter):
         if handler_cache is None:
             handler_cache = self.get_default_handler_cache()
         if datum_cache is None:
-            datum_cache = self.get_dfeault_datum_cache()
+            datum_cache = self.get_default_datum_cache()
         self._handler_cache = handler_cache
         self._datum_cache = datum_cache
         if retry_intervals is None:
