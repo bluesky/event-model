@@ -123,34 +123,41 @@ class DocumentRouter:
 class Filler(DocumentRouter):
     """Pass documents through, loading any externally-referenced data.
 
-    A 'handler class' may be any callable with the signature::
+    It is recommended to use the Filler as a context manager.  Because the
+    Filler manages caches of potentially expensive resources (e.g. large data
+    in memory) managing its lifecycle is important. If used as a context
+    manager, it will drops it references to its caches upon exit from the
+    context. Unless the user holds additionally references to those caches,
+    they will be garbage collected.
 
-        handler_class(resource_path, root, **resource_kwargs)
+    But for some applications, such as taking multiple passes over the same
+    data, it may be useful to keep a longer-lived Filler instance and then
+    manually delete it when finished.
 
-    It is expected to return an object, a 'handler instance', which is also
-    callable and has the following signature::
-
-        handler_instance(**datum_kwargs)
-
-    As implied by the names, this is typically implemented using a class that
-    implements ``__init__`` and ``__call__``, with the respective signatures.
-    In general it may be any callable-that-returns-a-callable.
+    See Examples below.
 
     Parameters
     ----------
     handler_registry : dict
         Maps each 'spec' (a string identifying a given type or external
-        resource) to a handler class
+        resource) to a handler class.
+
+        A 'handler class' may be any callable with the signature::
+
+            handler_class(resource_path, root, **resource_kwargs)
+
+        It is expected to return an object, a 'handler instance', which is also
+        callable and has the following signature::
+
+            handler_instance(**datum_kwargs)
+
+        As implied by the names, this is typically implemented using a class that
+        implements ``__init__`` and ``__call__``, with the respective signatures.
+        In general it may be any callable-that-returns-a-callable.
     handler_cache : dict, optional
-        A cache mapping a Resource uid to a handler instance created for that
-        resource. That instance may hold on to certain expensive resources,
-        such as data in memory or an open file handle. If None, a dict is used
-        and cleared on ``__exit__`` from the context. If a cache is provided by
-        the user, the user is in charge of clearing it.
+        A cache of handler instances. If None, a dict is used.
     datum_cache : dict, optional
-        A cache mapping a Datum id to a Datum document. If None, a dict is used
-        and cleared on ``__exit__`` from the context. If a cache is provided by
-        the user, the user is in charge of clearing it.
+        A cache of Datum documents. If None, a dict is used.
     retry_intervals : Iterable, optional
         If data is not found on the first try, there may a race between the
         I/O systems creating the external data and this stream of Documents
@@ -159,16 +166,30 @@ class Filler(DocumentRouter):
         between subsequent attempts. An empty list means, "Try only once." If
         None, a sensible default is used. That default should not be considered
         stable; it may change at any time as the authors tune it.
+
+    Examples
+    --------
+    A Filler may be used as a context manager.
+
+    >>> with Filler(handler_registry) as filler:
+    ...     for name, doc in stream:
+    ...         filler(name, doc)
+
+    Or as a long-lived object.
+
+    >>> f = Filler(handler_registry)
+    >>> for name, doc in stream:
+    ...     filler(name, doc)
+    ...
+    >>> del filler  # Free up memory from potentially large caches.
     """
     def __init__(self, handler_registry, *,
                  handler_cache=None, datum_cache=None, retry_intervals=None):
         self.handler_registry = handler_registry
-        self._auto_clear_handler_cache = handler_cache is None
-        self._auto_clear_datum_cache = datum_cache is None
         if handler_cache is None:
-            handler_cache = {}
+            handler_cache = self.get_default_handler_cache()
         if datum_cache is None:
-            datum_cache = {}
+            datum_cache = self.get_dfeault_datum_cache()
         self._handler_cache = handler_cache
         self._datum_cache = datum_cache
         if retry_intervals is None:
@@ -176,6 +197,14 @@ class Filler(DocumentRouter):
             # Max sleep, between the final two attempts, is about 1 second.
             retry_intervals = 0.001 * numpy.array([2**i for i in range(11)])
         self.retry_intervals = list(retry_intervals)
+
+    @staticmethod
+    def get_default_datum_cache():
+        return {}
+
+    @staticmethod
+    def get_default_handler_cache():
+        return {}
 
     def start(self, doc):
         return doc
@@ -231,10 +260,12 @@ class Filler(DocumentRouter):
         return self
 
     def __exit__(self, *exc_details):
-        if self._auto_clear_handler_cache:
-            self._handler_cache.clear()
-        if self._auto_clear_datum_cache:
-            self._datum_cache.clear()
+        # Drop references to the caches. If the user holds another reference to
+        # them it's the user's problem to manage their lifecycle. If the user
+        # does not (e.g. they are the default caches) the gc will look after
+        # them.
+        self._handler_cache = None
+        self._datum_cache = None
 
 
 class EventModelError(Exception):
