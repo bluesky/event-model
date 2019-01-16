@@ -151,11 +151,17 @@ class Filler(DocumentRouter):
         A cache mapping a Datum id to a Datum document. If None, a dict is used
         and cleared when :meth:`start` or :meth:`stop` are called. If a cache
         is provided by the user, the user is in charge of clearing it.
+    retry_intervals : Iterable, optional
+        If data is not found on the first try, there may a race between the
+        I/O systems creating the external data and this stream of Documents
+        that reference it. If Filler encounters an ``IOError`` it will wait a
+        bit and retry. This list specifies how long tosleep (in seconds)
+        between subsequent attempts. An empty list means, "Try only once." If
+        None, a sensible default is used. That default should not be considered
+        stable; it may change at any time as the authors tune it.
     """
-    ATTEMPTS = 10
-
     def __init__(self, handler_registry, *,
-                 handler_cache=None, datum_cache=None):
+                 handler_cache=None, datum_cache=None, retry_intervals=None):
         self.handler_registry = handler_registry
         self._auto_clear_handler_cache = handler_cache is None
         self._auto_clear_datum_cache = datum_cache is None
@@ -165,6 +171,11 @@ class Filler(DocumentRouter):
             datum_cache = {}
         self.handlers = handler_cache
         self.datums = datum_cache
+        if retry_intervals is None:
+            # Total wait of about 2 seconds before giving up.
+            # Max sleep, between the final two attempts, is about 1 second.
+            retry_intervals = 0.001 * numpy.array([2**i for i in range(11)])
+        self.retry_intervals = list(retry_intervals)
 
     def start(self, doc):
         self._auto_clear()
@@ -187,9 +198,12 @@ class Filler(DocumentRouter):
             if not is_filled:
                 datum_id = doc['data'][key]
                 datum_doc = self.datums[datum_id]
-                interval = 0.001
                 error = None
-                for i in range(self.ATTEMPTS):
+                # We are sure to attempt to read that data at least once and
+                # then perhaps additional times depending on the contents of
+                # retry_intervals.
+                for interval in [0] + self.retry_intervals:
+                    ttime.sleep(interval)
                     try:
                         handler = self.handlers[datum_doc['resource']]
                         actual_data = handler(**datum_doc['datum_kwargs'])
@@ -202,9 +216,6 @@ class Filler(DocumentRouter):
                         error = error_
                     else:
                         break
-                    ttime.sleep(interval)
-                    # Back off how quickly we attempt each time.
-                    interval *= 2
                 else:
                     # We have used up all our attempts. There seems to be an
                     # actual problem. Raise the error stashed above.
