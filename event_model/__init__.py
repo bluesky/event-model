@@ -490,7 +490,7 @@ def sanitize_doc(doc):
 
     Parameters
     ----------
-    doc : event-model document.
+    doc : dict
         The event-model document to be sanitized
 
     Returns
