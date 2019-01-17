@@ -127,8 +127,8 @@ class Filler(DocumentRouter):
     Filler manages caches of potentially expensive resources (e.g. large data
     in memory) managing its lifecycle is important. If used as a context
     manager, it will drop references to its caches upon exit from the
-    context. Unless the user holds additionally references to those caches,
-    they will be garbage collected.
+    context. Unless the user holds additional references to those caches, they
+    will be garbage collected.
 
     But for some applications, such as taking multiple passes over the same
     data, it may be useful to keep a longer-lived Filler instance and then
@@ -151,9 +151,10 @@ class Filler(DocumentRouter):
 
             handler_instance(**datum_kwargs)
 
-        As implied by the names, this is typically implemented using a class that
-        implements ``__init__`` and ``__call__``, with the respective signatures.
-        In general it may be any callable-that-returns-a-callable.
+        As the names 'handler class' and 'handler instance' suggest, this is
+        typically implemented using a class that implements ``__init__`` and
+        ``__call__``, with the respective signatures. But in general it may be
+        any callable-that-returns-a-callable.
     include : Iterable
         The set of fields to fill. By default all unfilled fields are filled.
         This parameter is mutually incompatible with the ``exclude`` parameter.
