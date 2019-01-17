@@ -154,6 +154,13 @@ class Filler(DocumentRouter):
         As implied by the names, this is typically implemented using a class that
         implements ``__init__`` and ``__call__``, with the respective signatures.
         In general it may be any callable-that-returns-a-callable.
+    include : Iterable
+        The set of fields to fill. By default all unfilled fields are filled.
+        This parameter is mutually incompatible with the ``exclude`` parameter.
+    exclude : Iterable
+        The set of fields to skip filling. By default all unfilled fields are
+        filled.  This parameter is mutually incompatible with the ``include``
+        parameter.
     handler_cache : dict, optional
         A cache of handler instances. If None, a dict is used.
     datum_cache : dict, optional
@@ -184,7 +191,13 @@ class Filler(DocumentRouter):
     >>> del filler  # Free up memory from potentially large caches.
     """
     def __init__(self, handler_registry, *,
+                 include=None, exclude=None,
                  handler_cache=None, datum_cache=None, retry_intervals=None):
+        if include is not None and exclude is not None:
+            raise EventModelValueError(
+                "The parameters `include` and `exclude` are mutually "
+                "incompatible. At least one must be left as the default, "
+                "None.")
         self.handler_registry = handler_registry
         if handler_cache is None:
             handler_cache = self.get_default_handler_cache()
@@ -197,6 +210,8 @@ class Filler(DocumentRouter):
             # Max sleep, between the final two attempts, is about 1 second.
             retry_intervals = 0.001 * numpy.array([2**i for i in range(11)])
         self.retry_intervals = list(retry_intervals)
+        self.include = include
+        self.exclude = exclude
 
     @staticmethod
     def get_default_datum_cache():
@@ -245,6 +260,10 @@ class Filler(DocumentRouter):
 
     def event(self, doc):
         for key, is_filled in doc['filled'].items():
+            if self.exclude is not None and key in self.exclude:
+                continue
+            if self.include is not None and key not in self.include:
+                continue
             if not is_filled:
                 datum_id = doc['data'][key]
                 datum_doc = self._datum_cache[datum_id]
