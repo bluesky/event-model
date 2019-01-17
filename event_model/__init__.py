@@ -213,6 +213,7 @@ class Filler(DocumentRouter):
         self.retry_intervals = list(retry_intervals)
         self.include = include
         self.exclude = exclude
+        self._closed = False
 
     @staticmethod
     def get_default_datum_cache():
@@ -306,15 +307,25 @@ class Filler(DocumentRouter):
         # them it's the user's problem to manage their lifecycle. If the user
         # does not (e.g. they are the default caches) the gc will look after
         # them.
+        self._closed = True
         self._handler_cache = None
         self._datum_cache = None
 
+    def __call__(self, name, doc, validate=False):
+        if self._closed:
+            raise EventModelRuntimeError(
+                "This Filler has been closed and is no longer usable.")
+        super().__call__(name, doc, validate)
 
 class EventModelError(Exception):
     ...
 
 
 class EventModelValueError(EventModelError, ValueError):
+    ...
+
+
+class EventModelRuntimeError(EventModelError, RuntimeError):
     ...
 
 
