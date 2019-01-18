@@ -176,9 +176,19 @@ class Filler(DocumentRouter):
         I/O systems creating the external data and this stream of Documents
         that reference it. If Filler encounters an ``IOError`` it will wait a
         bit and retry. This list specifies how long to sleep (in seconds)
-        between subsequent attempts. None means, "Try only once." By default, a
-        sequence of several retries is used. That default should not be
-        considered stable; it may change at any time as the authors tune it.
+        between subsequent attempts. Set to ``None`` to try only once before
+        raising ``DataNotAccessible``. A subclass may catch this exception and
+        implement a different retry mechanism --- for example using a different
+        implementation of sleep from an async framework.  But by default, a
+        sequence of several retries with increasing sleep intervals is used.
+        The default sequence should not be considered stable; it may change at
+        any time as the authors tune it.
+
+    Raises
+    ------
+    DataNotAccessible
+        If an IOError is raised when loading the data after the configured
+        number of attempts. See the ``retry_intervals`` parameter for details.
 
     Examples
     --------
