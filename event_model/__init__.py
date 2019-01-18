@@ -402,7 +402,7 @@ def compose_resource(*, start, spec, root, resource_path, resource_kwargs,
            'spec': spec,
            'root': root,
            'resource_path': resource_path,
-           'resource_kwargs': {},
+           'resource_kwargs': resource_kwargs,
            'path_semantics': path_semantics}
     if validate:
         jsonschema.validate(doc, schemas[DocumentNames.resource])
