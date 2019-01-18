@@ -225,7 +225,6 @@ def test_filler():
     assert filler._closed
 
     # Test context manager
-
     with event_model.Filler(reg) as filler:
         filler('start', run_bundle.start_doc)
         filler('descriptor', desc_bundle.descriptor_doc)
@@ -238,6 +237,14 @@ def test_filler():
         assert not filler._closed
     assert event['data']['image'].shape == (5, 5)
     assert filler._closed
+
+    # Test undefined handler spec
+    with event_model.Filler({}) as filler:
+        filler('start', run_bundle.start_doc)
+        filler('descriptor', desc_bundle.descriptor_doc)
+        filler('descriptor', desc_bundle_baseline.descriptor_doc)
+        with pytest.raises(event_model.UndefinedAssetSpecification):
+            filler('resource', res_bundle.resource_doc)
 
     # Test exclude and include.
     with pytest.raises(ValueError):
