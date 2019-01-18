@@ -281,6 +281,11 @@ class Filler(DocumentRouter):
                     ttime.sleep(interval)
                     try:
                         handler = self._handler_cache[datum_doc['resource']]
+                    except KeyError as err:
+                        raise EventModelKeyError(
+                            f"Datum document references a Resource that has "
+                            f"not yet been seen. Datum document: {datum_doc}") from err
+                    try:
                         actual_data = handler(**datum_doc['datum_kwargs'])
                         doc['data'][key] = actual_data
                         doc['filled'][key] = datum_id
@@ -328,6 +333,10 @@ class Filler(DocumentRouter):
 
 
 class EventModelError(Exception):
+    ...
+
+
+class EventModelKeyError(EventModelError, KeyError):
     ...
 
 
