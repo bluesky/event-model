@@ -245,7 +245,8 @@ class Filler(DocumentRouter):
             handler_class = self.handler_registry[doc['spec']]
         except KeyError as err:
             raise UndefinedAssetSpecification(
-                f"Resource document refers to spec {doc['spec']!r} which is "
+                f"Resource document with uid {doc['uid']} "
+                f"refers to spec {doc['spec']!r} which is "
                 f"not defined in the Filler's handler registry.") from err
         handler = handler_class(doc['resource_path'],
                                 root=doc['root'],
