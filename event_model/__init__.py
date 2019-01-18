@@ -120,6 +120,11 @@ class DocumentRouter:
         self.datum_page(bulk_datum_to_datum_page(doc))
 
 
+# In total wait about 2 seconds before giving up.
+# Max sleep, between the final two attempts, is about 1 second.
+DEFAULT_RETRY_INTERVALS = tuple(0.001 * numpy.array([2**i for i in range(11)]))
+
+
 class Filler(DocumentRouter):
     """Pass documents through, loading any externally-referenced data.
 
@@ -171,9 +176,9 @@ class Filler(DocumentRouter):
         I/O systems creating the external data and this stream of Documents
         that reference it. If Filler encounters an ``IOError`` it will wait a
         bit and retry. This list specifies how long to sleep (in seconds)
-        between subsequent attempts. An empty list means, "Try only once." If
-        None, a sensible default is used. That default should not be considered
-        stable; it may change at any time as the authors tune it.
+        between subsequent attempts. None means, "Try only once." By default, a
+        sequence of several retries is used. That default should not be
+        considered stable; it may change at any time as the authors tune it.
 
     Examples
     --------
@@ -193,7 +198,8 @@ class Filler(DocumentRouter):
     """
     def __init__(self, handler_registry, *,
                  include=None, exclude=None,
-                 handler_cache=None, datum_cache=None, retry_intervals=None):
+                 handler_cache=None, datum_cache=None,
+                 retry_intervals=DEFAULT_RETRY_INTERVALS):
         if include is not None and exclude is not None:
             raise EventModelValueError(
                 "The parameters `include` and `exclude` are mutually "
@@ -207,9 +213,7 @@ class Filler(DocumentRouter):
         self._handler_cache = handler_cache
         self._datum_cache = datum_cache
         if retry_intervals is None:
-            # Total wait about 2 seconds before giving up.
-            # Max sleep, between the final two attempts, is about 1 second.
-            retry_intervals = 0.001 * numpy.array([2**i for i in range(11)])
+            retry_intervals = []
         self.retry_intervals = list(retry_intervals)
         self.include = include
         self.exclude = exclude
