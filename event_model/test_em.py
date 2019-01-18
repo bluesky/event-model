@@ -232,7 +232,9 @@ def test_filler():
         filler('resource', res_bundle.resource_doc)
         filler('datum', datum_doc)
         event = copy.deepcopy(raw_event)
-        filler('event', event)
+        name, doc = filler('event', event)
+        assert name == 'event'
+        assert doc is event
         filler('stop', stop_doc)
         assert not filler._closed
     assert event['data']['image'].shape == (5, 5)

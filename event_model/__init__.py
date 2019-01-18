@@ -344,7 +344,7 @@ class Filler(DocumentRouter):
         if self._closed:
             raise EventModelRuntimeError(
                 "This Filler has been closed and is no longer usable.")
-        super().__call__(name, doc, validate)
+        return super().__call__(name, doc, validate)
 
 
 class EventModelError(Exception):
