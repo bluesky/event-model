@@ -1,4 +1,5 @@
 import event_model
+import numpy
 
 
 def test_documents():
@@ -150,6 +151,7 @@ def test_document_router_smoke_test():
     res_bundle = run_bundle.compose_resource(
         spec='TIFF', root='/tmp', resource_path='stack.tiff',
         resource_kwargs={})
+    dr('resource', res_bundle.resource_doc)
     datum_doc1 = res_bundle.compose_datum(datum_kwargs={'slice': 5})
     datum_doc2 = res_bundle.compose_datum(datum_kwargs={'slice': 10})
     dr('datum', datum_doc1)
@@ -170,3 +172,46 @@ def test_document_router_smoke_test():
         seq_num=1)
     dr('event', event3)
     dr('stop', run_bundle.compose_stop())
+
+
+def test_filler():
+
+    class DummyHandler:
+        def __init__(self, resource_path, root, a, b):
+            assert a == 1
+            assert b == 2
+            assert resource_path == 'stack.tiff'
+            assert root == '/tmp'
+
+        def __call__(self, c, d):
+            assert c == 3
+            assert d == 4
+            return numpy.ones((5, 5))
+
+    reg = {'DUMMY': DummyHandler}
+    filler = event_model.Filler(reg)
+    run_bundle = event_model.compose_run()
+    filler('start', run_bundle.start_doc)
+    desc_bundle = run_bundle.compose_descriptor(
+        data_keys={'motor': {'shape': [], 'dtype': 'number', 'source': '...'},
+                   'image': {'shape': [512, 512], 'dtype': 'number',
+                             'source': '...', 'external': 'FILESTORE:'}},
+        name='primary')
+    filler('descriptor', desc_bundle.descriptor_doc)
+    desc_bundle_baseline = run_bundle.compose_descriptor(
+        data_keys={'motor': {'shape': [], 'dtype': 'number', 'source': '...'}},
+        name='baseline')
+    filler('descriptor', desc_bundle_baseline.descriptor_doc)
+    res_bundle = run_bundle.compose_resource(
+        spec='DUMMY', root='/tmp', resource_path='stack.tiff',
+        resource_kwargs={'a': 1, 'b': 2})
+    filler('resource', res_bundle.resource_doc)
+    datum_doc = res_bundle.compose_datum(datum_kwargs={'c': 3, 'd': 4})
+    filler('datum', datum_doc)
+    event = desc_bundle.compose_event(
+        data={'motor': 0, 'image': datum_doc['datum_id']},
+        timestamps={'motor': 0, 'image': 0}, filled={'image': False},
+        seq_num=1)
+    filler('event', event)
+    assert event['data']['image'].shape == (5, 5)
+    filler('stop', run_bundle.compose_stop())
