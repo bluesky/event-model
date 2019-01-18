@@ -295,8 +295,8 @@ class Filler(DocumentRouter):
                     # We have used up all our attempts. There seems to be an
                     # actual problem. Raise the error stashed above.
                     raise DataNotAccessible(
-                        "Filler was unable to load the data referenced by the "
-                        "Datum document {datum_doc}.") from error
+                        f"Filler was unable to load the data referenced by "
+                        f"the Datum document {datum_doc}.") from error
         return doc
 
     def descriptor(self, doc):
