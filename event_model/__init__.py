@@ -308,7 +308,7 @@ class Filler(DocumentRouter):
     def __enter__(self):
         return self
 
-    def __exit__(self, *exc_details):
+    def close(self):
         # Drop references to the caches. If the user holds another reference to
         # them it's the user's problem to manage their lifecycle. If the user
         # does not (e.g. they are the default caches) the gc will look after
@@ -316,6 +316,9 @@ class Filler(DocumentRouter):
         self._closed = True
         self._handler_cache = None
         self._datum_cache = None
+
+    def __exit__(self, *exc_details):
+        self.close()
 
     def __call__(self, name, doc, validate=False):
         if self._closed:
