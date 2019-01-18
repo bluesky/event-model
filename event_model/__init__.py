@@ -284,7 +284,7 @@ class Filler(DocumentRouter):
                         actual_data = handler(**datum_doc['datum_kwargs'])
                         doc['data'][key] = actual_data
                         doc['filled'][key] = datum_id
-                    except OSError as error_:
+                    except IOError as error_:
                         # The file may not be visible on the network yet.
                         # Wait and try again. Stash the error in a variable
                         # that we can access later if we run out of attempts.
@@ -294,7 +294,9 @@ class Filler(DocumentRouter):
                 else:
                     # We have used up all our attempts. There seems to be an
                     # actual problem. Raise the error stashed above.
-                    raise error
+                    raise DataNotAccessible(
+                        "Filler was unable to load the data referenced by the "
+                        "Datum document {datum_doc}.") from error
         return doc
 
     def descriptor(self, doc):
@@ -340,6 +342,11 @@ class EventModelValidationError(EventModelError):
 
 class UnfilledData(EventModelError):
     """raised when unfilled data is found"""
+    ...
+
+
+class DataNotAccessible(EventModelError, IOError):
+    """raised when attempts to load data referenced by Datum document fail"""
     ...
 
 
