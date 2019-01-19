@@ -237,6 +237,9 @@ class Filler(DocumentRouter):
         self.retry_intervals = list(retry_intervals)
         self._closed = False
 
+    def __repr__(self):
+        return "<Filler>" if not self._closed else "<Closed Filler>"
+
     @staticmethod
     def get_default_resource_cache():
         return {}
