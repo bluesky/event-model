@@ -290,3 +290,27 @@ def test_filler():
         filler('stop', stop_doc)
         assert not filler._closed
     assert event['data']['image'].shape == (5, 5)
+
+    class DummyHandlerRootMapTest:
+        def __init__(self, resource_path, a, b):
+            assert a == 1
+            assert b == 2
+            assert resource_path == '/tmp/moved/stack.tiff'
+
+        def __call__(self, c, d):
+            assert c == 3
+            assert d == 4
+            return numpy.ones((5, 5))
+
+    with event_model.Filler({'DUMMY': DummyHandlerRootMapTest},
+                            root_map={'/tmp': '/tmp/moved'}) as filler:
+        filler('start', run_bundle.start_doc)
+        filler('descriptor', desc_bundle.descriptor_doc)
+        filler('descriptor', desc_bundle_baseline.descriptor_doc)
+        filler('resource', res_bundle.resource_doc)
+        filler('datum', datum_doc)
+        event = copy.deepcopy(raw_event)
+        filler('event', event)
+        filler('stop', stop_doc)
+        assert not filler._closed
+    assert event['data']['image'].shape == (5, 5)

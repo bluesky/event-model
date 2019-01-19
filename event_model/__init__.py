@@ -162,6 +162,10 @@ class Filler(DocumentRouter):
         The set of fields to skip filling. By default all unfilled fields are
         filled.  This parameter is mutually incompatible with the ``include``
         parameter.
+    root_map: dict
+        str -> str mapping to account for temporarily moved/copied/remounted
+        files.  Any resources which have a ``root`` in ``root_map`` will be
+        loaded using the mapped ``root``.
     handler_cache : dict, optional
         A cache of handler instances. If None, a dict is used.
     resource_cache : dict, optional
@@ -204,7 +208,7 @@ class Filler(DocumentRouter):
     >>> del filler  # Free up memory from potentially large caches.
     """
     def __init__(self, handler_registry, *,
-                 include=None, exclude=None,
+                 include=None, exclude=None, root_map=None,
                  handler_cache=None, resource_cache=None, datum_cache=None,
                  retry_intervals=(0.001, 0.002, 0.004, 0.008, 0.016, 0.032,
                                   0.064, 0.128, 0.256, 0.512, 1.024)):
@@ -214,6 +218,9 @@ class Filler(DocumentRouter):
                 "incompatible. At least one must be left as the default, "
                 "None.")
         self.handler_registry = handler_registry
+        self.include = include
+        self.exclude = exclude
+        self.root_map = root_map or {}
         if handler_cache is None:
             handler_cache = self.get_default_handler_cache()
         if resource_cache is None:
@@ -226,8 +233,6 @@ class Filler(DocumentRouter):
         if retry_intervals is None:
             retry_intervals = []
         self.retry_intervals = list(retry_intervals)
-        self.include = include
-        self.exclude = exclude
         self._closed = False
 
     @staticmethod
@@ -313,8 +318,14 @@ class Filler(DocumentRouter):
                             f"not defined in the Filler's "
                             f"handler registry.") from err
                     try:
-                        handler = handler_class(resource['resource_path'],
-                                                root=resource['root'],
+                        # Apply root_map.
+                        resource_path = resource['resource_path']
+                        root = resource.get('root', '')
+                        root = self.root_map.get(root, root)
+                        if root:
+                            resource_path = os.path.join(root, resource_path)
+
+                        handler = handler_class(resource_path,
                                                 **resource['resource_kwargs'])
                     except Exception as err:
                         raise EventModelError(
