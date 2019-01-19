@@ -169,6 +169,8 @@ class Filler(DocumentRouter):
         parameter.
     handler_cache : dict, optional
         A cache of handler instances. If None, a dict is used.
+    resource_cache : dict, optional
+        A cache of Resource documents. If None, a dict is used.
     datum_cache : dict, optional
         A cache of Datum documents. If None, a dict is used.
     retry_intervals : Iterable, optional
@@ -208,7 +210,7 @@ class Filler(DocumentRouter):
     """
     def __init__(self, handler_registry, *,
                  include=None, exclude=None,
-                 handler_cache=None, datum_cache=None,
+                 handler_cache=None, resource_cache=None, datum_cache=None,
                  retry_intervals=DEFAULT_RETRY_INTERVALS):
         if include is not None and exclude is not None:
             raise EventModelValueError(
@@ -218,9 +220,12 @@ class Filler(DocumentRouter):
         self.handler_registry = handler_registry
         if handler_cache is None:
             handler_cache = self.get_default_handler_cache()
+        if resource_cache is None:
+            resource_cache = self.get_default_resource_cache()
         if datum_cache is None:
             datum_cache = self.get_default_datum_cache()
         self._handler_cache = handler_cache
+        self._resource_cache = resource_cache
         self._datum_cache = datum_cache
         if retry_intervals is None:
             retry_intervals = []
@@ -228,6 +233,10 @@ class Filler(DocumentRouter):
         self.include = include
         self.exclude = exclude
         self._closed = False
+
+    @staticmethod
+    def get_default_resource_cache():
+        return {}
 
     @staticmethod
     def get_default_datum_cache():
@@ -241,17 +250,9 @@ class Filler(DocumentRouter):
         return doc
 
     def resource(self, doc):
-        try:
-            handler_class = self.handler_registry[doc['spec']]
-        except KeyError as err:
-            raise UndefinedAssetSpecification(
-                f"Resource document with uid {doc['uid']} "
-                f"refers to spec {doc['spec']!r} which is "
-                f"not defined in the Filler's handler registry.") from err
-        handler = handler_class(doc['resource_path'],
-                                root=doc['root'],
-                                **doc['resource_kwargs'])
-        self._handler_cache[doc['uid']] = handler
+        # Defer creating the handler instance until we actually need it, when
+        # we fill the first Event field that requires this Resource.
+        self._resource_cache[doc['uid']] = doc
         return doc
 
     # Handlers operate document-wise, so we'll explode pages into individual
@@ -288,19 +289,50 @@ class Filler(DocumentRouter):
                 continue
             if not is_filled:
                 datum_id = doc['data'][key]
-                datum_doc = self._datum_cache[datum_id]
-                error = None
+                # Look up the cached Datum doc.
+                try:
+                    datum_doc = self._datum_cache[datum_id]
+                except KeyError as err:
+                    raise UnresolvableForeignKeyError(
+                        f"Event with uid {doc['uid']} refers to unknown Datum "
+                        f"datum_id {datum_id}") from err
+                resource_uid = datum_doc['resource']
+                # Look up the cached Resource.
+                try:
+                    resource = self._resource_cache[resource_uid]
+                except KeyError as err:
+                    raise UnresolvableForeignKeyError(
+                        f"Datum with id {datum_id} refers to unknown Resource "
+                        f"uid {resource_uid}") from err
+                # Look up the cached handler instance, or instantiate one.
+                try:
+                    handler = self._handler_cache[resource['uid']]
+                except KeyError:
+                    try:
+                        handler_class = self.handler_registry[resource['spec']]
+                    except KeyError as err:
+                        raise UndefinedAssetSpecification(
+                            f"Resource document with uid {resource['uid']} "
+                            f"refers to spec {resource['spec']!r} which is "
+                            f"not defined in the Filler's "
+                            f"handler registry.") from err
+                    try:
+                        handler = handler_class(resource['resource_path'],
+                                                root=resource['root'],
+                                                **resource['resource_kwargs'])
+                    except Exception as err:
+                        raise EventModelError(
+                            f"Error instantiating handler "
+                            f"class {handler_class} "
+                            f"with Resource document {resource}.") from err
+                    self._handler_cache[resource['uid']] = handler
+
                 # We are sure to attempt to read that data at least once and
                 # then perhaps additional times depending on the contents of
                 # retry_intervals.
+                error = None
                 for interval in [0] + self.retry_intervals:
                     ttime.sleep(interval)
-                    try:
-                        handler = self._handler_cache[datum_doc['resource']]
-                    except KeyError as err:
-                        raise EventModelKeyError(
-                            f"Datum document references a Resource that has "
-                            f"not yet been seen. Datum document: {datum_doc}") from err
                     try:
                         actual_data = handler(**datum_doc['datum_kwargs'])
                         doc['data'][key] = actual_data
@@ -317,7 +349,8 @@ class Filler(DocumentRouter):
                     # actual problem. Raise the error stashed above.
                     raise DataNotAccessible(
                         f"Filler was unable to load the data referenced by "
-                        f"the Datum document {datum_doc}.") from error
+                        f"the Datum document {datum_doc} and the Resource "
+                        f"document {resource}.") from error
         return doc
 
     def descriptor(self, doc):
@@ -336,6 +369,7 @@ class Filler(DocumentRouter):
         # them.
         self._closed = True
         self._handler_cache = None
+        self._resource_cache = None
         self._datum_cache = None
 
     def __exit__(self, *exc_details):
@@ -380,6 +414,11 @@ class UndefinedAssetSpecification(EventModelKeyError):
 
 class DataNotAccessible(EventModelError, IOError):
     """raised when attempts to load data referenced by Datum document fail"""
+    ...
+
+
+class UnresolvableForeignKeyError(EventModelValueError):
+    """when we see a foreign before we see the thing to which it refers"""
     ...
 
 

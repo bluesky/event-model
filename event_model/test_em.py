@@ -245,8 +245,12 @@ def test_filler():
         filler('start', run_bundle.start_doc)
         filler('descriptor', desc_bundle.descriptor_doc)
         filler('descriptor', desc_bundle_baseline.descriptor_doc)
+        filler('resource', res_bundle.resource_doc)
+        filler('datum', datum_doc)
+        event = copy.deepcopy(raw_event)
+        assert isinstance(event['data']['image'], str)
         with pytest.raises(event_model.UndefinedAssetSpecification):
-            filler('resource', res_bundle.resource_doc)
+            filler('event', event)
 
     # Test exclude and include.
     with pytest.raises(ValueError):
