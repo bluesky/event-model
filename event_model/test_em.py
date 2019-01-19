@@ -179,11 +179,10 @@ def test_document_router_smoke_test():
 def test_filler():
 
     class DummyHandler:
-        def __init__(self, resource_path, root, a, b):
+        def __init__(self, resource_path, a, b):
             assert a == 1
             assert b == 2
-            assert resource_path == 'stack.tiff'
-            assert root == '/tmp'
+            assert resource_path == '/tmp/stack.tiff'
 
         def __call__(self, c, d):
             assert c == 3
