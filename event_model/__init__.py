@@ -120,11 +120,6 @@ class DocumentRouter:
         self.datum_page(bulk_datum_to_datum_page(doc))
 
 
-# In total wait about 2 seconds before giving up.
-# Max sleep, between the final two attempts, is about 1 second.
-DEFAULT_RETRY_INTERVALS = tuple(0.001 * numpy.array([2**i for i in range(11)]))
-
-
 class Filler(DocumentRouter):
     """Pass documents through, loading any externally-referenced data.
 
@@ -211,7 +206,8 @@ class Filler(DocumentRouter):
     def __init__(self, handler_registry, *,
                  include=None, exclude=None,
                  handler_cache=None, resource_cache=None, datum_cache=None,
-                 retry_intervals=DEFAULT_RETRY_INTERVALS):
+                 retry_intervals=(0.001, 0.002, 0.004, 0.008, 0.016, 0.032,
+                                  0.064, 0.128, 0.256, 0.512, 1.024)):
         if include is not None and exclude is not None:
             raise EventModelValueError(
                 "The parameters `include` and `exclude` are mutually "
