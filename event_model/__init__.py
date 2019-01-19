@@ -197,13 +197,15 @@ class Filler(DocumentRouter):
 
     >>> with Filler(handler_registry) as filler:
     ...     for name, doc in stream:
-    ...         filler(name, doc)
+    ...         filler(name, doc)  # mutates doc in place
+    ...         # Do some analysis or export with name and doc.
 
     Or as a long-lived object.
 
     >>> f = Filler(handler_registry)
     >>> for name, doc in stream:
-    ...     filler(name, doc)
+    ...     filler(name, doc)  # mutates doc in place
+    ...     # Do some analysis or export with name and doc.
     ...
     >>> del filler  # Free up memory from potentially large caches.
     """
