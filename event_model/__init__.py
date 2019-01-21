@@ -120,11 +120,293 @@ class DocumentRouter:
         self.datum_page(bulk_datum_to_datum_page(doc))
 
 
+class Filler(DocumentRouter):
+    """Pass documents through, loading any externally-referenced data.
+
+    It is recommended to use the Filler as a context manager.  Because the
+    Filler manages caches of potentially expensive resources (e.g. large data
+    in memory) managing its lifecycle is important. If used as a context
+    manager, it will drop references to its caches upon exit from the
+    context. Unless the user holds additional references to those caches, they
+    will be garbage collected.
+
+    But for some applications, such as taking multiple passes over the same
+    data, it may be useful to keep a longer-lived Filler instance and then
+    manually delete it when finished.
+
+    See Examples below.
+
+    Parameters
+    ----------
+    handler_registry : dict
+        Maps each 'spec' (a string identifying a given type or external
+        resource) to a handler class.
+
+        A 'handler class' may be any callable with the signature::
+
+            handler_class(resource_path, root, **resource_kwargs)
+
+        It is expected to return an object, a 'handler instance', which is also
+        callable and has the following signature::
+
+            handler_instance(**datum_kwargs)
+
+        As the names 'handler class' and 'handler instance' suggest, this is
+        typically implemented using a class that implements ``__init__`` and
+        ``__call__``, with the respective signatures. But in general it may be
+        any callable-that-returns-a-callable.
+    include : Iterable
+        The set of fields to fill. By default all unfilled fields are filled.
+        This parameter is mutually incompatible with the ``exclude`` parameter.
+    exclude : Iterable
+        The set of fields to skip filling. By default all unfilled fields are
+        filled.  This parameter is mutually incompatible with the ``include``
+        parameter.
+    root_map: dict
+        str -> str mapping to account for temporarily moved/copied/remounted
+        files.  Any resources which have a ``root`` in ``root_map`` will be
+        loaded using the mapped ``root``.
+    handler_cache : dict, optional
+        A cache of handler instances. If None, a dict is used.
+    resource_cache : dict, optional
+        A cache of Resource documents. If None, a dict is used.
+    datum_cache : dict, optional
+        A cache of Datum documents. If None, a dict is used.
+    retry_intervals : Iterable, optional
+        If data is not found on the first try, there may a race between the
+        I/O systems creating the external data and this stream of Documents
+        that reference it. If Filler encounters an ``IOError`` it will wait a
+        bit and retry. This list specifies how long to sleep (in seconds)
+        between subsequent attempts. Set to ``None`` to try only once before
+        raising ``DataNotAccessible``. A subclass may catch this exception and
+        implement a different retry mechanism --- for example using a different
+        implementation of sleep from an async framework.  But by default, a
+        sequence of several retries with increasing sleep intervals is used.
+        The default sequence should not be considered stable; it may change at
+        any time as the authors tune it.
+
+    Raises
+    ------
+    DataNotAccessible
+        If an IOError is raised when loading the data after the configured
+        number of attempts. See the ``retry_intervals`` parameter for details.
+
+    Examples
+    --------
+    A Filler may be used as a context manager.
+
+    >>> with Filler(handler_registry) as filler:
+    ...     for name, doc in stream:
+    ...         filler(name, doc)  # mutates doc in place
+    ...         # Do some analysis or export with name and doc.
+
+    Or as a long-lived object.
+
+    >>> f = Filler(handler_registry)
+    >>> for name, doc in stream:
+    ...     filler(name, doc)  # mutates doc in place
+    ...     # Do some analysis or export with name and doc.
+    ...
+    >>> del filler  # Free up memory from potentially large caches.
+    """
+    def __init__(self, handler_registry, *,
+                 include=None, exclude=None, root_map=None,
+                 handler_cache=None, resource_cache=None, datum_cache=None,
+                 retry_intervals=(0.001, 0.002, 0.004, 0.008, 0.016, 0.032,
+                                  0.064, 0.128, 0.256, 0.512, 1.024)):
+        if include is not None and exclude is not None:
+            raise EventModelValueError(
+                "The parameters `include` and `exclude` are mutually "
+                "incompatible. At least one must be left as the default, "
+                "None.")
+        self.handler_registry = handler_registry
+        self.include = include
+        self.exclude = exclude
+        self.root_map = root_map or {}
+        if handler_cache is None:
+            handler_cache = self.get_default_handler_cache()
+        if resource_cache is None:
+            resource_cache = self.get_default_resource_cache()
+        if datum_cache is None:
+            datum_cache = self.get_default_datum_cache()
+        self._handler_cache = handler_cache
+        self._resource_cache = resource_cache
+        self._datum_cache = datum_cache
+        if retry_intervals is None:
+            retry_intervals = []
+        self.retry_intervals = list(retry_intervals)
+        self._closed = False
+
+    def __repr__(self):
+        return "<Filler>" if not self._closed else "<Closed Filler>"
+
+    @staticmethod
+    def get_default_resource_cache():
+        return {}
+
+    @staticmethod
+    def get_default_datum_cache():
+        return {}
+
+    @staticmethod
+    def get_default_handler_cache():
+        return {}
+
+    def start(self, doc):
+        return doc
+
+    def resource(self, doc):
+        # Defer creating the handler instance until we actually need it, when
+        # we fill the first Event field that requires this Resource.
+        self._resource_cache[doc['uid']] = doc
+        return doc
+
+    # Handlers operate document-wise, so we'll explode pages into individual
+    # documents.
+
+    def datum_page(self, doc):
+        datum = self.datum  # Avoid attribute lookup in hot loop.
+        for datum_doc in unpack_datum_page(doc):
+            datum(datum_doc)
+        return doc
+
+    def datum(self, doc):
+        self._datum_cache[doc['datum_id']] = doc
+        return doc
+
+    def event_page(self, doc):
+        # TODO We may be able to fill a page in place, and that may be more
+        # efficient than unpacking the page in to Events, filling them, and the
+        # re-packing a new page. But that seems tricky in general since the
+        # page may be implemented as a DataFrame or dict, etc.
+
+        event = self.event  # Avoid attribute lookup in hot loop.
+        filled_events = []
+
+        for event_doc in unpack_event_page(doc):
+            filled_events.append(event(event_doc))
+        return pack_event_page(filled_events)
+
+    def event(self, doc):
+        for key, is_filled in doc['filled'].items():
+            if self.exclude is not None and key in self.exclude:
+                continue
+            if self.include is not None and key not in self.include:
+                continue
+            if not is_filled:
+                datum_id = doc['data'][key]
+                # Look up the cached Datum doc.
+                try:
+                    datum_doc = self._datum_cache[datum_id]
+                except KeyError as err:
+                    raise UnresolvableForeignKeyError(
+                        f"Event with uid {doc['uid']} refers to unknown Datum "
+                        f"datum_id {datum_id}") from err
+                resource_uid = datum_doc['resource']
+                # Look up the cached Resource.
+                try:
+                    resource = self._resource_cache[resource_uid]
+                except KeyError as err:
+                    raise UnresolvableForeignKeyError(
+                        f"Datum with id {datum_id} refers to unknown Resource "
+                        f"uid {resource_uid}") from err
+                # Look up the cached handler instance, or instantiate one.
+                try:
+                    handler = self._handler_cache[resource['uid']]
+                except KeyError:
+                    try:
+                        handler_class = self.handler_registry[resource['spec']]
+                    except KeyError as err:
+                        raise UndefinedAssetSpecification(
+                            f"Resource document with uid {resource['uid']} "
+                            f"refers to spec {resource['spec']!r} which is "
+                            f"not defined in the Filler's "
+                            f"handler registry.") from err
+                    try:
+                        # Apply root_map.
+                        resource_path = resource['resource_path']
+                        root = resource.get('root', '')
+                        root = self.root_map.get(root, root)
+                        if root:
+                            resource_path = os.path.join(root, resource_path)
+
+                        handler = handler_class(resource_path,
+                                                **resource['resource_kwargs'])
+                    except Exception as err:
+                        raise EventModelError(
+                            f"Error instantiating handler "
+                            f"class {handler_class} "
+                            f"with Resource document {resource}.") from err
+                    self._handler_cache[resource['uid']] = handler
+
+                # We are sure to attempt to read that data at least once and
+                # then perhaps additional times depending on the contents of
+                # retry_intervals.
+                error = None
+                for interval in [0] + self.retry_intervals:
+                    ttime.sleep(interval)
+                    try:
+                        actual_data = handler(**datum_doc['datum_kwargs'])
+                        doc['data'][key] = actual_data
+                        doc['filled'][key] = datum_id
+                    except IOError as error_:
+                        # The file may not be visible on the network yet.
+                        # Wait and try again. Stash the error in a variable
+                        # that we can access later if we run out of attempts.
+                        error = error_
+                    else:
+                        break
+                else:
+                    # We have used up all our attempts. There seems to be an
+                    # actual problem. Raise the error stashed above.
+                    raise DataNotAccessible(
+                        f"Filler was unable to load the data referenced by "
+                        f"the Datum document {datum_doc} and the Resource "
+                        f"document {resource}.") from error
+        return doc
+
+    def descriptor(self, doc):
+        return doc
+
+    def stop(self, doc):
+        return doc
+
+    def __enter__(self):
+        return self
+
+    def close(self):
+        # Drop references to the caches. If the user holds another reference to
+        # them it's the user's problem to manage their lifecycle. If the user
+        # does not (e.g. they are the default caches) the gc will look after
+        # them.
+        self._closed = True
+        self._handler_cache = None
+        self._resource_cache = None
+        self._datum_cache = None
+
+    def __exit__(self, *exc_details):
+        self.close()
+
+    def __call__(self, name, doc, validate=False):
+        if self._closed:
+            raise EventModelRuntimeError(
+                "This Filler has been closed and is no longer usable.")
+        return super().__call__(name, doc, validate)
+
+
 class EventModelError(Exception):
     ...
 
 
+class EventModelKeyError(EventModelError, KeyError):
+    ...
+
+
 class EventModelValueError(EventModelError, ValueError):
+    ...
+
+
+class EventModelRuntimeError(EventModelError, RuntimeError):
     ...
 
 
@@ -134,6 +416,21 @@ class EventModelValidationError(EventModelError):
 
 class UnfilledData(EventModelError):
     """raised when unfilled data is found"""
+    ...
+
+
+class UndefinedAssetSpecification(EventModelKeyError):
+    """raised when a resource spec is missing from the handler registry"""
+    ...
+
+
+class DataNotAccessible(EventModelError, IOError):
+    """raised when attempts to load data referenced by Datum document fail"""
+    ...
+
+
+class UnresolvableForeignKeyError(EventModelValueError):
+    """when we see a foreign before we see the thing to which it refers"""
     ...
 
 
@@ -186,7 +483,7 @@ def compose_resource(*, start, spec, root, resource_path, resource_kwargs,
            'spec': spec,
            'root': root,
            'resource_path': resource_path,
-           'resource_kwargs': {},
+           'resource_kwargs': resource_kwargs,
            'path_semantics': path_semantics}
     if validate:
         jsonschema.validate(doc, schemas[DocumentNames.resource])

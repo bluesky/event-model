@@ -1,4 +1,7 @@
+import copy
 import event_model
+import numpy
+import pytest
 
 
 def test_documents():
@@ -150,6 +153,7 @@ def test_document_router_smoke_test():
     res_bundle = run_bundle.compose_resource(
         spec='TIFF', root='/tmp', resource_path='stack.tiff',
         resource_kwargs={})
+    dr('resource', res_bundle.resource_doc)
     datum_doc1 = res_bundle.compose_datum(datum_kwargs={'slice': 5})
     datum_doc2 = res_bundle.compose_datum(datum_kwargs={'slice': 10})
     dr('datum', datum_doc1)
@@ -170,3 +174,142 @@ def test_document_router_smoke_test():
         seq_num=1)
     dr('event', event3)
     dr('stop', run_bundle.compose_stop())
+
+
+def test_filler():
+
+    class DummyHandler:
+        def __init__(self, resource_path, a, b):
+            assert a == 1
+            assert b == 2
+            assert resource_path == '/tmp/stack.tiff'
+
+        def __call__(self, c, d):
+            assert c == 3
+            assert d == 4
+            return numpy.ones((5, 5))
+
+    reg = {'DUMMY': DummyHandler}
+    filler = event_model.Filler(reg)
+    run_bundle = event_model.compose_run()
+    desc_bundle = run_bundle.compose_descriptor(
+        data_keys={'motor': {'shape': [], 'dtype': 'number', 'source': '...'},
+                   'image': {'shape': [512, 512], 'dtype': 'number',
+                             'source': '...', 'external': 'FILESTORE:'}},
+        name='primary')
+    desc_bundle_baseline = run_bundle.compose_descriptor(
+        data_keys={'motor': {'shape': [], 'dtype': 'number', 'source': '...'}},
+        name='baseline')
+    res_bundle = run_bundle.compose_resource(
+        spec='DUMMY', root='/tmp', resource_path='stack.tiff',
+        resource_kwargs={'a': 1, 'b': 2})
+    datum_doc = res_bundle.compose_datum(datum_kwargs={'c': 3, 'd': 4})
+    raw_event = desc_bundle.compose_event(
+        data={'motor': 0, 'image': datum_doc['datum_id']},
+        timestamps={'motor': 0, 'image': 0}, filled={'image': False},
+        seq_num=1)
+    filler('start', run_bundle.start_doc)
+    filler('descriptor', desc_bundle.descriptor_doc)
+    filler('descriptor', desc_bundle_baseline.descriptor_doc)
+    filler('resource', res_bundle.resource_doc)
+    filler('datum', datum_doc)
+    event = copy.deepcopy(raw_event)
+    assert isinstance(event['data']['image'], str)
+    filler('event', event)
+    stop_doc = run_bundle.compose_stop()
+    filler('stop', stop_doc)
+    assert event['data']['image'].shape == (5, 5)
+    assert not filler._closed
+    filler.close()
+    assert filler._closed
+
+    # Test context manager
+    with event_model.Filler(reg) as filler:
+        filler('start', run_bundle.start_doc)
+        filler('descriptor', desc_bundle.descriptor_doc)
+        filler('descriptor', desc_bundle_baseline.descriptor_doc)
+        filler('resource', res_bundle.resource_doc)
+        filler('datum', datum_doc)
+        event = copy.deepcopy(raw_event)
+        name, doc = filler('event', event)
+        assert name == 'event'
+        assert doc is event
+        filler('stop', stop_doc)
+        assert not filler._closed
+    assert event['data']['image'].shape == (5, 5)
+    assert filler._closed
+
+    # Test undefined handler spec
+    with event_model.Filler({}) as filler:
+        filler('start', run_bundle.start_doc)
+        filler('descriptor', desc_bundle.descriptor_doc)
+        filler('descriptor', desc_bundle_baseline.descriptor_doc)
+        filler('resource', res_bundle.resource_doc)
+        filler('datum', datum_doc)
+        event = copy.deepcopy(raw_event)
+        assert isinstance(event['data']['image'], str)
+        with pytest.raises(event_model.UndefinedAssetSpecification):
+            filler('event', event)
+
+    # Test exclude and include.
+    with pytest.raises(ValueError):
+        event_model.Filler({}, include=[], exclude=[])
+
+    with event_model.Filler(reg, exclude=['image']) as filler:
+        filler('start', run_bundle.start_doc)
+        filler('descriptor', desc_bundle.descriptor_doc)
+        filler('descriptor', desc_bundle_baseline.descriptor_doc)
+        filler('resource', res_bundle.resource_doc)
+        filler('datum', datum_doc)
+        event = copy.deepcopy(raw_event)
+        assert isinstance(event['data']['image'], str)
+        filler('event', event)
+        filler('stop', stop_doc)
+
+    with event_model.Filler(reg, include=['image']) as filler:
+        filler('start', run_bundle.start_doc)
+        filler('descriptor', desc_bundle.descriptor_doc)
+        filler('descriptor', desc_bundle_baseline.descriptor_doc)
+        filler('resource', res_bundle.resource_doc)
+        filler('datum', datum_doc)
+        event = copy.deepcopy(raw_event)
+        filler('event', event)
+        filler('stop', stop_doc)
+        assert not filler._closed
+    assert event['data']['image'].shape == (5, 5)
+
+    with event_model.Filler(reg, include=['image', 'EXTRA THING']) as filler:
+        filler('start', run_bundle.start_doc)
+        filler('descriptor', desc_bundle.descriptor_doc)
+        filler('descriptor', desc_bundle_baseline.descriptor_doc)
+        filler('resource', res_bundle.resource_doc)
+        filler('datum', datum_doc)
+        event = copy.deepcopy(raw_event)
+        filler('event', event)
+        filler('stop', stop_doc)
+        assert not filler._closed
+    assert event['data']['image'].shape == (5, 5)
+
+    class DummyHandlerRootMapTest:
+        def __init__(self, resource_path, a, b):
+            assert a == 1
+            assert b == 2
+            assert resource_path == '/tmp/moved/stack.tiff'
+
+        def __call__(self, c, d):
+            assert c == 3
+            assert d == 4
+            return numpy.ones((5, 5))
+
+    with event_model.Filler({'DUMMY': DummyHandlerRootMapTest},
+                            root_map={'/tmp': '/tmp/moved'}) as filler:
+        filler('start', run_bundle.start_doc)
+        filler('descriptor', desc_bundle.descriptor_doc)
+        filler('descriptor', desc_bundle_baseline.descriptor_doc)
+        filler('resource', res_bundle.resource_doc)
+        filler('datum', datum_doc)
+        event = copy.deepcopy(raw_event)
+        filler('event', event)
+        filler('stop', stop_doc)
+        assert not filler._closed
+    assert event['data']['image'].shape == (5, 5)
