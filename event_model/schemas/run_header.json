@@ -18,7 +18,7 @@
         "run_stop": {
             "$ref": "./run_stop.json" }
     },
-    "required": ["run_start"],
+    "required": ["run_start", "uid"],
     "type": "object",
     "title": "run_header",
     "description": "Embedded metadata from a run"
