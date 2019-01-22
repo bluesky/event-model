@@ -1,0 +1,25 @@
+{
+    "$schema": "http://json-schema.org/draft-06/schema#",
+    "properties": {
+        "uid": {
+            "type": "string",
+            "description": "Unique identifier for this run"
+        },
+        "run_start": { 
+            "$ref": "./run_start.json" },
+        "descriptors": { 
+            "type":"array", 
+            "items": {
+                "$ref":"./event_descriptor.json"}},
+        "rescources": { 
+            "type":"array", 
+            "items": {
+                "$ref":"./resource.json"}},
+        "run_stop": {
+            "$ref": "./run_stop.json" }
+    },
+    "required": ["run_start"],
+    "type": "object",
+    "title": "run_header",
+    "description": "Embedded metadata from a run"
+}
