@@ -285,7 +285,7 @@ class Filler(DocumentRouter):
 
         for event_doc in unpack_event_page(doc):
             filled_events.append(event(event_doc))
-        return pack_event_page(filled_events)
+        return pack_event_page(*filled_events)
 
     def event(self, doc):
         for key, is_filled in doc['filled'].items():
