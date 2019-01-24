@@ -458,9 +458,9 @@ ComposeRunBundle = namedtuple('ComposeRunBundle',
                               'start_doc compose_descriptor compose_resource '
                               'compose_stop')
 ComposeDescriptorBundle = namedtuple('ComposeDescriptorBundle',
-                                     'descriptor_doc compose_event')
+                                     'descriptor_doc compose_event compose_event_page')
 ComposeResourceBundle = namedtuple('ComposeResourceBundle',
-                                   'resource_doc compose_datum')
+                                   'resource_doc compose_datum compose_datum_page')
 
 
 def compose_datum(*, resource, counter, datum_kwargs, validate=True):
@@ -468,6 +468,18 @@ def compose_datum(*, resource, counter, datum_kwargs, validate=True):
     doc = {'resource': resource_uid,
            'datum_kwargs': datum_kwargs,
            'datum_id': '{}/{}'.format(resource_uid, next(counter))}
+    if validate:
+        jsonschema.validate(doc, schemas[DocumentNames.datum])
+    return doc
+
+
+def compose_datum_page(*, resource, counter, datum_kwargs, validate=True):
+    resource_uid = resource['uid']
+    any_column, *_ = datum_kwargs.values()
+    N = len(any_column)
+    doc = {'resource': resource_uid,
+           'datum_kwargs': datum_kwargs,
+           'datum_id': ['{}/{}'.format(resource_uid, next(counter)) for _ in range(N)]}
     if validate:
         jsonschema.validate(doc, schemas[DocumentNames.datum])
     return doc
@@ -489,7 +501,8 @@ def compose_resource(*, start, spec, root, resource_path, resource_kwargs,
         jsonschema.validate(doc, schemas[DocumentNames.resource])
     return ComposeResourceBundle(
         doc,
-        partial(compose_datum, resource=doc, counter=counter))
+        partial(compose_datum, resource=doc, counter=counter),
+        partial(compose_datum_page, resource=doc, counter=counter))
 
 
 def compose_stop(*, start, event_counter, poison_pill,
@@ -512,6 +525,39 @@ def compose_stop(*, start, event_counter, poison_pill,
            'num_events': dict(event_counter)}
     if validate:
         jsonschema.validate(doc, schemas[DocumentNames.stop])
+    return doc
+
+
+def compose_event_page(*, descriptor, event_counter, data, timestamps, seq_num,
+                       filled=None, uid=None, time=None, validate=True):
+    N = len(seq_num)
+    if uid is None:
+        uid = [str(uuid.uuid4()) for _ in range(N)]
+    if time is None:
+        time = [ttime.time()] * N
+    if filled is None:
+        filled = {}
+    doc = {'uid': uid,
+           'time': time,
+           'data': data,
+           'timestamps': timestamps,
+           'seq_num': seq_num,
+           'filled': filled,
+           'descriptor': descriptor['uid']}
+    if validate:
+        jsonschema.validate(doc, schemas[DocumentNames.event_page])
+        if not (descriptor['data_keys'].keys() == data.keys() == timestamps.keys()):
+            raise EventModelValidationError(
+                "These sets of keys must match:\n"
+                "event['data'].keys(): {}\n"
+                "event['timestamps'].keys(): {}\n"
+                "descriptor['data_keys'].keys(): {}\n".format(
+                    data.keys(), timestamps.keys(), descriptor['data_keys'].keys()))
+        if set(filled) - set(data):
+            raise EventModelValidationError(
+                "Keys in event['filled'] {} must be a subset of those in "
+                "event['data'] {}".format(filled.keys(), data.keys()))
+    event_counter[descriptor['name']] += 1
     return doc
 
 
@@ -582,7 +628,8 @@ def compose_descriptor(*, start, streams, event_counter,
         event_counter[name] = 0
     return ComposeDescriptorBundle(
         doc,
-        partial(compose_event, descriptor=doc, event_counter=event_counter))
+        partial(compose_event, descriptor=doc, event_counter=event_counter),
+        partial(compose_event_page, descriptor=doc, event_counter=event_counter))
 
 
 def compose_run(*, uid=None, time=None, metadata=None, validate=True):

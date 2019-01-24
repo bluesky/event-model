@@ -37,15 +37,17 @@ def test_compose_run():
                    'image': {'shape': [512, 512], 'dtype': 'number',
                              'source': '...', 'external': 'FILESTORE:'}},
         name='primary')
-    descriptor_doc, compose_event = bundle
+    descriptor_doc, compose_event, compose_event_page = bundle
     assert bundle.descriptor_doc is descriptor_doc
     assert bundle.compose_event is compose_event
+    assert bundle.compose_event_page is compose_event_page
     bundle = compose_resource(
         spec='TIFF', root='/tmp', resource_path='stack.tiff',
         resource_kwargs={})
-    resource_doc, compose_datum = bundle
+    resource_doc, compose_datum, compose_datum_page = bundle
     assert bundle.resource_doc is resource_doc
     assert bundle.compose_datum is compose_datum
+    assert bundle.compose_datum_page is compose_datum_page
     datum_doc = compose_datum(datum_kwargs={'slice': 5})
     event_doc = compose_event(
         data={'motor': 0, 'image': datum_doc['datum_id']},
