@@ -805,23 +805,15 @@ def verify_filled(event_page):
         Raised if any of the data in the event_page is unfilled, when raised it
         inlcudes a list of unfilled data objects in the exception message.
     '''
-
     if not all(map(all, event_page['filled'].values())):
         # check that all event_page data is filled.
         unfilled_data = []
-        for field in event_page['filled']:
-            if not event_page['filled'][field]:
-                for field, filled in event_page['filled'].items():
-                    if not all(filled):
-                        unfilled_data.append(field)
-                        # Note: As of this writing, this is a slightly
-                        # aspirational error message, as event_model.Filler has
-                        # not been merged yet. May need to be revisited if it
-                        # is renamed or kept elsewhere in the end.
-                        raise UnfilledData("unfilled data found in "
-                                           "{!r}. Try passing the parameter "
-                                           "`gen` through `event_model.Filler`"
-                                           " first.".format(unfilled_data))
+        for field, filled in event_page['filled'].items():
+            if not all(filled):
+                unfilled_data.append(field)
+                raise UnfilledData(f"Unfilled data found in fields "
+                                   f"{unfilled_data!r}. Use "
+                                   f"`event_model.Filler`.")
 
 
 def sanitize_doc(doc):
