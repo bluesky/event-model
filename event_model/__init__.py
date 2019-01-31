@@ -89,12 +89,20 @@ class DocumentRouter:
     def event(self, doc):
         event_page = pack_event_page(doc)
         output_event_page = self.event_page(event_page)
+        # Subclass' implementation of event_page may return a valid EventPage
+        # or None.
+        if output_event_page is None:
+            return None
         output_event, = unpack_event_page(output_event_page)
         return output_event
 
     def datum(self, doc):
         datum_page = pack_datum_page(doc)
         output_datum_page = self.datum_page(datum_page)
+        # Subclass' implementation of event_page may return a valid DatumPage
+        # or None.
+        if output_datum_page is None:
+            return None
         output_datum, = unpack_datum_page(output_datum_page)
         return output_datum
 
