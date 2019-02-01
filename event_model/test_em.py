@@ -67,22 +67,56 @@ def test_round_trip_pagination():
     res_bundle = run_bundle.compose_resource(
         spec='TIFF', root='/tmp', resource_path='stack.tiff',
         resource_kwargs={})
-    datum_doc = res_bundle.compose_datum(datum_kwargs={'slice': 5})
-    event_doc = desc_bundle.compose_event(
-        data={'motor': 0, 'image': datum_doc['datum_id']},
+    datum_doc1 = res_bundle.compose_datum(datum_kwargs={'slice': 5})
+    datum_doc2 = res_bundle.compose_datum(datum_kwargs={'slice': 10})
+    datum_doc3 = res_bundle.compose_datum(datum_kwargs={'slice': 15})
+    event_doc1 = desc_bundle.compose_event(
+        data={'motor': 0, 'image': datum_doc1['datum_id']},
+        timestamps={'motor': 0, 'image': 0}, filled={'image': False},
+        seq_num=1)
+    event_doc2 = desc_bundle.compose_event(
+        data={'motor': 1, 'image': datum_doc2['datum_id']},
+        timestamps={'motor': 0, 'image': 0}, filled={'image': False},
+        seq_num=1)
+    event_doc3 = desc_bundle.compose_event(
+        data={'motor': 2, 'image': datum_doc3['datum_id']},
         timestamps={'motor': 0, 'image': 0}, filled={'image': False},
         seq_num=1)
 
-    # Round trip event -> event_page -> event.
-    expected = event_doc
+    # Round trip single event -> event_page -> event.
+    expected = event_doc1
     actual, = event_model.unpack_event_page(
         event_model.pack_event_page(expected))
     assert actual == expected
 
-    # Round trip datum -> datum_page -> datum.
-    expected = datum_doc
+    # Round trip two events -> event_page -> events.
+    expected = [event_doc1, event_doc2]
+    actual = list(event_model.unpack_event_page(
+        event_model.pack_event_page(*expected)))
+    assert actual == expected
+
+    # Round trip three events -> event_page -> events.
+    expected = [event_doc1, event_doc2, event_doc3]
+    actual = list(event_model.unpack_event_page(
+        event_model.pack_event_page(*expected)))
+    assert actual == expected
+
+    # Round trip one datum -> datum_page -> datum.
+    expected = datum_doc1
     actual, = event_model.unpack_datum_page(
         event_model.pack_datum_page(expected))
+    assert actual == expected
+
+    # Round trip two datum -> datum_page -> datum.
+    expected = [datum_doc1, datum_doc2]
+    actual = list(event_model.unpack_datum_page(
+        event_model.pack_datum_page(*expected)))
+    assert actual == expected
+
+    # Round trip three datum -> datum_page -> datum.
+    expected = [datum_doc1, datum_doc2, datum_doc3]
+    actual = list(event_model.unpack_datum_page(
+        event_model.pack_datum_page(*expected)))
     assert actual == expected
 
 
