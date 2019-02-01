@@ -37,15 +37,17 @@ def test_compose_run():
                    'image': {'shape': [512, 512], 'dtype': 'number',
                              'source': '...', 'external': 'FILESTORE:'}},
         name='primary')
-    descriptor_doc, compose_event = bundle
+    descriptor_doc, compose_event, compose_event_page = bundle
     assert bundle.descriptor_doc is descriptor_doc
     assert bundle.compose_event is compose_event
+    assert bundle.compose_event_page is compose_event_page
     bundle = compose_resource(
         spec='TIFF', root='/tmp', resource_path='stack.tiff',
         resource_kwargs={})
-    resource_doc, compose_datum = bundle
+    resource_doc, compose_datum, compose_datum_page = bundle
     assert bundle.resource_doc is resource_doc
     assert bundle.compose_datum is compose_datum
+    assert bundle.compose_datum_page is compose_datum_page
     datum_doc = compose_datum(datum_kwargs={'slice': 5})
     event_doc = compose_event(
         data={'motor': 0, 'image': datum_doc['datum_id']},
@@ -65,22 +67,56 @@ def test_round_trip_pagination():
     res_bundle = run_bundle.compose_resource(
         spec='TIFF', root='/tmp', resource_path='stack.tiff',
         resource_kwargs={})
-    datum_doc = res_bundle.compose_datum(datum_kwargs={'slice': 5})
-    event_doc = desc_bundle.compose_event(
-        data={'motor': 0, 'image': datum_doc['datum_id']},
+    datum_doc1 = res_bundle.compose_datum(datum_kwargs={'slice': 5})
+    datum_doc2 = res_bundle.compose_datum(datum_kwargs={'slice': 10})
+    datum_doc3 = res_bundle.compose_datum(datum_kwargs={'slice': 15})
+    event_doc1 = desc_bundle.compose_event(
+        data={'motor': 0, 'image': datum_doc1['datum_id']},
+        timestamps={'motor': 0, 'image': 0}, filled={'image': False},
+        seq_num=1)
+    event_doc2 = desc_bundle.compose_event(
+        data={'motor': 1, 'image': datum_doc2['datum_id']},
+        timestamps={'motor': 0, 'image': 0}, filled={'image': False},
+        seq_num=1)
+    event_doc3 = desc_bundle.compose_event(
+        data={'motor': 2, 'image': datum_doc3['datum_id']},
         timestamps={'motor': 0, 'image': 0}, filled={'image': False},
         seq_num=1)
 
-    # Round trip event -> event_page -> event.
-    expected = event_doc
+    # Round trip single event -> event_page -> event.
+    expected = event_doc1
     actual, = event_model.unpack_event_page(
         event_model.pack_event_page(expected))
     assert actual == expected
 
-    # Round trip datum -> datum_page -> datum.
-    expected = datum_doc
+    # Round trip two events -> event_page -> events.
+    expected = [event_doc1, event_doc2]
+    actual = list(event_model.unpack_event_page(
+        event_model.pack_event_page(*expected)))
+    assert actual == expected
+
+    # Round trip three events -> event_page -> events.
+    expected = [event_doc1, event_doc2, event_doc3]
+    actual = list(event_model.unpack_event_page(
+        event_model.pack_event_page(*expected)))
+    assert actual == expected
+
+    # Round trip one datum -> datum_page -> datum.
+    expected = datum_doc1
     actual, = event_model.unpack_datum_page(
         event_model.pack_datum_page(expected))
+    assert actual == expected
+
+    # Round trip two datum -> datum_page -> datum.
+    expected = [datum_doc1, datum_doc2]
+    actual = list(event_model.unpack_datum_page(
+        event_model.pack_datum_page(*expected)))
+    assert actual == expected
+
+    # Round trip three datum -> datum_page -> datum.
+    expected = [datum_doc1, datum_doc2, datum_doc3]
+    actual = list(event_model.unpack_datum_page(
+        event_model.pack_datum_page(*expected)))
     assert actual == expected
 
 
@@ -313,3 +349,8 @@ def test_filler():
         filler('stop', stop_doc)
         assert not filler._closed
     assert event['data']['image'].shape == (5, 5)
+
+    # Test verify_filled.
+    with pytest.raises(event_model.UnfilledData):
+        event_model.verify_filled(event_model.pack_event_page(raw_event))
+    event_model.verify_filled(event_model.pack_event_page(event))
