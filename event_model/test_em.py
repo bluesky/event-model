@@ -349,3 +349,8 @@ def test_filler():
         filler('stop', stop_doc)
         assert not filler._closed
     assert event['data']['image'].shape == (5, 5)
+
+    # Test verify_filled.
+    with pytest.raises(event_model.UnfilledData):
+        event_model.verify_filled(event_model.pack_event_page(raw_event))
+    event_model.verify_filled(event_model.pack_event_page(event))
