@@ -843,48 +843,14 @@ def sanitize_doc(doc):
         The event-model document with numpy objects converted to built-in
         Python types.
     '''
-    sanitized_doc = doc.copy()
-    _apply_to_dict_recursively(doc, _sanitize_numpy)
-
-    return sanitized_doc
+    return json.loads(json.dumps(doc, cls=NumpyEncoder))
 
 
-def _sanitize_numpy(val):
-    '''Convert any numpy objects into built-in Python types.
-
-    Parameters
-    ----------
-    val : object
-        The potential numpy object to be converted.
-
-    Returns
-    -------
-    val : object
-        The input parameter, converted to a built-in Python type if it is a
-        numpy type.
-    '''
-    if isinstance(val, (numpy.generic, numpy.ndarray)):
-        if numpy.isscalar(val):
-            return val.item()
-        return val.tolist()
-    return val
-
-
-def _apply_to_dict_recursively(dictionary, func):
-    '''Recursively and apply a function to a dictionary of dictionaries.
-
-    Takes in a (potentially nested) dictionary and applies a function to each
-    value in the dictionary
-
-    Parameters
-    ----------
-    dictionary : dict
-        The (potentially nested) dictionary to be recursed.
-    func : function
-        A function to apply to each value in dictionary.
-    '''
-
-    for key, val in dictionary.items():
-        if hasattr(val, 'items'):
-            dictionary[key] = _apply_to_dict_recursively(val, func)
-        dictionary[key] = func(val)
+class NumpyEncoder(json.JSONEncoder):
+    # Credit: https://stackoverflow.com/a/47626762/1221924
+    def default(self, obj):
+        if isinstance(obj, (numpy.generic, numpy.ndarray)):
+            if numpy.isscalar(obj):
+                return obj.item()
+            return obj.tolist()
+        return json.JSONEncoder.default(self, obj)

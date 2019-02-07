@@ -1,4 +1,5 @@
 import copy
+import json
 import event_model
 import numpy
 import pytest
@@ -153,6 +154,36 @@ def test_bulk_events_to_event_page():
     bulk_events = {'primary': [event1, event2], 'baseline': [event3]}
     pages = event_model.bulk_events_to_event_pages(bulk_events)
     assert tuple(pages) == (primary_event_page, baseline_event_page)
+
+
+def test_sanitize_doc():
+    run_bundle = event_model.compose_run()
+    desc_bundle = run_bundle.compose_descriptor(
+        data_keys={'motor': {'shape': [], 'dtype': 'number', 'source': '...'},
+                   'image': {'shape': [512, 512], 'dtype': 'number',
+                             'source': '...', 'external': 'FILESTORE:'}},
+        name='primary')
+    desc_bundle_baseline = run_bundle.compose_descriptor(
+        data_keys={'motor': {'shape': [], 'dtype': 'number', 'source': '...'}},
+        name='baseline')
+    event1 = desc_bundle.compose_event(
+        data={'motor': 0, 'image': numpy.ones((512, 512))},
+        timestamps={'motor': 0, 'image': 0}, filled={'image': True},
+        seq_num=1)
+    event2 = desc_bundle.compose_event(
+        data={'motor': 0, 'image': numpy.ones((512, 512))},
+        timestamps={'motor': 0, 'image': 0}, filled={'image': True},
+        seq_num=2)
+    event3 = desc_bundle_baseline.compose_event(
+        data={'motor': 0},
+        timestamps={'motor': 0},
+        seq_num=1)
+
+    event_page = event_model.pack_event_page(event1, event2)
+    bulk_events = {'primary': [event1, event2], 'baseline': [event3]}
+    json.dumps(event_model.sanitize_doc(event_page))
+    json.dumps(event_model.sanitize_doc(bulk_events))
+    json.dumps(event_model.sanitize_doc(event1))
 
 
 def test_bulk_datum_to_datum_page():
