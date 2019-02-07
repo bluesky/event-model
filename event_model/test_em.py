@@ -181,7 +181,6 @@ def test_sanitize_doc():
 
     event_page = event_model.pack_event_page(event1, event2)
     bulk_events = {'primary': [event1, event2], 'baseline': [event3]}
-    pages = event_model.bulk_events_to_event_pages(bulk_events)
     json.dumps(event_model.sanitize_doc(event_page))
     json.dumps(event_model.sanitize_doc(bulk_events))
     json.dumps(event_model.sanitize_doc(event1))
