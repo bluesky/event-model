@@ -38,15 +38,15 @@ class DocumentRouter:
 
         router(name, doc)
 
-    the document is passed to the method of the corresponding name, as in
+    the document is passed to the method of the corresponding name, as in::
 
         getattr(router, name)(doc)
 
-    The method is expected to return a valid document of the same type. It may
-    be the original instance (passed through), a copy, or a different dict
-    altogether.
+    The method is expected to return ``None`` or a valid document of the same
+    type. It may be the original instance (passed through), a copy, or a
+    different dict altogether.
 
-    Finally, the call to ``router(name, doc))`` returns::
+    Finally, the call to ``router(name, doc)`` returns::
 
         (name, getattr(router, name)(doc))
     """
