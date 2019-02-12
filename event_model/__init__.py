@@ -307,9 +307,11 @@ class Filler(DocumentRouter):
                 try:
                     datum_doc = self._datum_cache[datum_id]
                 except KeyError as err:
-                    raise UnresolvableForeignKeyError(
+                    err_with_key = UnresolvableForeignKeyError(
                         f"Event with uid {doc['uid']} refers to unknown Datum "
-                        f"datum_id {datum_id}") from err
+                        f"datum_id {datum_id}")
+                    err_with_key.key = datum_id
+                    raise err_with_key from err
                 resource_uid = datum_doc['resource']
                 # Look up the cached Resource.
                 try:
