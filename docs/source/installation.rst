@@ -2,6 +2,6 @@
 Installation
 ============
 
-At the command line::
+Using pip::
 
-    $ pip install event-model
+    pip install event-model

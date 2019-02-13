@@ -3,12 +3,17 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
+*********************************
 Bluesky Event Model Documentation
-=================================
+*********************************
+
+This repository contains the formal schemas for bluesky's streaming data model
+and some Python tooling for composing, validating, and transforming documents
+in the model.
 
 .. toctree::
    :maxdepth: 2
 
    installation
-   usage
+   data-model
    release-history
