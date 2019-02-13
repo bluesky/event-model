@@ -16,4 +16,5 @@ in the model.
 
    installation
    data-model
+   api
    release-history
