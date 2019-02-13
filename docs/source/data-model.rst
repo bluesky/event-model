@@ -28,7 +28,7 @@ JSON) in any language. Each document class has a defined, but flexible, schema.
    :width: 100%
    :align: center
 
-Events documents may contain the literal values or as *pointers* to values that
+Event documents may contain the literal values or as *pointers* to values that
 are stored in some external file or networked resource, yet to be loaded. Two
 additional document types manage references to externally-stored data.
 
