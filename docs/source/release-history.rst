@@ -2,6 +2,19 @@
 Release History
 ***************
 
+Unreleased
+==========
+
+Added
+-----
+* This documentation!
+* Schemas for :ref:`EventPage <event_page>` and :ref:`DatumPage <datum_page>`
+* :class:`~event_model.DocumentRouter`, a useful utility adapted from bluesky's
+  :class:`CallbackBase`
+* :class:`~event_model.Filler`
+* :func:`~event_model.verify_filled`
+* :func:`~event_model.sanitize_doc`
+
 v1.7.0 (3 January 2019)
 =======================
 
