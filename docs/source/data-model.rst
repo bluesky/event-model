@@ -37,7 +37,7 @@ additional document types manage references to externally-stored data.
 
 Finally, Event and Datum can be represented in "paged" form, where multiple
 rows are contained in one structure for efficient transport and vectorized
-compoutation. The representations contain equivalent information: an EventPage
+computation. The representations contain equivalent information: an EventPage
 can always be losslessly transformed into a Event and vice versa.
 
 The scope of a "run" is left to the user. It is quite generic: a set of
