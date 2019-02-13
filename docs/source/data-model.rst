@@ -57,6 +57,8 @@ For each type, we will show:
 * the formal schema, encoded using
   `JSON schema <https://json-schema.org/understanding-json-schema/>`_
 
+.. _start:
+
 Run Start Document
 ------------------
 
@@ -98,6 +100,8 @@ Typical example:
 Formal schema:
 
 .. literalinclude:: ../../event_model/schemas/run_start.json
+
+.. _descriptor:
 
 Event Descriptor
 ----------------
@@ -168,6 +172,8 @@ Formal schema:
 
 .. literalinclude:: ../../event_model/schemas/run_start.json
 
+.. _event:
+
 Event Document
 --------------
 
@@ -217,12 +223,16 @@ Formal schema:
 
 .. literalinclude:: ../../event_model/schemas/event.json
 
+.. _event_page:
+
 Event contents can also be represented in "paged" form, where multiple
 rows are contained in one structure for efficient transport and vectorized
 compoutation. The representations contain equivalent information: an EventPage
 can always be losslessly transformed into a Event and vice versa.
 
 .. literalinclude:: ../../event_model/schemas/event_page.json
+
+.. _stop:
 
 Run Stop Document
 -----------------
@@ -241,6 +251,8 @@ Minimal nontrivial valid example:
 Formal schema:
 
 .. literalinclude:: ../../event_model/schemas/run_stop.json
+
+.. _resource:
 
 Resource Document
 -----------------
@@ -262,6 +274,8 @@ Formal schema:
 
 .. literalinclude:: ../../event_model/schemas/resource.json
 
+.. _datum:
+
 Datum Document
 --------------
 
@@ -277,10 +291,14 @@ Formal schema:
 
 .. literalinclude:: ../../event_model/schemas/datum.json
 
+.. _datum_page:
+
 Like Events, Datum contents can also be represented in "paged" form, and the
 representations contain equivalent information.
 
 .. literalinclude:: ../../event_model/schemas/datum_page.json
+
+.. _bulk_events:
 
 "Bulk Events" Document (DEPRECATED)
 -----------------------------------
@@ -289,6 +307,8 @@ This is another representation of Events. This representation is deprecated.
 Use EventPage instead.
 
 .. literalinclude:: ../../event_model/schemas/bulk_events.json
+
+.. _bulk_datum:
 
 "Bulk Datum" Document (DEPRECATED)
 ----------------------------------
