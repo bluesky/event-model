@@ -5,6 +5,11 @@ cache:
   directories:
     - $HOME/.cache/pip
     - $HOME/.ccache  # https://github.com/travis-ci/travis-ci/issues/5853
+env:
+  global:
+    # Doctr deploy key for NSLS-II/NSLS-II.github.io
+    - secure: "EFkgQxAxoVGmqN7JkjZcuhqmrZsqowOlSZIpDkcVI9LotQlFze3V3myImpI4qolGq3fasI2sBO9/o7hHLcnoD7pC7fdiwhsMECOVmjZcpz7jOlWbAr/9J7TmD3W2+w49Jrd5uschUV12XwCytI1VUMEjayVy1WQx61Gy6xRUzZ38tw6008Hh/7wDFzFzL6q+xaknhKdorw54htzVTi3Khyv/2kWC+qxt1Qo9hF+WOIo8O4rrXAY/yp1xxrKsF+qtDBW4sylT5hf1d3Ezl4vNhSebZ8LQ8Txl2821DocD1W0j/zbD8wlbBxymvYdtvOB7jt50izErI90jy5Dw1PVkJKVfqIQAah4b5LiwdwB27HJh1gm19MJtjgyK3UfAhjVgtEr420/XIQwsN1rXVzWLp5rVbF07RngMIiZKPD6oCONuOfKWYCU7GhFAtULI610R6O8SmnhwzizNWTOn+TgI/JkFvXxflLyEjA9uyvX0pPvCi0YXEwn+mbfNOCnfSRK8rgXDQuRAFHXoSYZF/8g7i9roTnyjZb94wKVNzjyM29+68ToEKiXoNePcnVMvYFp2TvNDtawKzt0fPSAxTXnpCCXXkoA0jpMYpabzfSZkpKaH1WnFcbqIk2R75Loba5FXzx1ILHvWFri2w4yNr22EB+a5IZWe/XUvthFRFJzXhes="
+
 
 install:
   # Install this package and the packages listed in requirements.txt.
@@ -17,4 +22,8 @@ script:
   - coverage report -m  # Generate test coverage report.
   - codecov  # Upload the report to codecov.
   - flake8 --max-line-length=115  # Enforce code style (but relax line length limit a bit).
+  - set -e
   - make -C docs html  # Build the documentation.
+  # Pubish the documentation to GitHub Pages.
+  - pip install doctr
+  - doctr deploy --built-docs docs/build/html --deploy-repo NSLS-II/NSLS-II.github.io event-model
