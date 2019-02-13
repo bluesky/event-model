@@ -227,7 +227,7 @@ Formal schema:
 
 Event contents can also be represented in "paged" form, where multiple
 rows are contained in one structure for efficient transport and vectorized
-compoutation. The representations contain equivalent information: an EventPage
+computation. The representations contain equivalent information: an EventPage
 can always be losslessly transformed into an Event and vice versa.
 
 .. literalinclude:: ../../event_model/schemas/event_page.json
