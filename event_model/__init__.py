@@ -605,14 +605,14 @@ def compose_event(*, descriptor, event_counter, data, timestamps, seq_num,
 
 def compose_descriptor(*, start, streams, event_counter,
                        name, data_keys, uid=None, time=None,
-                       object_names=None, configuration=None, hints=None,
+                       object_keys=None, configuration=None, hints=None,
                        validate=True):
     if uid is None:
         uid = str(uuid.uuid4())
     if time is None:
         time = ttime.time()
-    if object_names is None:
-        object_names = {}
+    if object_keys is None:
+        object_keys = {}
     if configuration is None:
         configuration = {}
     if hints is None:
@@ -622,7 +622,7 @@ def compose_descriptor(*, start, streams, event_counter,
            'run_start': start['uid'],
            'name': name,
            'data_keys': data_keys,
-           'object_names': object_names,
+           'object_keys': object_keys,
            'hints': hints,
            'configuration': configuration}
     if validate:
