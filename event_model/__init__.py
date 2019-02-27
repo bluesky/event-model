@@ -571,8 +571,10 @@ def compose_event_page(*, descriptor, event_counter, data, timestamps, seq_num,
     return doc
 
 
-def compose_event(*, descriptor, event_counter, data, timestamps, seq_num,
+def compose_event(*, descriptor, event_counter, data, timestamps, seq_num=None,
                   filled=None, uid=None, time=None, validate=True):
+    if seq_num is None:
+        seq_num = event_counter[descriptor['name']]
     if uid is None:
         uid = str(uuid.uuid4())
     if time is None:
