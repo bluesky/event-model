@@ -116,7 +116,7 @@ Minimal nontrivial valid example:
                                    'source': 'PV:...'}},
     'hints': {},
     'name': 'primary',
-    'object_names': {},
+    'object_keys': {},
     'run_start': '10bf6945-4afd-43ca-af36-6ad8f3540bcd',  # foreign key
     'time': 1550070954.276659,
     'uid': 'd08d2ada-5f4e-495b-8e73-ff36186e7183'}

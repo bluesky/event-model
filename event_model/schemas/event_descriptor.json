@@ -95,6 +95,10 @@
             "hints": {
                 "$ref": "#/definitions/object_hints"
             },
+            "object_keys": {
+                "type": "object",
+                "description": "Maps a Device/Signal name to the names of the entries it produces in data_keys."
+            },
             "name": {
                 "type": "string",
                 "description": "A human-friendly name for this data stream, such as 'primary' or 'baseline'."
