@@ -801,7 +801,7 @@ def bulk_events_to_event_pages(bulk_events):
     Parameters
     ----------
     bulk_events : dict
-    
+
     Returns
     -------
     event_pages : list
