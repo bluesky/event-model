@@ -684,6 +684,18 @@ def compose_run(*, uid=None, time=None, metadata=None, validate=True):
 
 
 def pack_event_page(*events):
+    """
+    Transform one or more Event documents into an EventPage document.
+
+    Parameters
+    ----------
+    *event : dicts
+        any number of Event documents
+
+    Returns
+    -------
+    event_page : dict
+    """
     time_list = []
     uid_list = []
     seq_num_list = []
@@ -706,6 +718,17 @@ def pack_event_page(*events):
 
 
 def unpack_event_page(event_page):
+    """
+    Transform an EventPage document into individual Event documents.
+
+    Parameters
+    ----------
+    event_page : dict
+
+    Yields
+    ------
+    event : dict
+    """
     descriptor = event_page['descriptor']
     data_list = _transpose_dict_of_lists(event_page['data'])
     timestamps_list = _transpose_dict_of_lists(event_page['timestamps'])
@@ -724,6 +747,18 @@ def unpack_event_page(event_page):
 
 
 def pack_datum_page(*datum):
+    """
+    Transform one or more Datum documents into a DatumPage document.
+
+    Parameters
+    ----------
+    *datum : dicts
+        any number of Datum documents
+
+    Returns
+    -------
+    datum_page : dict
+    """
     datum_id_list = []
     datum_kwarg_list = []
     for datum_ in datum:
@@ -736,6 +771,17 @@ def pack_datum_page(*datum):
 
 
 def unpack_datum_page(datum_page):
+    """
+    Transform a DatumPage document into individual Datum documents.
+
+    Parameters
+    ----------
+    datum_page : dict
+
+    Yields
+    ------
+    datum : dict
+    """
     resource = datum_page['resource']
     datum_kwarg_list = _transpose_dict_of_lists(datum_page['datum_kwargs'])
     for datum_id, datum_kwargs in zip(
@@ -747,6 +793,19 @@ def unpack_datum_page(datum_page):
 
 
 def bulk_events_to_event_pages(bulk_events):
+    """
+    Transform a BulkEvents document into a list of EventPage documents.
+
+    Note: The BulkEvents layout has been deprecated in favor of EventPage.
+
+    Parameters
+    ----------
+    bulk_events : dict
+    
+    Returns
+    -------
+    event_pages : list
+    """
     # This is for a deprecated document type, so we are not being fussy
     # about efficiency/laziness here.
     event_pages = {}  # descriptor uid mapped to page
@@ -778,6 +837,12 @@ def bulk_events_to_event_pages(bulk_events):
 
 
 def bulk_datum_to_datum_page(bulk_datum):
+    """
+    Transform one BulkDatum into one DatumPage.
+
+    Note: There is only one known usage of BulkDatum "in the wild", and the
+    BulkDatum layout has been deprecated in favor of DatumPage.
+    """
     datum_page = {'datum_id': bulk_datum['datum_ids'],
                   'resource': bulk_datum['resource'],
                   'datum_kwargs': _transpose_list_of_dicts(
@@ -851,6 +916,16 @@ def sanitize_doc(doc):
 
 
 class NumpyEncoder(json.JSONEncoder):
+    """
+    A json.JSONEncoder for encoding numpy objects using built-in Python types.
+
+    Examples
+    --------
+
+    Encode a Python object that includes an arbitrarily-nested numpy object.
+
+    >>> json.dumps({'a': {'b': numpy.array([1, 2, 3])}}, cls=NumpyEncoder)
+    """
     # Credit: https://stackoverflow.com/a/47626762/1221924
     def default(self, obj):
         if isinstance(obj, (numpy.generic, numpy.ndarray)):
