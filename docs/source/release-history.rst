@@ -2,8 +2,8 @@
 Release History
 ***************
 
-Unreleased
-==========
+v1.8.0 (2019-03-05)
+===================
 
 Added
 -----
@@ -13,10 +13,10 @@ Added
   :class:`CallbackBase`
 * :class:`~event_model.Filler`
 * :func:`~event_model.verify_filled`
-* :func:`~event_model.sanitize_doc`
+* :func:`~event_model.sanitize_doc` and :class:`~event_model.NumpyEncoder`
 
-v1.7.0 (3 January 2019)
-=======================
+v1.7.0 (2019-01-03)
+===================
 
 Added
 -----
