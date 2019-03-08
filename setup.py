@@ -42,6 +42,7 @@ setup(
     author="Brookhaven National Lab",
     author_email='dallan@bnl.gov',
     url='https://github.com/NSLS-II/event-model',
+    python_requires='>={}'.format('.'.join(str(n) for n in min_version)),
     packages=find_packages(exclude=['docs', 'tests']),
     entry_points={
         'console_scripts': [

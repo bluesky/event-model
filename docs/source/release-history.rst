@@ -2,6 +2,13 @@
 Release History
 ***************
 
+v1.8.1 (2019-03-08)
+===================
+
+Fix setup.py meta-data to include ``python_requires``.  This prevents
+the wheels from being installed on python < 3.6.
+
+
 v1.8.0 (2019-03-05)
 ===================
 
