@@ -2,7 +2,7 @@
 Release History
 ***************
 
-v1.8.1 (2019-03-08)
+v1.8.2 (2019-03-08)
 ===================
 
 Fix setup.py meta-data to include ``python_requires``.  This prevents
