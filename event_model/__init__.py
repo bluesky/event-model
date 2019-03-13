@@ -643,8 +643,8 @@ def compose_descriptor(*, start, streams, event_counter,
         partial(compose_event, descriptor=doc, event_counter=event_counter),
         partial(compose_event_page, descriptor=doc, event_counter=event_counter))
 
-
-def compose_run(*, uid=None, time=None, metadata=None, validate=True):
+_GLOBAL_SCAN_ID = 0
+def compose_run(*, uid=None, time=None, scan_id=None, metadata=None, validate=True):
     """
     Compose a RunStart document and factory functions for related documents.
 
@@ -667,7 +667,11 @@ def compose_run(*, uid=None, time=None, metadata=None, validate=True):
         time = ttime.time()
     if metadata is None:
         metadata = {}
-    doc = dict(uid=uid, time=time, **metadata)
+    if scan_id is None:
+        global _GLOBAL_SCAN_ID
+        _GLOBAL_SCAN_ID += 1
+        scan_id = _GLOBAL_SCAN_ID
+    doc = dict(uid=uid, time=time, scan_id=scan_id, **metadata)
     # Define some mutable state to be shared internally by the closures composed
     # below.
     streams = {}
