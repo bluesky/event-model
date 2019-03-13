@@ -643,7 +643,10 @@ def compose_descriptor(*, start, streams, event_counter,
         partial(compose_event, descriptor=doc, event_counter=event_counter),
         partial(compose_event_page, descriptor=doc, event_counter=event_counter))
 
+
 _GLOBAL_SCAN_ID = 0
+
+
 def compose_run(*, uid=None, time=None, scan_id=None, metadata=None, validate=True):
     """
     Compose a RunStart document and factory functions for related documents.
