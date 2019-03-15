@@ -68,6 +68,26 @@
                         }
                     }
                 }
+            },
+            "configuration": {
+                "type": "object",
+                "properties": {
+                    "data": {
+                        "type": "object",
+                        "description": "The actual measurement data"
+                    },
+                    "timestamps": {
+                        "type": "object",
+                        "description": "The timestamps of the individual measurement data"
+                    },
+                    "data_keys": {
+                        "additionalProperties": {
+                            "$ref": "#/definitions/data_key"
+                        },
+                        "type": "object",
+                        "description": "This describes the data stored alongside it in this configuration object."
+                    }
+                }
             }
         },
         "properties": {
@@ -76,7 +96,7 @@
                     "$ref": "#/definitions/data_key"
                 },
                 "type": "object",
-                "description": "The describes the data to be in the event Documents",
+                "description": "This describes the data in the Event Documents.",
                 "title": "data_keys"
             },
             "uid": {
@@ -102,6 +122,13 @@
             "name": {
                 "type": "string",
                 "description": "A human-friendly name for this data stream, such as 'primary' or 'baseline'."
+            },
+            "configuration": {
+                "additionalProperties": {
+                    "$ref": "#/definitions/configuration"
+                },
+                "type": "object",
+                "description": "Readings of configurational fields necessary for interpreting data in the Events."
             }
         },
         "patternProperties": {
