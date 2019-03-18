@@ -506,7 +506,7 @@ def compose_resource(*, start, spec, root, resource_path, resource_kwargs,
            'root': root,
            'resource_path': resource_path,
            'resource_kwargs': resource_kwargs,
-           'path_semantics': path_semantics}
+           'path_semantics': {'posix': 'posix', 'nt': 'windows'}[os.name]}
     if validate:
         jsonschema.validate(doc, schemas[DocumentNames.resource])
     return ComposeResourceBundle(
