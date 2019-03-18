@@ -102,6 +102,18 @@ def test_round_trip_pagination():
         event_model.pack_event_page(*expected)))
     assert actual == expected
 
+    # Round trip on docs that don't have a filled key
+    unfilled_doc1 = event_doc1
+    unfilled_doc1.pop('filled')
+    unfilled_doc2 = event_doc2
+    unfilled_doc2.pop('filled')
+    unfilled_doc3 = event_doc3
+    unfilled_doc3.pop('filled')
+    expected = [unfilled_doc1, unfilled_doc2, unfilled_doc3]
+    actual = list(event_model.unpack_event_page(
+        event_model.pack_event_page(*expected)))
+    assert actual == expected
+
     # Round trip one datum -> datum_page -> datum.
     expected = datum_doc1
     actual, = event_model.unpack_datum_page(
