@@ -3,7 +3,7 @@ import json
 import event_model
 import numpy
 import pytest
-
+import os
 
 def test_documents():
     dn = event_model.DocumentNames
@@ -145,8 +145,14 @@ def test_bulk_events_to_event_page():
     desc_bundle_baseline = run_bundle.compose_descriptor(
         data_keys={'motor': {'shape': [], 'dtype': 'number', 'source': '...'}},
         name='baseline')
+
+    if os.name == 'nt':
+        path_root = 'C:\tmp'
+    else:
+        path_root = '/tmp'
+
     res_bundle = run_bundle.compose_resource(
-        spec='TIFF', root='/tmp', resource_path='stack.tiff',
+        spec='TIFF', root=path_root, resource_path='stack.tiff',
         resource_kwargs={})
     datum_doc1 = res_bundle.compose_datum(datum_kwargs={'slice': 5})
     datum_doc2 = res_bundle.compose_datum(datum_kwargs={'slice': 10})
@@ -263,12 +269,20 @@ def test_filler():
         def __init__(self, resource_path, a, b):
             assert a == 1
             assert b == 2
-            assert resource_path == '/tmp/stack.tiff'
-
+            if os.name == 'nt':
+                assert resource_path == 'C:\\tmp\\stack.tiff'
+            else:
+                assert resource_path == '/tmp/stack.tiff'
+                
         def __call__(self, c, d):
             assert c == 3
             assert d == 4
             return numpy.ones((5, 5))
+
+    if os.name == 'nt':
+        path_root = 'C:\\tmp'
+    else:
+        path_root = '/tmp'
 
     reg = {'DUMMY': DummyHandler}
     filler = event_model.Filler(reg)
@@ -282,7 +296,7 @@ def test_filler():
         data_keys={'motor': {'shape': [], 'dtype': 'number', 'source': '...'}},
         name='baseline')
     res_bundle = run_bundle.compose_resource(
-        spec='DUMMY', root='/tmp', resource_path='stack.tiff',
+        spec='DUMMY', root=path_root, resource_path='stack.tiff',
         resource_kwargs={'a': 1, 'b': 2})
     datum_doc = res_bundle.compose_datum(datum_kwargs={'c': 3, 'd': 4})
     raw_event = desc_bundle.compose_event(
@@ -375,15 +389,23 @@ def test_filler():
         def __init__(self, resource_path, a, b):
             assert a == 1
             assert b == 2
-            assert resource_path == '/tmp/moved/stack.tiff'
+            if os.name == 'nt':
+                assert resource_path == 'C:\\tmp\\moved\\stack.tiff'
+            else:
+                assert resource_path == '/tmp/moved/stack.tiff'
 
         def __call__(self, c, d):
             assert c == 3
             assert d == 4
             return numpy.ones((5, 5))
 
-    with event_model.Filler({'DUMMY': DummyHandlerRootMapTest},
-                            root_map={'/tmp': '/tmp/moved'}) as filler:
+    with event_model.Filler(
+                    {'DUMMY': DummyHandlerRootMapTest},
+                    root_map={
+                        '/tmp': '/tmp/moved',
+                        'C:\\tmp': 'C:\\tmp\\moved'}
+                    ) as filler:
+
         filler('start', run_bundle.start_doc)
         filler('descriptor', desc_bundle.descriptor_doc)
         filler('descriptor', desc_bundle_baseline.descriptor_doc)
