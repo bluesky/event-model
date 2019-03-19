@@ -112,7 +112,8 @@ def test_round_trip_pagination():
     expected = [unfilled_doc1, unfilled_doc2, unfilled_doc3]
     actual = list(event_model.unpack_event_page(
         event_model.pack_event_page(*expected)))
-    actual.pop('filled')
+    for doc in actual:
+        doc.pop('filled')
     assert actual == expected
 
     # Round trip one datum -> datum_page -> datum.
