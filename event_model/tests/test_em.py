@@ -5,6 +5,7 @@ import numpy
 import pytest
 import os
 
+
 def test_documents():
     dn = event_model.DocumentNames
     for k in ('stop', 'start', 'descriptor',
@@ -273,7 +274,7 @@ def test_filler():
                 assert resource_path == 'C:\\tmp\\stack.tiff'
             else:
                 assert resource_path == '/tmp/stack.tiff'
-                
+
         def __call__(self, c, d):
             assert c == 3
             assert d == 4
