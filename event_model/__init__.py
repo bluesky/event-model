@@ -708,7 +708,9 @@ def pack_event_page(*events):
         time_list.append(event['time'])
         uid_list.append(event['uid'])
         seq_num_list.append(event['seq_num'])
-        filled_list.append(event.get('filled', False))
+        filled_list.append(event.get(
+                           'filled',
+                           {key: False for key in event['data'].keys()}))
         data_list.append(event['data'])
         timestamps_list.append(event['timestamps'])
     event_page = {'time': time_list, 'uid': uid_list, 'seq_num': seq_num_list,
