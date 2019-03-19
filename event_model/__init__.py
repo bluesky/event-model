@@ -499,6 +499,8 @@ def compose_resource(*, start, spec, root, resource_path, resource_kwargs,
                      path_semantics=os.name, uid=None, validate=True):
     if uid is None:
         uid = str(uuid.uuid4())
+    if path_semantics == 'nt':
+        path_semantics == 'windows'
     counter = itertools.count()
     doc = {'uid': uid,
            'run_start': start['uid'],
@@ -506,7 +508,7 @@ def compose_resource(*, start, spec, root, resource_path, resource_kwargs,
            'root': root,
            'resource_path': resource_path,
            'resource_kwargs': resource_kwargs,
-           'path_semantics': {'posix': 'posix', 'nt': 'windows'}[os.name]}
+           'path_semantics': path_semantics}
     if validate:
         jsonschema.validate(doc, schemas[DocumentNames.resource])
     return ComposeResourceBundle(
