@@ -500,7 +500,7 @@ def compose_resource(*, start, spec, root, resource_path, resource_kwargs,
     if uid is None:
         uid = str(uuid.uuid4())
     if path_semantics == 'nt':
-        path_semantics == 'windows'
+        path_semantics = 'windows'
     counter = itertools.count()
     doc = {'uid': uid,
            'run_start': start['uid'],
