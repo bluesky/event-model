@@ -637,7 +637,7 @@ def compose_descriptor(*, start, streams, event_counter,
         jsonschema.validate(doc, schemas[DocumentNames.descriptor])
     if name not in streams:
         streams[name] = set(data_keys)
-        event_counter[name] = 0
+        event_counter[name] = 1
     return ComposeDescriptorBundle(
         doc,
         partial(compose_event, descriptor=doc, event_counter=event_counter),

@@ -52,9 +52,9 @@ def test_compose_run():
     datum_doc = compose_datum(datum_kwargs={'slice': 5})
     event_doc = compose_event(
         data={'motor': 0, 'image': datum_doc['datum_id']},
-        timestamps={'motor': 0, 'image': 0}, filled={'image': False},
-        seq_num=1)
+        timestamps={'motor': 0, 'image': 0}, filled={'image': False})
     assert 'descriptor' in event_doc
+    assert event_doc['seq_num'] == 1
     compose_stop()
 
 
