@@ -148,7 +148,7 @@ def test_bulk_events_to_event_page():
         name='baseline')
 
     if os.name == 'nt':
-        path_root = 'C:\tmp'
+        path_root = 'C:\\tmp'
     else:
         path_root = '/tmp'
 

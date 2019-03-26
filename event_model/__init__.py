@@ -494,13 +494,12 @@ def compose_datum_page(*, resource, counter, datum_kwargs, validate=True):
         jsonschema.validate(doc, schemas[DocumentNames.datum])
     return doc
 
+default_path_semantics = {'posix': 'posix', 'nt': 'windows'}[os.name]
 
 def compose_resource(*, start, spec, root, resource_path, resource_kwargs,
-                     path_semantics=os.name, uid=None, validate=True):
+                     path_semantics=default_path_semantics, uid=None, validate=True):
     if uid is None:
         uid = str(uuid.uuid4())
-    if path_semantics == 'nt':
-        path_semantics = 'windows'
     counter = itertools.count()
     doc = {'uid': uid,
            'run_start': start['uid'],
@@ -734,7 +733,7 @@ def unpack_event_page(event_page):
     descriptor = event_page['descriptor']
     data_list = _transpose_dict_of_lists(event_page['data'])
     timestamps_list = _transpose_dict_of_lists(event_page['timestamps'])
-    filled_list = _transpose_dict_of_lists(event_page.get('filled'))
+    filled_list = _transpose_dict_of_lists(event_page.get('filled',{}))
     for uid, time, seq_num, data, timestamps, filled in zip(
             event_page['uid'],
             event_page['time'],
@@ -854,8 +853,6 @@ def bulk_datum_to_datum_page(bulk_datum):
 
 def _transpose_list_of_dicts(list_of_dicts):
     "Transform list-of-dicts into dict-of-lists (i.e. DataFrame-like)."
-    if list_of_dicts is None:
-        return None
     dict_of_lists = defaultdict(list)
     for row in list_of_dicts:
         for k, v in row.items():
@@ -865,8 +862,6 @@ def _transpose_list_of_dicts(list_of_dicts):
 
 def _transpose_dict_of_lists(dict_of_lists):
     "Transform dict-of-lists (i.e. DataFrame-like) into list-of-dicts."
-    if dict_of_lists is None:
-        return None
     list_of_dicts = []
     keys = list(dict_of_lists)
     for row in zip(*(dict_of_lists[k] for k in keys)):
