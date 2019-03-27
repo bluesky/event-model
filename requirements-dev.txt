@@ -3,7 +3,7 @@
 codecov
 coverage
 flake8
-pytest
+pytest >3.9
 sphinx
 # These are dependencies of various sphinx extensions for documentation.
 ipython
