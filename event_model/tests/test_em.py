@@ -55,7 +55,8 @@ def test_compose_run():
         timestamps={'motor': 0, 'image': 0}, filled={'image': False})
     assert 'descriptor' in event_doc
     assert event_doc['seq_num'] == 1
-    compose_stop()
+    stop_doc = compose_stop()
+    assert 'primary' in stop_doc['num_events']
 
 
 def test_round_trip_pagination():

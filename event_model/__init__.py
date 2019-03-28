@@ -677,7 +677,8 @@ def compose_run(*, uid=None, time=None, metadata=None, validate=True):
         jsonschema.validate(doc, schemas[DocumentNames.start])
     return ComposeRunBundle(
         doc,
-        partial(compose_descriptor, start=doc, streams=streams, event_counter={}),
+        partial(compose_descriptor, start=doc, streams=streams,
+                event_counter=event_counter),
         partial(compose_resource, start=doc),
         partial(compose_stop, start=doc, event_counter=event_counter,
                 poison_pill=poison_pill))
