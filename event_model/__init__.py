@@ -495,8 +495,11 @@ def compose_datum_page(*, resource, counter, datum_kwargs, validate=True):
     return doc
 
 
+default_path_semantics = {'posix': 'posix', 'nt': 'windows'}[os.name]
+
+
 def compose_resource(*, start, spec, root, resource_path, resource_kwargs,
-                     path_semantics=os.name, uid=None, validate=True):
+                     path_semantics=default_path_semantics, uid=None, validate=True):
     if uid is None:
         uid = str(uuid.uuid4())
     counter = itertools.count()
@@ -707,7 +710,7 @@ def pack_event_page(*events):
         time_list.append(event['time'])
         uid_list.append(event['uid'])
         seq_num_list.append(event['seq_num'])
-        filled_list.append(event['filled'])
+        filled_list.append(event.get('filled', {}))
         data_list.append(event['data'])
         timestamps_list.append(event['timestamps'])
     event_page = {'time': time_list, 'uid': uid_list, 'seq_num': seq_num_list,
@@ -733,7 +736,7 @@ def unpack_event_page(event_page):
     descriptor = event_page['descriptor']
     data_list = _transpose_dict_of_lists(event_page['data'])
     timestamps_list = _transpose_dict_of_lists(event_page['timestamps'])
-    filled_list = _transpose_dict_of_lists(event_page['filled'])
+    filled_list = _transpose_dict_of_lists(event_page.get('filled', {}))
     for uid, time, seq_num, data, timestamps, filled in zip(
             event_page['uid'],
             event_page['time'],
