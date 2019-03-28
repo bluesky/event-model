@@ -2,6 +2,17 @@
 Release History
 ***************
 
+v1.8.3 (2019-03-28)
+===================
+
+Fixes
+-----
+* Add 'configuration' to :ref:`EventDescriptor <event_descriptor>` schema.
+* Fix path_semantics and be robust against empty `'filled'`.
+* Fix sequence numbers in :func:`~event_model.compose_descriptor`.
+* Fix a typo which made `'num_events'` always empty.
+
+
 v1.8.2 (2019-03-08)
 ===================
 
