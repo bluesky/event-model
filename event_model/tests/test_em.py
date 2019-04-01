@@ -407,3 +407,94 @@ def test_filler(tmp_path):
     with pytest.raises(event_model.UnfilledData):
         event_model.verify_filled(event_model.pack_event_page(raw_event))
     event_model.verify_filled(event_model.pack_event_page(event))
+
+
+def test_run_router():
+    bundle = event_model.compose_run()
+    docs = []
+    start_doc, compose_descriptor, compose_resource, compose_stop = bundle
+    docs.append(('start', start_doc))
+    bundle = compose_descriptor(
+        data_keys={'motor': {'shape': [], 'dtype': 'number', 'source': '...'},
+                   'image': {'shape': [512, 512], 'dtype': 'number',
+                             'source': '...', 'external': 'FILESTORE:'}},
+        name='primary')
+    primary_descriptor_doc, compose_primary_event, compose_event_page = bundle
+    docs.append(('descriptor', primary_descriptor_doc))
+    bundle = compose_descriptor(
+        data_keys={'motor': {'shape': [], 'dtype': 'number', 'source': '...'}},
+        name='baseline')
+    baseline_descriptor_doc, compose_baseline_event, compose_event_page = bundle
+    docs.append(('descriptor', baseline_descriptor_doc))
+    bundle = compose_resource(
+        spec='TIFF', root='/tmp', resource_path='stack.tiff',
+        resource_kwargs={})
+    resource_doc, compose_datum, compose_datum_page = bundle
+    docs.append(('resource', resource_doc))
+    datum_doc = compose_datum(datum_kwargs={'slice': 5})
+    docs.append(('datum', datum_doc))
+    primary_event_doc = compose_primary_event(
+        data={'motor': 0, 'image': datum_doc['datum_id']},
+        timestamps={'motor': 0, 'image': 0}, filled={'image': False})
+    docs.append(('event', primary_event_doc))
+    baseline_event_doc = compose_baseline_event(
+        data={'motor': 0},
+        timestamps={'motor': 0})
+    docs.append(('event', baseline_event_doc))
+    stop_doc = compose_stop()
+    docs.append(('stop', stop_doc))
+
+    # Empty list of factories. Just make sure nothing blows up.
+    rr = event_model.RunRouter([])
+    for name, doc in docs:
+        rr(name, doc)
+
+    # A factory that rejects all runs.
+    def null_factory(name, doc):
+        return [], []
+
+    rr = event_model.RunRouter([null_factory])
+    for name, doc in docs:
+        rr(name, doc)
+
+    # A factory that accepts all runs.
+    collected = []
+
+    def collector(name, doc):
+        if name == 'event_page':
+            name = 'event'
+            doc, = event_model.unpack_event_page(doc)
+        elif name == 'datum_page':
+            name = 'datum'
+            doc, = event_model.unpack_datum_page(doc)
+        collected.append((name, doc))
+
+    def all_factory(name, doc):
+        collector(name, doc)
+        return [collector], []
+
+    rr = event_model.RunRouter([all_factory])
+    for name, doc in docs:
+        rr(name, doc)
+
+    assert collected == docs
+    collected.clear()
+
+    # A factory that returns a subfactory interested in 'baseline' only.
+    def subfactory(name, doc):
+        if doc.get('name') == 'baseline':
+            return [collector]
+        return []
+
+    def factory_with_subfactory_only(name, doc):
+        return [], [subfactory]
+
+    rr = event_model.RunRouter([factory_with_subfactory_only])
+    for name, doc in docs:
+        rr(name, doc)
+
+    expected_item = ('event', baseline_event_doc)
+    unexpected_item = ('event', primary_event_doc)
+    assert expected_item in collected
+    assert unexpected_item not in collected
+    collected.clear()
