@@ -138,6 +138,11 @@ class RunRouter(DocumentRouter):
     It is configured with a list of factory functions that produce callbacks in
     a two-layered scheme, described below.
 
+    .. warning::
+
+       This is experimental. In a future release, it may be changed in a
+       backward-incompatible way or fully removed.
+
     Parameters
     ----------
     factories : list
