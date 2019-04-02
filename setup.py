@@ -39,6 +39,7 @@ setup(
     cmdclass=versioneer.get_cmdclass(),
     description="Data model used by the bluesky ecosystem",
     long_description=readme,
+    long_description_content_type='text/markdown',
     author="Brookhaven National Lab",
     author_email='dallan@bnl.gov',
     url='https://github.com/NSLS-II/event-model',
