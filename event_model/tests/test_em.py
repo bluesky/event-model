@@ -135,6 +135,29 @@ def test_round_trip_pagination():
         event_model.pack_datum_page(*expected)))
     assert actual == expected
 
+    # Check edge case where datum_kwargs are empty.
+    datum_doc1 = res_bundle.compose_datum(datum_kwargs={})
+    datum_doc2 = res_bundle.compose_datum(datum_kwargs={})
+    datum_doc3 = res_bundle.compose_datum(datum_kwargs={})
+
+    # Round trip one datum -> datum_page -> datum.
+    expected = datum_doc1
+    actual, = event_model.unpack_datum_page(
+        event_model.pack_datum_page(expected))
+    assert actual == expected
+
+    # Round trip two datum -> datum_page -> datum.
+    expected = [datum_doc1, datum_doc2]
+    actual = list(event_model.unpack_datum_page(
+        event_model.pack_datum_page(*expected)))
+    assert actual == expected
+
+    # Round trip three datum -> datum_page -> datum.
+    expected = [datum_doc1, datum_doc2, datum_doc3]
+    actual = list(event_model.unpack_datum_page(
+        event_model.pack_datum_page(*expected)))
+    assert actual == expected
+
 
 def test_bulk_events_to_event_page(tmp_path):
     run_bundle = event_model.compose_run()

@@ -962,9 +962,10 @@ def unpack_datum_page(datum_page):
     """
     resource = datum_page['resource']
     datum_kwarg_list = _transpose_dict_of_lists(datum_page['datum_kwargs'])
-    for datum_id, datum_kwargs in zip(
+    for datum_id, datum_kwargs in itertools.zip_longest(
             datum_page['datum_id'],
-            datum_kwarg_list):
+            datum_kwarg_list,
+            fillvalue={}):
         datum = {'datum_id': datum_id, 'datum_kwargs': datum_kwargs,
                  'resource': resource}
         yield datum
