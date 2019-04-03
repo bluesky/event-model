@@ -310,7 +310,7 @@ def test_filler(tmp_path):
     filler.close()
     assert filler._closed
 
-    # Test context manager
+    # Test context manager with Event.
     with event_model.Filler(reg) as filler:
         filler('start', run_bundle.start_doc)
         filler('descriptor', desc_bundle.descriptor_doc)
@@ -324,6 +324,22 @@ def test_filler(tmp_path):
         filler('stop', stop_doc)
         assert not filler._closed
     assert event['data']['image'].shape == (5, 5)
+    assert filler._closed
+
+    # Test context manager with EventPage.
+    with event_model.Filler(reg) as filler:
+        filler('start', run_bundle.start_doc)
+        filler('descriptor', desc_bundle.descriptor_doc)
+        filler('descriptor', desc_bundle_baseline.descriptor_doc)
+        filler('resource', res_bundle.resource_doc)
+        filler('datum', datum_doc)
+        event_page = event_model.pack_event_page(copy.deepcopy(raw_event))
+        name, doc = filler('event_page', event_page)
+        assert name == 'event_page'
+        assert doc is event_page
+        filler('stop', stop_doc)
+        assert not filler._closed
+    assert event_page['data']['image'][0].shape == (5, 5)
     assert filler._closed
 
     # Test undefined handler spec

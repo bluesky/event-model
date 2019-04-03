@@ -462,7 +462,11 @@ class Filler(DocumentRouter):
 
         for event_doc in unpack_event_page(doc):
             filled_events.append(event(event_doc))
-        return pack_event_page(*filled_events)
+        new_event_page = pack_event_page(*filled_events)
+        # Modify original doc in place, as we do with 'event'.
+        doc['data'] = new_event_page['data']
+        doc['filled'] = new_event_page['filled']
+        return doc
 
     def event(self, doc):
         for key, is_filled in doc['filled'].items():
@@ -526,6 +530,7 @@ class Filler(DocumentRouter):
                     ttime.sleep(interval)
                     try:
                         actual_data = handler(**datum_doc['datum_kwargs'])
+                        # Here we are intentionally modifying doc in place.
                         doc['data'][key] = actual_data
                         doc['filled'][key] = datum_id
                     except IOError as error_:
