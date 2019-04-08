@@ -469,7 +469,7 @@ class Filler(DocumentRouter):
         return doc
 
     def event(self, doc):
-        for key, is_filled in doc['filled'].items():
+        for key, is_filled in doc.get('filled', {}).items():
             if self.exclude is not None and key in self.exclude:
                 continue
             if self.include is not None and key not in self.include:
