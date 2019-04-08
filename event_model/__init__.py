@@ -998,7 +998,7 @@ def bulk_events_to_event_pages(bulk_events):
                         'descriptor': descriptor}
                 page['data'] = {k: [] for k in event['data']}
                 page['timestamps'] = {k: [] for k in event['timestamps']}
-                page['filled'] = {k: [] for k in event['filled']}
+                page['filled'] = {k: [] for k in event.get('filled', {})}
                 event_pages[descriptor] = page
             page['uid'].append(event['uid'])
             page['time'].append(event['time'])
@@ -1010,7 +1010,7 @@ def bulk_events_to_event_pages(bulk_events):
             for k, v in event['timestamps'].items():
                 page_timestamps[k].append(v)
             page_filled = page['filled']
-            for k, v in event['filled'].items():
+            for k, v in event.get('filled', {}).items():
                 page_filled[k].append(v)
     return list(event_pages.values())
 
