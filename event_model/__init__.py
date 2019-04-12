@@ -678,7 +678,7 @@ def compose_resource(*, start, spec, root, resource_path, resource_kwargs,
         uid = str(uuid.uuid4())
     counter = itertools.count()
     doc = {'uid': uid,
-           'run_start': start['uid'],
+           'run_start': start,
            'spec': spec,
            'root': root,
            'resource_path': resource_path,
@@ -706,7 +706,7 @@ def compose_stop(*, start, event_counter, poison_pill,
         time = ttime.time()
     doc = {'uid': uid,
            'time': time,
-           'run_start': start['uid'],
+           'run_start': start,
            'exit_status': exit_status,
            'reason': reason,
            'num_events': dict(event_counter)}
@@ -798,7 +798,7 @@ def compose_descriptor(*, start, streams, event_counter,
         hints = {}
     doc = {'uid': uid,
            'time': time,
-           'run_start': start['uid'],
+           'run_start': start,
            'name': name,
            'data_keys': data_keys,
            'object_keys': object_keys,
@@ -854,10 +854,10 @@ def compose_run(*, uid=None, time=None, metadata=None, validate=True):
         jsonschema.validate(doc, schemas[DocumentNames.start])
     return ComposeRunBundle(
         doc,
-        partial(compose_descriptor, start=doc, streams=streams,
+        partial(compose_descriptor, start=doc['uid'], streams=streams,
                 event_counter=event_counter),
-        partial(compose_resource, start=doc),
-        partial(compose_stop, start=doc, event_counter=event_counter,
+        partial(compose_resource, start=doc['uid']),
+        partial(compose_stop, start=doc['uid'], event_counter=event_counter,
                 poison_pill=poison_pill))
 
 

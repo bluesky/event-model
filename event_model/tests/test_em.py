@@ -159,7 +159,7 @@ def test_round_trip_pagination():
     assert actual == expected
 
 
-def test_bulk_events_to_event_page(tmp_path):
+def test_bulk_events_to_event_page(tmpdir):
     run_bundle = event_model.compose_run()
     desc_bundle = run_bundle.compose_descriptor(
         data_keys={'motor': {'shape': [], 'dtype': 'number', 'source': '...'},
@@ -170,7 +170,7 @@ def test_bulk_events_to_event_page(tmp_path):
         data_keys={'motor': {'shape': [], 'dtype': 'number', 'source': '...'}},
         name='baseline')
 
-    path_root = str(tmp_path)
+    path_root = str(tmpdir)
 
     res_bundle = run_bundle.compose_resource(
         spec='TIFF', root=path_root, resource_path='stack.tiff',
@@ -284,20 +284,20 @@ def test_document_router_smoke_test():
     dr('stop', run_bundle.compose_stop())
 
 
-def test_filler(tmp_path):
+def test_filler(tmpdir):
 
     class DummyHandler:
         def __init__(self, resource_path, a, b):
             assert a == 1
             assert b == 2
-            assert resource_path == str(tmp_path / "stack.tiff")
+            assert resource_path == str(tmpdir / "stack.tiff")
 
         def __call__(self, c, d):
             assert c == 3
             assert d == 4
             return numpy.ones((5, 5))
 
-    path_root = str(tmp_path)
+    path_root = str(tmpdir)
 
     reg = {'DUMMY': DummyHandler}
     filler = event_model.Filler(reg)
@@ -420,7 +420,7 @@ def test_filler(tmp_path):
         def __init__(self, resource_path, a, b):
             assert a == 1
             assert b == 2
-            assert resource_path == str(tmp_path / "moved" / "stack.tiff")
+            assert resource_path == str(tmpdir / "moved" / "stack.tiff")
 
         def __call__(self, c, d):
             assert c == 3
@@ -428,7 +428,7 @@ def test_filler(tmp_path):
             return numpy.ones((5, 5))
 
     with event_model.Filler({'DUMMY': DummyHandlerRootMapTest},
-                            root_map={path_root: str(tmp_path / "moved")}
+                            root_map={path_root: str(tmpdir / "moved")}
                             ) as filler:
 
         filler('start', run_bundle.start_doc)
