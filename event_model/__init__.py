@@ -969,4 +969,3 @@ class NumpyEncoder(json.JSONEncoder):
                 return obj.item()
             return obj.tolist()
         return json.JSONEncoder.default(self, obj)
-
