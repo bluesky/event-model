@@ -11,6 +11,7 @@ import time as ttime
 import uuid
 import warnings
 from ._version import get_versions
+import numpy as np
 
 __all__ = ['DocumentNames', 'schemas', 'compose_run']
 
@@ -896,6 +897,38 @@ def verify_filled(event_page):
                                    f"`event_model.Filler`.")
 
 
+def sanitize_np(doc):
+    '''Return a copy with any numpy objects converted to built-in Python types.
+    This is a faster version of sanitize_doc which only converts numpy objects.
+
+    This function takes in an event-model document and returns a copy with any
+    numpy objects converted to built-in Python types. It is useful for
+    sanitizing documents prior to sending to any consumer that does not
+    recognize numpy types, such as a MongoDB database or a JSON encoder.
+
+    Parameters
+    ----------
+    doc : dict
+        The event-model document to be sanitized
+
+    Returns
+    -------
+    sanitized_doc : event-model document
+        The event-model document with numpy objects converted to built-in
+        Python types.
+    '''
+    return {key: sanitize_item(value) for key, value in doc.items()}
+
+
+def sanitize_item(val):
+    "Convert any numpy objects into built-in Python types."
+    if isinstance(val, (np.generic, np.ndarray)):
+        if np.isscalar(val):
+            return val.item()
+        return val.tolist()
+    return val
+
+
 def sanitize_doc(doc):
     '''Return a copy with any numpy objects converted to built-in Python types.
 
@@ -936,3 +969,4 @@ class NumpyEncoder(json.JSONEncoder):
                 return obj.item()
             return obj.tolist()
         return json.JSONEncoder.default(self, obj)
+
