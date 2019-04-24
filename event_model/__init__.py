@@ -928,7 +928,6 @@ def sanitize_np(doc):
     return doc
 
 
-
 def sanitize_item(val):
     "Convert any numpy objects into built-in Python types."
     if isinstance(val, (np.generic, np.ndarray)):
