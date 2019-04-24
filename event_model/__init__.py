@@ -917,7 +917,16 @@ def sanitize_np(doc):
         The event-model document with numpy objects converted to built-in
         Python types.
     '''
-    return {key: sanitize_item(value) for key, value in doc.items()}
+    def iterate_sanitize(doc):
+        for key, value in doc.items():
+            if isinstance(value, dict):
+                iterate_sanitize(value)
+            else:
+                value = sanitize_item(value)
+
+    iterate_sanitize(doc)
+    return doc
+
 
 
 def sanitize_item(val):
