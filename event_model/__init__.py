@@ -12,6 +12,7 @@ import uuid
 import warnings
 from ._version import get_versions
 import numpy as np
+import collections
 
 __all__ = ['DocumentNames', 'schemas', 'compose_run']
 
@@ -918,13 +919,15 @@ def sanitize_np(doc):
         Python types.
     '''
     def iterate_sanitize(doc):
-        for key, value in doc.items():
-            if isinstance(value, dict):
+        if hasattr(doc, 'items'):
+            for value in doc.values():
                 iterate_sanitize(value)
-            elif isinstance(value, list):
-                value = [sanitize_item(item) for item in value]
-            else:
-                value = sanitize_item(value)
+        elif isinstance(doc, collections.abc.Iterable):
+             doc = list(doc) # Change tuples to lists
+             for value in doc:
+                iterate_sanitize(value)
+        else:
+            doc = sanitize_item(doc)
 
     iterate_sanitize(doc)
     return doc
