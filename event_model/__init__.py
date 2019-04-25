@@ -925,7 +925,7 @@ def sanitize_np(doc):
     else:
         return sanitize_item(doc)
 
-    return doc
+    return sanitize_np(doc)
 
 
 def sanitize_item(val):
