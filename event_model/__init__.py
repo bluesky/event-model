@@ -921,6 +921,8 @@ def sanitize_np(doc):
         for key, value in doc.items():
             if isinstance(value, dict):
                 iterate_sanitize(value)
+            elif isinstance(value, list):
+                value = [sanitize_item(item) for item in value]
             else:
                 value = sanitize_item(value)
 
