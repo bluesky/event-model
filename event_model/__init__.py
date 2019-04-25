@@ -918,19 +918,13 @@ def sanitize_np(doc):
         The event-model document with numpy objects converted to built-in
         Python types.
     '''
+    if hasattr(doc, 'items'):
+        return {key: sanitize_np(value) for key, value in doc.items()}
+    elif isinstance(doc, collections.abc.Iterable) and not isinstance(doc, str):
+        return [sanitize_np(item) for item in doc]
+    else:
+        return sanitize_item(doc)
 
-    def iterate_sanitize(doc):
-        if hasattr(doc, 'items'):
-            for value in doc.values():
-                iterate_sanitize(value)
-        elif isinstance(doc, collections.abc.Iterable) and not isinstance(str):
-            doc = list(doc)  # Change tuples to lists
-            for value in doc:
-                iterate_sanitize(value)
-        else:
-            doc = sanitize_item(doc)
-
-    iterate_sanitize(doc)
     return doc
 
 
