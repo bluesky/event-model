@@ -2,6 +2,20 @@
 Release History
 ***************
 
+v1.9.0 (2019-05-01)
+===================
+
+Added
+-----
+* Add experimental :class:`~event_model.RunRouter`.
+
+Fixes
+-----
+* :func:`~event_model.unpack_datum_page` errored when ``datum_kwargs`` were
+  empty.
+* Fill EventPages in place, as Events are filled in place.
+* Do not assume Events and EventPages have a ``filled`` key; it is optional.
+
 v1.8.3 (2019-03-28)
 ===================
 
