@@ -9,6 +9,10 @@ and transforming documents in the model.
    :members:
    :undoc-members:
 
+.. autoclass:: event_model.RunRouter
+   :members:
+   :undoc-members:
+
 .. autoclass:: event_model.DocumentRouter
    :members:
    :undoc-members:
