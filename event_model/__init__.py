@@ -709,7 +709,7 @@ def compose_stop(*, start, event_counter, poison_pill,
            'run_start': start['uid'],
            'exit_status': exit_status,
            'reason': reason,
-           'num_events': dict(event_counter)}
+           'num_events': {k: v - 1 for k, v in event_counter.items()}}
     if validate:
         jsonschema.validate(doc, schemas[DocumentNames.stop])
     return doc
@@ -751,7 +751,6 @@ def compose_event_page(*, descriptor, event_counter, data, timestamps, seq_num,
 def compose_event(*, descriptor, event_counter, data, timestamps, seq_num=None,
                   filled=None, uid=None, time=None, validate=True):
     if seq_num is None:
-        event_counter[descriptor['name']] += 1
         seq_num = event_counter[descriptor['name']]
     if uid is None:
         uid = str(uuid.uuid4())
@@ -779,6 +778,7 @@ def compose_event(*, descriptor, event_counter, data, timestamps, seq_num=None,
             raise EventModelValidationError(
                 "Keys in event['filled'] {} must be a subset of those in "
                 "event['data'] {}".format(filled.keys(), data.keys()))
+    event_counter[descriptor['name']] += 1
     return doc
 
 
@@ -814,7 +814,7 @@ def compose_descriptor(*, start, streams, event_counter,
         jsonschema.validate(doc, schemas[DocumentNames.descriptor])
     if name not in streams:
         streams[name] = set(data_keys)
-        event_counter[name] = 0
+        event_counter[name] = 1
     return ComposeDescriptorBundle(
         doc,
         partial(compose_event, descriptor=doc, event_counter=event_counter),
