@@ -57,6 +57,7 @@ def test_compose_run():
     assert event_doc['seq_num'] == 1
     stop_doc = compose_stop()
     assert 'primary' in stop_doc['num_events']
+    assert stop_doc['num_events']['primary'] == 1
 
 
 def test_round_trip_pagination():

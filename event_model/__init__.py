@@ -709,7 +709,7 @@ def compose_stop(*, start, event_counter, poison_pill,
            'run_start': start['uid'],
            'exit_status': exit_status,
            'reason': reason,
-           'num_events': dict(event_counter)}
+           'num_events': {k: v - 1 for k, v in event_counter.items()}}
     if validate:
         jsonschema.validate(doc, schemas[DocumentNames.stop])
     return doc
