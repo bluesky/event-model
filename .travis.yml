@@ -9,6 +9,9 @@ env:
   global:
     # Doctr deploy key for NSLS-II/NSLS-II.github.io
     - secure: "EFkgQxAxoVGmqN7JkjZcuhqmrZsqowOlSZIpDkcVI9LotQlFze3V3myImpI4qolGq3fasI2sBO9/o7hHLcnoD7pC7fdiwhsMECOVmjZcpz7jOlWbAr/9J7TmD3W2+w49Jrd5uschUV12XwCytI1VUMEjayVy1WQx61Gy6xRUzZ38tw6008Hh/7wDFzFzL6q+xaknhKdorw54htzVTi3Khyv/2kWC+qxt1Qo9hF+WOIo8O4rrXAY/yp1xxrKsF+qtDBW4sylT5hf1d3Ezl4vNhSebZ8LQ8Txl2821DocD1W0j/zbD8wlbBxymvYdtvOB7jt50izErI90jy5Dw1PVkJKVfqIQAah4b5LiwdwB27HJh1gm19MJtjgyK3UfAhjVgtEr420/XIQwsN1rXVzWLp5rVbF07RngMIiZKPD6oCONuOfKWYCU7GhFAtULI610R6O8SmnhwzizNWTOn+TgI/JkFvXxflLyEjA9uyvX0pPvCi0YXEwn+mbfNOCnfSRK8rgXDQuRAFHXoSYZF/8g7i9roTnyjZb94wKVNzjyM29+68ToEKiXoNePcnVMvYFp2TvNDtawKzt0fPSAxTXnpCCXXkoA0jpMYpabzfSZkpKaH1WnFcbqIk2R75Loba5FXzx1ILHvWFri2w4yNr22EB+a5IZWe/XUvthFRFJzXhes="
+    # Doctr deploy key for bluesky/bluesky.github.io
+    - secure: "JoyiIucfZfJ7zRq1nyB84tSqOtrjHBw5qeHDjM8rZOAwefEhtATkjJlF4hQ+J5++ecAULKcZqpB3QiCkSujJ39MfARwPHwSpJdXiKYIltTwTK0e2Wl0EzycrngPfT0RZGZ/+De+hjwbBFVppR4Q/ZWENypc4NVEPM7j9zCcMnRIkOY03dpzyckGsXbQm98pkNhkN8QJjlz8uDduv+N0t3zij2xNwe1vqHgBVmjdTP8ehuf++ncvqKfiQzMovNWQKGzdfXrs/YHRGrVNFE9ydeEAoww6fiq4OqeTuYerDbhaFgbCDO6tSsYe1oHLFXG+0LeJVPoYMDjIxmZo2xhHUhNMcdjTKxYtf3gYg3RwRpPaXets6nH77xTAVMhYpCE7ZEA43TMH223U7zesmvv2pTiaElwB42XsR5kGKf1p6g++egmf8GaibcXaWw5kpNqy7eatcRPzPVmiyg4m0ZxCdVgoPJpVg0ftP8NfotCS5tCPo03BCxqr23adOazb+BDGJiJCeuqHgkVb3BwmaTfAhxYwB+olDOLzTkTaFtw/fNVsGFf99IKURmLVBymXVKzVh00xNZ3gcTkqc8/WDngArdV/WY8rNImGL+qMb4kYig5a37eFi2MD3UXcFA7gZUy+RvnjHg402vX5FbKIjuMLyzZs0OuPMVA67sGPeKzDHfuY="
+
 
 
 install:
@@ -27,3 +30,4 @@ script:
   # Pubish the documentation to GitHub Pages.
   - pip install doctr
   - doctr deploy --built-docs docs/build/html --deploy-repo NSLS-II/NSLS-II.github.io event-model
+  - doctr deploy --built-docs docs/build/html --deploy-repo bluesky/bluesky.github.io event-model
