@@ -1,7 +1,5 @@
 from collections import defaultdict, deque, namedtuple
 import json
-import jsonschema
-import numpy
 from enum import Enum
 from functools import partial
 import itertools
@@ -10,11 +8,13 @@ from pkg_resources import resource_filename as rs_fn
 import time as ttime
 import uuid
 import warnings
+
+import jsonschema
+import numpy
+
 from ._version import get_versions
 
-__all__ = ['DocumentNames', 'schemas', 'compose_run']
-
-_validate = partial(jsonschema.validate, types={'array': (list, tuple)})
+__all__ = ['DocumentNames', 'schemas', 'schema_validators', 'compose_run']
 
 
 class DocumentNames(Enum):
@@ -70,8 +70,7 @@ class DocumentRouter:
         """
         output_doc = getattr(self, name)(doc)
         if validate:
-            jsonschema.validate(output_doc,
-                                schemas[getattr(DocumentNames, name)])
+            schema_validators[DocumentNames.name].validate(output_doc)
         return (name, output_doc if output_doc is not None else doc)
 
     def start(self, doc):
@@ -635,6 +634,25 @@ for name, filename in SCHEMA_NAMES.items():
     with open(rs_fn('event_model', filename)) as fin:
         schemas[name] = json.load(fin)
 
+
+def _is_array(checker, instance):
+    return (
+        jsonschema.validators.Draft7Validator.TYPE_CHECKER.is_type(instance, 'array') or
+        isinstance(instance, tuple)
+    )
+
+
+_array_type_checker = jsonschema.validators.Draft7Validator.TYPE_CHECKER.redefine('array', _is_array)
+
+
+_Validator = jsonschema.validators.extend(
+    jsonschema.validators.Draft7Validator,
+    type_checker=_array_type_checker)
+
+
+schema_validators = {name: _Validator(schema=schema) for name, schema in schemas.items()}
+
+
 __version__ = get_versions()['version']
 del get_versions
 
@@ -653,7 +671,7 @@ def compose_datum(*, resource, counter, datum_kwargs, validate=True):
            'datum_kwargs': datum_kwargs,
            'datum_id': '{}/{}'.format(resource_uid, next(counter))}
     if validate:
-        jsonschema.validate(doc, schemas[DocumentNames.datum])
+        schema_validators[DocumentNames.datum].validate(doc)
     return doc
 
 
@@ -665,7 +683,7 @@ def compose_datum_page(*, resource, counter, datum_kwargs, validate=True):
            'datum_kwargs': datum_kwargs,
            'datum_id': ['{}/{}'.format(resource_uid, next(counter)) for _ in range(N)]}
     if validate:
-        jsonschema.validate(doc, schemas[DocumentNames.datum])
+        schema_validators[DocumentNames.datum].validate(doc)
     return doc
 
 
@@ -685,7 +703,8 @@ def compose_resource(*, start, spec, root, resource_path, resource_kwargs,
            'resource_kwargs': resource_kwargs,
            'path_semantics': path_semantics}
     if validate:
-        jsonschema.validate(doc, schemas[DocumentNames.resource])
+        schema_validators[DocumentNames.resource].validate(doc)
+
     return ComposeResourceBundle(
         doc,
         partial(compose_datum, resource=doc, counter=counter),
@@ -711,7 +730,7 @@ def compose_stop(*, start, event_counter, poison_pill,
            'reason': reason,
            'num_events': {k: v - 1 for k, v in event_counter.items()}}
     if validate:
-        jsonschema.validate(doc, schemas[DocumentNames.stop])
+        schema_validators[DocumentNames.stop].validate(doc)
     return doc
 
 
@@ -732,7 +751,7 @@ def compose_event_page(*, descriptor, event_counter, data, timestamps, seq_num,
            'filled': filled,
            'descriptor': descriptor['uid']}
     if validate:
-        jsonschema.validate(doc, schemas[DocumentNames.event_page])
+        schema_validators[DocumentNames.event_page].validate(doc)
         if not (descriptor['data_keys'].keys() == data.keys() == timestamps.keys()):
             raise EventModelValidationError(
                 "These sets of keys must match:\n"
@@ -766,7 +785,7 @@ def compose_event(*, descriptor, event_counter, data, timestamps, seq_num=None,
            'filled': filled,
            'descriptor': descriptor['uid']}
     if validate:
-        jsonschema.validate(doc, schemas[DocumentNames.event])
+        schema_validators[DocumentNames.event].validate(doc)
         if not (descriptor['data_keys'].keys() == data.keys() == timestamps.keys()):
             raise EventModelValidationError(
                 "These sets of keys must match:\n"
@@ -811,7 +830,7 @@ def compose_descriptor(*, start, streams, event_counter,
                 "data_keys {}. The requested data_keys were {}. All "
                 "descriptors in a given stream must have the same "
                 "data_keys.".format(name, streams[name], set(data_keys)))
-        jsonschema.validate(doc, schemas[DocumentNames.descriptor])
+        schema_validators[DocumentNames.descriptor].validate(doc)
     if name not in streams:
         streams[name] = set(data_keys)
         event_counter[name] = 1
@@ -851,7 +870,8 @@ def compose_run(*, uid=None, time=None, metadata=None, validate=True):
     event_counter = {}
     poison_pill = []
     if validate:
-        jsonschema.validate(doc, schemas[DocumentNames.start])
+        schema_validators[DocumentNames.start].validate(doc)
+
     return ComposeRunBundle(
         doc,
         partial(compose_descriptor, start=doc, streams=streams,

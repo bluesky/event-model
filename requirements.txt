@@ -1,2 +1,2 @@
-jsonschema
+jsonschema>=3.0.0
 numpy
