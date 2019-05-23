@@ -2,6 +2,21 @@
 Release History
 ***************
 
+v1.9.0 (2019-05-24)
+===================
+
+This release requires ``jsonschema>3``. Previous releases required
+``jsonschema<3``.
+
+Added
+-----
+* Added :data:`~event_model.schema_validators` using the new interface in
+  jsonschema 3.0.
+
+Fixes
+-----
+* The counters in ``num_events`` in the RunStop document were off by one.
+
 v1.9.0 (2019-05-01)
 ===================
 
