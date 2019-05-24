@@ -2,7 +2,7 @@
 Release History
 ***************
 
-v1.9.0 (2019-05-24)
+v1.10.0 (2019-05-24)
 ===================
 
 This release requires ``jsonschema>3``. Previous releases required
