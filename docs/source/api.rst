@@ -9,6 +9,11 @@ and transforming documents in the model.
    :members:
    :undoc-members:
 
+There are two dictionaries, :data:`event_model.schemas` and
+:data:`event_model.schema_validators`, which are keyed on the members of the
+:class:`event_model.DocumentNames` enum and which are mapped, respectively, to
+a schema and an associated :class:`jsonschema.IValidator`.
+
 .. autoclass:: event_model.RunRouter
    :members:
    :undoc-members:
