@@ -485,7 +485,7 @@ class Filler(DocumentRouter):
             # Infer that none of the external data is filled.
             descriptor = self._descriptor_cache[doc['descriptor']]
             filled = {key: 'external' in val
-                      for key, val in descriptor['data_keys']}
+                      for key, val in descriptor['data_keys'].items()}
         for key, is_filled in filled.items():
             if self.exclude is not None and key in self.exclude:
                 continue
