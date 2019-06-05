@@ -849,7 +849,7 @@ def compose_run(*, uid=None, time=None, metadata=None, validate=True):
     uid : string, optional
         Unique identifier for this run, conventionally a UUID4. If None is
         given, a UUID4 will be generated.
-    time: float, optional
+    time : float, optional
         UNIX epoch time of start of this run. If None is given, the current
         time will be used.
     metadata : dict, optional
