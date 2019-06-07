@@ -348,6 +348,8 @@ class Filler(DocumentRouter):
         A cache of Resource documents. If None, a dict is used.
     datum_cache : dict, optional
         A cache of Datum documents. If None, a dict is used.
+    descriptor_cache : dict, optional
+        A cache of EventDescriptor documents. If None, a dict is used.
     retry_intervals : Iterable, optional
         If data is not found on the first try, there may a race between the
         I/O systems creating the external data and this stream of Documents
@@ -388,6 +390,7 @@ class Filler(DocumentRouter):
     def __init__(self, handler_registry, *,
                  include=None, exclude=None, root_map=None,
                  handler_cache=None, resource_cache=None, datum_cache=None,
+                 descriptor_cache=None,
                  retry_intervals=(0.001, 0.002, 0.004, 0.008, 0.016, 0.032,
                                   0.064, 0.128, 0.256, 0.512, 1.024)):
         if include is not None and exclude is not None:
@@ -405,9 +408,12 @@ class Filler(DocumentRouter):
             resource_cache = self.get_default_resource_cache()
         if datum_cache is None:
             datum_cache = self.get_default_datum_cache()
+        if descriptor_cache is None:
+            descriptor_cache = self.get_default_descriptor_cache()
         self._handler_cache = handler_cache
         self._resource_cache = resource_cache
         self._datum_cache = datum_cache
+        self._descriptor_cache = descriptor_cache
         if retry_intervals is None:
             retry_intervals = []
         self.retry_intervals = list(retry_intervals)
@@ -418,6 +424,10 @@ class Filler(DocumentRouter):
 
     @staticmethod
     def get_default_resource_cache():
+        return {}
+
+    @staticmethod
+    def get_default_descriptor_cache():
         return {}
 
     @staticmethod
@@ -468,7 +478,15 @@ class Filler(DocumentRouter):
         return doc
 
     def event(self, doc):
-        for key, is_filled in doc.get('filled', {}).items():
+        try:
+            filled = doc['filled']
+        except KeyError:
+            # This document is not telling us which, if any, keys are filled.
+            # Infer that none of the external data is filled.
+            descriptor = self._descriptor_cache[doc['descriptor']]
+            filled = {key: 'external' in val
+                      for key, val in descriptor['data_keys'].items()}
+        for key, is_filled in filled.items():
             if self.exclude is not None and key in self.exclude:
                 continue
             if self.include is not None and key not in self.include:
@@ -549,6 +567,7 @@ class Filler(DocumentRouter):
         return doc
 
     def descriptor(self, doc):
+        self._descriptor_cache[doc['uid']] = doc
         return doc
 
     def stop(self, doc):
