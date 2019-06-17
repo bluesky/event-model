@@ -19,7 +19,7 @@
         "path_semantics": {
             "type": "string",
             "description": "Rules for joining paths",
-            "enum": ["posix", "windows"]
+            "enum": ["posix", "windows", "nt"]
         },
         "uid": {
             "type": "string",
