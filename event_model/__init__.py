@@ -394,7 +394,7 @@ class Filler(DocumentRouter):
                  retry_intervals=(0.001, 0.002, 0.004, 0.008, 0.016, 0.032,
                                   0.064, 0.128, 0.256, 0.512, 1.024)):
 
-        if inplace == None:
+        if inplace is None:
             self._inplace = True
             warnings.warn(
                 "'inplace' argument not specified. It is recommended to "
@@ -402,7 +402,6 @@ class Filler(DocumentRouter):
                 " will default to False.")
         else:
             self._inplace = inplace
-
 
         if include is not None and exclude is not None:
             raise EventModelValueError(
@@ -504,10 +503,6 @@ class Filler(DocumentRouter):
                                                  exclude=exclude))
         filled_doc = pack_event_page(*filled_events)
         return filled_doc
-
-    def event(self, doc):
-        self.fill_event(doc, include=self.include, exclude=self.exclude)
-        return doc
 
     def fill_event(self, doc, include=None, exclude=None):
         filled_doc = doc
