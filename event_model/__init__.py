@@ -390,9 +390,20 @@ class Filler(DocumentRouter):
     def __init__(self, handler_registry, *,
                  include=None, exclude=None, root_map=None,
                  handler_cache=None, resource_cache=None, datum_cache=None,
-                 descriptor_cache=None,
+                 descriptor_cache=None, inplace=None,
                  retry_intervals=(0.001, 0.002, 0.004, 0.008, 0.016, 0.032,
                                   0.064, 0.128, 0.256, 0.512, 1.024)):
+
+        if inplace == None:
+            self._inplace = True
+            warnings.warn(
+                "'inplace' argument not specified. It is recommended to "
+                "specify True or False. In future releases, 'inplace' "
+                " will default to False.")
+        else:
+            self._inplace = inplace
+
+
         if include is not None and exclude is not None:
             raise EventModelValueError(
                 "The parameters `include` and `exclude` are mutually "
@@ -465,28 +476,41 @@ class Filler(DocumentRouter):
         # efficient than unpacking the page in to Events, filling them, and the
         # re-packing a new page. But that seems tricky in general since the
         # page may be implemented as a DataFrame or dict, etc.
-        self.fill_event_page(doc, include=self.include, exclude=self.exclude)
-        return doc
+        filled_doc = self.fill_event_page(doc, include=self.include,
+                                          exclude=self.exclude)
+        # Modify original doc in place, as we do with 'event'.
+        if self._inplace:
+            doc['data'] = filled_doc['data']
+            doc['filled'] = filled_doc['filled']
+            return doc
+        else:
+            return filled_doc
+
+    def event(self, doc):
+        filled_doc = self.fill_event(doc, include=self.include,
+                                     exclude=self.exclude)
+        if self._inplace:
+            doc = filled_doc
+            return doc
+        else:
+            return filled_doc
 
     def fill_event_page(self, doc, include=None, exclude=None):
         event = self.event  # Avoid attribute lookup in hot loop.
         filled_events = []
-
         for event_doc in unpack_event_page(doc):
             filled_events.append(self.fill_event(event_doc,
                                                  include=include,
                                                  exclude=exclude))
-
-        new_event_page = pack_event_page(*filled_events)
-        # Modify original doc in place, as we do with 'event'.
-        doc['data'] = new_event_page['data']
-        doc['filled'] = new_event_page['filled']
+        filled_doc = pack_event_page(*filled_events)
+        return filled_doc
 
     def event(self, doc):
         self.fill_event(doc, include=self.include, exclude=self.exclude)
         return doc
 
     def fill_event(self, doc, include=None, exclude=None):
+        filled_doc = doc
         try:
             filled = doc['filled']
         except KeyError:
@@ -557,8 +581,8 @@ class Filler(DocumentRouter):
                     try:
                         actual_data = handler(**datum_doc['datum_kwargs'])
                         # Here we are intentionally modifying doc in place.
-                        doc['data'][key] = actual_data
-                        doc['filled'][key] = datum_id
+                        filled_doc['data'][key] = actual_data
+                        filled_doc['filled'][key] = datum_id
                     except IOError as error_:
                         # The file may not be visible on the network yet.
                         # Wait and try again. Stash the error in a variable
@@ -573,7 +597,7 @@ class Filler(DocumentRouter):
                         f"Filler was unable to load the data referenced by "
                         f"the Datum document {datum_doc} and the Resource "
                         f"document {resource}.") from error
-        return doc
+        return filled_doc
 
     def descriptor(self, doc):
         self._descriptor_cache[doc['uid']] = doc
