@@ -465,19 +465,28 @@ class Filler(DocumentRouter):
         # efficient than unpacking the page in to Events, filling them, and the
         # re-packing a new page. But that seems tricky in general since the
         # page may be implemented as a DataFrame or dict, etc.
+        self.fill_event_page(doc, include=self.include, exclude=self.exclude)
+        return doc
 
+    def fill_event_page(self, doc, include=None, exclude=None):
         event = self.event  # Avoid attribute lookup in hot loop.
         filled_events = []
 
         for event_doc in unpack_event_page(doc):
-            filled_events.append(event(event_doc))
+            filled_events.append(self.fill_event(event_doc,
+                                                 include=include,
+                                                 exclude=exclude))
+
         new_event_page = pack_event_page(*filled_events)
         # Modify original doc in place, as we do with 'event'.
         doc['data'] = new_event_page['data']
         doc['filled'] = new_event_page['filled']
-        return doc
 
     def event(self, doc):
+        self.fill_event(doc, include=self.include, exclude=self.exclude)
+        return doc
+
+    def fill_event(self, doc, include=None, exclude=None):
         try:
             filled = doc['filled']
         except KeyError:
@@ -487,9 +496,9 @@ class Filler(DocumentRouter):
             filled = {key: 'external' in val
                       for key, val in descriptor['data_keys'].items()}
         for key, is_filled in filled.items():
-            if self.exclude is not None and key in self.exclude:
+            if exclude is not None and key in exclude:
                 continue
-            if self.include is not None and key not in self.include:
+            if include is not None and key not in include:
                 continue
             if not is_filled:
                 datum_id = doc['data'][key]
