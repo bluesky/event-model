@@ -495,7 +495,6 @@ class Filler(DocumentRouter):
             return filled_doc
 
     def fill_event_page(self, doc, include=None, exclude=None):
-        event = self.event  # Avoid attribute lookup in hot loop.
         filled_events = []
         for event_doc in unpack_event_page(doc):
             filled_events.append(self.fill_event(event_doc,
