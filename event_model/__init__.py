@@ -508,6 +508,7 @@ class Filler(DocumentRouter):
         return filled_doc
 
     def fill_event(self, doc, include=None, exclude=None):
+        filled_doc = doc
         try:
             filled = doc['filled']
         except KeyError:
@@ -578,8 +579,8 @@ class Filler(DocumentRouter):
                     try:
                         actual_data = handler(**datum_doc['datum_kwargs'])
                         # Here we are intentionally modifying doc in place.
-                        doc['data'][key] = actual_data
-                        doc['filled'][key] = datum_id
+                        filled_doc['data'][key] = actual_data
+                        filled_doc['filled'][key] = datum_id
                     except IOError as error_:
                         # The file may not be visible on the network yet.
                         # Wait and try again. Stash the error in a variable
