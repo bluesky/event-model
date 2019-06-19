@@ -493,7 +493,8 @@ class Filler(DocumentRouter):
         filled_doc = self.fill_event(doc, include=self.include,
                                      exclude=self.exclude)
         if self._inplace:
-            doc = filled_doc
+            doc['data'] = filled_doc['data']
+            doc['filled'] = filled_doc['filled']
             return doc
         else:
             return filled_doc
@@ -508,7 +509,7 @@ class Filler(DocumentRouter):
         return filled_doc
 
     def fill_event(self, doc, include=None, exclude=None):
-        filled_doc = doc
+        filled_doc = doc.copy()
         try:
             filled = doc['filled']
         except KeyError:
