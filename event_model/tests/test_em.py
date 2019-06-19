@@ -455,6 +455,30 @@ def test_filler(tmp_path):
         event_model.verify_filled(event_model.pack_event_page(raw_event))
     event_model.verify_filled(event_model.pack_event_page(event))
 
+    with event_model.Filler(reg, inplace=True) as filler:
+        filler('start', run_bundle.start_doc)
+        filler('descriptor', desc_bundle.descriptor_doc)
+        filler('descriptor', desc_bundle_baseline.descriptor_doc)
+        filler('resource', res_bundle.resource_doc)
+        filler('datum', datum_doc)
+        event = copy.deepcopy(raw_event)
+        filled_event = filler.event(event)
+        assert filled_event is event
+
+    with event_model.Filler(reg, inplace=False) as filler:
+        filler('start', run_bundle.start_doc)
+        filler('descriptor', desc_bundle.descriptor_doc)
+        filler('descriptor', desc_bundle_baseline.descriptor_doc)
+        filler('resource', res_bundle.resource_doc)
+        filler('datum', datum_doc)
+        event = copy.deepcopy(raw_event)
+        filled_event = filler.event(event)
+        assert filled_event is not event
+        assert isinstance(event['data']['image'], str)
+
+    with pytest.warns(UserWarning):
+        filler = event_model.Filler(reg)
+
 
 def test_run_router():
     bundle = event_model.compose_run()

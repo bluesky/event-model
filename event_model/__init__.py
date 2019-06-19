@@ -8,6 +8,7 @@ from pkg_resources import resource_filename as rs_fn
 import time as ttime
 import uuid
 import warnings
+import copy
 
 import jsonschema
 import numpy
@@ -509,7 +510,7 @@ class Filler(DocumentRouter):
         return filled_doc
 
     def fill_event(self, doc, include=None, exclude=None):
-        filled_doc = doc.copy()
+        filled_doc = copy.deepcopy(doc)
         try:
             filled = doc['filled']
         except KeyError:
