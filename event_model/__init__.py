@@ -1,4 +1,5 @@
 from collections import defaultdict, deque, namedtuple
+import copy
 import json
 from enum import Enum
 from functools import partial
@@ -8,7 +9,6 @@ from pkg_resources import resource_filename as rs_fn
 import time as ttime
 import uuid
 import warnings
-import copy
 
 import jsonschema
 import numpy
