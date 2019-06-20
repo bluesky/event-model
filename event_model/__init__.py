@@ -1046,12 +1046,14 @@ def unpack_datum_page(datum_page):
 
 
 def rechunk_event_pages(event_pages, chunk_size):
+    stream_key = 'descriptor'
     array_keys = ['seq_num', 'time', 'uid']
     dataframe_keys = ['data', 'timestamps', 'filled']
 
+    i = 0
     for page in event_pages:
         chunk = next(page_chunks(page))
-        yield from page_chunks(page)
+        yield from page_chunks(page, chunk_size, )
 
     def page_chunks(page, chunk_size, first_size)
         i = 0
@@ -1059,7 +1061,7 @@ def rechunk_event_pages(event_pages, chunk_size):
             size = first_size if not i else chunk_size
             try:
                  yield {**{stream_key: page[stream_key]},
-                        **{key: page[key][i:i+size], name=key))
+                        **{key: page[key][i:i+size]
                            for key in array_keys},
                         **{'data': page['data'][key][i:i+size]
                            for key in page['data'].keys()}.values())},
@@ -1070,6 +1072,36 @@ def rechunk_event_pages(event_pages, chunk_size):
             except StopIteration:
                 break
             i += 1
+
+
+def merge_event_pages(pages):
+    stream_key = 'descriptor'
+    array_keys = ['seq_num', 'time', 'uid']
+
+    return {**{stream_key: page[stream_key]},
+            **{key: list(itertools.chain.from_iterable(
+                    [page[key] for page in pages]) for key in array_keys])},
+            **{'data': {key: list(itertools.chain.from_iterable(
+                    [page['data'][key] for page in pages]))
+                    for key in page['data'].keys()}},
+            **{'timestamps': {key: list(itertools.chain.from_iterable(
+                    [page['timestamps'][key] for page in pages]))
+                    for key in page['data'].keys()}},
+            **{'filled': {key: list(itertools.chain.from_iterable(
+                    [page['filled'][key] for page in pages]))
+                    for key in page['data'].keys()}}}
+
+
+def merge_datum_pages(pages):
+    stream_key = 'resource'
+    array_keys = ['datum_id']
+
+    return {**{stream_key: page[stream_key]},
+            **{key: list(itertools.chain.from_iterable(
+                    [page[key] for page in pages]) for key in array_keys])},
+            **{'datum_kwargs': {key: list(itertools.chain.from_iterable(
+                    [page['datum_kwargs'][key] for page in pages]))
+                    for key in page['datum_kwargs'].keys()}}}
 
 
 def bulk_events_to_event_pages(bulk_events):
