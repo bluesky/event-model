@@ -308,7 +308,7 @@ def test_filler(tmp_path):
     path_root = str(tmp_path)
 
     reg = {'DUMMY': DummyHandler}
-    filler = event_model.Filler(reg)
+    filler = event_model.Filler(reg, inplace=True)
     run_bundle = event_model.compose_run()
     desc_bundle = run_bundle.compose_descriptor(
         data_keys={'motor': {'shape': [], 'dtype': 'number', 'source': '...'},
@@ -342,7 +342,7 @@ def test_filler(tmp_path):
     assert filler._closed
 
     # Test context manager with Event.
-    with event_model.Filler(reg) as filler:
+    with event_model.Filler(reg, inplace=True) as filler:
         filler('start', run_bundle.start_doc)
         filler('descriptor', desc_bundle.descriptor_doc)
         filler('descriptor', desc_bundle_baseline.descriptor_doc)
@@ -358,7 +358,7 @@ def test_filler(tmp_path):
     assert filler._closed
 
     # Test context manager with EventPage.
-    with event_model.Filler(reg) as filler:
+    with event_model.Filler(reg, inplace=True) as filler:
         filler('start', run_bundle.start_doc)
         filler('descriptor', desc_bundle.descriptor_doc)
         filler('descriptor', desc_bundle_baseline.descriptor_doc)
@@ -374,7 +374,7 @@ def test_filler(tmp_path):
     assert filler._closed
 
     # Test undefined handler spec
-    with event_model.Filler({}) as filler:
+    with event_model.Filler({}, inplace=True) as filler:
         filler('start', run_bundle.start_doc)
         filler('descriptor', desc_bundle.descriptor_doc)
         filler('descriptor', desc_bundle_baseline.descriptor_doc)
@@ -387,9 +387,9 @@ def test_filler(tmp_path):
 
     # Test exclude and include.
     with pytest.raises(ValueError):
-        event_model.Filler({}, include=[], exclude=[])
+        event_model.Filler({}, include=[], exclude=[], inplace=True)
 
-    with event_model.Filler(reg, exclude=['image']) as filler:
+    with event_model.Filler(reg, exclude=['image'], inplace=True) as filler:
         filler('start', run_bundle.start_doc)
         filler('descriptor', desc_bundle.descriptor_doc)
         filler('descriptor', desc_bundle_baseline.descriptor_doc)
@@ -400,7 +400,7 @@ def test_filler(tmp_path):
         filler('event', event)
         filler('stop', stop_doc)
 
-    with event_model.Filler(reg, include=['image']) as filler:
+    with event_model.Filler(reg, include=['image'], inplace=True) as filler:
         filler('start', run_bundle.start_doc)
         filler('descriptor', desc_bundle.descriptor_doc)
         filler('descriptor', desc_bundle_baseline.descriptor_doc)
@@ -412,7 +412,8 @@ def test_filler(tmp_path):
         assert not filler._closed
     assert event['data']['image'].shape == (5, 5)
 
-    with event_model.Filler(reg, include=['image', 'EXTRA THING']) as filler:
+    with event_model.Filler(reg, include=['image', 'EXTRA THING'],
+                            inplace=True) as filler:
         filler('start', run_bundle.start_doc)
         filler('descriptor', desc_bundle.descriptor_doc)
         filler('descriptor', desc_bundle_baseline.descriptor_doc)
@@ -436,8 +437,8 @@ def test_filler(tmp_path):
             return numpy.ones((5, 5))
 
     with event_model.Filler({'DUMMY': DummyHandlerRootMapTest},
-                            root_map={path_root: str(tmp_path / "moved")}
-                            ) as filler:
+                            root_map={path_root: str(tmp_path / "moved")},
+                            inplace=True) as filler:
 
         filler('start', run_bundle.start_doc)
         filler('descriptor', desc_bundle.descriptor_doc)
@@ -454,6 +455,30 @@ def test_filler(tmp_path):
     with pytest.raises(event_model.UnfilledData):
         event_model.verify_filled(event_model.pack_event_page(raw_event))
     event_model.verify_filled(event_model.pack_event_page(event))
+
+    with event_model.Filler(reg, inplace=True) as filler:
+        filler('start', run_bundle.start_doc)
+        filler('descriptor', desc_bundle.descriptor_doc)
+        filler('descriptor', desc_bundle_baseline.descriptor_doc)
+        filler('resource', res_bundle.resource_doc)
+        filler('datum', datum_doc)
+        event = copy.deepcopy(raw_event)
+        name, filled_event = filler('event', event)
+        assert filled_event is event
+
+    with event_model.Filler(reg, inplace=False) as filler:
+        filler('start', run_bundle.start_doc)
+        filler('descriptor', desc_bundle.descriptor_doc)
+        filler('descriptor', desc_bundle_baseline.descriptor_doc)
+        filler('resource', res_bundle.resource_doc)
+        filler('datum', datum_doc)
+        event = copy.deepcopy(raw_event)
+        name, filled_event = filler('event', event)
+        assert filled_event is not event
+        assert isinstance(event['data']['image'], str)
+
+    with pytest.warns(UserWarning):
+        filler = event_model.Filler(reg)
 
 
 def test_run_router():
