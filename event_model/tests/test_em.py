@@ -463,7 +463,7 @@ def test_filler(tmp_path):
         filler('resource', res_bundle.resource_doc)
         filler('datum', datum_doc)
         event = copy.deepcopy(raw_event)
-        filled_event = filler.event(event)
+        name, filled_event = filler('event', event)
         assert filled_event is event
 
     with event_model.Filler(reg, inplace=False) as filler:
@@ -473,7 +473,7 @@ def test_filler(tmp_path):
         filler('resource', res_bundle.resource_doc)
         filler('datum', datum_doc)
         event = copy.deepcopy(raw_event)
-        filled_event = filler.event(event)
+        name, filled_event = filler('event', event)
         assert filled_event is not event
         assert isinstance(event['data']['image'], str)
 

@@ -510,7 +510,10 @@ class Filler(DocumentRouter):
         return filled_doc
 
     def fill_event(self, doc, include=None, exclude=None):
-        filled_doc = copy.deepcopy(doc)
+        if self._inplace:
+            filled_doc = doc
+        else:
+            filled_doc = copy.deepcopy(doc)
         try:
             filled = doc['filled']
         except KeyError:
