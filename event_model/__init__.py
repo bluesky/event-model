@@ -1046,7 +1046,31 @@ def unpack_datum_page(datum_page):
 
 
 def rechunk_event_pages(event_pages, chunk_size):
-    
+    array_keys = ['seq_num', 'time', 'uid']
+    dataframe_keys = ['data', 'timestamps', 'filled']
+
+    for page in event_pages:
+        chunk = next(page_chunks(page))
+        yield from page_chunks(page)
+
+    def page_chunks(page, chunk_size, first_size)
+        i = 0
+        while True:
+            size = first_size if not i else chunk_size
+            try:
+                 yield {**{stream_key: page[stream_key]},
+                        **{key: page[key][i:i+size], name=key))
+                           for key in array_keys},
+                        **{'data': page['data'][key][i:i+size]
+                           for key in page['data'].keys()}.values())},
+                        **{'timestamps': page['timestamps'][key][i:i+size]
+                           for key in page['data'].keys()}.values())},
+                        **{'filled': page['filled'][key][i:i+size]
+                           for key in page['data'].keys()}.values())}}
+            except StopIteration:
+                break
+            i += 1
+
 
 def bulk_events_to_event_pages(bulk_events):
     """
