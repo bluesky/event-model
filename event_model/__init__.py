@@ -1045,6 +1045,9 @@ def unpack_datum_page(datum_page):
         yield datum
 
 
+def rechunk_event_pages(event_pages, chunk_size):
+    
+
 def bulk_events_to_event_pages(bulk_events):
     """
     Transform a BulkEvents document into a list of EventPage documents.
