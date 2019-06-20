@@ -493,27 +493,26 @@ class Filler(DocumentRouter):
     def event(self, doc):
         filled_doc = self.fill_event(doc, include=self.include,
                                      exclude=self.exclude)
-        if self._inplace:
-            doc['data'] = filled_doc['data']
-            doc['filled'] = filled_doc['filled']
-            return doc
-        else:
-            return filled_doc
+        return filled_doc
 
     def fill_event_page(self, doc, include=None, exclude=None):
         filled_events = []
         for event_doc in unpack_event_page(doc):
             filled_events.append(self.fill_event(event_doc,
                                                  include=include,
-                                                 exclude=exclude))
+                                                 exclude=exclude,
+                                                 inplace=True))
         filled_doc = pack_event_page(*filled_events)
         return filled_doc
 
-    def fill_event(self, doc, include=None, exclude=None):
-        if self._inplace:
+    def fill_event(self, doc, include=None, exclude=None, inplace=None):
+        if inplace is None:
+            inplace = self._inplace
+        if inplace:
             filled_doc = doc
         else:
             filled_doc = copy.deepcopy(doc)
+
         try:
             filled = doc['filled']
         except KeyError:
