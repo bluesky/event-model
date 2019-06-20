@@ -1075,10 +1075,9 @@ def rechunk_event_pages(event_pages, chunk_size):
 
 
 def merge_event_pages(pages):
-    stream_key = 'descriptor'
     array_keys = ['seq_num', 'time', 'uid']
 
-    return {**{stream_key: page[stream_key]},
+    return {**{'descriptor': pages[0]['descriptor']},
             **{key: list(itertools.chain.from_iterable(
                     [page[key] for page in pages]) for key in array_keys])},
             **{'data': {key: list(itertools.chain.from_iterable(
@@ -1093,10 +1092,9 @@ def merge_event_pages(pages):
 
 
 def merge_datum_pages(pages):
-    stream_key = 'resource'
     array_keys = ['datum_id']
 
-    return {**{stream_key: page[stream_key]},
+    return {**{'resource': pages[0]['resource']},
             **{key: list(itertools.chain.from_iterable(
                     [page[key] for page in pages]) for key in array_keys])},
             **{'datum_kwargs': {key: list(itertools.chain.from_iterable(
