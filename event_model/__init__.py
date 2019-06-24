@@ -1060,7 +1060,7 @@ def rechunk_event_pages(event_pages, chunk_size):
     if chunk_list:
         yield merge_event_pages(chunk_list)
 
-    def page_chunks(page, chunk_size, remainder)
+    def page_chunks(page, chunk_size, remainder):
         array_keys = ['seq_num', 'time', 'uid']
         page_size = len(page['uid'])
         chunks = [(0,remainder)]
