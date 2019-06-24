@@ -1048,33 +1048,44 @@ def unpack_datum_page(datum_page):
 def rechunk_event_pages(event_pages, chunk_size):
     stream_key = 'descriptor'
     array_keys = ['seq_num', 'time', 'uid']
-    dataframe_keys = ['data', 'timestamps', 'filled']
 
-    i = 0
+    remainder = chunk_size
+    chunk_list = []
+
     for page in event_pages:
-        chunk = next(page_chunks(page))
-        yield from page_chunks(page, chunk_size, )
+        new_chunks = page_chunks(page, chunk_size, remainder)
+        for chunk in new_chunks:
+            remainder -= len(chunk['seq_num'])
+            chunk_list.append(chunk)
+            if remainder == 0:
+                yield merge_event_pages(chunk_list)
+                remainder = chunk_size
+    if chunk_list:
+        yield merge_event_pages(chunk_list)
 
-    def page_chunks(page, chunk_size, first_size)
-        i = 0
-        while True:
-            size = first_size if not i else chunk_size
-            try:
-                 yield {**{stream_key: page[stream_key]},
-                        **{key: page[key][i:i+size]
-                           for key in array_keys},
-                        **{'data': page['data'][key][i:i+size]
-                           for key in page['data'].keys()}.values())},
-                        **{'timestamps': page['timestamps'][key][i:i+size]
-                           for key in page['data'].keys()}.values())},
-                        **{'filled': page['filled'][key][i:i+size]
-                           for key in page['data'].keys()}.values())}}
-            except StopIteration:
-                break
-            i += 1
+    def page_chunks(page, chunk_size, remainder)
+        array_keys = ['seq_num', 'time', 'uid']
+        page_size = len(page['uid'])
+        chunks = [(0,remainder)]
+        chunks.extend([(i - chunk_size, i) for i
+                       in range(remainder + chunk_size, page_size, chunk_size)]
+
+        for start, stop in chunks:
+            yield {**{stream_key: page[stream_key]},
+                **{key: page[key][start:stop]
+                   for key in array_keys},
+                **{'data': page['data'][key][start:stop]
+                   for key in page['data'].keys()}.values())},
+                **{'timestamps': page['timestamps'][key][start: stop]
+                   for key in page['data'].keys()}.values())},
+                **{'filled': page['filled'][key][start:stop]
+                   for key in page['data'].keys()}.values())}}
 
 
 def merge_event_pages(pages):
+    if len(pages) == 1:
+        return pages[0]
+
     array_keys = ['seq_num', 'time', 'uid']
 
     return {**{'descriptor': pages[0]['descriptor']},
@@ -1092,6 +1103,9 @@ def merge_event_pages(pages):
 
 
 def merge_datum_pages(pages):
+    if len(pages) == 1:
+        return pages[0]
+
     array_keys = ['datum_id']
 
     return {**{'resource': pages[0]['resource']},
