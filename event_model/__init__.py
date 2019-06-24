@@ -1046,9 +1046,6 @@ def unpack_datum_page(datum_page):
 
 
 def rechunk_event_pages(event_pages, chunk_size):
-    stream_key = 'descriptor'
-    array_keys = ['seq_num', 'time', 'uid']
-
     remainder = chunk_size
     chunk_list = []
 
@@ -1071,9 +1068,8 @@ def rechunk_event_pages(event_pages, chunk_size):
                        in range(remainder + chunk_size, page_size, chunk_size)]
 
         for start, stop in chunks:
-            yield {**{stream_key: page[stream_key]},
-                **{key: page[key][start:stop]
-                   for key in array_keys},
+            yield {**{'descriptor': page['descriptor']},
+                **{key: page[key][start:stop] for key in array_keys},
                 **{'data': page['data'][key][start:stop]
                    for key in page['data'].keys()}.values())},
                 **{'timestamps': page['timestamps'][key][start: stop]
