@@ -3,8 +3,6 @@ import json
 import event_model
 import numpy
 import pytest
-import random
-
 
 
 def test_documents():
@@ -486,44 +484,35 @@ def test_filler(tmp_path):
 def test_rechunk_event_pages():
 
     def event_page_gen(page_size, num_pages):
-
-        def rand_list(length):
-            return [random.randint(0,100) for _ in range(length)]
-
-        data_keys = ['x','y','z']
+        data_keys = ['x', 'y', 'z']
         array_keys = ['seq_num', 'time', 'uid']
         for i in range(num_pages):
             yield {'descriptor': 'DESCRIPTOR',
                    **{key: list(range(page_size)) for key in array_keys},
                    'data': {key: list(range(page_size)) for key in data_keys},
-                   'timestamps':{key: list(range(page_size)) for key in data_keys},
+                   'timestamps': {key: list(range(page_size)) for key in data_keys},
                    'filled': {key: list(range(page_size)) for key in data_keys}}
 
-
-    event_pages = list(event_page_gen(10, 3))
+    event_pages = list(event_page_gen(13, 31))
     event_pages_70 = event_model.rechunk_event_pages(event_pages, 7)
-    event_pages_100 = event_model.rechunk_event_pages(event_pages_70, 10)
+    event_pages_100 = event_model.rechunk_event_pages(event_pages_70, 13)
     assert event_pages == list(event_pages_100)
 
 
 def test_rechunk_datum_pages():
 
     def datum_page_gen(page_size, num_pages):
-
-        def rand_list(length):
-            return [random.randint(0,100) for _ in range(length)]
-
-        data_keys = ['x','y','z']
+        data_keys = ['x', 'y', 'z']
         array_keys = ['datum_id']
         for i in range(num_pages):
             yield {'resource': 'RESOURCE',
                    **{key: list(range(page_size)) for key in array_keys},
-                   'datum_kwargs': {key: rand_list(page_size) for key in data_keys}}
+                   'datum_kwargs': {key: list(range(page_size))
+                                    for key in data_keys}}
 
-
-    datum_pages = list(datum_page_gen(10, 3))
+    datum_pages = list(datum_page_gen(13, 31))
     datum_pages_70 = event_model.rechunk_datum_pages(datum_pages, 7)
-    datum_pages_100 = event_model.rechunk_datum_pages(datum_pages_70, 10)
+    datum_pages_100 = event_model.rechunk_datum_pages(datum_pages_70, 13)
     assert datum_pages == list(datum_pages_100)
 
 
