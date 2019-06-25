@@ -482,43 +482,48 @@ def test_filler(tmp_path):
     with pytest.warns(UserWarning):
         filler = event_model.Filler(reg)
 
-def test_rechunk_event_pages(example_data):
+
+def test_rechunk_event_pages():
 
     def event_page_gen(page_size, num_pages):
-        data_keys = ['x','y','z']
-        array_keys = ['seq_num', 'time', 'uid']
-        for i in range(num_pages):
-            yield {'descriptor': random.randint(50),
-                   **{key: rand_list(page_size) for key in array_keys},
-                   'data': {key: rand_list(page_size) for key in data_keys},
-                   'timestamps':{key: rand_list(page_size) for key in data_keys},
-                   'filled': {key: rand_list(page_size) for key in data_keys}}
 
         def rand_list(length):
             return [random.randint(0,100) for _ in range(length)]
 
-    event_pages = list(event_page_gen(100, 10))
-    event_pages_70 = rechunk_event_pages(event_pages, 70)
-    event_pages_100 = rechunk_event_pages(event_pages_70, 100)
+        data_keys = ['x','y','z']
+        array_keys = ['seq_num', 'time', 'uid']
+        for i in range(num_pages):
+            yield {'descriptor': 'DESCRIPTOR',
+                   **{key: list(range(page_size)) for key in array_keys},
+                   'data': {key: list(range(page_size)) for key in data_keys},
+                   'timestamps':{key: list(range(page_size)) for key in data_keys},
+                   'filled': {key: list(range(page_size)) for key in data_keys}}
+
+
+    event_pages = list(event_page_gen(10, 3))
+    event_pages_70 = event_model.rechunk_event_pages(event_pages, 7)
+    event_pages_100 = event_model.rechunk_event_pages(event_pages_70, 10)
     assert event_pages == list(event_pages_100)
 
 
-def test_rechunk_datum_pages(example_data):
+def test_rechunk_datum_pages():
 
     def datum_page_gen(page_size, num_pages):
-        data_keys = ['x','y','z']
-        array_keys = ['seq_num', 'time', 'uid']
-        for i in range(num_pages):
-            yield {'resource': random.randint(50),
-                   **{key: rand_list(page_size) for key in array_keys},
-                   'datum_kwargs': {key: rand_list(page_size) for key in data_keys}}
 
         def rand_list(length):
             return [random.randint(0,100) for _ in range(length)]
 
-    datum_pages = list(datum_page_gen(100, 10))
-    datum_pages_70 = rechunk_datum_pages(event_pages, 70)
-    datum_pages_100 = rechunk_datum_pages(event_pages_70, 100)
+        data_keys = ['x','y','z']
+        array_keys = ['datum_id']
+        for i in range(num_pages):
+            yield {'resource': 'RESOURCE',
+                   **{key: list(range(page_size)) for key in array_keys},
+                   'datum_kwargs': {key: rand_list(page_size) for key in data_keys}}
+
+
+    datum_pages = list(datum_page_gen(10, 3))
+    datum_pages_70 = event_model.rechunk_datum_pages(datum_pages, 7)
+    datum_pages_100 = event_model.rechunk_datum_pages(datum_pages_70, 10)
     assert datum_pages == list(datum_pages_100)
 
 
