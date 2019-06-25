@@ -6,6 +6,7 @@ import pytest
 import random
 
 
+
 def test_documents():
     dn = event_model.DocumentNames
     for k in ('stop', 'start', 'descriptor',
@@ -481,24 +482,45 @@ def test_filler(tmp_path):
     with pytest.warns(UserWarning):
         filler = event_model.Filler(reg)
 
-def test_rechunk_events():
+def test_rechunk_event_pages(example_data):
 
     def event_page_gen(page_size, num_pages):
+        data_keys = ['x','y','z']
+        array_keys = ['seq_num', 'time', 'uid']
         for i in range(num_pages):
-            yield {'descriptor': 'test_page',
-                   **{key: page[key][start:stop] for key in array_keys},
-                   'data': {page['data'][key][start:stop]
-                            for key in page['data'].keys()},
-                   'timestamps': {page['timestamps'][key][start: stop]
-                                  for key in page['timestamps'].kys()},
-                   'filled': {page['filled'][key][start:stop]
-                              for key in page['data'].keys()}}
+            yield {'descriptor': random.randint(50),
+                   **{key: rand_list(page_size) for key in array_keys},
+                   'data': {key: rand_list(page_size) for key in data_keys},
+                   'timestamps':{key: rand_list(page_size) for key in data_keys},
+                   'filled': {key: rand_list(page_size) for key in data_keys}}
 
         def rand_list(length):
             return [random.randint(0,100) for _ in range(length)]
 
-    event_page = event_model.compose_event_page
-    print(event_page)
+    event_pages = list(event_page_gen(100, 10))
+    event_pages_70 = rechunk_event_pages(event_pages, 70)
+    event_pages_100 = rechunk_event_pages(event_pages_70, 100)
+    assert event_pages == list(event_pages_100)
+
+
+def test_rechunk_datum_pages(example_data):
+
+    def datum_page_gen(page_size, num_pages):
+        data_keys = ['x','y','z']
+        array_keys = ['seq_num', 'time', 'uid']
+        for i in range(num_pages):
+            yield {'resource': random.randint(50),
+                   **{key: rand_list(page_size) for key in array_keys},
+                   'datum_kwargs': {key: rand_list(page_size) for key in data_keys}}
+
+        def rand_list(length):
+            return [random.randint(0,100) for _ in range(length)]
+
+    datum_pages = list(datum_page_gen(100, 10))
+    datum_pages_70 = rechunk_datum_pages(event_pages, 70)
+    datum_pages_100 = rechunk_datum_pages(event_pages_70, 100)
+    assert datum_pages == list(datum_pages_100)
+
 
 def test_run_router():
     bundle = event_model.compose_run()
