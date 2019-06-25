@@ -3,6 +3,7 @@ import json
 import event_model
 import numpy
 import pytest
+import random
 
 
 def test_documents():
@@ -480,6 +481,24 @@ def test_filler(tmp_path):
     with pytest.warns(UserWarning):
         filler = event_model.Filler(reg)
 
+def test_rechunk_events():
+
+    def event_page_gen(page_size, num_pages):
+        for i in range(num_pages):
+            yield {'descriptor': 'test_page',
+                   **{key: page[key][start:stop] for key in array_keys},
+                   'data': {page['data'][key][start:stop]
+                            for key in page['data'].keys()},
+                   'timestamps': {page['timestamps'][key][start: stop]
+                                  for key in page['timestamps'].kys()},
+                   'filled': {page['filled'][key][start:stop]
+                              for key in page['data'].keys()}}
+
+        def rand_list(length):
+            return [random.randint(0,100) for _ in range(length)]
+
+    event_page = event_model.compose_event_page
+    print(event_page)
 
 def test_run_router():
     bundle = event_model.compose_run()

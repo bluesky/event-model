@@ -1065,17 +1065,17 @@ def rechunk_event_pages(event_pages, chunk_size):
         page_size = len(page['uid'])
         chunks = [(0,remainder)]
         chunks.extend([(i - chunk_size, i) for i
-                       in range(remainder + chunk_size, page_size, chunk_size)]
+                       in range(remainder + chunk_size, page_size, chunk_size)])
 
         for start, stop in chunks:
-            yield {**{'descriptor': page['descriptor']},
-                **{key: page[key][start:stop] for key in array_keys},
-                **{'data': page['data'][key][start:stop]
-                   for key in page['data'].keys()}.values())},
-                **{'timestamps': page['timestamps'][key][start: stop]
-                   for key in page['data'].keys()}.values())},
-                **{'filled': page['filled'][key][start:stop]
-                   for key in page['data'].keys()}.values())}}
+            yield {'descriptor': page['descriptor'],
+                   **{key: page[key][start:stop] for key in array_keys},
+                   'data': {key: page['data'][key][start:stop]
+                            for key in page['data'].keys()},
+                   'timestamps': {key: page['timestamps'][key][start: stop]
+                                  for key in page['timestamps'].keys()},
+                   'filled': {key: page['filled'][key][start:stop]
+                              for key in page['data'].keys()}}
 
 
 def merge_event_pages(event_pages):
@@ -1085,18 +1085,18 @@ def merge_event_pages(event_pages):
 
     array_keys = ['seq_num', 'time', 'uid']
 
-    return {**{'descriptor': pages[0]['descriptor']},
+    return {'descriptor': pages[0]['descriptor'],
             **{key: list(itertools.chain.from_iterable(
-                    [page[key] for page in pages]) for key in array_keys])},
-            **{'data': {key: list(itertools.chain.from_iterable(
+                    [page[key] for page in pages])) for key in array_keys},
+            'data': {key: list(itertools.chain.from_iterable(
                     [page['data'][key] for page in pages]))
-                    for key in page['data'].keys()}},
-            **{'timestamps': {key: list(itertools.chain.from_iterable(
+                    for key in page['data'].keys()},
+            'timestamps': {key: list(itertools.chain.from_iterable(
                     [page['timestamps'][key] for page in pages]))
-                    for key in page['data'].keys()}},
-            **{'filled': {key: list(itertools.chain.from_iterable(
+                    for key in page['data'].keys()},
+            'filled': {key: list(itertools.chain.from_iterable(
                     [page['filled'][key] for page in pages]))
-                    for key in page['data'].keys()}}}
+                    for key in page['data'].keys()}}
 
 
 def rechunk_datum_pages(datum_pages, chunk_size):
@@ -1119,13 +1119,13 @@ def rechunk_datum_pages(datum_pages, chunk_size):
         page_size = len(page['datum_id'])
         chunks = [(0,remainder)]
         chunks.extend([(i - chunk_size, i) for i
-                       in range(remainder + chunk_size, page_size, chunk_size)]
+                       in range(remainder + chunk_size, page_size, chunk_size)])
 
         for start, stop in chunks:
-            yield {**{'resource': page['resource']},
-                **{key: page[key][start:stop] for key in array_keys},
-                **{'datum_kwargs': page['datum_kwargs'][key][start:stop]
-                   for key in page['datum_kwargs'].keys()}.values())}}
+            yield {'resource': page['resource'],
+                   **{key: page[key][start:stop] for key in array_keys},
+                   'datum_kwargs': {key: page['datum_kwargs'][key][start:stop]
+                      for key in page['datum_kwargs'].keys()}}
 
 
 def merge_datum_pages(datum_pages):
@@ -1135,13 +1135,12 @@ def merge_datum_pages(datum_pages):
 
     array_keys = ['datum_id']
 
-    return {**{'resource': pages[0]['resource']},
+    return {'resource': pages[0]['resource'],
             **{key: list(itertools.chain.from_iterable(
-                    [page[key] for page in pages]) for key in array_keys])},
-            **{'datum_kwargs': {key: list(itertools.chain.from_iterable(
+                    [page[key] for page in pages])) for key in array_keys},
+            'datum_kwargs': {key: list(itertools.chain.from_iterable(
                     [page['datum_kwargs'][key] for page in pages]))
-                    for key in page['datum_kwargs'].keys()}}}
-
+                    for key in page['datum_kwargs'].keys()}}
 
 def bulk_events_to_event_pages(bulk_events):
     """
