@@ -1079,7 +1079,7 @@ def rechunk_event_pages(event_pages, chunk_size):
 
 
 def merge_event_pages(pages):
-    if len(pages) == 1:
+    if len(list(pages)) == 1:
         return pages[0]
 
     array_keys = ['seq_num', 'time', 'uid']
@@ -1097,9 +1097,36 @@ def merge_event_pages(pages):
                     [page['filled'][key] for page in pages]))
                     for key in page['data'].keys()}}}
 
+def rechunk_datum_pages(datum_pages, chunk_size):
+    remainder = chunk_size
+    chunk_list = []
+
+    for page in datum_pages:
+        new_chunks = page_chunks(page, chunk_size, remainder)
+        for chunk in new_chunks:
+            remainder -= len(chunk['datum_id'])
+            chunk_list.append(chunk)
+            if remainder == 0:
+                yield merge_datum_pages(chunk_list)
+                remainder = chunk_size
+    if chunk_list:
+        yield merge_datum_pages(chunk_list)
+
+    def page_chunks(page, chunk_size, remainder):
+        array_keys = ['datum_id']
+        page_size = len(page['uid'])
+        chunks = [(0,remainder)]
+        chunks.extend([(i - chunk_size, i) for i
+                       in range(remainder + chunk_size, page_size, chunk_size)]
+
+        for start, stop in chunks:
+            yield {**{'resource': page['resource']},
+                **{key: page[key][start:stop] for key in array_keys},
+                **{'datum_kwargs': page['datum_kwargs'][key][start:stop]
+                   for key in page['datum_kwargs'].keys()}.values())}}
 
 def merge_datum_pages(pages):
-    if len(pages) == 1:
+    if len(list(pages)) == 1:
         return pages[0]
 
     array_keys = ['datum_id']
