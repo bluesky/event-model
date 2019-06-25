@@ -1078,13 +1078,9 @@ def rechunk_event_pages(event_pages, chunk_size):
                    for key in page['data'].keys()}.values())}}
 
 
-def merge_event_pages(pages):
-    one_page = True
-    for i, page in enumerate(pages):
-        if i >= 1:
-            one_page = False
-            break
-    if one_page:
+def merge_event_pages(event_pages):
+    pages = list(event_pages)
+    if len(pages) == 1:
         return pages[0]
 
     array_keys = ['seq_num', 'time', 'uid']
@@ -1132,13 +1128,9 @@ def rechunk_datum_pages(datum_pages, chunk_size):
                    for key in page['datum_kwargs'].keys()}.values())}}
 
 
-def merge_datum_pages(pages):
-    one_page = True
-    for i, page in enumerate(pages):
-        if i >= 1:
-            one_page = False
-            break
-    if one_page:
+def merge_datum_pages(datum_pages):
+    pages = list(datum_pages)
+    if len(pages) == 1:
         return pages[0]
 
     array_keys = ['datum_id']
