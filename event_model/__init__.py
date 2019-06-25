@@ -1097,6 +1097,7 @@ def merge_event_pages(pages):
                     [page['filled'][key] for page in pages]))
                     for key in page['data'].keys()}}}
 
+
 def rechunk_datum_pages(datum_pages, chunk_size):
     remainder = chunk_size
     chunk_list = []
@@ -1114,7 +1115,7 @@ def rechunk_datum_pages(datum_pages, chunk_size):
 
     def page_chunks(page, chunk_size, remainder):
         array_keys = ['datum_id']
-        page_size = len(page['uid'])
+        page_size = len(page['datum_id'])
         chunks = [(0,remainder)]
         chunks.extend([(i - chunk_size, i) for i
                        in range(remainder + chunk_size, page_size, chunk_size)]
@@ -1124,6 +1125,7 @@ def rechunk_datum_pages(datum_pages, chunk_size):
                 **{key: page[key][start:stop] for key in array_keys},
                 **{'datum_kwargs': page['datum_kwargs'][key][start:stop]
                    for key in page['datum_kwargs'].keys()}.values())}}
+
 
 def merge_datum_pages(pages):
     if len(list(pages)) == 1:
