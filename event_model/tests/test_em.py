@@ -494,9 +494,9 @@ def test_rechunk_event_pages():
                    'filled': {key: list(range(page_size)) for key in data_keys}}
 
     event_pages = list(event_page_gen(13, 31))
-    event_pages_70 = event_model.rechunk_event_pages(event_pages, 7)
-    event_pages_100 = event_model.rechunk_event_pages(event_pages_70, 13)
-    assert event_pages == list(event_pages_100)
+    event_pages_7 = event_model.rechunk_event_pages(event_pages, 7)
+    event_pages_13 = event_model.rechunk_event_pages(event_pages_7, 13)
+    assert event_pages == list(event_pages_13)
 
 
 def test_rechunk_datum_pages():
