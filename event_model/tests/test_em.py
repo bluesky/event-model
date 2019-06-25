@@ -484,6 +484,9 @@ def test_filler(tmp_path):
 def test_rechunk_event_pages():
 
     def event_page_gen(page_size, num_pages):
+        """
+        Generator event_pages for testing.
+        """
         data_keys = ['x', 'y', 'z']
         array_keys = ['seq_num', 'time', 'uid']
         for i in range(num_pages):
@@ -493,15 +496,22 @@ def test_rechunk_event_pages():
                    'timestamps': {key: list(range(page_size)) for key in data_keys},
                    'filled': {key: list(range(page_size)) for key in data_keys}}
 
+    # Get a list of event pages of size 13.
     event_pages = list(event_page_gen(13, 31))
+    # Change the size of the event_pages to size 7.
     event_pages_7 = event_model.rechunk_event_pages(event_pages, 7)
+    # Change the size back to 13.
     event_pages_13 = event_model.rechunk_event_pages(event_pages_7, 13)
+    # Check that it is equal to the original list of event_pages.
     assert event_pages == list(event_pages_13)
 
 
 def test_rechunk_datum_pages():
 
     def datum_page_gen(page_size, num_pages):
+        """
+        Generator datum_pages for testing.
+        """
         data_keys = ['x', 'y', 'z']
         array_keys = ['datum_id']
         for i in range(num_pages):
@@ -510,9 +520,13 @@ def test_rechunk_datum_pages():
                    'datum_kwargs': {key: list(range(page_size))
                                     for key in data_keys}}
 
+    # Get a list of event pages of size 13.
     datum_pages = list(datum_page_gen(13, 31))
+    # Change the size of the event_pages to size 7.
     datum_pages_70 = event_model.rechunk_datum_pages(datum_pages, 7)
+    # Change the size back to 13.
     datum_pages_100 = event_model.rechunk_datum_pages(datum_pages_70, 13)
+    # Check that it is equal to the original list of event_pages.
     assert datum_pages == list(datum_pages_100)
 
 
