@@ -499,7 +499,8 @@ def test_rechunk_event_pages():
     # Get a list of event pages of size 13.
     event_pages = list(event_page_gen(13, 31))
     # Change the size of the event_pages to size 7.
-    event_pages_7 = event_model.rechunk_event_pages(event_pages, 7)
+    event_pages_7 = list(event_model.rechunk_event_pages(event_pages, 7))
+    assert [7] * 57 + [4] == [len(page['uid']) for page in event_pages_7]
     # Change the size back to 13.
     event_pages_13 = event_model.rechunk_event_pages(event_pages_7, 13)
     # Check that it is equal to the original list of event_pages.
@@ -523,7 +524,8 @@ def test_rechunk_datum_pages():
     # Get a list of datum pages of size 13.
     datum_pages = list(datum_page_gen(13, 31))
     # Change the size of the datum_pages to size 7.
-    datum_pages_7 = event_model.rechunk_datum_pages(datum_pages, 7)
+    datum_pages_7 = list(event_model.rechunk_datum_pages(datum_pages, 7))
+    assert [7] * 57 + [4] == [len(page['datum_id']) for page in datum_pages_7]
     # Change the size back to 13.
     datum_pages_13 = event_model.rechunk_datum_pages(datum_pages_7, 13)
     # Check that it is equal to the original list of datum_pages.
