@@ -523,11 +523,11 @@ def test_rechunk_datum_pages():
     # Get a list of datum pages of size 13.
     datum_pages = list(datum_page_gen(13, 31))
     # Change the size of the datum_pages to size 7.
-    datum_pages_70 = event_model.rechunk_datum_pages(datum_pages, 7)
+    datum_pages_7 = event_model.rechunk_datum_pages(datum_pages, 7)
     # Change the size back to 13.
-    datum_pages_100 = event_model.rechunk_datum_pages(datum_pages_70, 13)
+    datum_pages_13 = event_model.rechunk_datum_pages(datum_pages_7, 13)
     # Check that it is equal to the original list of datum_pages.
-    assert datum_pages == list(datum_pages_100)
+    assert datum_pages == list(datum_pages_13)
 
 
 def test_run_router():
