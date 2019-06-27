@@ -1045,6 +1045,173 @@ def unpack_datum_page(datum_page):
         yield datum
 
 
+def rechunk_event_pages(event_pages, chunk_size):
+    """
+    Resizes the event_pages in a iterable of event_pages.
+
+    Parameters
+    ----------
+    event_pages: Iterabile
+        An iterable of event_pages
+    chunk_size: integer
+        Size of pages to yield
+
+    Yields
+    ------
+    event_page : dict
+    """
+    remainder = chunk_size
+    chunk_list = []
+
+    def page_chunks(page, chunk_size, remainder):
+        """
+        Yields chunks of a event_page.
+        The first chunk will be of size remainder, the following chunks will be
+        of size chunk_size. The last chunk will be what ever is left over.
+        """
+        array_keys = ['seq_num', 'time', 'uid']
+        page_size = len(page['uid'])  # Number of events in the page.
+
+        # Make a list of the chunk indexes.
+        chunks = [(0, remainder)]
+        chunks.extend([(i, i + chunk_size) for i
+                       in range(remainder, page_size, chunk_size)])
+
+        for start, stop in chunks:
+            yield {'descriptor': page['descriptor'],
+                   **{key: page[key][start:stop] for key in array_keys},
+                   'data': {key: page['data'][key][start:stop]
+                            for key in page['data'].keys()},
+                   'timestamps': {key: page['timestamps'][key][start: stop]
+                                  for key in page['timestamps'].keys()},
+                   'filled': {key: page['filled'][key][start:stop]
+                              for key in page['data'].keys()}}
+
+    for page in event_pages:
+        new_chunks = page_chunks(page, chunk_size, remainder)
+        for chunk in new_chunks:
+            remainder -= len(chunk['uid'])  # Subtract the size of the chunk.
+            chunk_list.append(chunk)
+            if remainder == 0:
+                yield merge_event_pages(chunk_list)
+                remainder = chunk_size
+                chunk_list = []
+    if chunk_list:
+        yield merge_event_pages(chunk_list)
+
+
+def merge_event_pages(event_pages):
+    """
+    Combines a iterable of event_pages to a single event_page.
+
+    Parameters
+    ----------
+    event_pages: Iterabile
+        An iterable of event_pages
+
+    Returns
+    ------
+    event_page : dict
+    """
+    pages = list(event_pages)
+    if len(pages) == 1:
+        return pages[0]
+
+    array_keys = ['seq_num', 'time', 'uid']
+
+    return {'descriptor': pages[0]['descriptor'],
+            **{key: list(itertools.chain.from_iterable(
+                    [page[key] for page in pages])) for key in array_keys},
+            'data': {key: list(itertools.chain.from_iterable(
+                    [page['data'][key] for page in pages]))
+                    for key in pages[0]['data'].keys()},
+            'timestamps': {key: list(itertools.chain.from_iterable(
+                    [page['timestamps'][key] for page in pages]))
+                    for key in pages[0]['data'].keys()},
+            'filled': {key: list(itertools.chain.from_iterable(
+                    [page['filled'][key] for page in pages]))
+                    for key in pages[0]['data'].keys()}}
+
+
+def rechunk_datum_pages(datum_pages, chunk_size):
+    """
+    Resizes the datum_pages in a iterable of event_pages.
+
+    Parameters
+    ----------
+    datum_pages: Iterabile
+        An iterable of datum_pages
+    chunk_size: integer
+        Size of pages to yield
+
+    Yields
+    ------
+    datum_page : dict
+    """
+    remainder = chunk_size
+    chunk_list = []
+
+    def page_chunks(page, chunk_size, remainder):
+        """
+        Yields chunks of a datum_page.
+        The first chunk will be of size remainder, the following chunks will be
+        of size chunk_size. The last chunk will be what ever is left over.
+        """
+
+        array_keys = ['datum_id']
+        page_size = len(page['datum_id'])  # Number of datum in the page.
+
+        # Make a list of the chunk indexes.
+        chunks = [(0, remainder)]
+        chunks.extend([(i, i + chunk_size) for i
+                       in range(remainder, page_size, chunk_size)])
+
+        for start, stop in chunks:
+            yield {'resource': page['resource'],
+                   **{key: page[key][start:stop] for key in array_keys},
+                   'datum_kwargs': {key: page['datum_kwargs'][key][start:stop]
+                                    for key in page['datum_kwargs'].keys()}}
+
+    for page in datum_pages:
+        new_chunks = page_chunks(page, chunk_size, remainder)
+        for chunk in new_chunks:
+            remainder -= len(chunk['datum_id'])  # Subtract the size of the chunk.
+            chunk_list.append(chunk)
+            if remainder == 0:
+                yield merge_datum_pages(chunk_list)
+                remainder = chunk_size
+                chunk_list = []
+    if chunk_list:
+        yield merge_datum_pages(chunk_list)
+
+
+def merge_datum_pages(datum_pages):
+    """
+    Combines a iterable of datum_pages to a single datum_page.
+
+    Parameters
+    ----------
+    datum_pages: Iterabile
+        An iterable of datum_pages
+
+    Returns
+    ------
+    datum_page : dict
+    """
+    pages = list(datum_pages)
+    if len(pages) == 1:
+        return pages[0]
+
+    array_keys = ['datum_id']
+
+    return {'resource': pages[0]['resource'],
+            **{key: list(itertools.chain.from_iterable(
+                    [page[key] for page in pages])) for key in array_keys},
+            'datum_kwargs': {key: list(itertools.chain.from_iterable(
+                    [page['datum_kwargs'][key] for page in pages]))
+                    for key in pages[0]['datum_kwargs'].keys()}}
+
+
 def bulk_events_to_event_pages(bulk_events):
     """
     Transform a BulkEvents document into a list of EventPage documents.

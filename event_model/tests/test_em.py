@@ -481,6 +481,57 @@ def test_filler(tmp_path):
         filler = event_model.Filler(reg)
 
 
+def test_rechunk_event_pages():
+
+    def event_page_gen(page_size, num_pages):
+        """
+        Generator event_pages for testing.
+        """
+        data_keys = ['x', 'y', 'z']
+        array_keys = ['seq_num', 'time', 'uid']
+        for i in range(num_pages):
+            yield {'descriptor': 'DESCRIPTOR',
+                   **{key: list(range(page_size)) for key in array_keys},
+                   'data': {key: list(range(page_size)) for key in data_keys},
+                   'timestamps': {key: list(range(page_size)) for key in data_keys},
+                   'filled': {key: list(range(page_size)) for key in data_keys}}
+
+    # Get a list of event pages of size 13.
+    event_pages = list(event_page_gen(13, 31))
+    # Change the size of the event_pages to size 7.
+    event_pages_7 = list(event_model.rechunk_event_pages(event_pages, 7))
+    assert [7] * 57 + [4] == [len(page['uid']) for page in event_pages_7]
+    # Change the size back to 13.
+    event_pages_13 = event_model.rechunk_event_pages(event_pages_7, 13)
+    # Check that it is equal to the original list of event_pages.
+    assert event_pages == list(event_pages_13)
+
+
+def test_rechunk_datum_pages():
+
+    def datum_page_gen(page_size, num_pages):
+        """
+        Generator datum_pages for testing.
+        """
+        data_keys = ['x', 'y', 'z']
+        array_keys = ['datum_id']
+        for i in range(num_pages):
+            yield {'resource': 'RESOURCE',
+                   **{key: list(range(page_size)) for key in array_keys},
+                   'datum_kwargs': {key: list(range(page_size))
+                                    for key in data_keys}}
+
+    # Get a list of datum pages of size 13.
+    datum_pages = list(datum_page_gen(13, 31))
+    # Change the size of the datum_pages to size 7.
+    datum_pages_7 = list(event_model.rechunk_datum_pages(datum_pages, 7))
+    assert [7] * 57 + [4] == [len(page['datum_id']) for page in datum_pages_7]
+    # Change the size back to 13.
+    datum_pages_13 = event_model.rechunk_datum_pages(datum_pages_7, 13)
+    # Check that it is equal to the original list of datum_pages.
+    assert datum_pages == list(datum_pages_13)
+
+
 def test_run_router():
     bundle = event_model.compose_run()
     docs = []
