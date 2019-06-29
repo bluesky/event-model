@@ -13,7 +13,7 @@ organized in a
 by the RunEngine during plan execution.  All of the metadata and data generated
 by executing the plan is organized into documents.
 
-A :doc:`later section <callbacks>` describes how outside functions can
+A :doc:"later section <callbacks>" describes how outside functions can
 "subscribe" to a stream of these documents, visualizing, processing, or saving
 them. This section provides an outline of documents themselves, aiming to give
 a sense of the structure and familiarity with useful components.
@@ -24,7 +24,7 @@ Overview of a "Run"
 -------------------
 
 Each document belongs to a *run* --- loosely speaking, a dataset. Executing any
-of the :ref:`built-in pre-assembled plans <preassembled_plans>`, like
+of the :ref:"built-in pre-assembled plans <preassembled_plans>", like
 :func:`scan` and :func:`count`, creates one run.
 
 .. note::
@@ -33,7 +33,7 @@ of the :ref:`built-in pre-assembled plans <preassembled_plans>`, like
     plan might generate many runs or one long run. It just depends on how you
     want to organize your data, both at collection time and analysis time.
 
-    The tutorial's :ref:`tutorial_capture_data` section explores this.
+    The tutorial's :ref:"tutorial_capture_data" section explores this.
 
 The documents in each run are:
 
@@ -44,7 +44,7 @@ The documents in each run are:
     - plan_name --- e.g., ``'scan'`` or ``'count'``
     - uid --- unique ID that identifies this run
     - scan_id --- human-friendly integer scan ID (not necessarily unique)
-    - any other :doc:`metadata captured at execution time <metadata>` from the
+    - any other :doc:"metadata captured at execution time <metadata>" from the
       plan or the user
 
 - **Event documents**, containing the actual measurements. These are your data.
@@ -81,11 +81,11 @@ Run Start
 
 Again, a 'start' document marks the beginning of the run. It comprises
 everything we know before we start taking data, including all metadata provided
-by the user and the plan. (More on this in the :doc:`next section <metadata>`.)
+by the user and the plan. (More on this in the :doc:"next section <metadata>".)
 
 All built-in plans provide some useful metadata like the names of the
 detector(s) and motor(s) used. (User-defined plans may also do this; see
-:ref:`this section <tutorial_plan_metadata>` of the tutorial.)
+:ref:"this section <tutorial_plan_metadata>" of the tutorial.)
 
 The command:
 
@@ -176,4 +176,4 @@ As stated above, a 'descriptor' document provides a schema for the data in the
 Event documents. It provides useful information about each key in the data and
 about the configuration of the hardware. The layout of a descriptor is detailed
 and takes some time to cover, so we defer it to a
-:doc:`later section <event_descriptors>`.
+:doc:`later section <event-descriptors>`.

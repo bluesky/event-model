@@ -20,7 +20,7 @@ Recall our example 'event' document.
          'x_readback': 1442521007.5029348},
      'time': 1442521007.3438923,
      'seq_num': 1,
-     'uid': '<randomly-generated unique ID>', 
+     'uid': '<randomly-generated unique ID>',
      'descriptor': '<reference to a descriptor document>'}
 
 Typically, an experiment generates multiple event documents with the same data
@@ -29,7 +29,7 @@ documents like the one above --- with different readings and timestamps but
 identical data keys. All these events refer back to a 'descriptor' with
 metadata about the data keys and the configuration of the devices involved.
 
-.. note:: 
+.. note::
 
     We got the term "data keys" from ``event['data'].keys()``. Again, in our
     example, the data keys are ``['temperature', 'x_setpoint', 'x_readback']``
@@ -141,7 +141,7 @@ Hints
 -----
 
 This is an experimental feature. Devices can provide information via a
-``hints`` attribute that is stored here. See :ref:`hints`.
+``hints`` attribute that is stored here. See :ref:"hints".
 
 .. code-block:: python
 
@@ -206,5 +206,5 @@ Taken together, our example 'descriptor' document looks like this.
          'temp_ctrl': {'fields': ['temperature']}}
 
      'time': 1442521007.3438923,
-     'uid': '<randomly-generated unique ID>', 
+     'uid': '<randomly-generated unique ID>',
      'run_start': '<reference to the start document>'}
