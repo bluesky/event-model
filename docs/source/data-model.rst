@@ -1,10 +1,29 @@
-**********
-Data Model
-**********
+********************************
+Data Model: Documents and Events
+********************************
+
+*begin remove*
 
 Bluesky's event-based data model supports complex, asynchronous data collection
 and enables sophisticated live, prompt, streaming, and *post-facto* data
 analysis.
+
+*end remove*
+
+A primary design goal of bluesky is to enable better research by recording
+rich metadata alongside measured data for use in later analysis. Documents are
+how we do this.
+
+A *document* is our term for a Python dictionary with a schema --- that is,
+organized in a
+`formally specified <https://github.com/NSLS-II/event-model>`_ way --- created
+by the RunEngine during plan execution.  All of the metadata and data generated
+by executing the plan is organized into documents.
+
+A :doc:"later section <callbacks>" describes how outside functions can
+"subscribe" to a stream of these documents, visualizing, processing, or saving
+them. This section provides an outline of documents themselves, aiming to give
+a sense of the structure and familiarity with useful components.
 
 Overview
 ========
@@ -12,6 +31,8 @@ Overview
 The data model is composed of six types of Documents, which in Python are
 represented as dictionaries but could be represented as nested mappings (e.g.
 JSON) in any language. Each document class has a defined, but flexible, schema.
+
+*begin remove*
 
 * Run Start Document --- Everything we know about an experiment or simulation
   before any data acquisition begins: the who / why / what and metadata such as
@@ -23,6 +44,47 @@ JSON) in any language. Each document class has a defined, but flexible, schema.
 * Run Stop Document ---  Everything that we can only know at the very end, such
   as the time it ended and the exit status (succeeded, aborted, failed due to
   error).
+
+*end remove*
+
+- A **Run Start document**, containg all of the metadata known at the start of
+  the run. Highlights:
+
+    - time --- the start time
+    - plan_name --- e.g., ``'scan'`` or ``'count'``
+    - uid --- unique ID that identifies this run
+    - scan_id --- human-friendly integer scan ID (not necessarily unique)
+    - any other :doc:"metadata captured at execution time <metadata>" from the
+      plan or the user
+
+- **Event documents**, containing the actual measurements. These are your data.
+
+    - time --- a timestamp for this group of readings
+    - seq_num --- sequence number, counting up from 1
+    - data --- a dictionary of readings like
+      ``{'temperature': 5.0, 'position': 3.0}``
+    - timestamps --- a dictionary of individual timestamps for each reading,
+      from the hardware
+
+- **Event Descriptor documents** provide a schema for the data in the Event
+  documents. They list all of the keys in the Event's data and give useful
+  information about them, such as units and precision. They also contain
+  information about the configuration of the hardware.
+
+- A **Run Stop document**, containing metadata known only at the end of the
+  run. Highlights:
+
+    - time --- the time when the run was completed
+    - exit_status --- "success", "abort", or "fail"
+
+Every document has a ``time`` (its creation time) and a separate ``uid`` to
+identify it. The Event documents also have a ``descriptor`` field linking them
+to the Event Descriptor with their metadata. And the Event Descriptor and
+Run Stop documents have a ``run_start`` field linking them to their Run
+Start. Thus, all the documents in a run are linked back to the Run Start.
+
+Example Runs
+============
 
 .. image:: _static/document-generation-timeline.svg
    :width: 100%
@@ -62,6 +124,10 @@ For each type, we will show:
 Run Start Document
 ------------------
 
+Again, a 'start' document marks the beginning of the run. It comprises
+everything we know before we start taking data, including all metadata provided
+by the user and the plan. (More on this in the :doc:"next section <metadata>".)
+
 Minimal nontrivial valid example:
 
 ..
@@ -74,7 +140,9 @@ Minimal nontrivial valid example:
    {'time': 1550069716.5092213,  # UNIX epoch (seconds since 1 Jan 1970)
     'uid': '10bf6945-4afd-43ca-af36-6ad8f3540bcd'}  # globally unique ID
 
-Typical example:
+*begin remove*
+
+A typical example
 
 .. code-block:: python
 
@@ -97,7 +165,46 @@ Typical example:
     'time': 1550070004.9850419,
     'uid': 'ba1f9076-7925-4af8-916e-0e1eaa1b3c47'}
 
-Formal schema:
+*end remove*
+
+The command:
+
+.. code-block:: python
+
+    from bluesky.plans import scan
+    from ophyd.sim import det, motor  # simulated detector, motor
+
+    # Scan 'motor' from -3 to 3 in 10 steps, taking readings from 'det'.
+    RE(scan([det], motor, -3, 3, 16), purpose='calibration',
+       sample='kryptonite')
+
+generates a typical 'run start' document like this:
+
+.. code-block:: python
+
+    # 'start' document
+    {'purpose': 'calibration',
+     'sample': 'kryptonite',
+     'detectors': ['det'],
+     'motors': ['motor'],
+     'plan_name': 'scan',
+     'plan_type': 'generator',
+     'plan_args': {'detectors': '[det]',
+                   'motor': 'Mover(...)',
+                   'num': '16',
+                   'start': '-3',
+                   'stop': '3'},
+     'scan_id': 282,
+     'time': 1442521005.6099606,
+     'uid': '<randomly-generated unique ID>',
+    }
+
+.. note::
+
+    Time is given in UNIX time (seconds since 1970). Software for looking at
+    the data would, of course, translate that into a more human-readable form.
+
+The run start document formal schema:
 
 .. literalinclude:: ../../event_model/schemas/run_start.json
 
@@ -105,6 +212,12 @@ Formal schema:
 
 Event Descriptor
 ----------------
+
+As stated above, a 'descriptor' document provides a schema for the data in the
+Event documents. It provides useful information about each key in the data and
+about the configuration of the hardware. The layout of a descriptor is detailed
+and takes some time to cover, so we defer it to a
+:doc:"later section <event-descriptors>".
 
 Minimal nontrivial valid example:
 
@@ -167,7 +280,7 @@ Typical example:
     'run_start': 'ba1f9076-7925-4af8-916e-0e1eaa1b3c47',
     'time': 1550070005.0109222,
     'uid': '0ad55d9e-1b31-4af2-865c-7ab7c8171303'}
-   
+
 Formal schema:
 
 .. literalinclude:: ../../event_model/schemas/run_start.json
@@ -218,6 +331,10 @@ Typical example:
                    'random_walk:x': 1550070004.812525},
     'uid': '7b5343fe-dfd7-4884-bc18-a0b571ff60b7'}
 
+From a data analysis perspective, these readings were simultaneous, but in
+actuality the occurred at separate times.  The separate times of the individual
+readings are not thrown away (they are recorded in 'timestamps') but the
+overall event 'time' is often more useful.
 
 Formal schema:
 
@@ -237,10 +354,16 @@ can always be losslessly transformed into an Event and vice versa.
 Run Stop Document
 -----------------
 
+A 'stop' document marks the end of the run. It contains metadata that is not
+known until the run completes.
+
+The most commonly useful fields here are 'time' and 'exit_status'.
+
 Minimal nontrivial valid example:
 
 .. code-block:: python
 
+   # 'stop' document
    {'uid': '546cc556-5f69-46b5-bf36-587d8cfe67a9',
     'time': 1550072737.175858,
     'run_start': '61bb1db8-c95c-4144-845b-e248c06d80e1',
@@ -284,7 +407,7 @@ Minimal nontrivial valid example:
 .. code-block:: python
 
    {'resource': '272132cf-564f-428f-bf6b-149ee4287024',  # foreign key
-    'datum_kwargs': {'index': 0},  # format-specific parameters 
+    'datum_kwargs': {'index': 0},  # format-specific parameters
     'datum_id': '272132cf-564f-428f-bf6b-149ee4287024/1'}
 
 Formal schema:
