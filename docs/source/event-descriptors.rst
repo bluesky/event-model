@@ -1,15 +1,14 @@
 Event Descriptors
 =================
 
-In the section on :doc:`documents`, we gave an overview of the four kinds of
-document. We presented an example Run Start, Event, and Run Stop, but we
-deferred detailed discussion of the Event Descriptor.
+In the :doc:`data-model` section, we gave an overview of the document types.
+Here we present a more detailed discussion of the Event Descriptor.
 
 Recall our example 'event' document.
 
 .. code-block:: python
 
-    # 'event' document (same as above, shown again for reference)
+    # 'event' document
     {'data':
         {'temperature': 5.0,
           'x_setpoint': 3.0,
