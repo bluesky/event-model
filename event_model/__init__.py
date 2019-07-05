@@ -1354,3 +1354,43 @@ class NumpyEncoder(json.JSONEncoder):
                 return obj.item()
             return obj.tolist()
         return json.JSONEncoder.default(self, obj)
+
+def validate_order(run_gen):
+
+    run_dict = {'start': None,
+                'stop': None,
+                'event': defaultdict(list)}
+
+    last_index = 1
+    for i, namedoc in enumerate(run):
+        name, doc  = namedoc
+        last_index = i
+        if name in {'start', 'stop'}: run_dict[name] = (i, doc)
+        if name == 'descriptor': run_dict[doc['uid']] = (i, doc)
+        if name == 'resource': run_dict[doc['uid']] = (i, doc)
+        if name == 'datum': run_dict[doc['datum_id']] = (i, doc)
+        if name == 'event': run_dict[name][doc['descriptor']].append((i, doc))
+        if name == 'event_page':
+            for event in unpack_event_page(doc):
+                run_dict['event'][event['descriptor']].append((i, event))
+        if name == 'datum_page':
+            for datum in unpack_datum_page(doc):
+                run_dict[datum['datum_id']] = (i, datum)
+
+    # Check that the first doc is a start doc.
+    assert run_dict['start'][0] == 1
+
+    # Check that no documents follow a stop document.
+    if run_dict['stop'] is not None:
+        assert run_dict['stop'][0] = last_index
+
+    # For each stream check that events are ordered by timestamp.
+    for stream, event_list in run_dict[event].items():
+        t0 = None
+        for event in event_list:
+            t1 = event['time']
+            if t0:
+                assert t1 > t0
+            t0 = t1
+
+
