@@ -479,7 +479,7 @@ def test_filler(tmp_path):
         event_page = event_model.pack_event_page(copy.deepcopy(raw_event))
         filled_event_page = filler.fill_event_page(event_page)
         assert filled_event_page is event_page
-        
+
         # Test fill_event and fill_event_page again with inplace=False.
 
         # Test fill_event()
@@ -513,7 +513,7 @@ def test_filler(tmp_path):
         event_page = event_model.pack_event_page(copy.deepcopy(raw_event))
         filled_event_page = filler.fill_event_page(event_page)
         assert filled_event_page is not event_page
-        
+
         # Test fill_event and fill_event_page again with inplace=True.
 
         # Test fill_event()
