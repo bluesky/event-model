@@ -456,15 +456,39 @@ def test_filler(tmp_path):
         event_model.verify_filled(event_model.pack_event_page(raw_event))
     event_model.verify_filled(event_model.pack_event_page(event))
 
+    # Test inplace.
     with event_model.Filler(reg, inplace=True) as filler:
         filler('start', run_bundle.start_doc)
         filler('descriptor', desc_bundle.descriptor_doc)
         filler('descriptor', desc_bundle_baseline.descriptor_doc)
         filler('resource', res_bundle.resource_doc)
         filler('datum', datum_doc)
+        # Test event()
         event = copy.deepcopy(raw_event)
         name, filled_event = filler('event', event)
         assert filled_event is event
+        event = copy.deepcopy(raw_event)
+        # Test fill_event()
+        filled_event = filler.fill_event(event)
+        assert filled_event is event
+        # Test event_page()
+        event_page = event_model.pack_event_page(copy.deepcopy(raw_event))
+        _, filled_event_page = filler('event_page', event_page)
+        assert filled_event_page is event_page
+        # Test fill_event_page()
+        event_page = event_model.pack_event_page(copy.deepcopy(raw_event))
+        filled_event_page = filler.fill_event_page(event_page)
+        assert filled_event_page is event_page
+        
+        # Test fill_event and fill_event_page again with inplace=False.
+
+        # Test fill_event()
+        filled_event = filler.fill_event(event, inplace=False)
+        assert filled_event is not event
+        # Test fill_event_page()
+        event_page = event_model.pack_event_page(copy.deepcopy(raw_event))
+        filled_event_page = filler.fill_event_page(event_page, inplace=False)
+        assert filled_event_page is not event_page
 
     with event_model.Filler(reg, inplace=False) as filler:
         filler('start', run_bundle.start_doc)
@@ -476,6 +500,29 @@ def test_filler(tmp_path):
         name, filled_event = filler('event', event)
         assert filled_event is not event
         assert isinstance(event['data']['image'], str)
+
+        event = copy.deepcopy(raw_event)
+        # Test fill_event()
+        filled_event = filler.fill_event(event)
+        assert filled_event is not event
+        # Test event_page()
+        event_page = event_model.pack_event_page(copy.deepcopy(raw_event))
+        _, filled_event_page = filler('event_page', event_page)
+        assert filled_event_page is not event_page
+        # Test fill_event_page()
+        event_page = event_model.pack_event_page(copy.deepcopy(raw_event))
+        filled_event_page = filler.fill_event_page(event_page)
+        assert filled_event_page is not event_page
+        
+        # Test fill_event and fill_event_page again with inplace=True.
+
+        # Test fill_event()
+        filled_event = filler.fill_event(event, inplace=True)
+        assert filled_event is event
+        # Test fill_event_page()
+        event_page = event_model.pack_event_page(copy.deepcopy(raw_event))
+        filled_event_page = filler.fill_event_page(event_page, inplace=True)
+        assert filled_event_page is event_page
 
     with pytest.warns(UserWarning):
         filler = event_model.Filler(reg)

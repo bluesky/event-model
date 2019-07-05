@@ -482,20 +482,14 @@ class Filler(DocumentRouter):
         # page may be implemented as a DataFrame or dict, etc.
         filled_doc = self.fill_event_page(doc, include=self.include,
                                           exclude=self.exclude)
-        # Modify original doc in place, as we do with 'event'.
-        if self._inplace:
-            doc['data'] = filled_doc['data']
-            doc['filled'] = filled_doc['filled']
-            return doc
-        else:
-            return filled_doc
+        return filled_doc
 
     def event(self, doc):
         filled_doc = self.fill_event(doc, include=self.include,
                                      exclude=self.exclude)
         return filled_doc
 
-    def fill_event_page(self, doc, include=None, exclude=None):
+    def fill_event_page(self, doc, include=None, exclude=None, inplace=None):
         filled_events = []
         for event_doc in unpack_event_page(doc):
             filled_events.append(self.fill_event(event_doc,
@@ -503,7 +497,14 @@ class Filler(DocumentRouter):
                                                  exclude=exclude,
                                                  inplace=True))
         filled_doc = pack_event_page(*filled_events)
-        return filled_doc
+        if inplace is None:
+            inplace = self._inplace
+        if inplace:
+            doc['data'] = filled_doc['data']
+            doc['filled'] = filled_doc['filled']
+            return doc
+        else:
+            return filled_doc
 
     def fill_event(self, doc, include=None, exclude=None, inplace=None):
         if inplace is None:
