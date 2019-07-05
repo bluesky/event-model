@@ -1387,7 +1387,7 @@ def validate_order(run_gen):
     # For each stream check that events are ordered by timestamp.
     for stream, event_list in run_dict[event].items():
         t0 = None
-        for event in event_list:
+        for i, event in event_list:
             t1 = event['time']
             if t0:
                 assert t1 > t0
