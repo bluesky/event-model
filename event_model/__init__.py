@@ -1355,42 +1355,70 @@ class NumpyEncoder(json.JSONEncoder):
             return obj.tolist()
         return json.JSONEncoder.default(self, obj)
 
-def validate_order(run_gen):
 
-    run_dict = {'start': None,
-                'stop': None,
-                'event': defaultdict(list)}
+def validate_order(run_iterable):
+    """
+    Validates the order of a Bluesky Run.
 
-    last_index = 1
-    for i, namedoc in enumerate(run):
-        name, doc  = namedoc
+    Parameters
+    ---------
+    run_iterable: iterable
+    A Bluesky run in the form of an iterable of name, doc pairs.
+    """
+    datum_cache = {}
+    resource_cache = {}
+    descriptor_cache = {}
+    event_cache = defaultdict(list)
+    last_index = 0
+
+    for i, (name, doc) in enumerate(run_iterable):
         last_index = i
-        if name in {'start', 'stop'}: run_dict[name] = (i, doc)
-        if name == 'descriptor': run_dict[doc['uid']] = (i, doc)
-        if name == 'resource': run_dict[doc['uid']] = (i, doc)
-        if name == 'datum': run_dict[doc['datum_id']] = (i, doc)
-        if name == 'event': run_dict[name][doc['descriptor']].append((i, doc))
-        if name == 'event_page':
-            for event in unpack_event_page(doc):
-                run_dict['event'][event['descriptor']].append((i, event))
+
+        if name == 'start': start = (i, doc)
+        if name == 'stop': stop = (i, doc)
+        if name == 'resource': resource_cache[doc['uid']] = (i, doc)
+        if name == 'descriptor': descriptor_cache[doc['uid']] = (i, doc)
+        if name == 'datum': datum_cache[doc['datum_id']] = (i, doc)
         if name == 'datum_page':
             for datum in unpack_datum_page(doc):
-                run_dict[datum['datum_id']] = (i, datum)
+                datum_cache[datum['datum_id']] = (i, datum)
+        if name == 'event': event_cache[doc['descriptor']].append((i, doc))
+        if name == 'event_page':
+            for event in unpack_event_page(doc):
+                event_cache[event['descriptor']].append((i, event))
 
-    # Check that the first doc is a start doc.
-    assert run_dict['start'][0] == 1
+    # Check that the start document is the first document.
+    assert start[0] == 1
 
-    # Check that no documents follow a stop document.
-    if run_dict['stop'] is not None:
-        assert run_dict['stop'][0] = last_index
+    # Check the the stop document is the last document.
+    assert stop[0] == last_index
 
-    # For each stream check that events are ordered by timestamp.
-    for stream, event_list in run_dict[event].items():
+    # For each stream check that events are in timestamp order.
+    for descriptor_id, event_stream in event_cache.values():
         t0 = None
-        for i, event in event_list:
+        for index, event in event_stream:
             t1 = event['time']
             if t0:
                 assert t1 > t0
             t0 = t1
 
+    # Check that descriptor doc is received before the first event of that
+    # stream.
+    for descriptor_id, event_stream in event_cache.values():
+        assert event_stream[0][0] >
+               descriptor_cache[event_stream[0]['descriptor']][0]
 
+    # For each event check that referenced datum are received first.
+    for descriptor_id, event_stream in event_cache.items():
+        external_keys = set(descriptor_cache[descriptor_id]['data_keys']['external'].keys())
+        for i, event in event_stream:
+            # Check that the filled keys match the external keys defined in the
+            # descriptor.
+            assert external_keys == set(event['filled'].keys())
+            for key, value in event.items():
+                if key in external_keys:
+                    assert datum_cache[value][0] < i
+
+    # For each datum check that the referenced resource is received first.
+    for i, datum in datum_cache.values()
+        assert resource_cache[datum['resource']][0] < i
