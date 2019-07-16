@@ -1394,7 +1394,7 @@ def validate_order(run_iterable):
     assert stop[0] == last_index
 
     # For each datum check that the referenced resource is received first.
-    for i, datum in datum_cache.values()
+    for i, datum in datum_cache.values():
         assert resource_cache[datum['resource']][0] < i
 
     def event_check(event):
