@@ -1371,32 +1371,6 @@ def validate_order(run_iterable):
     last_event_time = {}
     last_index = 0
 
-    for i, (name, doc) in enumerate(run_iterable):
-        last_index = i
-
-        if name == 'start': start = (i, doc)
-        if name == 'stop': stop = (i, doc)
-        if name == 'resource': resource_cache[doc['uid']] = (i, doc)
-        if name == 'descriptor': descriptor_cache[doc['uid']] = (i, doc)
-        if name == 'datum': datum_cache[doc['datum_id']] = (i, doc)
-        if name == 'datum_page':
-            for datum in unpack_datum_page(doc):
-                datum_cache[datum['datum_id']] = (i, datum)
-        if name == 'event': event_check(doc)
-        if name == 'event_page':
-            for event in unpack_event_page(doc):
-                event_check(event)
-
-    # Check that the start document is the first document.
-    assert start[0] == 1
-
-    # Check the the stop document is the last document.
-    assert stop[0] == last_index
-
-    # For each datum check that the referenced resource is received first.
-    for i, datum in datum_cache.values():
-        assert resource_cache[datum['resource']][0] < i
-
     def event_check(event):
         # Check that descriptor doc is received before the first event of that
         # stream.
@@ -1423,4 +1397,30 @@ def validate_order(run_iterable):
         for key, value in event['data'].items():
             if key in external_keys:
                 assert datum_cache.get(value) is not None
+
+    for i, (name, doc) in enumerate(run_iterable):
+        last_index = i
+
+        if name == 'start': start = (i, doc)
+        if name == 'stop': stop = (i, doc)
+        if name == 'resource': resource_cache[doc['uid']] = (i, doc)
+        if name == 'descriptor': descriptor_cache[doc['uid']] = (i, doc)
+        if name == 'datum': datum_cache[doc['datum_id']] = (i, doc)
+        if name == 'datum_page':
+            for datum in unpack_datum_page(doc):
+                datum_cache[datum['datum_id']] = (i, datum)
+        if name == 'event': event_check(doc)
+        if name == 'event_page':
+            for event in unpack_event_page(doc):
+                event_check(event)
+
+    # Check that the start document is the first document.
+    assert start[0] == 1
+
+    # Check the the stop document is the last document.
+    assert stop[0] == last_index
+
+    # For each datum check that the referenced resource is received first.
+    for i, datum in datum_cache.values():
+        assert resource_cache[datum['resource']][0] < i
 
