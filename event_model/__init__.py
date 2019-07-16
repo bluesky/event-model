@@ -1368,7 +1368,7 @@ def validate_order(run_iterable):
     datum_cache = {}
     resource_cache = {}
     descriptor_cache = {}
-    event_cache = defaultdict(list)
+    last_event_time = {}
     last_index = 0
 
     for i, (name, doc) in enumerate(run_iterable):
@@ -1382,10 +1382,10 @@ def validate_order(run_iterable):
         if name == 'datum_page':
             for datum in unpack_datum_page(doc):
                 datum_cache[datum['datum_id']] = (i, datum)
-        if name == 'event': event_cache[doc['descriptor']].append((i, doc))
+        if name == 'event': event_check(doc)
         if name == 'event_page':
             for event in unpack_event_page(doc):
-                event_cache[event['descriptor']].append((i, event))
+                event_check(event)
 
     # Check that the start document is the first document.
     assert start[0] == 1
@@ -1393,32 +1393,34 @@ def validate_order(run_iterable):
     # Check the the stop document is the last document.
     assert stop[0] == last_index
 
-    # For each stream check that events are in timestamp order.
-    for descriptor_id, event_stream in event_cache.values():
-        t0 = None
-        for index, event in event_stream:
-            t1 = event['time']
-            if t0:
-                assert t1 > t0
-            t0 = t1
-
-    # Check that descriptor doc is received before the first event of that
-    # stream.
-    for descriptor_id, event_stream in event_cache.values():
-        assert event_stream[0][0] >
-               descriptor_cache[event_stream[0]['descriptor']][0]
-
-    # For each event check that referenced datum are received first.
-    for descriptor_id, event_stream in event_cache.items():
-        external_keys = set(descriptor_cache[descriptor_id]['data_keys']['external'].keys())
-        for i, event in event_stream:
-            # Check that the filled keys match the external keys defined in the
-            # descriptor.
-            assert external_keys == set(event['filled'].keys())
-            for key, value in event.items():
-                if key in external_keys:
-                    assert datum_cache[value][0] < i
-
     # For each datum check that the referenced resource is received first.
     for i, datum in datum_cache.values()
         assert resource_cache[datum['resource']][0] < i
+
+    def event_check(event):
+        # Check that descriptor doc is received before the first event of that
+        # stream.
+        if last_event_time.get(event['descriptor']) is None:
+            assert descriptor_cache.get(event['descriptor']) is not None
+
+        # For each stream check that events are in timestamp order.
+        if last_event_time.get(event['descriptor']) is None:
+            last_event_time[event['descriptor']] = event['time']
+        else:
+            assert event['time'] > last_event_time[event['descriptor']]
+            last_event_time[event['descriptor']] = event['time']
+
+        # For each event check that referenced datum are received first.
+        external_keys = set(descriptor_cache[event['descriptor']]['data_keys']['external']
+                            .keys())
+
+        # Check that the filled keys match the external keys defined in the
+        # descriptor.
+        assert external_keys == set(event['filled'].keys())
+
+        # Check that for each datum_id in the event, the datum document was
+        # received first.
+        for key, value in event['data'].items():
+            if key in external_keys:
+                assert datum_cache.get(value) is not None
+
