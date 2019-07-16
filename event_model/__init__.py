@@ -1359,6 +1359,7 @@ class NumpyEncoder(json.JSONEncoder):
 class OrderError(ValueError):
     ...
 
+
 def validate_order(run_iterable):
     """
     Validates the order of a Bluesky Run.
@@ -1431,7 +1432,7 @@ def validate_order(run_iterable):
         if stop:
             raise OrderError("The stop document must be the last document of "
                              "the run. Documents were received following the "
-                             "stop document."
+                             "stop document.")
         if name == 'start':
             if start:
                 raise ValueError(f"A second start document was received. {doc}")
