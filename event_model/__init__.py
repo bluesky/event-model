@@ -1356,6 +1356,9 @@ class NumpyEncoder(json.JSONEncoder):
         return json.JSONEncoder.default(self, obj)
 
 
+class OrderError(ValueError):
+    ...
+
 def validate_order(run_iterable):
     """
     Validates the order of a Bluesky Run.
@@ -1369,19 +1372,23 @@ def validate_order(run_iterable):
     resource_cache = {}
     descriptor_cache = {}
     last_event_time = {}
-    last_index = 0
+    stop = None
+    start = None
 
     def event_check(event):
         # Check that descriptor doc is received before the first event of that
         # stream.
         if last_event_time.get(event['descriptor']) is None:
-            assert descriptor_cache.get(event['descriptor']) is not None
+            if descriptor_cache.get(event['descriptor']) is None:
+                raise OrderError("Descriptor was not received before the "
+                                 "first event of the stream.")
 
         # For each stream check that events are in timestamp order.
         if last_event_time.get(event['descriptor']) is None:
             last_event_time[event['descriptor']] = event['time']
         else:
-            assert event['time'] > last_event_time[event['descriptor']]
+            if event['time'] < last_event_time[event['descriptor']]:
+                raise OrderError("Events out of order.")
             last_event_time[event['descriptor']] = event['time']
 
         # For each event check that referenced datum are received first.
@@ -1390,42 +1397,59 @@ def validate_order(run_iterable):
 
         # Check that the filled keys match the external keys defined in the
         # descriptor.
-        assert external_keys == set(event['filled'].keys())
+        if external_keys != set(event['filled'].keys()):
+            raise ValueError("Filled keys do not match external_keys from "
+                             f"the descriptor. external_keys:{external_keys}, "
+                             f"filled_keys:{event['filled'].keys()}")
 
         # Check that for each datum_id in the event, the datum document was
         # received first.
         for key, value in event['data'].items():
             if key in external_keys:
-                assert datum_cache.get(value) is not None
+                if datum_cache.get(value) is None:
+                    raise OrderError(f"Datum document {value} not received "
+                                     f"before event that references it.  event:{event}")
 
-    for i, (name, doc) in enumerate(run_iterable):
-        last_index = i
+    def datum_check(datum):
+        # Check that the referenced resource is received first.
+        if resource_cache.get(doc['resource']) is None:
+            raise OrderError(f"Resource document {datum['resource']} was not "
+                             f"received before the datum that refrences it. "
+                             f"datum: {datum}")
 
+    # Check that the start document is the first document.
+    name, doc = next(run_iterable)
+    if name != 'start':
+        raise OrderError("The first document of the run must be a start "
+                         "document, but the first document received was "
+                         f"{name},{doc}")
+    else:
+        start = doc
+
+    for name, doc in run_iterable:
+        # Check that the stop document is the last document.
+        if stop:
+            raise OrderError("The stop document must be the last document of "
+                             "the run. Documents were received following the "
+                             "stop document."
         if name == 'start':
-            start = (i, doc)
+            if start:
+                raise ValueError(f"A second start document was received. {doc}")
         if name == 'stop':
-            stop = (i, doc)
+            stop = doc
         if name == 'resource':
-            resource_cache[doc['uid']] = (i, doc)
+            resource_cache[doc['uid']] = doc
         if name == 'descriptor':
-            descriptor_cache[doc['uid']] = (i, doc)
+            descriptor_cache[doc['uid']] = doc
         if name == 'datum':
-            datum_cache[doc['datum_id']] = (i, doc)
+            datum_cache[doc['datum_id']] = doc
+            datum_check(doc)
         if name == 'datum_page':
             for datum in unpack_datum_page(doc):
-                datum_cache[datum['datum_id']] = (i, datum)
+                datum_cache[datum['datum_id']] = datum
+                datum_check(datum)
         if name == 'event':
             event_check(doc)
         if name == 'event_page':
             for event in unpack_event_page(doc):
                 event_check(event)
-
-    # Check that the start document is the first document.
-    assert start[0] == 1
-
-    # Check the the stop document is the last document.
-    assert stop[0] == last_index
-
-    # For each datum check that the referenced resource is received first.
-    for i, datum in datum_cache.values():
-        assert resource_cache[datum['resource']][0] < i
