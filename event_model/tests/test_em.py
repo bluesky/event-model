@@ -670,7 +670,8 @@ def test_run_router():
     collected.clear()
 
 
-def test_validate_order():
+def test_validate_order(tmp_path):
+    path_root = str(tmp_path)
 
     # Make some example documents to work with.
     run_bundle = event_model.compose_run()
@@ -683,7 +684,7 @@ def test_validate_order():
         data_keys={'motor': {'shape': [], 'dtype': 'number', 'source': '...'}},
         name='baseline')
     res_bundle = run_bundle.compose_resource(
-        spec='DUMMY', resource_path='stack.tiff',
+        spec='DUMMY', root=path_root, resource_path='stack.tiff',
         resource_kwargs={'a': 1, 'b': 2})
     datum_doc = res_bundle.compose_datum(datum_kwargs={'c': 3, 'd': 4})
     raw_event = desc_bundle.compose_event(
