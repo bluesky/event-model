@@ -668,3 +668,147 @@ def test_run_router():
     assert expected_item in collected
     assert unexpected_item not in collected
     collected.clear()
+
+
+def test_validate_order():
+
+    # Make some example documents to work with.
+    run_bundle = event_model.compose_run()
+    desc_bundle = run_bundle.compose_descriptor(
+        data_keys={'motor': {'shape': [], 'dtype': 'number', 'source': '...'},
+                   'image': {'shape': [512, 512], 'dtype': 'number',
+                             'source': '...', 'external': 'FILESTORE:'}},
+        name='primary')
+    desc_bundle_baseline = run_bundle.compose_descriptor(
+        data_keys={'motor': {'shape': [], 'dtype': 'number', 'source': '...'}},
+        name='baseline')
+    res_bundle = run_bundle.compose_resource(
+        spec='DUMMY', resource_path='stack.tiff',
+        resource_kwargs={'a': 1, 'b': 2})
+    datum_doc = res_bundle.compose_datum(datum_kwargs={'c': 3, 'd': 4})
+    raw_event = desc_bundle.compose_event(
+        data={'motor': 0, 'image': datum_doc['datum_id']},
+        timestamps={'motor': 0, 'image': 0}, filled={'image': False},
+        seq_num=1)
+    raw_event2 = desc_bundle.compose_event(
+        data={'motor': 0, 'image': datum_doc['datum_id']},
+        timestamps={'motor': 0, 'image': 0}, filled={'image': False},
+        seq_num=1)
+    stop_doc = run_bundle.compose_stop()
+
+    # A run that should not throw any exceptions.
+    good_run = [('start', run_bundle.start_doc),
+                ('descriptor', desc_bundle.descriptor_doc),
+                ('descriptor', desc_bundle_baseline.descriptor_doc),
+                ('resource', res_bundle.resource_doc),
+                ('datum', datum_doc),
+                ('event', copy.deepcopy(raw_event)),
+                ('stop', stop_doc)]
+
+    # Test a good run.
+    event_model.validate_order(good_run)
+
+    # Start doc is not the first document.
+    start_not_first = [('descriptor', desc_bundle.descriptor_doc),
+                       ('start', run_bundle.start_doc),
+                       ('descriptor', desc_bundle_baseline.descriptor_doc),
+                       ('resource', res_bundle.resource_doc),
+                       ('datum', datum_doc),
+                       ('event', copy.deepcopy(raw_event)),
+                       ('stop', stop_doc)]
+
+    with pytest.raises(event_model.OrderError):
+        event_model.validate_order(start_not_first)
+
+    # Two start documents.
+    two_starts = [('start', run_bundle.start_doc),
+                  ('descriptor', desc_bundle.descriptor_doc),
+                  ('descriptor', desc_bundle_baseline.descriptor_doc),
+                  ('resource', res_bundle.resource_doc),
+                  ('start', run_bundle.start_doc),
+                  ('datum', datum_doc),
+                  ('event', copy.deepcopy(raw_event)),
+                  ('stop', stop_doc)]
+
+    with pytest.raises(ValueError):
+        event_model.validate_order(two_starts)
+
+    # Stop doc order.
+    bad_stop = [('start', run_bundle.start_doc),
+                ('descriptor', desc_bundle.descriptor_doc),
+                ('descriptor', desc_bundle_baseline.descriptor_doc),
+                ('resource', res_bundle.resource_doc),
+                ('start', run_bundle.start_doc),
+                ('datum', datum_doc),
+                ('stop', stop_doc),
+                ('event', copy.deepcopy(raw_event))]
+
+    with pytest.raises(event_model.OrderError):
+        event_model.validate_order(bad_stop)
+
+    # Check that referenced resource is received first.
+    bad_resource = [('start', run_bundle.start_doc),
+                    ('descriptor', desc_bundle.descriptor_doc),
+                    ('descriptor', desc_bundle_baseline.descriptor_doc),
+                    ('datum', datum_doc),
+                    ('resource', res_bundle.resource_doc),
+                    ('event', copy.deepcopy(raw_event)),
+                    ('stop', stop_doc)]
+
+    with pytest.raises(event_model.OrderError):
+        event_model.validate_order(bad_resource)
+
+    # Descriptor received after event.
+    late_descriptor = [('start', run_bundle.start_doc),
+                       ('resource', res_bundle.resource_doc),
+                       ('datum', datum_doc),
+                       ('event', copy.deepcopy(raw_event)),
+                       ('descriptor', desc_bundle.descriptor_doc),
+                       ('descriptor', desc_bundle_baseline.descriptor_doc),
+                       ('stop', stop_doc)]
+
+    with pytest.raises(event_model.OrderError):
+        event_model.validate_order(late_descriptor)
+
+    # Events out of order.
+    wrong_event_order = [('start', run_bundle.start_doc),
+                         ('descriptor', desc_bundle.descriptor_doc),
+                         ('descriptor', desc_bundle_baseline.descriptor_doc),
+                         ('resource', res_bundle.resource_doc),
+                         ('datum', datum_doc),
+                         ('event', copy.deepcopy(raw_event2)),
+                         ('event', copy.deepcopy(raw_event)),
+                         ('stop', stop_doc)]
+
+    with pytest.raises(event_model.OrderError):
+        event_model.validate_order(wrong_event_order)
+
+    # Got datum afer event that referenced it.
+    wrong_datum_order = [('start', run_bundle.start_doc),
+                         ('descriptor', desc_bundle.descriptor_doc),
+                         ('descriptor', desc_bundle_baseline.descriptor_doc),
+                         ('resource', res_bundle.resource_doc),
+                         ('event', copy.deepcopy(raw_event)),
+                         ('datum', datum_doc),
+                         ('stop', stop_doc)]
+
+    with pytest.raises(event_model.OrderError):
+        event_model.validate_order(wrong_datum_order)
+
+    # Check filled.keys() is the same as the external keys defined in the
+    # descriptor.
+    bad_event = desc_bundle.compose_event(
+        data={'motor': 0, 'image': datum_doc['datum_id']},
+        timestamps={'motor': 0, 'image': 0}, filled={},
+        seq_num=1)
+
+    wrong_filled = [('start', run_bundle.start_doc),
+                    ('descriptor', desc_bundle.descriptor_doc),
+                    ('descriptor', desc_bundle_baseline.descriptor_doc),
+                    ('resource', res_bundle.resource_doc),
+                    ('datum', datum_doc),
+                    ('event', copy.deepcopy(bad_event)),
+                    ('stop', stop_doc)]
+
+    with pytest.raises(ValueError):
+        event_model.validate_order(wrong_filled)
