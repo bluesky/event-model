@@ -1392,7 +1392,6 @@ def validate_order(run_iterable):
                 raise OrderError("Events out of order.")
             last_event_time[event['descriptor']] = event['time']
 
-        # For each event check that referenced datum are received first.
         external_keys = set(descriptor_cache[event['descriptor']]['data_keys']['external']
                             .keys())
 
@@ -1418,16 +1417,15 @@ def validate_order(run_iterable):
                              f"received before the datum that refrences it. "
                              f"datum: {datum}")
 
-    # Check that the start document is the first document.
-    name, doc = next(run_iterable)
-    if name != 'start':
-        raise OrderError("The first document of the run must be a start "
-                         "document, but the first document received was "
-                         f"{name},{doc}")
-    else:
-        start = doc
 
     for name, doc in run_iterable:
+        # Check that the start document is the first document.
+        if not start:
+            if name != 'start':
+                raise OrderError("The first document of the run must be a start "
+                                 "document, but the first document received was "
+                                 f"{name},{doc}")
+
         # Check that the stop document is the last document.
         if stop:
             raise OrderError("The stop document must be the last document of "
@@ -1436,6 +1434,8 @@ def validate_order(run_iterable):
         if name == 'start':
             if start:
                 raise ValueError(f"A second start document was received. {doc}")
+            else:
+                start = doc
         if name == 'stop':
             stop = doc
         if name == 'resource':
