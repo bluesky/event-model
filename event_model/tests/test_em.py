@@ -703,7 +703,9 @@ def test_validate_order(tmp_path):
                 ('descriptor', desc_bundle_baseline.descriptor_doc),
                 ('resource', res_bundle.resource_doc),
                 ('datum', datum_doc),
+                ('datum_page', event_model.pack_datum_page(datum_doc)),
                 ('event', copy.deepcopy(raw_event)),
+                ('event_page', event_model.pack_event_page(copy.deepcopy(raw_event))),
                 ('stop', stop_doc)]
 
     # Test a good run.
