@@ -1392,8 +1392,9 @@ def validate_order(run_iterable):
                 raise OrderError("Events out of order.")
             last_event_time[event['descriptor']] = event['time']
 
-        external_keys = set(descriptor_cache[event['descriptor']]['data_keys']['external']
-                            .keys())
+        external_keys = {key for key, val
+                         in descriptor_cache[event['descriptor']]['data_keys'].items()
+                         if 'external' in val}
 
         # Check that the filled keys match the external keys defined in the
         # descriptor.
@@ -1416,7 +1417,6 @@ def validate_order(run_iterable):
             raise OrderError(f"Resource document {datum['resource']} was not "
                              f"received before the datum that refrences it. "
                              f"datum: {datum}")
-
 
     for name, doc in run_iterable:
         # Check that the start document is the first document.

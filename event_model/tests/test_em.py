@@ -678,7 +678,7 @@ def test_validate_order(tmp_path):
     desc_bundle = run_bundle.compose_descriptor(
         data_keys={'motor': {'shape': [], 'dtype': 'number', 'source': '...'},
                    'image': {'shape': [512, 512], 'dtype': 'number',
-                             'source': '...', 'external': {'image': '0'}}},
+                             'source': '...', 'external': 'FILESTORE:'}},
         name='primary')
     desc_bundle_baseline = run_bundle.compose_descriptor(
         data_keys={'motor': {'shape': [], 'dtype': 'number', 'source': '...'}},
@@ -739,7 +739,6 @@ def test_validate_order(tmp_path):
                 ('descriptor', desc_bundle.descriptor_doc),
                 ('descriptor', desc_bundle_baseline.descriptor_doc),
                 ('resource', res_bundle.resource_doc),
-                ('start', run_bundle.start_doc),
                 ('datum', datum_doc),
                 ('stop', stop_doc),
                 ('event', copy.deepcopy(raw_event))]
