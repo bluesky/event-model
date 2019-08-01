@@ -106,7 +106,7 @@
             },
             "run_start": {
                 "type": "string",
-                "description": "Globally unique ID to the run_start document this descriptor is associtaed with."
+                "description": "Globally unique ID of this run's 'start' document."
             },
             "time": {
                 "type": "number",

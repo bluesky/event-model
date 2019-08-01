@@ -25,7 +25,7 @@
         },
         "uid": {
             "type": "string",
-            "description": "Globally unique ID for tihs run"
+            "description": "Globally unique ID for this run"
         },
         "group": {
             "type": "string",
@@ -41,7 +41,7 @@
             "properties": {
                 "dimensions": {
                     "type": "array",
-                    "description": "The indepented axes of the experiment.  Ordered slow to fast",
+                    "description": "The independent axes of the experiment.  Ordered slow to fast",
                     "items": {
                         "type": "array",
                         "description": "Each entry in this list is of the from ([<FIELD>, ...], <STREAM>).  A 1d scan will have 1 such entry, a scan with 3 independent entries would have 3",
