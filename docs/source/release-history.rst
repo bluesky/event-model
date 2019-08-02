@@ -2,6 +2,31 @@
 Release History
 ***************
 
+v1.11.1 (2019-08-02)
+====================
+
+Fixed
+-----
+
+* Fix some inconsitent behavior in the :class:`~event_model.Filler` ``inplace``
+  parameter, and test it better.
+
+v1.11.0 (2019-06-27)
+====================
+
+Added
+-----
+
+* Added new methods :meth:`~event_model.Filler.fill_event` and
+  :meth:`~event_model.Filler.fill_event_page`.
+* Added :func:`~event_model.rechunk_event_pages`.
+
+Fixed
+-----
+
+* Consult the Event Descriptor document to infer which columns needs to be
+  filled if there is no explicit ``'filled'`` key in the Event document.
+
 v1.10.0 (2019-05-24)
 ====================
 
