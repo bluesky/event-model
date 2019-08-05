@@ -17,6 +17,7 @@ v1.11.0 (2019-06-27)
 Added
 -----
 
+* Added new optional parameter ``inplace`` to :class:`~event_model.Filler`.
 * Added new methods :meth:`~event_model.Filler.fill_event` and
   :meth:`~event_model.Filler.fill_event_page`.
 * Added :func:`~event_model.rechunk_event_pages`.
