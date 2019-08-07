@@ -8,7 +8,7 @@ v1.11.1 (2019-08-05)
 Fixed
 -----
 
-* Fix some inconsitent behavior in the :class:`~event_model.Filler` ``inplace``
+* Fix some inconsistent behavior in the :class:`~event_model.Filler` ``inplace``
   parameter, and test it better.
 
 v1.11.0 (2019-06-27)
@@ -25,7 +25,7 @@ Added
 Fixed
 -----
 
-* Consult the Event Descriptor document to infer which columns needs to be
+* Consult the Event Descriptor document to infer which columns need to be
   filled if there is no explicit ``'filled'`` key in the Event document.
 
 v1.10.0 (2019-05-24)
