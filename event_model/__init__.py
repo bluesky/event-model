@@ -1231,7 +1231,7 @@ def bulk_events_to_event_pages(bulk_events):
     # This is for a deprecated document type, so we are not being fussy
     # about efficiency/laziness here.
     event_pages = {}  # descriptor uid mapped to page
-    for stream_name, events in bulk_events.items():
+    for events in bulk_events.values():
         for event in events:
             descriptor = event['descriptor']
             try:
