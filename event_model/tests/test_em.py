@@ -536,7 +536,7 @@ def test_rechunk_event_pages():
         """
         data_keys = ['x', 'y', 'z']
         array_keys = ['seq_num', 'time', 'uid']
-        for i in range(num_pages):
+        for _ in range(num_pages):
             yield {'descriptor': 'DESCRIPTOR',
                    **{key: list(range(page_size)) for key in array_keys},
                    'data': {key: list(range(page_size)) for key in data_keys},
@@ -562,7 +562,7 @@ def test_rechunk_datum_pages():
         """
         data_keys = ['x', 'y', 'z']
         array_keys = ['datum_id']
-        for i in range(num_pages):
+        for _ in range(num_pages):
             yield {'resource': 'RESOURCE',
                    **{key: list(range(page_size)) for key in array_keys},
                    'datum_kwargs': {key: list(range(page_size))
