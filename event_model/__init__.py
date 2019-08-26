@@ -507,7 +507,20 @@ class Filler(DocumentRouter):
             return filled_doc
 
     def get_handler(self, resource):
-        # Look up the cached handler instance, or instantiate one.
+        """
+        Return a Handler instance for this Resource.
+
+        Parameters
+        ----------
+        resource: dict
+
+        Returns
+        -------
+        handler: Handler
+        """
+        if self._closed:
+            raise EventModelRuntimeError(
+                "This Filler has been closed and is no longer usable.")
         try:
             handler = self._handler_cache[resource['uid']]
         except KeyError:
