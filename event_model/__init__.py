@@ -506,6 +506,37 @@ class Filler(DocumentRouter):
         else:
             return filled_doc
 
+    def get_handler(self, resource):
+        # Look up the cached handler instance, or instantiate one.
+        try:
+            handler = self._handler_cache[resource['uid']]
+        except KeyError:
+            try:
+                handler_class = self.handler_registry[resource['spec']]
+            except KeyError as err:
+                raise UndefinedAssetSpecification(
+                    f"Resource document with uid {resource['uid']} "
+                    f"refers to spec {resource['spec']!r} which is "
+                    f"not defined in the Filler's "
+                    f"handler registry.") from err
+            try:
+                # Apply root_map.
+                resource_path = resource['resource_path']
+                root = resource.get('root', '')
+                root = self.root_map.get(root, root)
+                if root:
+                    resource_path = os.path.join(root, resource_path)
+
+                handler = handler_class(resource_path,
+                                        **resource['resource_kwargs'])
+            except Exception as err:
+                raise EventModelError(
+                    f"Error instantiating handler "
+                    f"class {handler_class} "
+                    f"with Resource document {resource}.") from err
+            self._handler_cache[resource['uid']] = handler
+        return handler
+
     def fill_event(self, doc, include=None, exclude=None, inplace=None):
         if inplace is None:
             inplace = self._inplace
@@ -546,35 +577,7 @@ class Filler(DocumentRouter):
                         resource_uid,
                         f"Datum with id {datum_id} refers to unknown Resource "
                         f"uid {resource_uid}") from err
-                # Look up the cached handler instance, or instantiate one.
-                try:
-                    handler = self._handler_cache[resource['uid']]
-                except KeyError:
-                    try:
-                        handler_class = self.handler_registry[resource['spec']]
-                    except KeyError as err:
-                        raise UndefinedAssetSpecification(
-                            f"Resource document with uid {resource['uid']} "
-                            f"refers to spec {resource['spec']!r} which is "
-                            f"not defined in the Filler's "
-                            f"handler registry.") from err
-                    try:
-                        # Apply root_map.
-                        resource_path = resource['resource_path']
-                        root = resource.get('root', '')
-                        root = self.root_map.get(root, root)
-                        if root:
-                            resource_path = os.path.join(root, resource_path)
-
-                        handler = handler_class(resource_path,
-                                                **resource['resource_kwargs'])
-                    except Exception as err:
-                        raise EventModelError(
-                            f"Error instantiating handler "
-                            f"class {handler_class} "
-                            f"with Resource document {resource}.") from err
-                    self._handler_cache[resource['uid']] = handler
-
+                handler = self.get_handler(resource)
                 # We are sure to attempt to read that data at least once and
                 # then perhaps additional times depending on the contents of
                 # retry_intervals.
