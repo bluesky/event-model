@@ -341,8 +341,9 @@ def test_filler(tmp_path):
 
     # Test get_handler() method.
     handler = filler.get_handler(res_bundle.resource_doc)
-    # Repeated calls should return the exact same object (via caching).
-    assert filler.get_handler(res_bundle.resource_doc) is handler
+    # The method does not expose the internal cache of handlers, so it should
+    # not return the same instance when called repeatedly.
+    assert filler.get_handler(res_bundle.resource_doc) is not handler
 
     # Test closing.
     filler.close()

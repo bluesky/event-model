@@ -508,7 +508,7 @@ class Filler(DocumentRouter):
 
     def get_handler(self, resource):
         """
-        Return a Handler instance for this Resource.
+        Return a new Handler instance for this Resource.
 
         Parameters
         ----------
@@ -522,31 +522,35 @@ class Filler(DocumentRouter):
             raise EventModelRuntimeError(
                 "This Filler has been closed and is no longer usable.")
         try:
+            handler_class = self.handler_registry[resource['spec']]
+        except KeyError as err:
+            raise UndefinedAssetSpecification(
+                f"Resource document with uid {resource['uid']} "
+                f"refers to spec {resource['spec']!r} which is "
+                f"not defined in the Filler's "
+                f"handler registry.") from err
+        # Apply root_map.
+        resource_path = resource['resource_path']
+        root = resource.get('root', '')
+        root = self.root_map.get(root, root)
+        if root:
+            resource_path = os.path.join(root, resource_path)
+        try:
+            handler = handler_class(resource_path,
+                                    **resource['resource_kwargs'])
+        except Exception as err:
+            raise EventModelError(
+                f"Error instantiating handler "
+                f"class {handler_class} "
+                f"with Resource document {resource}.") from err
+        return handler
+
+    def _get_handler_maybe_cached(self, resource):
+        "Get a cached handler for this resource or make one and cache it."
+        try:
             handler = self._handler_cache[resource['uid']]
         except KeyError:
-            try:
-                handler_class = self.handler_registry[resource['spec']]
-            except KeyError as err:
-                raise UndefinedAssetSpecification(
-                    f"Resource document with uid {resource['uid']} "
-                    f"refers to spec {resource['spec']!r} which is "
-                    f"not defined in the Filler's "
-                    f"handler registry.") from err
-            try:
-                # Apply root_map.
-                resource_path = resource['resource_path']
-                root = resource.get('root', '')
-                root = self.root_map.get(root, root)
-                if root:
-                    resource_path = os.path.join(root, resource_path)
-
-                handler = handler_class(resource_path,
-                                        **resource['resource_kwargs'])
-            except Exception as err:
-                raise EventModelError(
-                    f"Error instantiating handler "
-                    f"class {handler_class} "
-                    f"with Resource document {resource}.") from err
+            handler = self.get_handler(resource)
             self._handler_cache[resource['uid']] = handler
         return handler
 
@@ -590,7 +594,7 @@ class Filler(DocumentRouter):
                         resource_uid,
                         f"Datum with id {datum_id} refers to unknown Resource "
                         f"uid {resource_uid}") from err
-                handler = self.get_handler(resource)
+                handler = self._get_handler_maybe_cached(resource)
                 # We are sure to attempt to read that data at least once and
                 # then perhaps additional times depending on the contents of
                 # retry_intervals.
