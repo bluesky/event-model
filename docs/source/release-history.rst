@@ -2,6 +2,16 @@
 Release History
 ***************
 
+v1.11.2 (2019-09-03)
+====================
+
+Fixed
+-----
+
+* Include ``requirements.txt`` in source distribution.
+* When ``UnresolveableForeignKeyError`` is raised, it always includes a ``key``
+  attribute with the key in question.
+
 v1.11.1 (2019-08-09)
 ====================
 
