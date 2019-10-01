@@ -1356,3 +1356,103 @@ class NumpyEncoder(json.JSONEncoder):
                 return obj.item()
             return obj.tolist()
         return json.JSONEncoder.default(self, obj)
+
+
+class OrderError(ValueError):
+    ...
+
+
+def validate_order(run_iterable):
+    """
+    Validates the order of a Bluesky Run.
+
+    Parameters
+    ---------
+    run_iterable: iterable
+    A Bluesky run in the form of an iterable of name, doc pairs.
+    """
+    datum_cache = {}
+    resource_cache = {}
+    descriptor_cache = {}
+    last_event_time = {}
+    stop = None
+    start = None
+
+    def event_check(event):
+        # Check that descriptor doc is received before the first event of that
+        # stream.
+        if last_event_time.get(event['descriptor']) is None:
+            if descriptor_cache.get(event['descriptor']) is None:
+                raise OrderError("Descriptor was not received before the "
+                                 "first event of the stream.")
+
+        # For each stream check that events are in timestamp order.
+        if last_event_time.get(event['descriptor']) is None:
+            last_event_time[event['descriptor']] = event['time']
+        else:
+            if event['time'] < last_event_time[event['descriptor']]:
+                raise OrderError("Events out of order.")
+            last_event_time[event['descriptor']] = event['time']
+
+        external_keys = {key for key, val
+                         in descriptor_cache[event['descriptor']]['data_keys'].items()
+                         if 'external' in val}
+
+        # Check that the filled keys match the external keys defined in the
+        # descriptor.
+        if external_keys != set(event['filled'].keys()):
+            raise ValueError("Filled keys do not match external_keys from "
+                             f"the descriptor. external_keys:{external_keys}, "
+                             f"filled_keys:{event['filled'].keys()}")
+
+        # Check that for each datum_id in the event, the datum document was
+        # received first.
+        for key, value in event['data'].items():
+            if key in external_keys:
+                if datum_cache.get(value) is None:
+                    raise OrderError(f"Datum document {value} not received "
+                                     f"before event that references it.  event:{event}")
+
+    def datum_check(datum):
+        # Check that the referenced resource is received first.
+        if resource_cache.get(doc['resource']) is None:
+            raise OrderError(f"Resource document {datum['resource']} was not "
+                             f"received before the datum that refrences it. "
+                             f"datum: {datum}")
+
+    for name, doc in run_iterable:
+        # Check that the start document is the first document.
+        if not start:
+            if name != 'start':
+                raise OrderError("The first document of the run must be a start "
+                                 "document, but the first document received was "
+                                 f"{name},{doc}")
+
+        # Check that the stop document is the last document.
+        if stop:
+            raise OrderError("The stop document must be the last document of "
+                             "the run. Documents were received following the "
+                             "stop document.")
+        if name == 'start':
+            if start:
+                raise ValueError(f"A second start document was received. {doc}")
+            else:
+                start = doc
+        if name == 'stop':
+            stop = doc
+        if name == 'resource':
+            resource_cache[doc['uid']] = doc
+        if name == 'descriptor':
+            descriptor_cache[doc['uid']] = doc
+        if name == 'datum':
+            datum_cache[doc['datum_id']] = doc
+            datum_check(doc)
+        if name == 'datum_page':
+            for datum in unpack_datum_page(doc):
+                datum_cache[datum['datum_id']] = datum
+                datum_check(datum)
+        if name == 'event':
+            event_check(doc)
+        if name == 'event_page':
+            for event in unpack_event_page(doc):
+                event_check(event)
