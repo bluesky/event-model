@@ -60,11 +60,19 @@ def test_compose_run():
     event_doc = compose_event(
         data={'motor': 0, 'image': datum_doc['datum_id']},
         timestamps={'motor': 0, 'image': 0}, filled={'image': False})
+    datum_page = compose_datum_page(datum_kwargs={'slice': [10, 15]})
+    event_page = compose_event_page(data={'motor': [1, 2], 'image':
+                                          datum_page['datum_id']},
+                                    timestamps={'motor': [0, 0],
+                                                'image': [0, 0]},
+                                    filled={'image': [False, False]},
+                                    seq_num=[1, 2])
     assert 'descriptor' in event_doc
+    assert 'descriptor' in event_page
     assert event_doc['seq_num'] == 1
     stop_doc = compose_stop()
     assert 'primary' in stop_doc['num_events']
-    assert stop_doc['num_events']['primary'] == 1
+    assert stop_doc['num_events']['primary'] == 3
 
 
 def test_round_trip_pagination():

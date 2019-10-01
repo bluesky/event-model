@@ -1,12 +1,14 @@
 {
     "definitions": {
         "dataframe": {
+            "type": "object",
             "title": "dataframe",
             "description": "A DataFrame-like object",
             "additionalProperties": {"type": "array"}
         },
         "dataframe_for_filled": {
             "title": "dataframe_for_filled",
+            "type": "object",
             "description": "A DataFrame-like object with boolean or string entries",
             "additionalProperties": {"type": "array", "items": {"type": ["boolean", "string"]}}
         }
@@ -17,15 +19,15 @@
             "description": "The UID of the EventDescriptor to which all of the Events in this page belong"
         },
         "data": {
-            "type": "dataframe",
+            "$ref": "#/definitions/dataframe",
             "description": "The actual measurement data"
         },
-        "timestamps": {
-            "type": "dataframe",
+        "timestamps":{
+            "$ref":"#/definitions/dataframe",
             "description": "The timestamps of the individual measurement data"
         },
         "filled": {
-            "type": "dataframe_for_filled",
+            "$ref":"#/definitions/dataframe_for_filled",
             "description": "Mapping each of the keys of externally-stored data to an array containing the boolean False, indicating that the data has not been loaded, or to foreign keys (moved here from 'data' when the data was loaded)"
         },
         "seq_num": {
