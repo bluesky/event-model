@@ -4,7 +4,9 @@
             "type": "object",
             "title": "dataframe",
             "description": "A DataFrame-like object",
-            "additionalProperties": {"type": "array"}
+            "additionalProperties": {
+                "type": "array"
+            }
         }
     },
     "properties": {
@@ -18,7 +20,9 @@
         },
         "datum_id": {
             "type": "array",
-            "items": {"type": "string"},
+            "items": {
+                "type": "string"
+            },
             "description": "Array unique identifiers for each Datum (akin to 'uid' for other Document types), typically formatted as '<resource>/<integer>'"
         }
     },
