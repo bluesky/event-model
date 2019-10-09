@@ -775,6 +775,13 @@ class RunRouter(DocumentRouter):
 class EventModelError(Exception):
     ...
 
+# Here we define subclasses of all of the built-in Python exception types (as
+# needed, not a comprehensive list) so that all errors raised *directly* by
+# event_model also inhereit from EventModelError as well as the appropriate
+# built-in type. This means, for example, that `EventModelValueError` can be
+# caught by `except ValueError:` or by `except EventModelError:`. This can be
+# useful for higher-level libraries and for debugging.
+
 
 class EventModelKeyError(EventModelError, KeyError):
     ...
