@@ -1,9 +1,12 @@
 {
     "definitions": {
         "dataframe": {
+            "type": "object",
             "title": "dataframe",
             "description": "A DataFrame-like object",
-            "additionalProperties": {"type": "array"}
+            "additionalProperties": {
+                "type": "array"
+            }
         }
     },
     "properties": {
@@ -12,12 +15,14 @@
             "description": "The UID of the Resource to which all Datums in the page belong"
         },
         "datum_kwargs": {
-            "type": "dataframe",
+            "$ref": "#/definitions/dataframe",
             "description": "Array of arguments to pass to the Handler to retrieve one quanta of data"
         },
         "datum_id": {
             "type": "array",
-            "items": {"type": "string"},
+            "items": {
+                "type": "string"
+            },
             "description": "Array unique identifiers for each Datum (akin to 'uid' for other Document types), typically formatted as '<resource>/<integer>'"
         }
     },

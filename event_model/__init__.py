@@ -740,7 +740,7 @@ def compose_datum_page(*, resource, counter, datum_kwargs, validate=True):
            'datum_kwargs': datum_kwargs,
            'datum_id': ['{}/{}'.format(resource_uid, next(counter)) for _ in range(N)]}
     if validate:
-        schema_validators[DocumentNames.datum].validate(doc)
+        schema_validators[DocumentNames.datum_page].validate(doc)
     return doc
 
 
@@ -820,7 +820,7 @@ def compose_event_page(*, descriptor, event_counter, data, timestamps, seq_num,
             raise EventModelValidationError(
                 "Keys in event['filled'] {} must be a subset of those in "
                 "event['data'] {}".format(filled.keys(), data.keys()))
-    event_counter[descriptor['name']] += 1
+    event_counter[descriptor['name']] += len(data)
     return doc
 
 
