@@ -300,6 +300,46 @@ def test_document_router_smoke_test():
     dr('stop', run_bundle.compose_stop())
 
 
+def test_document_router_():
+    dr = event_model.DocumentRouter()
+    run_bundle = event_model.compose_run()
+    dr('start', run_bundle.start_doc, validate=True)
+    desc_bundle = run_bundle.compose_descriptor(
+        data_keys={'motor': {'shape': [], 'dtype': 'number', 'source': '...'},
+                   'image': {'shape': [512, 512], 'dtype': 'number',
+                             'source': '...', 'external': 'FILESTORE:'}},
+        name='primary')
+    dr('descriptor', desc_bundle.descriptor_doc, validate=True)
+    desc_bundle_baseline = run_bundle.compose_descriptor(
+        data_keys={'motor': {'shape': [], 'dtype': 'number', 'source': '...'}},
+        name='baseline')
+    dr('descriptor', desc_bundle_baseline.descriptor_doc, validate=True)
+    res_bundle = run_bundle.compose_resource(
+        spec='TIFF', root='/tmp', resource_path='stack.tiff',
+        resource_kwargs={})
+    dr('resource', res_bundle.resource_doc, validate=True)
+    datum_doc1 = res_bundle.compose_datum(datum_kwargs={'slice': 5})
+    datum_doc2 = res_bundle.compose_datum(datum_kwargs={'slice': 10})
+    dr('datum', datum_doc1, validate=True)
+    dr('datum', datum_doc2, validate=True)
+    event1 = desc_bundle.compose_event(
+        data={'motor': 0, 'image': datum_doc1['datum_id']},
+        timestamps={'motor': 0, 'image': 0}, filled={'image': False},
+        seq_num=1)
+    dr('event', event1, validate=True)
+    event2 = desc_bundle.compose_event(
+        data={'motor': 0, 'image': datum_doc2['datum_id']},
+        timestamps={'motor': 0, 'image': 0}, filled={'image': False},
+        seq_num=2)
+    dr('event', event2, validate=True)
+    event3 = desc_bundle_baseline.compose_event(
+        data={'motor': 0},
+        timestamps={'motor': 0},
+        seq_num=1)
+    dr('event', event3, validate=True)
+    dr('stop', run_bundle.compose_stop(), validate=True)
+
+
 def test_filler(tmp_path):
 
     class DummyHandler:

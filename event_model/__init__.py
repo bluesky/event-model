@@ -71,7 +71,7 @@ class DocumentRouter:
         """
         output_doc = getattr(self, name)(doc)
         if validate:
-            schema_validators[DocumentNames.name].validate(output_doc)
+            schema_validators[getattr(DocumentNames, name)].validate(output_doc)
         return (name, output_doc if output_doc is not None else doc)
 
     def start(self, doc):
