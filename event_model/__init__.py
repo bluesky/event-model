@@ -824,6 +824,7 @@ class UnresolvableForeignKeyError(EventModelValueError):
         self.key = key
         self.message = message
 
+
 class DuplicateHandler(EventModelRuntimeError):
     "raised when a handler is already registered for a given spec"
     ...
