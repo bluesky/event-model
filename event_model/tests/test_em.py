@@ -586,6 +586,56 @@ def test_filler(tmp_path):
     with pytest.warns(UserWarning):
         filler = event_model.Filler(reg)
 
+    class OtherDummyHandler:
+        "Same as DummyHandler, but a different object to test mutating reg"
+        def __init__(self, resource_path, a, b):
+            assert a == 1
+            assert b == 2
+            assert resource_path == str(tmp_path / "stack.tiff")
+
+        def __call__(self, c, d):
+            assert c == 3
+            assert d == 4
+            return numpy.ones((5, 5))
+
+    with event_model.Filler(reg, inplace=False) as filler:
+        with pytest.raises(event_model.EventModelTypeError):
+            # Updating an existing key fails.
+            filler.handler_registry['DUMMY'] = OtherDummyHandler
+        with pytest.raises(event_model.EventModelTypeError):
+            # Setting a new key fails.
+            filler.handler_registry['DUMMY'] = OtherDummyHandler
+        filler('start', run_bundle.start_doc)
+        filler('descriptor', desc_bundle.descriptor_doc)
+        filler('descriptor', desc_bundle_baseline.descriptor_doc)
+        filler('resource', res_bundle.resource_doc)
+        filler('datum', datum_doc)
+        event = copy.deepcopy(raw_event)
+        name, filled_event = filler('event', event)
+        assert filled_event is not event
+        assert isinstance(event['data']['image'], str)
+        # Now there should be a handler instance in the cache.
+        assert filler._handler_cache  # implementation detail
+        with pytest.raises(event_model.DuplicateHandler):
+            filler.register_handler('DUMMY', OtherDummyHandler)
+        filler.register_handler('DUMMY', OtherDummyHandler, overwrite=True)
+        assert filler.handler_registry['DUMMY'] is OtherDummyHandler
+        # Replacing the handler for a given spec should clear the cache.
+        assert not filler._handler_cache  # implementation detail
+        # Filling should work the same....
+        filler('start', run_bundle.start_doc)
+        filler('descriptor', desc_bundle.descriptor_doc)
+        filler('descriptor', desc_bundle_baseline.descriptor_doc)
+        filler('resource', res_bundle.resource_doc)
+        filler('datum', datum_doc)
+        event = copy.deepcopy(raw_event)
+        name, filled_event = filler('event', event)
+        assert filled_event is not event
+        assert isinstance(event['data']['image'], str)
+        filler.deregister_handler('DUMMY')
+        assert not filler.handler_registry
+        assert not filler._handler_cache  # implementation detail
+
 
 def test_rechunk_event_pages():
 
