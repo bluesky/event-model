@@ -320,7 +320,7 @@ class Filler(DocumentRouter):
             if original is handler:
                 return
             raise DuplicateHandler(
-                f"There is already a handler registered for the spec {spec!r}."
+                f"There is already a handler registered for the spec {spec!r}. "
                 f"Use overwrite=True to deregister the original.\n"
                 f"Original: {original}\n"
                 f"New: {handler}")
