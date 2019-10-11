@@ -636,8 +636,7 @@ class RunRouter(DocumentRouter):
             if resource_uid not in self._unlabeled_resources:
                 raise UnresolvableForeignKeyError(
                     resource_uid,
-                    f"Datum with id {datum_id} refers to unknown Resource "
-                    f"uid {resource_uid}") from err
+                    f"DatumPage refers to unknown Resource uid {resource_uid}")
             # Old Resources do not have a reference to a RunStart document,
             # so in turn we cannot immediately tell which run these datum
             # documents belong to.
