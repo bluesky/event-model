@@ -133,6 +133,9 @@ class HandlerRegistryView(collections.abc.Mapping):
     def __init__(self, handler_registry):
         self._handler_registry = handler_registry
 
+    def __repr__(self):
+        return f"HandlerRegistryView({self._handler_registry!r})"
+
     def __getitem__(self, key):
         return self._handler_registry[key]
 
