@@ -346,8 +346,19 @@ def test_filler(tmp_path):
     filler('stop', stop_doc)
     assert event['data']['image'].shape == (5, 5)
     assert not filler._closed
+
+    # Test get_handler() method.
+    handler = filler.get_handler(res_bundle.resource_doc)
+    # The method does not expose the internal cache of handlers, so it should
+    # not return the same instance when called repeatedly.
+    assert filler.get_handler(res_bundle.resource_doc) is not handler
+
+    # Test closing.
     filler.close()
-    assert filler._closed
+    with pytest.raises(event_model.EventModelRuntimeError):
+        filler.get_handler(res_bundle.resource_doc)
+    with pytest.raises(event_model.EventModelRuntimeError):
+        filler('stop', stop_doc)
 
     # Test context manager with Event.
     with event_model.Filler(reg, inplace=True) as filler:
