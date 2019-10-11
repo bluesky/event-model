@@ -493,9 +493,6 @@ class Filler(DocumentRouter):
     def inplace(self):
         return self._inplace
 
-    def start(self, doc):
-        return doc
-
     def resource(self, doc):
         # Defer creating the handler instance until we actually need it, when
         # we fill the first Event field that requires this Resource.
@@ -644,9 +641,6 @@ class Filler(DocumentRouter):
 
     def descriptor(self, doc):
         self._descriptor_cache[doc['uid']] = doc
-        return doc
-
-    def stop(self, doc):
         return doc
 
     def __enter__(self):
