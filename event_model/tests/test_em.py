@@ -638,7 +638,7 @@ def test_rechunk_datum_pages():
     assert datum_pages == list(datum_pages_13)
 
 
-def test_run_router():
+def test_run_router(tmp_path):
     bundle = event_model.compose_run()
     docs = []
     start_doc, compose_descriptor, compose_resource, compose_stop = bundle
@@ -656,7 +656,7 @@ def test_run_router():
     baseline_descriptor_doc, compose_baseline_event, compose_event_page = bundle
     docs.append(('descriptor', baseline_descriptor_doc))
     bundle = compose_resource(
-        spec='TIFF', root='/tmp', resource_path='stack.tiff',
+        spec='TIFF', root=str(tmp_path), resource_path='stack.tiff',
         resource_kwargs={})
     resource_doc, compose_datum, compose_datum_page = bundle
     docs.append(('resource', resource_doc))
@@ -727,3 +727,58 @@ def test_run_router():
     assert expected_item in collected
     assert unexpected_item not in collected
     collected.clear()
+
+    # Test RunRouter with handler_registry.
+
+    class FakeTiffHandler:
+        def __init__(self, resource_path):
+            assert resource_path == str(tmp_path / "stack.tiff")
+
+        def __call__(self, slice):
+            return numpy.ones((5, 5))
+
+    reg = {'TIFF': FakeTiffHandler}
+
+    def check_filled(name, doc):
+        if name == 'event_page':
+            for is_filled in doc['filled'].values():
+                assert all(is_filled)
+        elif name == 'event':
+            for is_filled in doc['filled'].values():
+                assert is_filled
+
+    def check_not_filled(name, doc):
+        if name == 'event_page':
+            for is_filled in doc['filled'].values():
+                assert not any(is_filled)
+        elif name == 'event':
+            for is_filled in doc['filled'].values():
+                assert not is_filled
+
+    def check_filled_factory(name, doc):
+        return [check_filled], []
+
+    def check_not_filled_factory(name, doc):
+        return [check_not_filled], []
+
+    # If reg is missing our spec (or just not given) docs pass through
+    # unfilled.
+    rr = event_model.RunRouter([check_not_filled_factory])
+    for name, doc in docs:
+        rr(name, doc)
+
+    # If fill_or_fail is set to True and reg is missing our spec (or just not
+    # given) we raise.
+    rr = event_model.RunRouter([check_not_filled_factory], fill_or_fail=True)
+    with pytest.raises(event_model.UndefinedAssetSpecification):
+        for name, doc in docs:
+            rr(name, doc)
+
+    # If spec is provided, docs are filled, regardless of fill_or_fail.
+    rr = event_model.RunRouter([check_filled_factory], reg)
+    for name, doc in docs:
+        rr(name, doc)
+
+    rr = event_model.RunRouter([check_filled_factory], reg, fill_or_fail=True)
+    for name, doc in docs:
+        rr(name, doc)
