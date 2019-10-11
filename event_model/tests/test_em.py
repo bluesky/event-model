@@ -604,7 +604,7 @@ def test_filler(tmp_path):
             filler.handler_registry['DUMMY'] = OtherDummyHandler
         with pytest.raises(event_model.EventModelTypeError):
             # Setting a new key fails.
-            filler.handler_registry['DUMMY'] = OtherDummyHandler
+            filler.handler_registry['SOMETHING_ELSE'] = OtherDummyHandler
         filler('start', run_bundle.start_doc)
         filler('descriptor', desc_bundle.descriptor_doc)
         filler('descriptor', desc_bundle_baseline.descriptor_doc)
