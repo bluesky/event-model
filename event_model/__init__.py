@@ -128,215 +128,6 @@ class DocumentRouter:
         self.datum_page(bulk_datum_to_datum_page(doc))
 
 
-class RunRouter(DocumentRouter):
-    """
-    Routes documents, by run, to callbacks it creates from factory functions.
-
-    A RunRouter is callable, and it has the signature ``router(name, doc)``,
-    suitable for subscribing to the RunEngine.
-
-    It is configured with a list of factory functions that produce callbacks in
-    a two-layered scheme, described below.
-
-    .. warning::
-
-       This is experimental. In a future release, it may be changed in a
-       backward-incompatible way or fully removed.
-
-    Parameters
-    ----------
-    factories : list
-        A list of callables with the signature::
-
-            factory('start', start_doc) -> List[Callbacks], List[SubFactories]
-
-        which should return two lists, which may be empty. All items in the
-        first list should be callbacks --- callables with the signature::
-
-            callback(name, doc)
-
-        that will receive all subsequent documents from the run including the
-        RunStop document. All items in the second list should be "subfactories"
-        with the signature::
-
-            subfactory('descriptor', descriptor_doc) -> List[Callbacks]
-
-        These will receive each of the EventDescriptor documents for the run,
-        as they arrive. They must return one list, which may be empty,
-        containing callbacks that will receive all Events that reference that
-        EventDescriptor and finally the RunStop document for the run.
-    """
-    def __init__(self, factories, handler_registry=None, *,
-                 root_map=None, filler_class=Filler, fill_or_fail=False):
-        self.factories = factories
-        self.handler_registry = handler_registry or {}
-        self.filler_class = filler_class
-        self.fill_or_fail = fill_or_fail
-        self.root_map = root_map
-
-        # Map RunStart UID to "subfactory" functions that want all
-        # EventDescriptors from that run.
-        self._subfactories = defaultdict(list)
-
-        # Callbacks that want all the documents from a given run, keyed on
-        # RunStart UID.
-        self._factory_cbs_by_start = defaultdict(list)
-
-        # Callbacks that want all the documents from a given run, keyed on
-        # each EventDescriptor UID in the run.
-        self._factory_cbs_by_descriptor = defaultdict(list)
-
-        # Callbacks that want documents related to a given EventDescriptor,
-        # keyed on EventDescriptor UID.
-        self._subfactory_cbs_by_descriptor = defaultdict(list)
-
-        # Callbacks that want documents related to a given EventDescriptor,
-        # keyed on the RunStart UID referenced by that EventDescriptor.
-        self._subfactory_cbs_by_start = defaultdict(list)
-
-        # Map RunStart UID to the list EventDescriptor. This is used to
-        # facilitate efficient cleanup of the caches above.
-        self._descriptors = defaultdict(list)
-
-        # Map EventDescriptor UID to RunStart UID. This is used for looking up
-        # Fillers.
-        self._descriptor_to_start = {}
-
-        # Map Resource UID to RunStart UID.
-        self._resources = {}
-
-        # Old-style Resources that do not have a RunStart UID
-        self._unlabeled_resources = deque(maxlen=10000)
-
-        # Map Runstart UID to instances of self.filler_class.
-        self._fillers = {}
-
-    def __repr__(self):
-        return (f"RunRouter([\n" +
-                f"\n".join(f"    {factory}" for factory in self.factories) +
-                f"])")
-
-    def start(self, doc):
-        uid = doc['uid']
-        filler = self.filler_class(self.handler_registry,
-                                   root_map=self.root_map,
-                                   inplace=False)
-        self._fillers[uid] = filler
-        # No need to pass the document to filler
-        # because Fillers do nothing with 'start'.
-        for factory in self.factories:
-            callbacks, subfactories = factory('start', doc)
-            self._factory_cbs_by_start[uid].extend(callbacks)
-            self._subfactories[uid].extend(subfactories)
-
-    def descriptor(self, doc):
-        uid = doc['uid']
-        start_uid = doc['run_start']
-        self._fillers[start_uid].descriptor(doc)
-        # Apply all factory cbs for this run to this descriptor, and run them.
-        factory_cbs = self._factory_cbs_by_start[start_uid]
-        self._factory_cbs_by_descriptor[uid].extend(factory_cbs)
-        for callback in factory_cbs:
-            callback('descriptor', doc)
-        # Let all the subfactories add any relavant callbacks.
-        for subfactory in self._subfactories[start_uid]:
-            callbacks = subfactory('descriptor', doc)
-            self._subfactory_cbs_by_start[start_uid].extend(callbacks)
-            self._subfactory_cbs_by_descriptor[uid].extend(callbacks)
-        # Keep track of the RunStart UID -> [EventDescriptor UIDs] mapping for
-        # purposes of cleanup in stop().
-        self._descriptors[start_uid].append(uid)
-        # Keep track of the EventDescriptor UID -> RunStartUID for filling
-        # purposes.
-        self._descriptor_to_start[uid] = start_uid
-
-    def event_page(self, doc):
-        descriptor_uid = doc['descriptor']
-        start_uid = self._descriptor_to_start[descriptor_uid]
-        try:
-            doc = self._fillers[start_uid].event_page(doc)
-        except UndefinedAssetSpecification:
-            if self.fill_or_fail:
-                raise
-        for callback in self._factory_cbs_by_descriptor[descriptor_uid]:
-            callback('event_page', doc)
-        for callback in self._subfactory_cbs_by_descriptor[descriptor_uid]:
-            callback('event_page', doc)
-
-    def datum_page(self, doc):
-        resource_uid = doc['resource']
-        try:
-            start_uid = self._resources[resource_uid]
-        except KeyError:
-            if resource_uid not in self._unlabeled_resources:
-                raise UnresolvableForeignKeyError(
-                    resource_uid,
-                    f"Datum with id {datum_id} refers to unknown Resource "
-                    f"uid {resource_uid}") from err
-            # Old Resources do not have a reference to a RunStart document,
-            # so in turn we cannot immediately tell which run these datum
-            # documents belong to.
-            # Fan them out to every run currently flowing through RunRouter. If
-            # they are not applicable they will do no harm, and this is
-            # expected to be an increasingly rare case.
-            for callbacks in self._factory_cbs_by_start.values():
-                for callback in callbacks:
-                    callback('datum_page', doc)
-            for callbacks in self._subfactory_cbs_by_start.values():
-                for callback in callbacks:
-                    callback('datum_page', doc)
-            for filler in self._fillers.values():
-                filler.datum_page(doc)
-        else:
-            self._fillers[start_uid].datum_page(doc)
-            for callback in self._factory_cbs_by_start[start_uid]:
-                callback('datum_page', doc)
-            for callback in self._subfactory_cbs_by_start[start_uid]:
-                callback('datum_page', doc)
-
-    def resource(self, doc):
-        try:
-            start_uid = doc['run_start']
-        except KeyError:
-            # Old Resources do not have a reference to a RunStart document.
-            # Fan them out to every run currently flowing through RunRouter. If
-            # they are not applicable they will do no harm, and this is
-            # expected to be an increasingly rare case.
-            self._unlabeled_resources.append(doc['uid'])
-            for callbacks in self._factory_cbs_by_start.values():
-                for callback in callbacks:
-                    callback('resource', doc)
-            for callbacks in self._subfactory_cbs_by_start.values():
-                for callback in callbacks:
-                    callback('resource', doc)
-            for filler in self._fillers.values():
-                filler.resource(doc)
-        else:
-            self._fillers[start_uid].resource(doc)
-            self._resources[doc['uid']] = doc['run_start']
-            for callback in self._factory_cbs_by_start[start_uid]:
-                callback('resource', doc)
-            for callback in self._subfactory_cbs_by_start[start_uid]:
-                callback('resource', doc)
-
-    def stop(self, doc):
-        start_uid = doc['run_start']
-        for callback in self._factory_cbs_by_start[start_uid]:
-            callback('stop', doc)
-        for callback in self._subfactory_cbs_by_start[start_uid]:
-            callback('stop', doc)
-        # Clean up references.
-        self._fillers.pop(start_uid, None)
-        self._subfactories.pop(start_uid, None)
-        self._factory_cbs_by_start.pop(start_uid, None)
-        self._subfactory_cbs_by_start.pop(start_uid, None)
-        for descriptor_uid in self._descriptors.pop(start_uid, ()):
-            self._descriptor_to_start.pop(descriptor_uid, None)
-            self._factory_cbs_by_descriptor.pop(descriptor_uid, None)
-            self._subfactory_cbs_by_descriptor.pop(descriptor_uid, None)
-        self._resources.pop(start_uid, None)
-
-
 class Filler(DocumentRouter):
     """Pass documents through, loading any externally-referenced data.
 
@@ -664,6 +455,215 @@ class Filler(DocumentRouter):
             raise EventModelRuntimeError(
                 "This Filler has been closed and is no longer usable.")
         return super().__call__(name, doc, validate)
+
+
+class RunRouter(DocumentRouter):
+    """
+    Routes documents, by run, to callbacks it creates from factory functions.
+
+    A RunRouter is callable, and it has the signature ``router(name, doc)``,
+    suitable for subscribing to the RunEngine.
+
+    It is configured with a list of factory functions that produce callbacks in
+    a two-layered scheme, described below.
+
+    .. warning::
+
+       This is experimental. In a future release, it may be changed in a
+       backward-incompatible way or fully removed.
+
+    Parameters
+    ----------
+    factories : list
+        A list of callables with the signature::
+
+            factory('start', start_doc) -> List[Callbacks], List[SubFactories]
+
+        which should return two lists, which may be empty. All items in the
+        first list should be callbacks --- callables with the signature::
+
+            callback(name, doc)
+
+        that will receive all subsequent documents from the run including the
+        RunStop document. All items in the second list should be "subfactories"
+        with the signature::
+
+            subfactory('descriptor', descriptor_doc) -> List[Callbacks]
+
+        These will receive each of the EventDescriptor documents for the run,
+        as they arrive. They must return one list, which may be empty,
+        containing callbacks that will receive all Events that reference that
+        EventDescriptor and finally the RunStop document for the run.
+    """
+    def __init__(self, factories, handler_registry=None, *,
+                 root_map=None, filler_class=Filler, fill_or_fail=False):
+        self.factories = factories
+        self.handler_registry = handler_registry or {}
+        self.filler_class = filler_class
+        self.fill_or_fail = fill_or_fail
+        self.root_map = root_map
+
+        # Map RunStart UID to "subfactory" functions that want all
+        # EventDescriptors from that run.
+        self._subfactories = defaultdict(list)
+
+        # Callbacks that want all the documents from a given run, keyed on
+        # RunStart UID.
+        self._factory_cbs_by_start = defaultdict(list)
+
+        # Callbacks that want all the documents from a given run, keyed on
+        # each EventDescriptor UID in the run.
+        self._factory_cbs_by_descriptor = defaultdict(list)
+
+        # Callbacks that want documents related to a given EventDescriptor,
+        # keyed on EventDescriptor UID.
+        self._subfactory_cbs_by_descriptor = defaultdict(list)
+
+        # Callbacks that want documents related to a given EventDescriptor,
+        # keyed on the RunStart UID referenced by that EventDescriptor.
+        self._subfactory_cbs_by_start = defaultdict(list)
+
+        # Map RunStart UID to the list EventDescriptor. This is used to
+        # facilitate efficient cleanup of the caches above.
+        self._descriptors = defaultdict(list)
+
+        # Map EventDescriptor UID to RunStart UID. This is used for looking up
+        # Fillers.
+        self._descriptor_to_start = {}
+
+        # Map Resource UID to RunStart UID.
+        self._resources = {}
+
+        # Old-style Resources that do not have a RunStart UID
+        self._unlabeled_resources = deque(maxlen=10000)
+
+        # Map Runstart UID to instances of self.filler_class.
+        self._fillers = {}
+
+    def __repr__(self):
+        return (f"RunRouter([\n" +
+                f"\n".join(f"    {factory}" for factory in self.factories) +
+                f"])")
+
+    def start(self, doc):
+        uid = doc['uid']
+        filler = self.filler_class(self.handler_registry,
+                                   root_map=self.root_map,
+                                   inplace=False)
+        self._fillers[uid] = filler
+        # No need to pass the document to filler
+        # because Fillers do nothing with 'start'.
+        for factory in self.factories:
+            callbacks, subfactories = factory('start', doc)
+            self._factory_cbs_by_start[uid].extend(callbacks)
+            self._subfactories[uid].extend(subfactories)
+
+    def descriptor(self, doc):
+        uid = doc['uid']
+        start_uid = doc['run_start']
+        self._fillers[start_uid].descriptor(doc)
+        # Apply all factory cbs for this run to this descriptor, and run them.
+        factory_cbs = self._factory_cbs_by_start[start_uid]
+        self._factory_cbs_by_descriptor[uid].extend(factory_cbs)
+        for callback in factory_cbs:
+            callback('descriptor', doc)
+        # Let all the subfactories add any relavant callbacks.
+        for subfactory in self._subfactories[start_uid]:
+            callbacks = subfactory('descriptor', doc)
+            self._subfactory_cbs_by_start[start_uid].extend(callbacks)
+            self._subfactory_cbs_by_descriptor[uid].extend(callbacks)
+        # Keep track of the RunStart UID -> [EventDescriptor UIDs] mapping for
+        # purposes of cleanup in stop().
+        self._descriptors[start_uid].append(uid)
+        # Keep track of the EventDescriptor UID -> RunStartUID for filling
+        # purposes.
+        self._descriptor_to_start[uid] = start_uid
+
+    def event_page(self, doc):
+        descriptor_uid = doc['descriptor']
+        start_uid = self._descriptor_to_start[descriptor_uid]
+        try:
+            doc = self._fillers[start_uid].event_page(doc)
+        except UndefinedAssetSpecification:
+            if self.fill_or_fail:
+                raise
+        for callback in self._factory_cbs_by_descriptor[descriptor_uid]:
+            callback('event_page', doc)
+        for callback in self._subfactory_cbs_by_descriptor[descriptor_uid]:
+            callback('event_page', doc)
+
+    def datum_page(self, doc):
+        resource_uid = doc['resource']
+        try:
+            start_uid = self._resources[resource_uid]
+        except KeyError:
+            if resource_uid not in self._unlabeled_resources:
+                raise UnresolvableForeignKeyError(
+                    resource_uid,
+                    f"Datum with id {datum_id} refers to unknown Resource "
+                    f"uid {resource_uid}") from err
+            # Old Resources do not have a reference to a RunStart document,
+            # so in turn we cannot immediately tell which run these datum
+            # documents belong to.
+            # Fan them out to every run currently flowing through RunRouter. If
+            # they are not applicable they will do no harm, and this is
+            # expected to be an increasingly rare case.
+            for callbacks in self._factory_cbs_by_start.values():
+                for callback in callbacks:
+                    callback('datum_page', doc)
+            for callbacks in self._subfactory_cbs_by_start.values():
+                for callback in callbacks:
+                    callback('datum_page', doc)
+            for filler in self._fillers.values():
+                filler.datum_page(doc)
+        else:
+            self._fillers[start_uid].datum_page(doc)
+            for callback in self._factory_cbs_by_start[start_uid]:
+                callback('datum_page', doc)
+            for callback in self._subfactory_cbs_by_start[start_uid]:
+                callback('datum_page', doc)
+
+    def resource(self, doc):
+        try:
+            start_uid = doc['run_start']
+        except KeyError:
+            # Old Resources do not have a reference to a RunStart document.
+            # Fan them out to every run currently flowing through RunRouter. If
+            # they are not applicable they will do no harm, and this is
+            # expected to be an increasingly rare case.
+            self._unlabeled_resources.append(doc['uid'])
+            for callbacks in self._factory_cbs_by_start.values():
+                for callback in callbacks:
+                    callback('resource', doc)
+            for callbacks in self._subfactory_cbs_by_start.values():
+                for callback in callbacks:
+                    callback('resource', doc)
+            for filler in self._fillers.values():
+                filler.resource(doc)
+        else:
+            self._fillers[start_uid].resource(doc)
+            self._resources[doc['uid']] = doc['run_start']
+            for callback in self._factory_cbs_by_start[start_uid]:
+                callback('resource', doc)
+            for callback in self._subfactory_cbs_by_start[start_uid]:
+                callback('resource', doc)
+
+    def stop(self, doc):
+        start_uid = doc['run_start']
+        for callback in self._factory_cbs_by_start[start_uid]:
+            callback('stop', doc)
+        for callback in self._subfactory_cbs_by_start[start_uid]:
+            callback('stop', doc)
+        # Clean up references.
+        self._fillers.pop(start_uid, None)
+        self._subfactories.pop(start_uid, None)
+        self._factory_cbs_by_start.pop(start_uid, None)
+        self._subfactory_cbs_by_start.pop(start_uid, None)
+        for descriptor_uid in self._descriptors.pop(start_uid, ()):
+            self._descriptor_to_start.pop(descriptor_uid, None)
+            self._factory_cbs_by_descriptor.pop(descriptor_uid, None)
+            self._subfactory_cbs_by_descriptor.pop(descriptor_uid, None)
+        self._resources.pop(start_uid, None)
 
 
 class EventModelError(Exception):
