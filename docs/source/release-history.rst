@@ -2,6 +2,40 @@
 Release History
 ***************
 
+v1.12.0 (2019-10-11)
+====================
+
+Added
+-----
+
+* The :class:`~event_model.RunRouter` can now "fill" documents that reference
+  externally stored data. It accepts an optional ``handler_registry`` and
+  ``root_map`` which it uses to create instances of
+  :class:`~event_model.Filler` internally. The default behavior of
+  :class:`~event_model.RunRouter` has not changed because it defaults to
+  ``handler_registry={}`` and ``fill_or_fail=False``, meaning that any external
+  reference not found in ``handler_registry`` will be passed through unfilled.
+  For advanced customizations---such as custom cache management---use the
+  parameter ``filler_class`` to specifiy an API-compatible alternative to
+  :class:`~event_model.Filler`.
+
+Changed
+-------
+
+* The ``handler_registry`` attribute of :class:`~event_model.Filler` is now a
+  read-only view. It cannot be directly mutated. Instead, use the new methods
+  :meth:`~event_model.Filler.register_handler` and
+  :meth:`~event_model.Filler.deregister_handler`.
+
+Fixed
+-----
+
+* Fix cache management in :class:`~event_model.Filler` such that registering a
+  new handler for a given spec clears all cached instances of the previously
+  registered handler.
+* Fix the validation feature in :class:`~event_model.DocumentRouter`, which
+  previously raised an error if used.
+
 v1.11.2 (2019-09-03)
 ====================
 
