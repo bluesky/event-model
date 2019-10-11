@@ -494,6 +494,42 @@ class RunRouter(DocumentRouter):
         as they arrive. They must return one list, which may be empty,
         containing callbacks that will receive all Events that reference that
         EventDescriptor and finally the RunStop document for the run.
+    handler_registry : dict, optional
+        This is passed to the Filler or whatever class is given in the
+        filler_class parametr below.
+
+        Maps each 'spec' (a string identifying a given type or external
+        resource) to a handler class.
+
+        A 'handler class' may be any callable with the signature::
+
+            handler_class(resource_path, root, **resource_kwargs)
+
+        It is expected to return an object, a 'handler instance', which is also
+        callable and has the following signature::
+
+            handler_instance(**datum_kwargs)
+
+        As the names 'handler class' and 'handler instance' suggest, this is
+        typically implemented using a class that implements ``__init__`` and
+        ``__call__``, with the respective signatures. But in general it may be
+        any callable-that-returns-a-callable.
+    root_map: dict, optional
+        This is passed to Filler or whatever class is given in the filler_class
+        parameter below.
+
+        str -> str mapping to account for temporarily moved/copied/remounted
+        files.  Any resources which have a ``root`` in ``root_map`` will be
+        loaded using the mapped ``root``.
+    filler_class: type
+        This is Filler by default. It can be a Filler subclass,
+        ``functools.partial(Filler, ...)``, or any class that provides the same
+        methods as ``DocumentRouter``.
+    fill_or_fail: boolean, optional
+        By default (False), if a document with a spec not in
+        ``handler_registery`` is encountered, let it pass through unfilled. But
+        if set to True, fill everything and `raise
+        ``UndefinedAssetSpecification`` if some unknown spec is encountered.
     """
     def __init__(self, factories, handler_registry=None, *,
                  root_map=None, filler_class=Filler, fill_or_fail=False):
