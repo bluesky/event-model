@@ -150,7 +150,7 @@ class HandlerRegistryView(collections.abc.Mapping):
             "The handler registry cannot be edited directly. "
             "Instead, use the method Filler.register_handler.")
 
-    def __delitem__(self, key, value):
+    def __delitem__(self, key):
         raise EventModelTypeError(
             "The handler registry cannot be edited directly. "
             "Instead, use the method Filler.deregister_handler.")
