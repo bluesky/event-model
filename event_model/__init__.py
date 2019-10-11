@@ -150,7 +150,7 @@ class HandlerRegistryView(collections.abc.Mapping):
             "The handler registry cannot be edited directly. "
             "Instead, use the method Filler.register_handler.")
 
-    def __delitem__(self, key, value):
+    def __delitem__(self, key):
         raise EventModelTypeError(
             "The handler registry cannot be edited directly. "
             "Instead, use the method Filler.deregister_handler.")
@@ -331,10 +331,9 @@ class Filler(DocumentRouter):
     def deregister_handler(self, spec):
         handler = self._handler_registry.pop(spec, None)
         if handler is not None:
-            name = handler.__name__
             for key in list(self._handler_cache):
-                resource_uid, spec = key
-                if spec == name:
+                resource_uid, spec_ = key
+                if spec == spec_:
                     del self._handler_cache[key]
 
     def resource(self, doc):
@@ -601,7 +600,7 @@ class RunRouter(DocumentRouter):
         methods as ``DocumentRouter``.
     fill_or_fail: boolean, optional
         By default (False), if a document with a spec not in
-        ``handler_registery`` is encountered, let it pass through unfilled. But
+        ``handler_registry`` is encountered, let it pass through unfilled. But
         if set to True, fill everything and `raise
         ``UndefinedAssetSpecification`` if some unknown spec is encountered.
     """
