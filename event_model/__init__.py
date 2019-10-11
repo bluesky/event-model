@@ -1,4 +1,5 @@
 from collections import defaultdict, deque, namedtuple
+import collections.abc
 import copy
 import json
 from enum import Enum
@@ -128,6 +129,33 @@ class DocumentRouter:
         self.datum_page(bulk_datum_to_datum_page(doc))
 
 
+class HandlerRegistryView(collections.abc.Mapping):
+    def __init__(self, handler_registry):
+        self._handler_registry = handler_registry
+
+    def __repr__(self):
+        return f"HandlerRegistryView({self._handler_registry!r})"
+
+    def __getitem__(self, key):
+        return self._handler_registry[key]
+
+    def __iter__(self):
+        yield from self._handler_registry
+
+    def __len__(self):
+        return len(self._handler_registry)
+
+    def __setitem__(self, key, value):
+        raise EventModelTypeError(
+            "The handler registry cannot be edited directly. "
+            "Instead, use the method Filler.register_handler.")
+
+    def __delitem__(self, key, value):
+        raise EventModelTypeError(
+            "The handler registry cannot be edited directly. "
+            "Instead, use the method Filler.deregister_handler.")
+
+
 class Filler(DocumentRouter):
     """Pass documents through, loading any externally-referenced data.
 
@@ -240,7 +268,9 @@ class Filler(DocumentRouter):
                 "The parameters `include` and `exclude` are mutually "
                 "incompatible. At least one must be left as the default, "
                 "None.")
-        self.handler_registry = handler_registry
+        # Store a *copy* so that handler_registry cannot be mutated under us.
+        self._handler_registry = dict(handler_registry)
+        self.handler_registry = HandlerRegistryView(self._handler_registry)
         self.include = include
         self.exclude = exclude
         self.root_map = root_map or {}
@@ -283,6 +313,29 @@ class Filler(DocumentRouter):
     @property
     def inplace(self):
         return self._inplace
+
+    def register_handler(self, spec, handler, overwrite=False):
+        if (not overwrite) and (spec in self._handler_registry):
+            original = self._handler_registry[spec]
+            if original is handler:
+                return
+            raise DuplicateHandler(
+                f"There is already a handler registered for the spec {spec!r}. "
+                f"Use overwrite=True to deregister the original.\n"
+                f"Original: {original}\n"
+                f"New: {handler}")
+
+        self.deregister_handler(spec)
+        self._handler_registry[spec] = handler
+
+    def deregister_handler(self, spec):
+        handler = self._handler_registry.pop(spec, None)
+        if handler is not None:
+            name = handler.__name__
+            for key in list(self._handler_cache):
+                resource_uid, spec = key
+                if spec == name:
+                    del self._handler_cache[key]
 
     def resource(self, doc):
         # Defer creating the handler instance until we actually need it, when
@@ -375,11 +428,12 @@ class Filler(DocumentRouter):
 
     def _get_handler_maybe_cached(self, resource):
         "Get a cached handler for this resource or make one and cache it."
+        key = (resource['uid'], resource['spec'])
         try:
-            handler = self._handler_cache[resource['uid']]
+            handler = self._handler_cache[key]
         except KeyError:
             handler = self.get_handler(resource)
-            self._handler_cache[resource['uid']] = handler
+            self._handler_cache[key] = handler
         return handler
 
     def fill_event(self, doc, include=None, exclude=None, inplace=None):
@@ -724,6 +778,13 @@ class RunRouter(DocumentRouter):
 class EventModelError(Exception):
     ...
 
+# Here we define subclasses of all of the built-in Python exception types (as
+# needed, not a comprehensive list) so that all errors raised *directly* by
+# event_model also inhereit from EventModelError as well as the appropriate
+# built-in type. This means, for example, that `EventModelValueError` can be
+# caught by `except ValueError:` or by `except EventModelError:`. This can be
+# useful for higher-level libraries and for debugging.
+
 
 class EventModelKeyError(EventModelError, KeyError):
     ...
@@ -734,6 +795,10 @@ class EventModelValueError(EventModelError, ValueError):
 
 
 class EventModelRuntimeError(EventModelError, RuntimeError):
+    ...
+
+
+class EventModelTypeError(EventModelError, TypeError):
     ...
 
 
@@ -761,6 +826,11 @@ class UnresolvableForeignKeyError(EventModelValueError):
     def __init__(self, key, message):
         self.key = key
         self.message = message
+
+
+class DuplicateHandler(EventModelRuntimeError):
+    "raised when a handler is already registered for a given spec"
+    ...
 
 
 SCHEMA_PATH = 'schemas'
