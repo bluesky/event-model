@@ -564,10 +564,13 @@ class Filler(DocumentRouter):
             handler = handler_class(resource_path,
                                     **resource['resource_kwargs'])
         except Exception as err:
-            raise EventModelError(
-                f"Error instantiating handler "
-                f"class {handler_class} "
-                f"with Resource document {resource}.") from err
+            msg = (f"Error instantiating handler "
+                   f"class {handler_class} "
+                   f"with Resource document {resource}.")
+            if root != resouce.get('root', ''):
+                msg += (f" Note that its 'root' field was "
+                        f"mapped to {root} by root_map.")
+            raise EventModelError(msg) from err
         return handler
 
     def _get_handler_maybe_cached(self, resource):
