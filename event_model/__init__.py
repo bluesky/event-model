@@ -369,13 +369,15 @@ class Filler(DocumentRouter):
                                      exclude=self.exclude)
         return filled_doc
 
-    def fill_event_page(self, doc, include=None, exclude=None, inplace=None):
+    def fill_event_page(self, doc, include=None, exclude=None, inplace=None,
+                        delayed=False):
         filled_events = []
         for event_doc in unpack_event_page(doc):
             filled_events.append(self.fill_event(event_doc,
                                                  include=include,
                                                  exclude=exclude,
-                                                 inplace=True))
+                                                 inplace=True,
+                                                 delayed=delayed))
         filled_doc = pack_event_page(*filled_events)
         if inplace is None:
             inplace = self._inplace
@@ -435,7 +437,8 @@ class Filler(DocumentRouter):
             self._handler_cache[key] = handler
         return handler
 
-    def fill_event(self, doc, include=None, exclude=None, inplace=None):
+    def fill_event(self, doc, include=None, exclude=None, inplace=None,
+                   delayed=False):
         if inplace is None:
             inplace = self._inplace
         if inplace:
@@ -483,9 +486,16 @@ class Filler(DocumentRouter):
                 for interval in [0] + self.retry_intervals:
                     ttime.sleep(interval)
                     try:
-                        actual_data = handler(**datum_doc['datum_kwargs'])
+                        if delayed:
+                            if not hasattr(handler, 'delayed'):
+                                raise NoDelayedSupport(
+                                    "The handler of type {type(handler)} "
+                                    "does not support delayed access.")
+                            payload = handler.delayed(**datum_doc['datum_kwargs'])
+                        else:
+                            payload = handler(**datum_doc['datum_kwargs'])
                         # Here we are intentionally modifying doc in place.
-                        filled_doc['data'][key] = actual_data
+                        filled_doc['data'][key] = payload
                         filled_doc['filled'][key] = datum_id
                     except IOError as error_:
                         # The file may not be visible on the network yet.
@@ -830,6 +840,12 @@ class UnresolvableForeignKeyError(EventModelValueError):
 class DuplicateHandler(EventModelRuntimeError):
     "raised when a handler is already registered for a given spec"
     ...
+
+class NoDelayedSupport(EventModelError):
+    "raised when delayed (e.g. dask) support is requested but not available"
+    ...
+
+
 
 
 SCHEMA_PATH = 'schemas'
