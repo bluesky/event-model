@@ -591,9 +591,9 @@ class Filler(DocumentRouter):
                 for interval in [0] + self.retry_intervals:
                     ttime.sleep(interval)
                     try:
-                        actual_data = handler(**datum_doc['datum_kwargs'])
+                        payload = handler(**datum_doc['datum_kwargs'])
                         # Here we are intentionally modifying doc in place.
-                        filled_doc['data'][key] = actual_data
+                        filled_doc['data'][key] = payload
                         filled_doc['filled'][key] = datum_id
                     except IOError as error_:
                         # The file may not be visible on the network yet.
