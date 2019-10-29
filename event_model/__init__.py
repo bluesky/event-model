@@ -363,7 +363,15 @@ class Filler(DocumentRouter):
         for spec, handler_class in handler_registry.items():
             self.register_handler(spec, handler_class)
         self.handler_registry = HandlerRegistryView(self._handler_registry)
+        if include is not None:
+            warnings.warn(
+                "In a future release of event-model, the argument `include` "
+                "will be removed from Filler.", DeprecationWarning)
         self.include = include
+        if exclude is not None:
+            warnings.warn(
+                "In a future release of event-model, the argument `exclude` "
+                "will be removed from Filler.", DeprecationWarning)
         self.exclude = exclude
         self.root_map = root_map or {}
         if handler_cache is None:
