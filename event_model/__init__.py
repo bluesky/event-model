@@ -353,6 +353,7 @@ class Filler(DocumentRouter):
             raise EventModelKeyError(
                 f"The option coerce={coerce} was given to event_model.Filler. "
                 f"The valid options are {set(_coersion_registry)}.")
+        self._coerce = coerce
 
         # See comments on coerision functions above for the use of
         # _current_state, which is passed to coersion functions' `filler_state`
@@ -413,6 +414,34 @@ class Filler(DocumentRouter):
     @property
     def inplace(self):
         return self._inplace
+
+    def clone(self, handler_registry=None, *,
+              root_map=None, coerce=None,
+              handler_cache=None, resource_cache=None, datum_cache=None,
+              descriptor_cache=None, inplace=None,
+              retry_intervals=None):
+        """
+        Create a new Filler instance from this one.
+
+        By default it will be created with the same settings that this Filler
+        has. Individual settings may be overridded here.
+        """
+        if handler_registry is None:
+            handler_registry = self._unpatched_handler_registry
+        if root_map is None:
+            root_map = self.root_map
+        if coerce is None:
+            coerce = self._coerce
+        if retry_intervals is None:
+            retry_intervals = self.retry_intervals
+        return Filler(handler_registry, root_map=root_map,
+                      coerce=coerce,
+                      handler_cache=handler_cache,
+                      resource_cache=resource_cache,
+                      datum_cache=datum_cache,
+                      descriptor_cache=descriptor_cache,
+                      inplace=inplace,
+                      retry_intervals=retry_intervals)
 
     def register_handler(self, spec, handler, overwrite=False):
         if (not overwrite) and (spec in self._handler_registry):
