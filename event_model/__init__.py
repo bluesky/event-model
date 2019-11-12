@@ -193,7 +193,7 @@ def as_is(handler_class, filler_state):
 def force_numpy(handler_class, filler_state):
     "A coersion that makes handler_class.__call__ return actual numpy.ndarray."
     class Subclass(handler_class):
-        def __call__(*args, **kwargs):
+        def __call__(self, *args, **kwargs):
             raw_result = super().__call__(*args, **kwargs)
             result_as_array = numpy.asarray(raw_result)
             return result_as_array
