@@ -448,40 +448,43 @@ def test_filler(tmp_path):
     with pytest.raises(ValueError):
         event_model.Filler({}, include=[], exclude=[], inplace=True)
 
-    with event_model.Filler(reg, exclude=['image'], inplace=True) as filler:
-        filler('start', run_bundle.start_doc)
-        filler('descriptor', desc_bundle.descriptor_doc)
-        filler('descriptor', desc_bundle_baseline.descriptor_doc)
-        filler('resource', res_bundle.resource_doc)
-        filler('datum', datum_doc)
-        event = copy.deepcopy(raw_event)
-        assert isinstance(event['data']['image'], str)
-        filler('event', event)
-        filler('stop', stop_doc)
+    with pytest.warns(DeprecationWarning):
+        with event_model.Filler(reg, exclude=['image'], inplace=True) as filler:
+            filler('start', run_bundle.start_doc)
+            filler('descriptor', desc_bundle.descriptor_doc)
+            filler('descriptor', desc_bundle_baseline.descriptor_doc)
+            filler('resource', res_bundle.resource_doc)
+            filler('datum', datum_doc)
+            event = copy.deepcopy(raw_event)
+            assert isinstance(event['data']['image'], str)
+            filler('event', event)
+            filler('stop', stop_doc)
 
-    with event_model.Filler(reg, include=['image'], inplace=True) as filler:
-        filler('start', run_bundle.start_doc)
-        filler('descriptor', desc_bundle.descriptor_doc)
-        filler('descriptor', desc_bundle_baseline.descriptor_doc)
-        filler('resource', res_bundle.resource_doc)
-        filler('datum', datum_doc)
-        event = copy.deepcopy(raw_event)
-        filler('event', event)
-        filler('stop', stop_doc)
-        assert not filler._closed
+    with pytest.warns(DeprecationWarning):
+        with event_model.Filler(reg, include=['image'], inplace=True) as filler:
+            filler('start', run_bundle.start_doc)
+            filler('descriptor', desc_bundle.descriptor_doc)
+            filler('descriptor', desc_bundle_baseline.descriptor_doc)
+            filler('resource', res_bundle.resource_doc)
+            filler('datum', datum_doc)
+            event = copy.deepcopy(raw_event)
+            filler('event', event)
+            filler('stop', stop_doc)
+            assert not filler._closed
     assert event['data']['image'].shape == (5, 5)
 
-    with event_model.Filler(reg, include=['image', 'EXTRA THING'],
-                            inplace=True) as filler:
-        filler('start', run_bundle.start_doc)
-        filler('descriptor', desc_bundle.descriptor_doc)
-        filler('descriptor', desc_bundle_baseline.descriptor_doc)
-        filler('resource', res_bundle.resource_doc)
-        filler('datum', datum_doc)
-        event = copy.deepcopy(raw_event)
-        filler('event', event)
-        filler('stop', stop_doc)
-        assert not filler._closed
+    with pytest.warns(DeprecationWarning):
+        with event_model.Filler(reg, include=['image', 'EXTRA THING'],
+                                inplace=True) as filler:
+            filler('start', run_bundle.start_doc)
+            filler('descriptor', desc_bundle.descriptor_doc)
+            filler('descriptor', desc_bundle_baseline.descriptor_doc)
+            filler('resource', res_bundle.resource_doc)
+            filler('datum', datum_doc)
+            event = copy.deepcopy(raw_event)
+            filler('event', event)
+            filler('stop', stop_doc)
+            assert not filler._closed
     assert event['data']['image'].shape == (5, 5)
 
     class DummyHandlerRootMapTest:

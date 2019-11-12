@@ -7,6 +7,7 @@ from functools import partial
 import itertools
 import os
 from pkg_resources import resource_filename as rs_fn
+import threading
 import time as ttime
 import uuid
 import warnings
@@ -155,6 +156,81 @@ class HandlerRegistryView(collections.abc.Mapping):
             "The handler registry cannot be edited directly. "
             "Instead, use the method Filler.deregister_handler.")
 
+# A "coersion funcion" is a hook that Filler can use to, for example, ensure
+# all the external data read in my handlers is an *actual* numpy array as
+# opposed to some other array-like such as h5py.Dataset or dask.array.Array,
+# or wrap every result is dask.array.from_array(...).
+#
+# It has access to the handler_class as it is registered and to some state
+# provided by the Filler (more on that below). It is expected to return
+# something that is API-compatible with handler_class.  That might be
+# handler_class itself (a no-op), a subclass, or an altogether different class
+# with the same API. See example below.
+#
+# The "state provided by the Filler", mentioned above is passed into the
+# coersion functions below as ``filler_state``. It is a namespace containing
+# information that may be useful for the coersion functions.  Currently, it has
+# ``filler_state.descriptor`` and ``filler_state.key``. More may be added in
+# the future if the need arises. Ultimately, this is necessary because Resource
+# documents don't know the shape and dtype of the data that they reference.
+# That situation could be improved in the future; to some degree this is a
+# work-around.
+#
+# As an implementation detail, the ``filler_state`` is a ``threading.local``
+# object to ensure that filling is thread-safe.
+#
+# Third-party libraries can register custom coersion options via the
+# register_coersion function below. For example, databroker uses this to
+# register a 'delayed' option. This avoids introducing dependency on a specific
+# delayed-computation framework (e.g. dask) in event-model itself.
+
+
+def as_is(handler_class, filler_state):
+    "A no-op coersion function that returns handler_class unchanged."
+    return handler_class
+
+
+def force_numpy(handler_class, filler_state):
+    "A coersion that makes handler_class.__call__ return actual numpy.ndarray."
+    class Subclass(handler_class):
+        def __call__(*args, **kwargs):
+            raw_result = super().__call__(*args, **kwargs)
+            result_as_array = numpy.asarray(raw_result)
+            return result_as_array
+    return Subclass
+
+
+# maps coerce option to corresponding coersion function
+_coersion_registry = {'as_is': as_is,
+                      'force_numpy': force_numpy}
+
+
+def register_coersion(name, func, overwrite=False):
+    """
+    Register a new option for :class:`Filler`'s ``coerce`` argument.
+
+    This is an advanced feature. See source code for comments and examples.
+
+    Parameters
+    ----------
+    name : string
+        The new value for ``coerce`` that will invoke this function.
+    func : callable
+        Expected signature::
+
+        func(filler, handler_class) -> handler_class
+    overwrite : boolean, optional
+        False by default. Name collissions will raise ``EventModelValueError``
+        unless this is set to ``True``.
+    """
+
+    if name in _coersion_registry and not overwrite:
+        raise EventModelValueError(
+            "The coersion function {func} could not be registered for the "
+            "name {name} because {_coersion_registry[func]} is already "
+            "registered. Use overwrite=True to force it.")
+    _coersion_registry[name] = func
+
 
 class Filler(DocumentRouter):
     """Pass documents through, loading any externally-referenced data.
@@ -202,6 +278,9 @@ class Filler(DocumentRouter):
         str -> str mapping to account for temporarily moved/copied/remounted
         files.  Any resources which have a ``root`` in ``root_map`` will be
         loaded using the mapped ``root``.
+    coerce : {'as_is', 'numpy'}
+        Default is 'as_is'. Other options (e.g. 'delayed') may be registered by
+        external packages at runtime.
     handler_cache : dict, optional
         A cache of handler instances. If None, a dict is used.
     resource_cache : dict, optional
@@ -248,7 +327,7 @@ class Filler(DocumentRouter):
     >>> del filler  # Free up memory from potentially large caches.
     """
     def __init__(self, handler_registry, *,
-                 include=None, exclude=None, root_map=None,
+                 include=None, exclude=None, root_map=None, coerce='as_is',
                  handler_cache=None, resource_cache=None, datum_cache=None,
                  descriptor_cache=None, inplace=None,
                  retry_intervals=(0.001, 0.002, 0.004, 0.008, 0.016, 0.032,
@@ -268,10 +347,32 @@ class Filler(DocumentRouter):
                 "The parameters `include` and `exclude` are mutually "
                 "incompatible. At least one must be left as the default, "
                 "None.")
-        # Store a *copy* so that handler_registry cannot be mutated under us.
-        self._handler_registry = dict(handler_registry)
+        try:
+            self._coersion_func = _coersion_registry[coerce]
+        except KeyError:
+            raise EventModelKeyError(
+                f"The option coerce={coerce} was given to event_model.Filler. "
+                f"The valid options are {set(_coersion_registry)}.")
+        self._coerce = coerce
+
+        # See comments on coerision functions above for the use of
+        # _current_state, which is passed to coersion functions' `filler_state`
+        # parameter.
+        self._current_state = threading.local()
+        self._unpatched_handler_registry = {}
+        self._handler_registry = {}
+        for spec, handler_class in handler_registry.items():
+            self.register_handler(spec, handler_class)
         self.handler_registry = HandlerRegistryView(self._handler_registry)
+        if include is not None:
+            warnings.warn(
+                "In a future release of event-model, the argument `include` "
+                "will be removed from Filler.", DeprecationWarning)
         self.include = include
+        if exclude is not None:
+            warnings.warn(
+                "In a future release of event-model, the argument `exclude` "
+                "will be removed from Filler.", DeprecationWarning)
         self.exclude = exclude
         self.root_map = root_map or {}
         if handler_cache is None:
@@ -314,9 +415,37 @@ class Filler(DocumentRouter):
     def inplace(self):
         return self._inplace
 
+    def clone(self, handler_registry=None, *,
+              root_map=None, coerce=None,
+              handler_cache=None, resource_cache=None, datum_cache=None,
+              descriptor_cache=None, inplace=None,
+              retry_intervals=None):
+        """
+        Create a new Filler instance from this one.
+
+        By default it will be created with the same settings that this Filler
+        has. Individual settings may be overridded here.
+        """
+        if handler_registry is None:
+            handler_registry = self._unpatched_handler_registry
+        if root_map is None:
+            root_map = self.root_map
+        if coerce is None:
+            coerce = self._coerce
+        if retry_intervals is None:
+            retry_intervals = self.retry_intervals
+        return Filler(handler_registry, root_map=root_map,
+                      coerce=coerce,
+                      handler_cache=handler_cache,
+                      resource_cache=resource_cache,
+                      datum_cache=datum_cache,
+                      descriptor_cache=descriptor_cache,
+                      inplace=inplace,
+                      retry_intervals=retry_intervals)
+
     def register_handler(self, spec, handler, overwrite=False):
         if (not overwrite) and (spec in self._handler_registry):
-            original = self._handler_registry[spec]
+            original = self._unpatched_handler_registry[spec]
             if original is handler:
                 return
             raise DuplicateHandler(
@@ -326,11 +455,17 @@ class Filler(DocumentRouter):
                 f"New: {handler}")
 
         self.deregister_handler(spec)
-        self._handler_registry[spec] = handler
+        # Keep a raw copy, unused above for identifying redundant registration.
+        self._unpatched_handler_registry[spec] = handler
+        # Let the 'coerce' argument to Filler.__init__ modify the handler if it
+        # wants to.
+        self._handler_registry[spec] = self._coersion_func(
+            handler, self._current_state)
 
     def deregister_handler(self, spec):
         handler = self._handler_registry.pop(spec, None)
         if handler is not None:
+            self._unpatched_handler_registry.pop(spec)
             for key in list(self._handler_cache):
                 resource_uid, spec_ = key
                 if spec == spec_:
@@ -443,15 +578,17 @@ class Filler(DocumentRouter):
         else:
             filled_doc = copy.deepcopy(doc)
 
+        descriptor = self._descriptor_cache[doc['descriptor']]
+        self._current_state.descriptor = descriptor
         try:
             filled = doc['filled']
         except KeyError:
             # This document is not telling us which, if any, keys are filled.
             # Infer that none of the external data is filled.
-            descriptor = self._descriptor_cache[doc['descriptor']]
             filled = {key: 'external' in val
                       for key, val in descriptor['data_keys'].items()}
         for key, is_filled in filled.items():
+            self._current_state.key = key
             if exclude is not None and key in exclude:
                 continue
             if include is not None and key not in include:
@@ -483,9 +620,9 @@ class Filler(DocumentRouter):
                 for interval in [0] + self.retry_intervals:
                     ttime.sleep(interval)
                     try:
-                        actual_data = handler(**datum_doc['datum_kwargs'])
+                        payload = handler(**datum_doc['datum_kwargs'])
                         # Here we are intentionally modifying doc in place.
-                        filled_doc['data'][key] = actual_data
+                        filled_doc['data'][key] = payload
                         filled_doc['filled'][key] = datum_id
                     except IOError as error_:
                         # The file may not be visible on the network yet.
@@ -501,6 +638,8 @@ class Filler(DocumentRouter):
                         f"Filler was unable to load the data referenced by "
                         f"the Datum document {datum_doc} and the Resource "
                         f"document {resource}.") from error
+        self._current_state.key = None
+        self._current_state.descriptor = None
         return filled_doc
 
     def descriptor(self, doc):
