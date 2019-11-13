@@ -25,6 +25,9 @@ a schema and an associated :class:`jsonschema.IValidator`.
 .. autoclass:: event_model.Filler
    :members:
 
+.. autoclass:: event_model.NoFiller
+   :members:
+
 .. autofunction:: event_model.verify_filled
 
 .. autofunction:: event_model.pack_event_page

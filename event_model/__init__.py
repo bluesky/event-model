@@ -671,6 +671,69 @@ class Filler(DocumentRouter):
         return super().__call__(name, doc, validate)
 
 
+class NoFiller(Filler):
+    """
+    This does not fill the documents; it merely validates them.
+
+    It checks that all the references between the documents are resolvable and
+    *could* be filled. This is useful when the filling will be done later, as
+    a delayed computation, but we want to make sure in advance that we have all
+    the information that we will need when that computation occurs.
+    """
+    def __init__(self, *args, **kwargs):
+        # Do not make Filler make copies because we are not going to alter the
+        # documents anyway.
+        kwargs.setdefault('inplace', True)
+        super().__init__(*args, **kwargs)
+
+    def fill_event_page(self, doc, include=None, exclude=None):
+        filled_events = []
+        for event_doc in unpack_event_page(doc):
+            filled_events.append(self.fill_event(event_doc,
+                                                 include=include,
+                                                 exclude=exclude,
+                                                 inplace=True))
+        filled_doc = pack_event_page(*filled_events)
+        return filled_doc
+
+    def fill_event(self, doc, include=None, exclude=None, inplace=None):
+        try:
+            filled = doc['filled']
+        except KeyError:
+            # This document is not telling us which, if any, keys are filled.
+            # Infer that none of the external data is filled.
+            descriptor = self._descriptor_cache[doc['descriptor']]
+            filled = {key: 'external' in val
+                      for key, val in descriptor['data_keys'].items()}
+        for key, is_filled in filled.items():
+            if exclude is not None and key in exclude:
+                continue
+            if include is not None and key not in include:
+                continue
+            if not is_filled:
+                datum_id = doc['data'][key]
+                # Look up the cached Datum doc.
+                try:
+                    datum_doc = self._datum_cache[datum_id]
+                except KeyError as err:
+                    err_with_key = UnresolvableForeignKeyError(
+                        datum_id,
+                        f"Event with uid {doc['uid']} refers to unknown Datum "
+                        f"datum_id {datum_id}")
+                    err_with_key.key = datum_id
+                    raise err_with_key from err
+                resource_uid = datum_doc['resource']
+                # Look up the cached Resource.
+                try:
+                    self._resource_cache[resource_uid]
+                except KeyError as err:
+                    raise UnresolvableForeignKeyError(
+                        datum_id,
+                        f"Datum with id {datum_id} refers to unknown Resource "
+                        f"uid {resource_uid}") from err
+        return doc
+
+
 class RunRouter(DocumentRouter):
     """
     Routes documents, by run, to callbacks it creates from factory functions.
