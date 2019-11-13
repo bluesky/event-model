@@ -432,6 +432,8 @@ class Filler(DocumentRouter):
             root_map = self.root_map
         if coerce is None:
             coerce = self._coerce
+        if inplace is None:
+            inplace = self.inplace
         if retry_intervals is None:
             retry_intervals = self.retry_intervals
         return Filler(handler_registry, root_map=root_map,
