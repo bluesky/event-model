@@ -1648,6 +1648,12 @@ class NumpyEncoder(json.JSONEncoder):
     """
     # Credit: https://stackoverflow.com/a/47626762/1221924
     def default(self, obj):
+        try:
+            import dask.array
+            if isinstance(obj, dask.array.Array):
+                obj = numpy.asarray(obj)
+        except ImportError:
+            pass
         if isinstance(obj, (numpy.generic, numpy.ndarray)):
             if numpy.isscalar(obj):
                 return obj.item()
