@@ -387,6 +387,20 @@ def test_filler(tmp_path):
     assert event['data']['image'].shape == (5, 5)
     assert not filler._closed
 
+    # Test NoFiller.
+    filler = event_model.NoFiller(reg)
+    filler('start', run_bundle.start_doc)
+    filler('descriptor', desc_bundle.descriptor_doc)
+    filler('descriptor', desc_bundle_baseline.descriptor_doc)
+    filler('resource', res_bundle.resource_doc)
+    filler('datum', datum_doc)
+    event = copy.deepcopy(raw_event)
+    assert isinstance(event['data']['image'], str)
+    filler('event', event)
+    # Check that it *hasn't* been filled.
+    assert isinstance(event['data']['image'], str)
+    filler('stop', stop_doc)
+
     # Test get_handler() method.
     handler = filler.get_handler(res_bundle.resource_doc)
     # The method does not expose the internal cache of handlers, so it should
