@@ -71,6 +71,14 @@ class DocumentRouter:
             The same name as what was passed in, and a doc that may be the same
             instance as doc, a copy of doc, or a different dict altogether.
         """
+        return self._dispatch(name, doc, validate)
+
+    def _dispatch(self, name, doc, validate):
+        """
+        Dispatch to the method corresponding to the `name`.
+
+        Optionally validate that the result is still a valid document.
+        """
         output_doc = getattr(self, name)(doc)
         if validate:
             schema_validators[getattr(DocumentNames, name)].validate(output_doc)
