@@ -86,16 +86,16 @@ class DocumentRouter:
         if output_doc is NotImplemented:
             if name == 'event':
                 event_page = pack_event_page(doc)
+                # Subclass' implementation of event_page may return a valid
+                # EventPage or None or NotImplemented.
                 output_event_page = self.event_page(event_page) or event_page
-                # Subclass' implementation of event_page may return a valid EventPage
-                # or None.
                 if output_event_page is not NotImplemented:
                     output_doc, = unpack_event_page(output_event_page)
             elif name == 'datum':
                 datum_page = pack_datum_page(doc)
+                # Subclass' implementation of event_page may return a valid
+                # DatumPage or None or NotImplemented.
                 output_datum_page = self.datum_page(datum_page) or datum_page
-                # Subclass' implementation of event_page may return a valid DatumPage
-                # or None.
                 if output_datum_page is not NotImplemented:
                     if output_datum_page is None:
                         output_datum_page = doc
@@ -103,19 +103,25 @@ class DocumentRouter:
             elif name == 'event_page':
                 output_events = []
                 for event in unpack_event_page(doc):
+                    # Subclass' implementation of event_page may return a valid
+                    # Event or None or NotImplemented.
                     output_event = self.event(event) or event
                     if output_event is NotImplemented:
                         break
                     output_events.append(output_event)
-                output_doc = pack_event_page(*output_events)
+                else:
+                    output_doc = pack_event_page(*output_events)
             elif name == 'datum_page':
                 output_datums = []
                 for datum in unpack_datum_page(doc):
+                    # Subclass' implementation of event_page may return a valid
+                    # Datum or None or NotImplemented.
                     output_datum = self.datum(datum) or datum
                     if output_datums is NotImplemented:
                         break
                     output_datums.append(output_datum)
-                output_doc = pack_datum_page(*output_datums)
+                else:
+                    output_doc = pack_datum_page(*output_datums)
         # If we still don't find an implemented method by here, then pass the
         # original document through.
         if output_doc is NotImplemented:
