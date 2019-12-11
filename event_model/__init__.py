@@ -81,8 +81,8 @@ class DocumentRouter:
         """
         output_doc = getattr(self, name)(doc)
 
-        # If 'event' is not defined by the subclass by 'event_page' is, or vice
-        # versa, use that. And the same for 'datum_page' / 'datum.
+        # If 'event' is not defined by the subclass but 'event_page' is, or
+        # vice versa, use that. And the same for 'datum_page' / 'datum.
         if output_doc is NotImplemented:
             if name == 'event':
                 event_page = pack_event_page(doc)
