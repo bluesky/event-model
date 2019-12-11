@@ -93,7 +93,7 @@ class DocumentRouter:
                     output_doc, = unpack_event_page(output_event_page)
             elif name == 'datum':
                 datum_page = pack_datum_page(doc)
-                # Subclass' implementation of event_page may return a valid
+                # Subclass' implementation of datum_page may return a valid
                 # DatumPage or None or NotImplemented.
                 output_datum_page = self.datum_page(datum_page) or datum_page
                 if output_datum_page is not NotImplemented:
@@ -103,7 +103,7 @@ class DocumentRouter:
             elif name == 'event_page':
                 output_events = []
                 for event in unpack_event_page(doc):
-                    # Subclass' implementation of event_page may return a valid
+                    # Subclass' implementation of event may return a valid
                     # Event or None or NotImplemented.
                     output_event = self.event(event) or event
                     if output_event is NotImplemented:
@@ -114,7 +114,7 @@ class DocumentRouter:
             elif name == 'datum_page':
                 output_datums = []
                 for datum in unpack_datum_page(doc):
-                    # Subclass' implementation of event_page may return a valid
+                    # Subclass' implementation of datum may return a valid
                     # Datum or None or NotImplemented.
                     output_datum = self.datum(datum) or datum
                     if output_datums is NotImplemented:
