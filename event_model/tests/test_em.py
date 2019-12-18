@@ -852,3 +852,26 @@ def test_run_router(tmp_path):
     rr = event_model.RunRouter([check_filled_factory], reg, fill_or_fail=True)
     for name, doc in docs:
         rr(name, doc)
+
+
+def test_techniques():
+    event_model.schema_validators[event_model.DocumentNames.start].validate(
+        {
+            "uid": "abc",
+            "time": 0,
+            "techniques": [
+                {
+                    "technique": "test",
+                    "version": 0,
+                    "configuration": {},
+                    "data_mapping": {
+                        "image": {
+                            "stream": "primary",
+                            "location": "event",
+                            "field": "fccd",
+                        }
+                    },
+                }
+            ],
+        }
+    )

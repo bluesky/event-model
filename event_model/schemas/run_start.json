@@ -4,6 +4,34 @@
             "title" : "data_type",
             "patternProperties": {"^([^./]+)$": {"$ref": "#/definitions/data_type"}},
             "additionalProperties": false
+        },
+        "data_mapping": {
+            "description": "Where to get the data from",
+            "type": "object",
+            "properties" : {
+                "stream": {"type": "string"},
+                "location": {"enum" : ["event", "configuration"]},
+                "field": {"type": "string"}
+            },
+            "required" : ["stream", "location", "field"],
+            "additionalProperties": false
+        },
+        "technique": {
+            "title" : "Describe how to interperet this run as the given technique",
+            "properties":{
+                "technique": {"type": "string",
+                              "description": "The name of the technique"},
+                "version": {"type": "integer",
+                            "description": "The version of the technique spec"},
+                "configuration" : {"type": "object",
+                                   "description": "Static information about technique"},
+                "data_mapping" : {
+                    "type": "object",
+                    "patternProperties": {"^([^./]+)$": {"$ref": "#/definitions/data_mapping"}}
+                }
+            },
+            "additionalProperties": false,
+            "required" : ["technique", "version", "configuration", "data_mapping"]
         }
     },
     "properties": {
@@ -35,6 +63,10 @@
             "type": "string",
             "description": "Unix owner to associate this data with"
         },
+        "techniques": {
+            "type": "array",
+            "items": {"$ref": "#/definitions/technique"}
+        },
         "hints": {
             "type": "object",
             "description": "Start-level hints",
@@ -57,12 +89,10 @@
                             {
                                 "type": "string",
                                 "description": "The stream to find the datakeys in."
-
                             }
                         ],
                         "additionalItems": false,
                         "minItems": 2
-
                     }
                 }
             },
