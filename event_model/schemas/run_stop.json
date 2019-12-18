@@ -26,7 +26,7 @@
         },
         "uid": {
             "type": "string",
-            "description": "Globally unique ID for tihs run"
+            "description": "Globally unique ID for this document"
         },
         "num_events": {
             "type": "object",
