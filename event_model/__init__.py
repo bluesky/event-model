@@ -1321,6 +1321,8 @@ def pack_event_page(*events):
     -------
     event_page : dict
     """
+    if not events:
+        raise ValueError("Cannot pack an event_page with no events.")
     time_list = []
     uid_list = []
     seq_num_list = []
@@ -1384,6 +1386,8 @@ def pack_datum_page(*datum):
     -------
     datum_page : dict
     """
+    if not datum:
+        raise ValueError("Cannot pack a datum_page with no datum.")
     datum_id_list = []
     datum_kwarg_list = []
     for datum_ in datum:
