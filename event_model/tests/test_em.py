@@ -852,3 +852,10 @@ def test_run_router(tmp_path):
     rr = event_model.RunRouter([check_filled_factory], reg, fill_or_fail=True)
     for name, doc in docs:
         rr(name, doc)
+
+
+def test_pack_empty_raises():
+    with pytest.raises(ValueError):
+        event_model.pack_event_page()
+    with pytest.raises(ValueError):
+        event_model.pack_datum_page()
