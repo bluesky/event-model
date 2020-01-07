@@ -1322,7 +1322,10 @@ def pack_event_page(*events):
     event_page : dict
     """
     if not events:
-        raise ValueError("Cannot pack an event_page with no events.")
+        raise ValueError(
+            "The pack_event_page() function was called with empty *args. "
+            "Cannot create an EventPage from an empty collection of Events "
+            "because the 'descriptor' field in an EventPage cannot be NULL.")
     time_list = []
     uid_list = []
     seq_num_list = []
@@ -1387,7 +1390,10 @@ def pack_datum_page(*datum):
     datum_page : dict
     """
     if not datum:
-        raise ValueError("Cannot pack a datum_page with no datum.")
+        raise ValueError(
+            "The pack_datum_page() function was called with empty *args. "
+            "Cannot create an DatumPage from an empty collection of Datum "
+            "because the 'resource' field in an DatumPage cannot be NULL.")
     datum_id_list = []
     datum_kwarg_list = []
     for datum_ in datum:
