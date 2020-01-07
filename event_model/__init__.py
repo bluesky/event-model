@@ -1393,7 +1393,7 @@ def pack_datum_page(*datum):
         raise ValueError(
             "The pack_datum_page() function was called with empty *args. "
             "Cannot create an DatumPage from an empty collection of Datum "
-            "because the 'resource' field in an DatumPage cannot be NULL.")
+            "because the 'resource' field in a DatumPage cannot be NULL.")
     datum_id_list = []
     datum_kwarg_list = []
     for datum_ in datum:
