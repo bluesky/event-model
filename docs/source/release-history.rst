@@ -8,9 +8,9 @@ v1.13.0 (2019-01-21)
 Added
 -----
 
-* The :class:`~event_model.Filler` accepts an optional paramter ``coerce`` that
+* The :class:`~event_model.Filler` accepts an optional parameter ``coerce`` that
   can be used to change the behavior of the handlers. This is useful for
-  forcing the filled data to be an in-memory numpy array of a dask array, for
+  forcing the filled data to be an in-memory numpy array or a dask array, for
   example. The options accepted by ``coerce`` can be configured at runtime
   using the new function :func:`~event_model.register_coersion`. The coersions
   registered by default are :func:`~event_model.as_is` and
