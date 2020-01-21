@@ -689,6 +689,8 @@ def _attempt_with_retries(func, args, kwargs,
     func, args, kwargs: self-explanatory
     retry_intervals: list
         How long to wait (seconds) between each successive retry.
+        This MUST be an actual list. Since this function is internal we do not
+        take the time to validate or normalize the input.
     error_to_catch: Exception class
         If this is raised, retry.
     error_to_raise: Exception instance or class
