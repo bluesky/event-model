@@ -97,8 +97,6 @@ class DocumentRouter:
                 # DatumPage or None or NotImplemented.
                 output_datum_page = self.datum_page(datum_page) or datum_page
                 if output_datum_page is not NotImplemented:
-                    if output_datum_page is None:
-                        output_datum_page = doc
                     output_doc, = unpack_datum_page(output_datum_page)
             elif name == 'event_page':
                 output_events = []
