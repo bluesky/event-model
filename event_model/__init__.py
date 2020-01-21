@@ -688,7 +688,7 @@ def _attempt_with_retries(func, args, kwargs,
 
     func, args, kwargs: self-explanatory
     retry_intervals: list
-        How long to wait (seconds) between before each successive retry.
+        How long to wait (seconds) between each successive retry.
     error_to_catch: Exception class
         If this is raised, retry.
     error_to_raise: Exception instance or class
@@ -703,7 +703,7 @@ def _attempt_with_retries(func, args, kwargs,
         try:
             return func(*args, **kwargs)
         except error_to_catch as error_:
-            # The file may not be visible on the network yet.
+            # The file may not be visible on the filesystem yet.
             # Wait and try again. Stash the error in a variable
             # that we can access later if we run out of attempts.
             error = error_
@@ -711,7 +711,7 @@ def _attempt_with_retries(func, args, kwargs,
             break
     else:
         # We have used up all our attempts. There seems to be an
-        # actual problem. Raise specified from the error stashed above.
+        # actual problem. Raise specified error from the error stashed above.
         raise error_to_raise from error
 
 
