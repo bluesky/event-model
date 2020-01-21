@@ -568,7 +568,7 @@ class Filler(DocumentRouter):
                    f"class {handler_class} "
                    f"with Resource document {resource}. ")
             if root != original_root:
-                msg += (f"It 'root' field was "
+                msg += (f"Its 'root' field was "
                         f"mapped from {original_root} to {root} by root_map.")
             else:
                 msg += (f"Its 'root' field {original_root} was "
