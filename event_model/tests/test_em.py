@@ -890,7 +890,7 @@ def test_attempt_with_retires():
         kwargs=expected_kwargs,
         error_to_catch=LocalException1,
         error_to_raise=LocalException2,
-        retry_intervals=[0.01, 0.01])
+        intervals=[0, 0.01, 0.01])
     assert result == expected_result
 
     mutable.clear()
@@ -903,4 +903,4 @@ def test_attempt_with_retires():
             kwargs=expected_kwargs,
             error_to_catch=LocalException1,
             error_to_raise=LocalException2,
-            retry_intervals=[0.01])
+            intervals=[0, 0.01])

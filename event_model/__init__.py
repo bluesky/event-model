@@ -396,9 +396,17 @@ class Filler(DocumentRouter):
         self._datum_cache = datum_cache
         self._descriptor_cache = descriptor_cache
         if retry_intervals is None:
-            retry_intervals = []
-        self.retry_intervals = list(retry_intervals)
+            self.retry_intervals = []
+        self.retry_intervals = retry_intervals
         self._closed = False
+
+    @property
+    def retry_intervals(self):
+        return self._retry_intervals
+
+    @retry_intervals.setter
+    def retry_intervals(self, value):
+        self._retry_intervals = list(value)
 
     def __repr__(self):
         return "<Filler>" if not self._closed else "<Closed Filler>"
@@ -577,7 +585,7 @@ class Filler(DocumentRouter):
             func=handler_class,
             args=(resource_path,),
             kwargs=resource['resource_kwargs'],
-            retry_intervals=self.retry_intervals,
+            intervals=[0] + self.retry_intervals,
             error_to_catch=IOError,
             error_to_raise=error_to_raise)
         return handler
@@ -643,7 +651,7 @@ class Filler(DocumentRouter):
                     func=handler,
                     args=(),
                     kwargs=datum_doc['datum_kwargs'],
-                    retry_intervals=self.retry_intervals,
+                    intervals=[0] + self.retry_intervals,
                     error_to_catch=IOError,
                     error_to_raise=error_to_raise)
                 # Here we are intentionally modifying doc in place.
@@ -681,26 +689,21 @@ class Filler(DocumentRouter):
 
 
 def _attempt_with_retries(func, args, kwargs,
-                          retry_intervals,
+                          intervals,
                           error_to_catch, error_to_raise):
     """
     Return func(*args, **kwargs), using a retry loop.
 
     func, args, kwargs: self-explanatory
-    retry_intervals: list
-        How long to wait (seconds) between each successive retry.
-        This MUST be an actual list. Since this function is internal we do not
-        take the time to validate or normalize the input.
+    intervals: list
+        How long to wait (seconds) between each attempt including the first.
     error_to_catch: Exception class
         If this is raised, retry.
     error_to_raise: Exception instance or class
         If we run out of retries, raise this from the proximate error.
     """
-    # We are sure to attempt IO at least once and
-    # then perhaps additional times depending on the contents of
-    # retry_intervals.
     error = None
-    for interval in [0] + retry_intervals:
+    for interval in intervals:
         ttime.sleep(interval)
         try:
             return func(*args, **kwargs)
