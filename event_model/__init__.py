@@ -556,8 +556,8 @@ class Filler(DocumentRouter):
                 f"handler registry.") from err
         # Apply root_map.
         resource_path = resource['resource_path']
-        root = resource.get('root', '')
-        root = self.root_map.get(root, root)
+        original_root = resource.get('root', '')
+        root = self.root_map.get(original_root, original_root)
         if root:
             resource_path = os.path.join(root, resource_path)
         try:
@@ -566,10 +566,13 @@ class Filler(DocumentRouter):
         except Exception as err:
             msg = (f"Error instantiating handler "
                    f"class {handler_class} "
-                   f"with Resource document {resource}.")
-            if root != resouce.get('root', ''):
-                msg += (f" Note that its 'root' field was "
-                        f"mapped to {root} by root_map.")
+                   f"with Resource document {resource}. ")
+            if root != original_root:
+                msg += (f"It 'root' field was "
+                        f"mapped from {original_root} to {root} by root_map.")
+            else:
+                msg += (f"Its 'root' field {original_root} was "
+                        f"*not* modified by root_map.")
             raise EventModelError(msg) from err
         return handler
 
