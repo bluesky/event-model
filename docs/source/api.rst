@@ -28,6 +28,12 @@ a schema and an associated :class:`jsonschema.IValidator`.
 .. autoclass:: event_model.NoFiller
    :members:
 
+.. autofunction:: event_model.register_coersion
+
+.. autofunction:: event_model.as_is
+
+.. autofunction:: event_model.force_numpy
+
 .. autofunction:: event_model.verify_filled
 
 .. autofunction:: event_model.pack_event_page

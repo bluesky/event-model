@@ -2,6 +2,56 @@
 Release History
 ***************
 
+v1.13.0 (2019-01-21)
+====================
+
+Added
+-----
+
+* The :class:`~event_model.Filler` accepts an optional parameter ``coerce`` that
+  can be used to change the behavior of the handlers. This is useful for
+  forcing the filled data to be an in-memory numpy array or a dask array, for
+  example. The options accepted by ``coerce`` can be configured at runtime
+  using the new function :func:`~event_model.register_coersion`. The coersions
+  registered by default are :func:`~event_model.as_is` and
+  :func:`~event_model.force_numpy`.
+* The :class:`~event_model.NoFiller` has been added. It has the same interface
+  as :class:`~event_model.Filler` but it merely *validates* the filling-related
+  documents rather than actually filling in the data. This is useful if the
+  filling may be done later as a delayed computation but we want to know
+  immediately that we have all the information we need to perform that
+  computation.
+* It is sometimes convenient to make an instance of
+  :class:`~event_model.Filler` based on an existing instance but perhaps
+  setting some options differently. The new method
+  :meth:`~event_model.Filler.clone` takes all the same parameters as Filler
+  instantiation. If called with no arguments, it will make a "clone" with all
+  the same options. Pass in arguments to override certain options.
+
+Changed
+-------
+
+* The :class:`~event_model.NumpyEncoder` special-cases dask arrays.
+* Several error messages have been made more specific and useful.
+
+Deprecated
+----------
+
+* Field-level filtering in :class:`~event_model.Filler` via the parameters
+  ``include`` and ``exclude`` is deprecated.
+
+Internal Changes
+----------------
+
+* The code in :class:`~event_model.DocumentRouter` that dispatches based on
+  document type has been factored out of ``__call__`` into a new internal
+  method, ``_dispatch``, which makes it easier to for subclasses to modify
+  ``__call__`` but reuse the dispatch logic.
+
+See the
+`GitHub v.13.0 milestone <https://github.com/bluesky/event-model/milestone/3>`_
+for a complete list of changes in this release.
+
 v1.12.0 (2019-10-11)
 ====================
 

@@ -226,7 +226,7 @@ def register_coersion(name, func, overwrite=False):
     func : callable
         Expected signature::
 
-        func(filler, handler_class) -> handler_class
+            func(filler, handler_class) -> handler_class
     overwrite : boolean, optional
         False by default. Name collissions will raise ``EventModelValueError``
         unless this is set to ``True``.
@@ -432,7 +432,10 @@ class Filler(DocumentRouter):
         Create a new Filler instance from this one.
 
         By default it will be created with the same settings that this Filler
-        has. Individual settings may be overridded here.
+        has. Individual settings may be overridden here.
+
+        The clone does *not* share any caches or internal state with the
+        original.
         """
         if handler_registry is None:
             handler_registry = self._unpatched_handler_registry
