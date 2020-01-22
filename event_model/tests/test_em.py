@@ -861,6 +861,12 @@ def test_pack_empty_raises():
         event_model.pack_datum_page()
 
 
+@pytest.mark.parametrize('retry_intervals', [(1,), [1], (), [], None])
+def test_retry_intervals_input_normalization(retry_intervals):
+    filler = event_model.Filler({}, retry_intervals=retry_intervals)
+    assert isinstance(filler.retry_intervals, list)
+
+
 def test_attempt_with_retires():
     mutable = []
     expected_args = (1, 2)

@@ -396,7 +396,7 @@ class Filler(DocumentRouter):
         self._datum_cache = datum_cache
         self._descriptor_cache = descriptor_cache
         if retry_intervals is None:
-            self.retry_intervals = []
+            retry_intervals = []
         self.retry_intervals = retry_intervals
         self._closed = False
 
