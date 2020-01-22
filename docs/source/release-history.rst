@@ -45,11 +45,11 @@ Internal Changes
 
 * The code in :class:`~event_model.DocumentRouter` that dispatches based on
   document type has been factored out of ``__call__`` into a new internal
-  method, ``_dispatch``, which makes it easier to for subclasses to modify
+  method, ``_dispatch``, which makes it easier for subclasses to modify
   ``__call__`` but reuse the dispatch logic.
 
 See the
-`GitHub v.13.0 milestone <https://github.com/bluesky/event-model/milestone/3>`_
+`GitHub v1.13.0 milestone <https://github.com/bluesky/event-model/milestone/3>`_
 for a complete list of changes in this release.
 
 v1.12.0 (2019-10-11)
