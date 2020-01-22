@@ -80,47 +80,77 @@ class DocumentRouter:
         Optionally validate that the result is still a valid document.
         """
         output_doc = getattr(self, name)(doc)
+
+        # If 'event' is not defined by the subclass but 'event_page' is, or
+        # vice versa, use that. And the same for 'datum_page' / 'datum.
+        if output_doc is NotImplemented:
+            if name == 'event':
+                event_page = pack_event_page(doc)
+                # Subclass' implementation of event_page may return a valid
+                # EventPage or None or NotImplemented.
+                output_event_page = self.event_page(event_page) or event_page
+                if output_event_page is not NotImplemented:
+                    output_doc, = unpack_event_page(output_event_page)
+            elif name == 'datum':
+                datum_page = pack_datum_page(doc)
+                # Subclass' implementation of datum_page may return a valid
+                # DatumPage or None or NotImplemented.
+                output_datum_page = self.datum_page(datum_page) or datum_page
+                if output_datum_page is not NotImplemented:
+                    output_doc, = unpack_datum_page(output_datum_page)
+            elif name == 'event_page':
+                output_events = []
+                for event in unpack_event_page(doc):
+                    # Subclass' implementation of event may return a valid
+                    # Event or None or NotImplemented.
+                    output_event = self.event(event) or event
+                    if output_event is NotImplemented:
+                        break
+                    output_events.append(output_event)
+                else:
+                    output_doc = pack_event_page(*output_events)
+            elif name == 'datum_page':
+                output_datums = []
+                for datum in unpack_datum_page(doc):
+                    # Subclass' implementation of datum may return a valid
+                    # Datum or None or NotImplemented.
+                    output_datum = self.datum(datum) or datum
+                    if output_datums is NotImplemented:
+                        break
+                    output_datums.append(output_datum)
+                else:
+                    output_doc = pack_datum_page(*output_datums)
+        # If we still don't find an implemented method by here, then pass the
+        # original document through.
+        if output_doc is NotImplemented:
+            output_doc = doc
         if validate:
             schema_validators[getattr(DocumentNames, name)].validate(output_doc)
         return (name, output_doc if output_doc is not None else doc)
 
     def start(self, doc):
-        return doc
+        return NotImplemented
 
     def stop(self, doc):
-        return doc
+        return NotImplemented
 
     def descriptor(self, doc):
-        return doc
+        return NotImplemented
 
     def resource(self, doc):
-        return doc
+        return NotImplemented
 
     def event(self, doc):
-        event_page = pack_event_page(doc)
-        output_event_page = self.event_page(event_page)
-        # Subclass' implementation of event_page may return a valid EventPage
-        # or None.
-        if output_event_page is None:
-            return None
-        output_event, = unpack_event_page(output_event_page)
-        return output_event
+        return NotImplemented
 
     def datum(self, doc):
-        datum_page = pack_datum_page(doc)
-        output_datum_page = self.datum_page(datum_page)
-        # Subclass' implementation of event_page may return a valid DatumPage
-        # or None.
-        if output_datum_page is None:
-            return None
-        output_datum, = unpack_datum_page(output_datum_page)
-        return output_datum
+        return NotImplemented
 
     def event_page(self, doc):
-        return doc
+        return NotImplemented
 
     def datum_page(self, doc):
-        return doc
+        return NotImplemented
 
     def bulk_events(self, doc):
         # Do not modify this in a subclass. Use event_page.
