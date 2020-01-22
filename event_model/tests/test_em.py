@@ -300,7 +300,7 @@ def test_document_router_smoke_test():
     dr('stop', run_bundle.compose_stop())
 
 
-def test_document_router_():
+def test_document_router_with_validation():
     dr = event_model.DocumentRouter()
     run_bundle = event_model.compose_run()
     dr('start', run_bundle.start_doc, validate=True)
@@ -338,6 +338,154 @@ def test_document_router_():
         seq_num=1)
     dr('event', event3, validate=True)
     dr('stop', run_bundle.compose_stop(), validate=True)
+
+
+def test_document_router_dispatch_event():
+
+    mutable = []  # used for counting calls
+
+    # example documents
+    event1 = {'data': {'x': 1},
+              'timestamps': {'x': 0.},
+              'uid': 'placeholder X',
+              'descriptor': 'placeholder Y',
+              'time': 0.,
+              'seq_num': 1}
+    event2 = {'data': {'x': 2},
+              'timestamps': {'x': 1.},
+              'uid': 'placeholder X',
+              'descriptor': 'placeholder Y',
+              'time': 1.,
+              'seq_num': 2}
+    event_page = event_model.pack_event_page(event1, event2)
+
+    class DefinesEventNotEventPage(event_model.DocumentRouter):
+        def event(self, doc):
+            # Just a dumb test that check something particular to these example
+            # documents.
+            assert doc['data']['x'] == doc['seq_num']
+            mutable.append(object())
+
+    dr = DefinesEventNotEventPage()
+    # Test that Event is routed to Event.
+    dr('event', event1)
+    assert len(mutable) == 1
+    mutable.clear()
+    # Test that EventPage is unpacked and routed to Event one at a time.
+    dr('event_page', event_page)
+    assert len(mutable) == 2
+    mutable.clear()
+
+    class DefinesEventPageNotEvent(event_model.DocumentRouter):
+        def event_page(self, doc):
+            # Just a dumb test that check something particular to these example
+            # documents.
+            assert doc['data']['x'][0] == 1
+            mutable.append(object())
+
+    dr = DefinesEventPageNotEvent()
+    # Test that Event is packed and routed to EventPage.
+    dr('event', event1)
+    assert len(mutable) == 1
+    mutable.clear()
+    # Test that EventPage is routed to EventPage.
+    dr('event_page', event_page)
+    assert len(mutable) == 1
+    mutable.clear()
+
+    class DefinesEventPageAndEvent(event_model.DocumentRouter):
+        def event(self, doc):
+            # Just a dumb test that check something particular to these example
+            # documents.
+            assert doc['data']['x'] == doc['seq_num']
+            mutable.append(object())
+
+        def event_page(self, doc):
+            # Just a dumb test that check something particular to these example
+            # documents.
+            assert doc['data']['x'][0] == 1
+            mutable.append(object())
+
+    dr = DefinesEventPageAndEvent()
+    # Test that Event is routed to Event.
+    dr('event', event1)
+    assert len(mutable) == 1
+    mutable.clear()
+    # Test that EventPage is routed to EventPage.
+    dr('event_page', event_page)
+    assert len(mutable) == 1
+    mutable.clear()
+
+
+def test_document_router_dispatch_datum():
+
+    mutable = []  # used for counting calls
+
+    # example documents
+    datum1 = {'datum_id': 'placeholder/1',
+              'resource': 'placeholder',
+              'datum_kwargs': {'index': 1}}
+    datum2 = {'datum_id': 'placholder/2',
+              'resource': 'placeholder',
+              'datum_kwargs': {'index': 2}}
+    datum_page = event_model.pack_datum_page(datum1, datum2)
+
+    class DefinesDatumNotDatumPage(event_model.DocumentRouter):
+        def datum(self, doc):
+            # Just a dumb test that check something particular to these example
+            # documents.
+            assert doc['datum_kwargs']['index'] == int(doc['datum_id'][-1])
+            mutable.append(object())
+
+    dr = DefinesDatumNotDatumPage()
+    # Test that Datum is routed to Datum.
+    dr('datum', datum1)
+    assert len(mutable) == 1
+    mutable.clear()
+    # Test that DatumPage is unpacked and routed to Datum one at a time.
+    dr('datum_page', datum_page)
+    assert len(mutable) == 2
+    mutable.clear()
+
+    class DefinesDatumPageNotDatum(event_model.DocumentRouter):
+        def datum_page(self, doc):
+            # Just a dumb test that check something particular to these example
+            # documents.
+            assert doc['datum_kwargs']['index'][0] == int(doc['datum_id'][0][-1])
+            mutable.append(object())
+
+    dr = DefinesDatumPageNotDatum()
+    # Test that Datum is packed and routed to DatumPage.
+    dr('datum', datum1)
+    assert len(mutable) == 1
+    mutable.clear()
+    # Test that DatumPage is routed to DatumPage.
+    dr('datum_page', datum_page)
+    assert len(mutable) == 1
+    mutable.clear()
+
+    class DefinesDatumPageAndDatum(event_model.DocumentRouter):
+        def datum(self, doc):
+            # Just a dumb test that check something particular to these example
+            # documents.
+            assert doc['datum_kwargs']['index'] == int(doc['datum_id'][-1])
+            mutable.append(object())
+
+        def datum_page(self, doc):
+            # Just a dumb test that check something particular to these example
+            # documents.
+            assert doc['datum_kwargs']['index'][0] == int(doc['datum_id'][0][-1])
+            mutable.append(object())
+
+    dr = DefinesDatumPageAndDatum()
+    # Test that Datum is routed to Datum.
+    dr('datum', datum1)
+    assert len(mutable) == 1
+    mutable.clear()
+    # Test that DatumPage is routed to DatumPage.
+    dr('datum_page', datum_page)
+    assert len(mutable) == 1
+    mutable.clear()
 
 
 def test_filler(tmp_path):
