@@ -427,8 +427,16 @@ class Filler(DocumentRouter):
         self._descriptor_cache = descriptor_cache
         if retry_intervals is None:
             retry_intervals = []
-        self.retry_intervals = list(retry_intervals)
+        self.retry_intervals = retry_intervals
         self._closed = False
+
+    @property
+    def retry_intervals(self):
+        return self._retry_intervals
+
+    @retry_intervals.setter
+    def retry_intervals(self, value):
+        self._retry_intervals = list(value)
 
     def __repr__(self):
         return "<Filler>" if not self._closed else "<Closed Filler>"
@@ -593,20 +601,23 @@ class Filler(DocumentRouter):
         root = self.root_map.get(original_root, original_root)
         if root:
             resource_path = os.path.join(root, resource_path)
-        try:
-            handler = handler_class(resource_path,
-                                    **resource['resource_kwargs'])
-        except Exception as err:
-            msg = (f"Error instantiating handler "
-                   f"class {handler_class} "
-                   f"with Resource document {resource}. ")
-            if root != original_root:
-                msg += (f"Its 'root' field was "
-                        f"mapped from {original_root} to {root} by root_map.")
-            else:
-                msg += (f"Its 'root' field {original_root} was "
-                        f"*not* modified by root_map.")
-            raise EventModelError(msg) from err
+        msg = (f"Error instantiating handler "
+               f"class {handler_class} "
+               f"with Resource document {resource}. ")
+        if root != original_root:
+            msg += (f"Its 'root' field was "
+                    f"mapped from {original_root} to {root} by root_map.")
+        else:
+            msg += (f"Its 'root' field {original_root} was "
+                    f"*not* modified by root_map.")
+        error_to_raise = EventModelError(msg)
+        handler = _attempt_with_retries(
+            func=handler_class,
+            args=(resource_path,),
+            kwargs=resource['resource_kwargs'],
+            intervals=[0] + self.retry_intervals,
+            error_to_catch=IOError,
+            error_to_raise=error_to_raise)
         return handler
 
     def _get_handler_maybe_cached(self, resource):
@@ -662,31 +673,20 @@ class Filler(DocumentRouter):
                         f"Datum with id {datum_id} refers to unknown Resource "
                         f"uid {resource_uid}") from err
                 handler = self._get_handler_maybe_cached(resource)
-                # We are sure to attempt to read that data at least once and
-                # then perhaps additional times depending on the contents of
-                # retry_intervals.
-                error = None
-                for interval in [0] + self.retry_intervals:
-                    ttime.sleep(interval)
-                    try:
-                        payload = handler(**datum_doc['datum_kwargs'])
-                        # Here we are intentionally modifying doc in place.
-                        filled_doc['data'][key] = payload
-                        filled_doc['filled'][key] = datum_id
-                    except IOError as error_:
-                        # The file may not be visible on the network yet.
-                        # Wait and try again. Stash the error in a variable
-                        # that we can access later if we run out of attempts.
-                        error = error_
-                    else:
-                        break
-                else:
-                    # We have used up all our attempts. There seems to be an
-                    # actual problem. Raise the error stashed above.
-                    raise DataNotAccessible(
+                error_to_raise = DataNotAccessible(
                         f"Filler was unable to load the data referenced by "
                         f"the Datum document {datum_doc} and the Resource "
-                        f"document {resource}.") from error
+                        f"document {resource}.")
+                payload = _attempt_with_retries(
+                    func=handler,
+                    args=(),
+                    kwargs=datum_doc['datum_kwargs'],
+                    intervals=[0] + self.retry_intervals,
+                    error_to_catch=IOError,
+                    error_to_raise=error_to_raise)
+                # Here we are intentionally modifying doc in place.
+                filled_doc['data'][key] = payload
+                filled_doc['filled'][key] = datum_id
         self._current_state.key = None
         self._current_state.descriptor = None
         return filled_doc
@@ -716,6 +716,38 @@ class Filler(DocumentRouter):
             raise EventModelRuntimeError(
                 "This Filler has been closed and is no longer usable.")
         return super().__call__(name, doc, validate)
+
+
+def _attempt_with_retries(func, args, kwargs,
+                          intervals,
+                          error_to_catch, error_to_raise):
+    """
+    Return func(*args, **kwargs), using a retry loop.
+
+    func, args, kwargs: self-explanatory
+    intervals: list
+        How long to wait (seconds) between each attempt including the first.
+    error_to_catch: Exception class
+        If this is raised, retry.
+    error_to_raise: Exception instance or class
+        If we run out of retries, raise this from the proximate error.
+    """
+    error = None
+    for interval in intervals:
+        ttime.sleep(interval)
+        try:
+            return func(*args, **kwargs)
+        except error_to_catch as error_:
+            # The file may not be visible on the filesystem yet.
+            # Wait and try again. Stash the error in a variable
+            # that we can access later if we run out of attempts.
+            error = error_
+        else:
+            break
+    else:
+        # We have used up all our attempts. There seems to be an
+        # actual problem. Raise specified error from the error stashed above.
+        raise error_to_raise from error
 
 
 class NoFiller(Filler):

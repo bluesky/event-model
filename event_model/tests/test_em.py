@@ -1050,3 +1050,54 @@ def test_pack_empty_raises():
         event_model.pack_event_page()
     with pytest.raises(ValueError):
         event_model.pack_datum_page()
+
+
+@pytest.mark.parametrize('retry_intervals', [(1,), [1], (), [], None])
+def test_retry_intervals_input_normalization(retry_intervals):
+    filler = event_model.Filler({}, retry_intervals=retry_intervals)
+    assert isinstance(filler.retry_intervals, list)
+
+
+def test_attempt_with_retires():
+    mutable = []
+    expected_args = (1, 2)
+    expected_kwargs = {'c': 3, 'd': 4}
+    expected_result = 10
+
+    class LocalException1(Exception):
+        pass
+
+    class LocalException2(Exception):
+        pass
+
+    def func(*args, **kwargs):
+        # Fails when called the first two times;
+        # on the third time, returns expected_result.
+        assert args == expected_args
+        assert kwargs == expected_kwargs
+        mutable.append(object())
+        if len(mutable) < 3:
+            raise LocalException1()
+        return expected_result
+
+    # Test with a total of three attempts, just sufficient to succeed.
+    result = event_model._attempt_with_retries(
+        func=func,
+        args=expected_args,
+        kwargs=expected_kwargs,
+        error_to_catch=LocalException1,
+        error_to_raise=LocalException2,
+        intervals=[0, 0.01, 0.01])
+    assert result == expected_result
+
+    mutable.clear()
+
+    # Test one fewer than the needed number of attempts to succeed.
+    with pytest.raises(LocalException2):
+        event_model._attempt_with_retries(
+            func=func,
+            args=expected_args,
+            kwargs=expected_kwargs,
+            error_to_catch=LocalException1,
+            error_to_raise=LocalException2,
+            intervals=[0, 0.01])
