@@ -4,6 +4,7 @@ External Assets
 
 The Documents
 =============
+
 The data model allows an Event document to contain a mixture of literal values
 and references to externally-stored values. Scalar values and very small arrays
 are typically placed directly in the document; large arrays such as from area
@@ -50,8 +51,11 @@ because its ``'uid'`` matches the Event's ``'descriptor'`` field.
             'dtype': 'number'}}
     ...}
 
-The presence of the key ``'external'`` (regardless of its value) indicates that
-the Events' ``'image'`` contains a reference to an asset outside the documents.
+The presence of the key ``'external'`` indicates that the Events' ``'image'``
+contains a reference to an asset outside the documents. (The value of
+that key is not currently used by any part of the system; only its existence is
+checked for. The value may be used in the futue as a hook for integration with
+outside systems.)
 
 Returning to our Event
 
@@ -101,19 +105,19 @@ usually not change during the lifecycle of this asset. The ``root`` is more
 context-dependent (depending on what system you are accessing the data from)
 and subject to change (if the data is moved over time).
 
-The ``spec`` gives us a hint as how choose a "handler" that can read this asset
-(whether it be a file, multiple files, or something more specialized). The
-``resource_kwargs`` provide any additional parameters that we should give to
-this handler.
+The ``spec`` gives us a hint about the format of this asset, whether it be a
+file, multiple files, or something more specialized. The ``resource_kwargs``
+provide any additional parameters for reading it.
 
 Handlers
 ========
 
+In bluesky/databroker, a "handler" is a reader with special inteface. It
+accepts a Resource document and a Datum document in exchange and returns the
+pertinent data.
+
 Handler Interface
 -----------------
-
-In bluesky/databroker, a "handler" is used to exchange a Resource and Datum
-document for the data that it references.
 
 A 'handler class' may be any callable with the signature::
 
@@ -242,6 +246,8 @@ when it sees the last document from the Run.
 
    import event_model
    rr = event_model.RunRouter([...], handler_registry=handler_registry)
+
+See :class:`~event_model.RunRouter` and :class:`~event_model.Filler` for more.
 
 .. _handler_packaging:
 
