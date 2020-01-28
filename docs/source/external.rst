@@ -112,8 +112,8 @@ provide any additional parameters for reading it.
 Handlers
 ========
 
-In bluesky/databroker, a "handler" is a reader with special interface. It
-accepts a Resource document and a Datum document in exchange and returns the
+In bluesky/databroker, a "handler" is a reader with a special interface. It
+accepts a Resource document and a Datum document and in exchange returns the
 pertinent data.
 
 Handler Interface
