@@ -300,6 +300,18 @@ Minimal nontrivial valid example:
     'reason': '',
     'num_events': {}}
 
+Typical example:
+
+.. code-block:: python
+
+   # 'stop' document
+   {'run_start': 'ba1f9076-7925-4af8-916e-0e1eaa1b3c47',
+    'time': 1580172029.3419003,
+    'uid': '78c70c2c-2508-479e-9857-05553748022e',
+    'exit_status': 'success',
+    'reason': '',
+    'num_events': {'primary': 10}
+
 Formal schema:
 
 .. literalinclude:: ../../event_model/schemas/run_stop.json
@@ -322,6 +334,18 @@ Minimal nontrivial valid example:
     'spec': 'SOME_SPEC',
     'uid': '272132cf-564f-428f-bf6b-149ee4287024'}
 
+Typical example:
+
+.. code-block:: python
+
+   # resource
+   {'spec': 'AD_HDF5',
+    'root': '/GPFS/DATA/Andor/',
+    'resource_path': '2020/01/03/8ff08ff9-a2bf-48c3-8ff3-dcac0f309d7d.h5',
+    'resource_kwargs': {'frame_per_point': 10},
+    'path_semantics': 'posix',
+    'uid': '3b300e6f-b431-4750-a635-5630d15c81a8',
+    'run_start': '10bf6945-4afd-43ca-af36-6ad8f3540bcd'}
 
 Formal schema:
 
@@ -338,8 +362,20 @@ Minimal nontrivial valid example:
 
    # 'datum' document
    {'resource': '272132cf-564f-428f-bf6b-149ee4287024',  # foreign key
-    'datum_kwargs': {'index': 0},  # format-specific parameters
+    'datum_kwargs': {},  # format-specific parameters
     'datum_id': '272132cf-564f-428f-bf6b-149ee4287024/1'}
+
+Typical example:
+
+.. code-block:: python
+
+   # datum
+   {'resource': '3b300e6f-b431-4750-a635-5630d15c81a8',
+    'datum_kwargs': {'index': 0},
+    'datum_id': '3b300e6f-b431-4750-a635-5630d15c81a8/0'}
+
+It is an implementation detail that ``datum_id`` is often formatted as
+``{resource}/{counter}`` but this should not be considered part of the schema.
 
 Formal schema:
 
