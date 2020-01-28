@@ -229,6 +229,16 @@ track which if any keys on a document "in flight" have already been filled.
 Fields that are not externally-stored (such as ``'temperature'`` in our
 example) do not appear there.
 
+A Filler takes in a ``handler_registry``, such as the one shown in the previous
+section. It uses the ``'spec'`` in each Resource document to find a matching
+handler class in its registry. If it cannot find a match for a given spec, an
+clear error is raised.
+
+.. code:: python
+
+   import event_model
+   filler = event_model.Filler(handler_registry)
+
 A primary concern here is resource management. Fillers create and cache
 instances of handlers, which in turn may cache instances of file handles,
 network connections, or other system resources.
