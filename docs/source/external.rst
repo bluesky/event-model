@@ -112,7 +112,7 @@ provide any additional parameters for reading it.
 Handlers
 ========
 
-In bluesky/databroker, a "handler" is a reader with special inteface. It
+In bluesky/databroker, a "handler" is a reader with special interface. It
 accepts a Resource document and a Datum document in exchange and returns the
 pertinent data.
 
@@ -230,14 +230,16 @@ Fields that are not externally-stored (such as ``'temperature'`` in our
 example) do not appear there.
 
 A Filler takes in a ``handler_registry``, such as the one shown in the previous
-section. It uses the ``'spec'`` in each Resource document to find a matching
-handler class in its registry. If it cannot find a match for a given spec, an
-clear error is raised.
+section.
 
 .. code:: python
 
    import event_model
    filler = event_model.Filler(handler_registry)
+
+It uses the ``'spec'`` in each Resource document to find a matching
+handler class in its registry. If it cannot find a match for a given spec, an
+:class:`~event_model.UndefinedAssetSpecification` error is raised.
 
 A primary concern here is resource management. Fillers create and cache
 instances of handlers, which in turn may cache instances of file handles,
@@ -249,7 +251,7 @@ resources they have allocated.
 When streaming data from multiple runs, it is convenient to use the
 :class:`~event_model.RunRouter` to manage Filler creation and disposal.
 It accepts a ``handler_registry`` and other optional Filler-related arguments.
-It uses them to make a separate Filler instance for each Run, which is closes
+It uses them to make a separate Filler instance for each Run, which it closes
 when it sees the last document from the Run.
 
 .. code:: python
@@ -292,4 +294,4 @@ the ``setup.py`` in https://github.com/bluesky/area-detector-handlers
 On the left-hand side of the ``=`` is given the spec, matching the ``'spec'``
 in the Resource document, and on the right-hand side is given the
 ``path.to.module:object_name`` of the handler class that can handle that type
-of file.
+of asset.
