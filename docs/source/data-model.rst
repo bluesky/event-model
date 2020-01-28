@@ -274,8 +274,8 @@ Formal schema:
 Event contents can also be represented in "paged" form, where multiple
 rows are contained in one structure for efficient transport and vectorized
 computation. The representations contain equivalent information: an EventPage
-can always be losslessly transformed into an Event and vice versa. Here is the
-example Event above structured as an Event Page with a single row:
+can always be transformed, without loss, into an Event and vice versa. Here is
+the example Event above structured as an Event Page with a single row:
 
 .. code-block:: python
 
