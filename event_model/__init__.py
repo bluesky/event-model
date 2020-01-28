@@ -294,7 +294,7 @@ class Filler(DocumentRouter):
 
         A 'handler class' may be any callable with the signature::
 
-            handler_class(resource_path, root, **resource_kwargs)
+            handler_class(full_path, **resource_kwargs)
 
         It is expected to return an object, a 'handler instance', which is also
         callable and has the following signature::
@@ -859,7 +859,7 @@ class RunRouter(DocumentRouter):
 
         A 'handler class' may be any callable with the signature::
 
-            handler_class(resource_path, root, **resource_kwargs)
+            handler_class(full_path, **resource_kwargs)
 
         It is expected to return an object, a 'handler instance', which is also
         callable and has the following signature::
