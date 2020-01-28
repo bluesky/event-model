@@ -274,7 +274,23 @@ Formal schema:
 Event contents can also be represented in "paged" form, where multiple
 rows are contained in one structure for efficient transport and vectorized
 computation. The representations contain equivalent information: an EventPage
-can always be losslessly transformed into an Event and vice versa.
+can always be losslessly transformed into an Event and vice versa. Here is the
+example Event above structured as an Event Page with a single row:
+
+.. code-block:: python
+
+   # 'event_page' document
+   {'data': {'random_walk:dt': [-1.0],
+             'random_walk:x': [1.9221013521832928]},
+    'descriptor': '0ad55d9e-1b31-4af2-865c-7ab7c8171303',
+    'filled': {},
+    'seq_num': [1],
+    'time': [1550070005.0189056],
+    'timestamps': {'random_walk:dt': [1550070004.994477],
+                   'random_walk:x': [1550070004.812525]},
+    'uid': ['7b5343fe-dfd7-4884-bc18-a0b571ff60b7']}
+
+Formal Event Page schema:
 
 .. literalinclude:: ../../event_model/schemas/event_page.json
 
@@ -384,7 +400,17 @@ Formal schema:
 .. _datum_page:
 
 Like Events, Datum contents can also be represented in "paged" form, and the
-representations contain equivalent information.
+representations contain equivalent information. This is the Datum example above
+strucuted as a Datum Page with one row:
+
+.. code-block:: python
+
+   # datum
+   {'resource': '3b300e6f-b431-4750-a635-5630d15c81a8',
+   'datum_kwargs': {'index': [0]},
+   'datum_id': ['3b300e6f-b431-4750-a635-5630d15c81a8/0']}
+
+Formal Datum Page schema:
 
 .. literalinclude:: ../../event_model/schemas/datum_page.json
 
