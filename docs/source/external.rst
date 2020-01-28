@@ -71,7 +71,7 @@ now that we know that ``'image'`` is external, the value
 ``'aa10035d-1d2b-41d9-97e6-03e3fe62fa6c/5'`` must be a ``datum_id``,
 referencing a Datum document. Here is the matching Datum document. This
 document can be used to retrieve some data that belong in our Event. In our
-example it might be an image or stack of images images that were taken at a
+example it might be an image or stack of images that were taken at a
 given temperature during a temperature scan.
 
 .. code:: python
@@ -223,7 +223,7 @@ After filling:
     'filled': {'image': 'aa10035d-1d2b-41d9-97e6-03e3fe62fa6c/5'}
     ...}
 
-Notice that the ``datum_id`` is still in the document; it has been moved out
+Notice that the ``datum_id`` is still in the document; it has been moved out of
 the way into the ``'filled'`` mapping. The ``'filled'`` mapping is a way to
 track which if any keys on a document "in flight" have already been filled.
 Fields that are not externally-stored (such as ``'temperature'`` in our
@@ -266,7 +266,7 @@ See :class:`~event_model.RunRouter` and :class:`~event_model.Filler` for more.
 Handler Packaging
 =================
 
-Packages can use the ``'databroker.handlers`'``
+Packages can use the ``'databroker.handlers'``
 `entrypoint <https://packaging.python.org/specifications/entry-points/>`_
 to declare that they include some handlers. See for example this excerpt from
 the ``setup.py`` in https://github.com/bluesky/area-detector-handlers
