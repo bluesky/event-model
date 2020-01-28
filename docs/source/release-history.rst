@@ -8,7 +8,7 @@ v1.13.1 (2019-01-28)
 Changed
 -------
 
-* The :class:`~event_model.DocumentRouter` convert and route Event and
+* The :class:`~event_model.DocumentRouter` converts and routes Event and
   EventPage documents correctly if either one or both of the methods
   ``event`` or ``event_page`` is overridden in the subclass. Likewise for Datum
   and DatumPage and the methods ``datum`` and ``datum_page``. The base class
