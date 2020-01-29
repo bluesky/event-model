@@ -2,6 +2,24 @@
 Release History
 ***************
 
+v1.13.1 (2019-01-28)
+====================
+
+Changed
+-------
+
+* The :class:`~event_model.DocumentRouter` converts and routes Event and
+  EventPage documents correctly if either one or both of the methods
+  ``event`` or ``event_page`` is overridden in the subclass. Likewise for Datum
+  and DatumPage and the methods ``datum`` and ``datum_page``. The base class
+  implementations all document-type methods now return the Python built-in
+  sentinel ``NotImplemented`` (not to be confused with the exception
+  ``NotImplementedError``).
+* This retry-with-backoff loop in :class:`~event_model.Filler` is now applied
+  to handler instantiation as well as handler calls. Either can involve I/O
+  with a filesystem that may lag slightly behind the availability of the
+  documents.
+
 v1.13.0 (2019-01-21)
 ====================
 
