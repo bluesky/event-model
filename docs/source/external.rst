@@ -156,9 +156,15 @@ But in general it may be any callable-that-returns-a-callable.
            return some_array_like
        return f
 
-A handler MAY also implement the instance method ``get_file_list()``. This
+A handler may also implement the instance method ``get_file_list()``. This
 presumes that the data in question comes from a filesystem, which may not
 always be the case, which is why this method is optional.
+
+A handler should implement ``close()`` if it caches any file handles, network
+connections or other system resources. The lifecycle of a handler is an
+implementation detail left up to the application. Below, we comment on how
+:class:`~event_model.Filler` and :class:`~event_model.RunRouter` make it easier
+to reuse handler instances and clean them up at the proper time.
 
 Handler Discovery
 -----------------
@@ -241,12 +247,22 @@ It uses the ``'spec'`` in each Resource document to find a matching
 handler class in its registry. If it cannot find a match for a given spec, an
 :class:`~event_model.UndefinedAssetSpecification` error is raised.
 
+Resource Management
+===================
+
 A primary concern here is resource management. Fillers create and cache
 instances of handlers, which in turn may cache instances of file handles,
 network connections, or other system resources.
 When a Filler is closed with :meth:`~event_model.Filler.close` or used as a
-context manager, it closes all its handlers which in turn should close any
-resources they have allocated.
+context manager, it releases all its handlers which in turn should close any
+resources they have allocated. The caches used by a Filler are injectable: by
+default all relevant documents and handler instances are cached until the
+Filler is closed, but the Filler can be configured to use any custom cache
+object, such an an :class:`cachetools.LRUCache` or
+:class:`cachetools.LFUCache`, to receive a prepopulated cache, or to share
+caches between Filler instances. This is an implementation detail left entirely
+up to the application. See :class:`~event_model.Filler` for details on cache
+injection.
 
 When streaming data from multiple runs, it is convenient to use the
 :class:`~event_model.RunRouter` to manage Filler creation and disposal.
