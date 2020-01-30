@@ -115,7 +115,7 @@ class DocumentRouter:
                     # Subclass' implementation of datum may return a valid
                     # Datum or None or NotImplemented.
                     output_datum = self.datum(datum) or datum
-                    if output_datums is NotImplemented:
+                    if output_datum is NotImplemented:
                         break
                     output_datums.append(output_datum)
                 else:
