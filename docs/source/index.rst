@@ -16,6 +16,7 @@ in the model.
 
    installation
    data-model
+   external
    event-descriptors
    api
    release-history
