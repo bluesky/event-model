@@ -2,7 +2,18 @@
 Release History
 ***************
 
-v1.13.1 (2019-01-28)
+v1.13.2 (2020-01-31)
+====================
+
+Fixed
+-----
+
+A bug in the new dispatch logic in :class:`~event_model.DocumentRouter`
+introduced in v1.13.1 caused the dispatcher to sometimes return
+``NotImplemented``. Now it always falls back to returning the original document
+if the subclass returns ``None`` or ``NotImplemented``.
+
+v1.13.1 (2020-01-28)
 ====================
 
 Changed
@@ -20,7 +31,7 @@ Changed
   with a filesystem that may lag slightly behind the availability of the
   documents.
 
-v1.13.0 (2019-01-21)
+v1.13.0 (2020-01-21)
 ====================
 
 Added
