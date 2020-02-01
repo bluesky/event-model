@@ -142,7 +142,7 @@ typically implemented using a class that implements ``__init__`` and
 
        def __call__(self, **datum_kwargs):
            # Consumes the 'datum_kwargs' from the datum and uses them to
-           # locates a specific unit (slice, chunk, or what you will...) of
+           # locate a specific unit (slice, chunk, or what you will...) of
            # data and return it.
            ...
            return some_array_like
@@ -258,7 +258,7 @@ context manager, it releases all its handlers which in turn should close any
 resources they have allocated. The caches used by a Filler are injectable: by
 default all relevant documents and handler instances are cached until the
 Filler is closed, but the Filler can be configured to use any custom cache
-object, such an an :class:`cachetools.LRUCache` or
+object, such as a :class:`cachetools.LRUCache` or
 :class:`cachetools.LFUCache`, to receive a prepopulated cache, or to share
 caches between Filler instances. This is an implementation detail left entirely
 up to the application. See :class:`~event_model.Filler` for details on cache
