@@ -242,8 +242,7 @@ or it may reference it via a ``datum_id`` from a Datum document.
     'timestamps': {'camera_image': 1550072091.2793014},
     'uid': '8eac2f83-2b3e-4d67-ae2c-1d3aaff29ff5'}
 
-Note the appearance of ``{'filled': {'camera_image': False}}``, indicating that
-the value of camera image is a foreign key; the data is not "filled in".
+See :doc:`external` for details on how external assets are handled.
 
 Typical example:
 
@@ -315,6 +314,9 @@ Formal schema:
 Resource Document
 -----------------
 
+See :doc:`external` for details on the role Resource documents play in
+referencing external assets, such as large array data written by detectors.
+
 Minimal nontrivial valid example:
 
 .. code-block:: python
@@ -337,6 +339,9 @@ Formal schema:
 
 Datum Document
 --------------
+
+See :doc:`external` for details on the role Datum documents play in referencing
+external assets, such as large array data written by detectors.
 
 Minimal nontrivial valid example:
 
