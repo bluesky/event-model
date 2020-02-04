@@ -278,10 +278,10 @@ can always be losslessly transformed into an Event and vice versa.
 .. literalinclude:: ../../event_model/schemas/event_page.json
 
 It is intentional that the values in the "data" and "timestamps" dictionaries
-do not have structure. The values may be numeric, bool, null (``None``), or
-homogenous array of these. The values are never objects or dictionaries (to use
-the JSON and Python terminology respectively).  This requirement allows
-document-consumers to make useful simplifying assumptions.
+do not have structure. The values may be numeric, bool, null (``None``), or a
+homogeneous N-dimensional array of any of these. The values are never objects
+or dictionaries (to use the JSON and Python terminology respectively). This
+requirement allows document-consumers to make useful simplifying assumptions.
 
 .. _stop:
 
