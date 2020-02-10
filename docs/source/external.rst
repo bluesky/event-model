@@ -262,7 +262,7 @@ object, such as a :class:`cachetools.LRUCache` or
 :class:`cachetools.LFUCache`, to receive a prepopulated cache, or to share
 caches between Filler instances. This is an implementation detail left entirely
 up to the application. See :class:`~event_model.Filler` for details on cache
-injection. This is an example where two Fillers share a global LRU cache:
+injection. Here is an example where two Fillers share a global LRU cache:
 
 .. code:: python
 
