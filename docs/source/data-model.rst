@@ -282,6 +282,11 @@ do not have structure. The values may be numeric, bool, null (``None``), or a
 homogeneous N-dimensional array of any of these. The values are never objects
 or dictionaries (to use the JSON and Python terminology respectively). This
 requirement allows document-consumers to make useful simplifying assumptions.
+As another justification for this design, consider that if we allowed one level
+of nesting in "data", then it could lead to wanting *those* values to
+allow nesting and so on, which would lead us to accepting arbitrarily nested
+structured data. This in turn would makes the Event Descriptors significantly
+more complex. Thus, we require that the values in "data" never be structured.
 
 .. _stop:
 
