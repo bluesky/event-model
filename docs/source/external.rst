@@ -267,7 +267,7 @@ injection. Here is an example where two Fillers share a global LRU cache:
 .. code:: python
 
    import event_model
-   import cache_tools
+   import cachetools
 
    handler_registry = {...}  # or use databroker.core.discover_handlers()
 
