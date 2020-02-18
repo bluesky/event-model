@@ -128,6 +128,14 @@ class DocumentRouter:
             schema_validators[getattr(DocumentNames, name)].validate(output_doc)
         return (name, output_doc if output_doc is not None else doc)
 
+    # The methods below return NotImplemented, a built-in Python constant.
+    # Note that it is not interchangeable with NotImplementedError. See docs at
+    # https://docs.python.org/3/library/constants.html#NotImplemented
+    # It is used here so that _dispatch, defined above, can detect whether a
+    # subclass implements event, event_page, both, or neither. This is similar
+    # to how Python uses NotImplemented in arithmetic operations, as described
+    # in the documentation.
+
     def start(self, doc):
         return NotImplemented
 
