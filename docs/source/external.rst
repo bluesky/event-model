@@ -262,7 +262,23 @@ object, such as a :class:`cachetools.LRUCache` or
 :class:`cachetools.LFUCache`, to receive a prepopulated cache, or to share
 caches between Filler instances. This is an implementation detail left entirely
 up to the application. See :class:`~event_model.Filler` for details on cache
-injection.
+injection. Here is an example where two Fillers share a global LRU cache:
+
+.. code:: python
+
+   import event_model
+   import cachetools
+
+   handler_registry = {...}  # or use databroker.core.discover_handlers()
+
+   handler_cache = cachetools.LRUCache(32)
+   f1 = Filler(handler_registry, handler_cache=handler_cache)
+   f2 = Filler(handler_registry, handler_cache=handler_cache)
+
+If both fillers are asked for the same Resource, they can share the same
+handler instance and any system resources cached therein. When the handler is
+evicted from the LRUCache, the Filler will recover gracefully: an instance will
+be recreated on demand and put back into the cache.
 
 When streaming data from multiple runs, it is convenient to use the
 :class:`~event_model.RunRouter` to manage Filler creation and disposal.
