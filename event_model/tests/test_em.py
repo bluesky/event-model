@@ -1186,3 +1186,24 @@ def test_attempt_with_retires():
             error_to_catch=LocalException1,
             error_to_raise=LocalException2,
             intervals=[0, 0.01])
+
+
+def test_unpack_event_page_with_empty_data():
+    event_page = {
+        'time': [1, 2, 3],
+        'seq_num': [1, 2, 3],
+        'uid': ['a', 'b', 'c'],
+        'descriptor': 'd',
+        'data': {},
+        'timestamps': {}}
+    events = list(event_model.unpack_event_page(event_page))
+    assert len(events) == 3
+
+
+def test_unpack_datum_page_with_empty_data():
+    datum_page = {
+        'datum_id': ['a', 'b', 'c'],
+        'resource': 'd',
+        'datum_kwargs': {}}
+    datums = list(event_model.unpack_datum_page(datum_page))
+    assert len(datums) == 3
