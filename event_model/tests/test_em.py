@@ -1188,22 +1188,29 @@ def test_attempt_with_retires():
             intervals=[0, 0.01])
 
 
-def test_unpack_event_page_with_empty_data():
+def test_round_trip_event_page_with_empty_data():
     event_page = {
         'time': [1, 2, 3],
         'seq_num': [1, 2, 3],
         'uid': ['a', 'b', 'c'],
         'descriptor': 'd',
         'data': {},
-        'timestamps': {}}
+        'timestamps': {},
+        'filled': {}}
     events = list(event_model.unpack_event_page(event_page))
     assert len(events) == 3
 
+    page_again = event_model.pack_event_page(*events)
+    assert page_again == event_page
 
-def test_unpack_datum_page_with_empty_data():
+
+def test_round_trip_datum_page_with_empty_data():
     datum_page = {
         'datum_id': ['a', 'b', 'c'],
         'resource': 'd',
         'datum_kwargs': {}}
     datums = list(event_model.unpack_datum_page(datum_page))
     assert len(datums) == 3
+
+    page_again = event_model.pack_datum_page(*datums)
+    assert page_again == datum_page
