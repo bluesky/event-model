@@ -1434,13 +1434,14 @@ def unpack_event_page(event_page):
     data_list = _transpose_dict_of_lists(event_page['data'])
     timestamps_list = _transpose_dict_of_lists(event_page['timestamps'])
     filled_list = _transpose_dict_of_lists(event_page.get('filled', {}))
-    for uid, time, seq_num, data, timestamps, filled in zip(
+    for uid, time, seq_num, data, timestamps, filled in itertools.zip_longest(
             event_page['uid'],
             event_page['time'],
             event_page['seq_num'],
             data_list,
             timestamps_list,
-            filled_list or [{}] * len(data_list)):
+            filled_list,
+            fillvalue={}):
         event = {'descriptor': descriptor,
                  'uid': uid, 'time': time, 'seq_num': seq_num,
                  'data': data, 'timestamps': timestamps, 'filled': filled}
