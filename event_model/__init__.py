@@ -397,7 +397,7 @@ class Filler(DocumentRouter):
             self._coersion_func = _coersion_registry[coerce]
         except KeyError:
             raise EventModelKeyError(
-                f"The option coerce={coerce} was given to event_model.Filler. "
+                f"The option coerce={coerce!r} was given to event_model.Filler. "
                 f"The valid options are {set(_coersion_registry)}.")
         self._coerce = coerce
 
