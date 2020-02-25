@@ -232,8 +232,11 @@ After filling:
 Notice that the ``datum_id`` is still in the document; it has been moved out of
 the way into the ``'filled'`` mapping. The ``'filled'`` mapping is a way to
 track which if any keys on a document "in flight" have already been filled.
+It is allowable for an Event or EventPage to be _partially_ filled, where the
+``'data'`` mapping contains a mixture of filled and not-yet-filled items.
 Fields that are not externally-stored (such as ``'temperature'`` in our
-example) do not appear there.
+example) do not appear in the ``'filled'`` mapping. Thus, the keys in the
+``'filled'`` mapping are subset of the keys in ``'data'``.
 
 A Filler takes in a ``handler_registry``, such as the one shown in the previous
 section.
