@@ -668,14 +668,14 @@ class Filler(DocumentRouter):
                 except KeyError as err:
                     if from_datakeys:
                         raise MismatchedDataKeys(
-￼                            "The documents are not valid.  Either because they "
-￼                            "were recorded incorrectly in the first place, "
-￼                            "corrupted since, or exercising a yet-undiscovered "
-￼                            "bug in reader. event['data'].keys()"
-￼                            "must equal descriptor['data_keys'].keys()."
-￼                            f"event['data'].keys(): {doc['data'].keys()}, "
-￼                            "descriptor['data_keys'].keys(): "
-￼                            f"{descriptor['data_keys'].keys()}") from err
+                            "The documents are not valid.  Either because they "
+                            "were recorded incorrectly in the first place, "
+                            "corrupted since, or exercising a yet-undiscovered "
+                            "bug in a reader. event['data'].keys() "
+                            "must equal descriptor['data_keys'].keys(). "
+                            f"event['data'].keys(): {doc['data'].keys()}, "
+                            "descriptor['data_keys'].keys(): "
+                            f"{descriptor['data_keys'].keys()}") from err
                     else:
                         raise err
                 # Look up the cached Datum doc.
@@ -823,8 +823,8 @@ class NoFiller(Filler):
                             "The documents are not valid.  Either because they "
                             "were recorded incorrectly in the first place, "
                             "corrupted since, or exercising a yet-undiscovered "
-                            "bug in reader. event['data'].keys()"
-                            "must equal descriptor['data_keys'].keys()."
+                            "bug in a reader. event['data'].keys() "
+                            "must equal descriptor['data_keys'].keys(). "
                             f"event['data'].keys(): {doc['data'].keys()}, "
                             "descriptor['data_keys'].keys(): "
                             f"{descriptor['data_keys'].keys()}") from err
@@ -1160,7 +1160,11 @@ class InvalidData(EventModelError):
 
 
 class MismatchedDataKeys(InvalidData):
-    """raised when event['data'].keys() != descriptor['data_keys'].keys()"""
+    """
+    Raised when any data keys structures are out of sync. This includes,
+    event['data'].keys(), descriptor['data_keys'].keys(),
+    event['timestamp'].keys(), event['filled'].keys()
+    """
     ...
 
 
