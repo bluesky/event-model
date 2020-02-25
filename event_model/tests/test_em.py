@@ -953,6 +953,7 @@ def test_filler(tmp_path):
             del event['data']['image']
             filler('event', event)
 
+
 def test_rechunk_event_pages():
 
     def event_page_gen(page_size, num_pages):
