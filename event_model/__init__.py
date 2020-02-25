@@ -786,19 +786,35 @@ class NoFiller(Filler):
     def fill_event(self, doc, include=None, exclude=None, inplace=None):
         try:
             filled = doc['filled']
+            from_datakeys = False
         except KeyError:
             # This document is not telling us which, if any, keys are filled.
             # Infer that none of the external data is filled.
             descriptor = self._descriptor_cache[doc['descriptor']]
             filled = {key: 'external' in val
                       for key, val in descriptor['data_keys'].items()}
+            from_datakeys = True
         for key, is_filled in filled.items():
             if exclude is not None and key in exclude:
                 continue
             if include is not None and key not in include:
                 continue
             if not is_filled:
-                datum_id = doc['data'][key]
+                try:
+                    datum_id = doc['data'][key]
+                except KeyError as err:
+                    if from_datakeys:
+                        raise MismatchedDataKeys(
+                            "The documents are not valid.  Either because they "
+                            "were recorded incorrectly in the first place, "
+                            "corrupted since, or exercising a yet-undiscovered "
+                            "bug in reader. event['data'].keys()"
+                            "must equal descriptor['data_keys'].keys()."
+                            f"event['data'].keys(): {doc['data'].keys()}, "
+                            "descriptor['data_keys'].keys(): "
+                            f"{self._descriptor_cache()}") from err
+                    else:
+                        raise err
                 # Look up the cached Datum doc.
                 try:
                     datum_doc = self._datum_cache[datum_id]
