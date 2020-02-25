@@ -677,7 +677,15 @@ class Filler(DocumentRouter):
                             "descriptor['data_keys'].keys(): "
                             f"{descriptor['data_keys'].keys()}") from err
                     else:
-                        raise err
+                        raise MismatchedDataKeys(
+                            "The documents are not valid.  Either because they "
+                            "were recorded incorrectly in the first place, "
+                            "corrupted since, or exercising a yet-undiscovered "
+                            "bug in a reader. event['filled'].keys() "
+                            "must be a subset of event['data'].keys(). "
+                            f"event['data'].keys(): {doc['data'].keys()}, "
+                            "event['filled'].keys(): "
+                            f"{doc['filled'].keys()}") from err
                 # Look up the cached Datum doc.
                 try:
                     datum_doc = self._datum_cache[datum_id]
@@ -829,7 +837,15 @@ class NoFiller(Filler):
                             "descriptor['data_keys'].keys(): "
                             f"{descriptor['data_keys'].keys()}") from err
                     else:
-                        raise err
+                        raise MismatchedDataKeys(
+                            "The documents are not valid.  Either because they "
+                            "were recorded incorrectly in the first place, "
+                            "corrupted since, or exercising a yet-undiscovered "
+                            "bug in a reader. event['filled'].keys() "
+                            "must be a subset of event['data'].keys(). "
+                            f"event['data'].keys(): {doc['data'].keys()}, "
+                            "event['filled'].keys(): "
+                            f"{doc['filled'].keys()}") from err
                 # Look up the cached Datum doc.
                 try:
                     datum_doc = self._datum_cache[datum_id]
