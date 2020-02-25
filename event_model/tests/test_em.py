@@ -932,18 +932,25 @@ def test_filler(tmp_path):
         assert not filler._handler_cache  # implementation detail
 
     with pytest.raises(event_model.MismatchedDataKeys):
-        with event_model.Filler(reg) as filler:
+        with event_model.NoFiller(reg) as filler:
             filler('start', run_bundle.start_doc)
-            descriptor = copy.deepcopy(desc_bundle.descriptor_doc)
-            descriptor['data_keys'] = {}
-            filler('descriptor', descriptor)
-            descriptor = copy.deepcopy(desc_bundle_baseline.descriptor_doc)
-            descriptor['data_keys'] = {}
-            filler('descriptor', descriptor)
+            filler('descriptor', desc_bundle.descriptor_doc)
+            filler('descriptor', desc_bundle_baseline.descriptor_doc)
             filler('resource', res_bundle.resource_doc)
             filler('datum', datum_doc)
             event = copy.deepcopy(raw_event)
-            event['filled'] = {}
+            del event['data']['image']
+            filler('event', event)
+
+    with pytest.raises(event_model.MismatchedDataKeys):
+        with event_model.Filler(reg) as filler:
+            filler('start', run_bundle.start_doc)
+            filler('descriptor', desc_bundle.descriptor_doc)
+            filler('descriptor', desc_bundle_baseline.descriptor_doc)
+            filler('resource', res_bundle.resource_doc)
+            filler('datum', datum_doc)
+            event = copy.deepcopy(raw_event)
+            del event['data']['image']
             filler('event', event)
 
 def test_rechunk_event_pages():
