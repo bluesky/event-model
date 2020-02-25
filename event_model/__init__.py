@@ -1119,7 +1119,17 @@ class UnresolvableForeignKeyError(EventModelValueError):
 
 
 class DuplicateHandler(EventModelRuntimeError):
-    "raised when a handler is already registered for a given spec"
+    """raised when a handler is already registered for a given spec"""
+    ...
+
+
+class InvalidData(EventModelError):
+    """raised when the data is invalid"""
+    ...
+
+
+class MismatchedDataKeys(InvalidData):
+    """raised when event['data'].keys() != descriptor['data_keys'].keys()"""
     ...
 
 
