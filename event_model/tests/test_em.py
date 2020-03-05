@@ -1067,7 +1067,6 @@ def test_run_router(tmp_path):
         collected.append((name, doc))
 
     def all_factory(name, doc):
-        collector(name, doc)
         return [collector], []
 
     rr = event_model.RunRouter([all_factory])
