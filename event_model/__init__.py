@@ -649,75 +649,75 @@ class Filler(DocumentRouter):
         from_datakeys = False
         self._current_state.descriptor = descriptor
         try:
-            filled = doc['filled']
+            needs_filling = {key for key, val in doc['filled'].items()
+                             if val==False}
         except KeyError:
             # This document is not telling us which, if any, keys are filled.
             # Infer that none of the external data is filled.
-            filled = {key: 'external' in val
-                      for key, val in descriptor['data_keys'].items()}
+            needs_filling = {key for key, val in descriptor['data_keys'].items()
+                             if 'external' in val}
             from_datakeys = True
-        for key, is_filled in filled.items():
+        for key in needs_filling:
             self._current_state.key = key
             if exclude is not None and key in exclude:
                 continue
             if include is not None and key not in include:
                 continue
-            if not is_filled:
-                try:
-                    datum_id = doc['data'][key]
-                except KeyError as err:
-                    if from_datakeys:
-                        raise MismatchedDataKeys(
-                            "The documents are not valid.  Either because they "
-                            "were recorded incorrectly in the first place, "
-                            "corrupted since, or exercising a yet-undiscovered "
-                            "bug in a reader. event['data'].keys() "
-                            "must equal descriptor['data_keys'].keys(). "
-                            f"event['data'].keys(): {doc['data'].keys()}, "
-                            "descriptor['data_keys'].keys(): "
-                            f"{descriptor['data_keys'].keys()}") from err
-                    else:
-                        raise MismatchedDataKeys(
-                            "The documents are not valid.  Either because they "
-                            "were recorded incorrectly in the first place, "
-                            "corrupted since, or exercising a yet-undiscovered "
-                            "bug in a reader. event['filled'].keys() "
-                            "must be a subset of event['data'].keys(). "
-                            f"event['data'].keys(): {doc['data'].keys()}, "
-                            "event['filled'].keys(): "
-                            f"{doc['filled'].keys()}") from err
-                # Look up the cached Datum doc.
-                try:
-                    datum_doc = self._datum_cache[datum_id]
-                except KeyError as err:
-                    raise UnresolvableForeignKeyError(
-                        datum_id,
-                        f"Event with uid {doc['uid']} refers to unknown Datum "
-                        f"datum_id {datum_id}") from err
-                resource_uid = datum_doc['resource']
-                # Look up the cached Resource.
-                try:
-                    resource = self._resource_cache[resource_uid]
-                except KeyError as err:
-                    raise UnresolvableForeignKeyError(
-                        resource_uid,
-                        f"Datum with id {datum_id} refers to unknown Resource "
-                        f"uid {resource_uid}") from err
-                handler = self._get_handler_maybe_cached(resource)
-                error_to_raise = DataNotAccessible(
-                        f"Filler was unable to load the data referenced by "
-                        f"the Datum document {datum_doc} and the Resource "
-                        f"document {resource}.")
-                payload = _attempt_with_retries(
-                    func=handler,
-                    args=(),
-                    kwargs=datum_doc['datum_kwargs'],
-                    intervals=[0] + self.retry_intervals,
-                    error_to_catch=IOError,
-                    error_to_raise=error_to_raise)
-                # Here we are intentionally modifying doc in place.
-                filled_doc['data'][key] = payload
-                filled_doc['filled'][key] = datum_id
+            try:
+                datum_id = doc['data'][key]
+            except KeyError as err:
+                if from_datakeys:
+                    raise MismatchedDataKeys(
+                        "The documents are not valid.  Either because they "
+                        "were recorded incorrectly in the first place, "
+                        "corrupted since, or exercising a yet-undiscovered "
+                        "bug in a reader. event['data'].keys() "
+                        "must equal descriptor['data_keys'].keys(). "
+                        f"event['data'].keys(): {doc['data'].keys()}, "
+                        "descriptor['data_keys'].keys(): "
+                        f"{descriptor['data_keys'].keys()}") from err
+                else:
+                    raise MismatchedDataKeys(
+                        "The documents are not valid.  Either because they "
+                        "were recorded incorrectly in the first place, "
+                        "corrupted since, or exercising a yet-undiscovered "
+                        "bug in a reader. event['filled'].keys() "
+                        "must be a subset of event['data'].keys(). "
+                        f"event['data'].keys(): {doc['data'].keys()}, "
+                        "event['filled'].keys(): "
+                        f"{doc['filled'].keys()}") from err
+            # Look up the cached Datum doc.
+            try:
+                datum_doc = self._datum_cache[datum_id]
+            except KeyError as err:
+                raise UnresolvableForeignKeyError(
+                    datum_id,
+                    f"Event with uid {doc['uid']} refers to unknown Datum "
+                    f"datum_id {datum_id}") from err
+            resource_uid = datum_doc['resource']
+            # Look up the cached Resource.
+            try:
+                resource = self._resource_cache[resource_uid]
+            except KeyError as err:
+                raise UnresolvableForeignKeyError(
+                    resource_uid,
+                    f"Datum with id {datum_id} refers to unknown Resource "
+                    f"uid {resource_uid}") from err
+            handler = self._get_handler_maybe_cached(resource)
+            error_to_raise = DataNotAccessible(
+                    f"Filler was unable to load the data referenced by "
+                    f"the Datum document {datum_doc} and the Resource "
+                    f"document {resource}.")
+            payload = _attempt_with_retries(
+                func=handler,
+                args=(),
+                kwargs=datum_doc['datum_kwargs'],
+                intervals=[0] + self.retry_intervals,
+                error_to_catch=IOError,
+                error_to_raise=error_to_raise)
+            # Here we are intentionally modifying doc in place.
+            filled_doc['data'][key] = payload
+            filled_doc['filled'][key] = datum_id
         self._current_state.key = None
         self._current_state.descriptor = None
         return filled_doc
