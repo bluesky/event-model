@@ -650,7 +650,7 @@ class Filler(DocumentRouter):
         self._current_state.descriptor = descriptor
         try:
             needs_filling = {key for key, val in doc['filled'].items()
-                             if val==False}
+                             if val is False}
         except KeyError:
             # This document is not telling us which, if any, keys are filled.
             # Infer that none of the external data is filled.
@@ -811,7 +811,7 @@ class NoFiller(Filler):
         from_datakeys = False
         try:
             needs_filling = {key for key, val in doc['filled'].items()
-                             if val==False}
+                             if val is False}
         except KeyError:
             # This document is not telling us which, if any, keys are filled.
             # Infer that none of the external data is filled.
