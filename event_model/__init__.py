@@ -811,7 +811,7 @@ class NoFiller(Filler):
         from_datakeys = False
         try:
             needs_filling = {key for key, val in doc['filled'].items()
-￼                            if val==False}
+                             if val==False}
         except KeyError:
             # This document is not telling us which, if any, keys are filled.
             # Infer that none of the external data is filled.
@@ -823,7 +823,6 @@ class NoFiller(Filler):
                 continue
             if include is not None and key not in include:
                 continue
-            if not is_filled:
             try:
                 datum_id = doc['data'][key]
             except KeyError as err:
