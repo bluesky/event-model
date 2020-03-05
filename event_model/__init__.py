@@ -864,8 +864,8 @@ class NoFiller(Filler):
             except KeyError as err:
                 raise UnresolvableForeignKeyError(
                     datum_id,
-                        f"Datum with id {datum_id} refers to unknown Resource "
-                        f"uid {resource_uid}") from err
+                    f"Datum with id {datum_id} refers to unknown Resource "
+                    f"uid {resource_uid}") from err
         return doc
 
 
