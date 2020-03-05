@@ -8,8 +8,8 @@ v1.13.3 (2020-03-05)
 Fixed
 -----
 
-* Make :func:`~event_model.unpack_event_page` tolerant of Event Pages with empty
-``data``.
+* Make :func:`~event_model.unpack_event_page` tolerant of Event Pages with
+  empty ``data``.
 
 Changed
 -------
