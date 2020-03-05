@@ -2,6 +2,25 @@
 Release History
 ***************
 
+v1.13.3 (2020-03-05)
+====================
+
+Fixed
+-----
+
+* Make :func:`~event_model.unpack_event_page` tolerant of Event Pages with
+  empty ``data``.
+
+Changed
+-------
+
+* Raise a more specific error when :class:`~event_model.Filler` encounters
+  an error due to a malformed document.
+
+See the
+`GitHub v1.13.3 milestone <https://github.com/bluesky/event-model/milestone/6>`_
+for a complete list of changes in this release.
+
 v1.13.2 (2020-01-31)
 ====================
 
