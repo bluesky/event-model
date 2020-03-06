@@ -277,7 +277,7 @@ def register_coersion(name, func, overwrite=False):
             return
         raise EventModelValueError(
             f"The coersion function {func} could not be registered for the "
-            f"name {name} because {_coersion_registry[func]} is already "
+            f"name {name} because {_coersion_registry[name]} is already "
             f"registered. Use overwrite=True to force it.")
     _coersion_registry[name] = func
 
