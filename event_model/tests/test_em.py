@@ -1236,3 +1236,13 @@ def test_round_trip_datum_page_with_empty_data():
 
     page_again = event_model.pack_datum_page(*datums)
     assert page_again == datum_page
+
+
+def test_register_coersion():
+    # Re-registration should be fine.
+    assert 'as_is' in event_model._coersion_registry  # implementation detail
+    event_model.register_coersion('as_is', event_model.as_is)
+
+    # but registering something different to the same name should raise.
+    with pytest.raises(event_model.EventModelValueError):
+        event_model.register_coersion('as_is', object)
