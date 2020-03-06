@@ -944,7 +944,7 @@ def test_filler(tmp_path):
             filler('event', event)
 
     with pytest.raises(event_model.MismatchedDataKeys):
-        with event_model.Filler(reg) as filler:
+        with event_model.Filler(reg, inplace=False) as filler:
             filler('start', run_bundle.start_doc)
             filler('descriptor', desc_bundle.descriptor_doc)
             filler('descriptor', desc_bundle_baseline.descriptor_doc)
