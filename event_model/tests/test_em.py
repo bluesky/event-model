@@ -876,6 +876,7 @@ def test_filler(tmp_path):
         assert filled_event_page is event_page
 
     with pytest.warns(UserWarning):
+        # warnings because inplace is not specified
         filler = event_model.Filler(reg)
 
     class OtherDummyHandler:
