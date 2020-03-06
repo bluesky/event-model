@@ -1236,3 +1236,52 @@ def test_round_trip_datum_page_with_empty_data():
 
     page_again = event_model.pack_datum_page(*datums)
     assert page_again == datum_page
+
+
+def test_replay():
+    bundle = event_model.compose_run()
+    collector = []
+    start_doc, compose_descriptor, compose_resource, compose_stop = bundle
+    collector.append(('start', start_doc))
+    bundle = compose_descriptor(
+        data_keys={'motor': {'shape': [], 'dtype': 'number', 'source': '...'},
+                   'image': {'shape': [512, 512], 'dtype': 'number',
+                             'source': '...', 'external': 'FILESTORE:'}},
+        name='primary')
+    descriptor_doc, compose_event, compose_event_page = bundle
+    collector.append(('descriptor', descriptor_doc))
+    bundle = compose_resource(
+        spec='TIFF', root='/tmp', resource_path='stack.tiff',
+        resource_kwargs={})
+    resource_doc, compose_datum, compose_datum_page = bundle
+    collector.append(('resource', resource_doc))
+    datum_doc = compose_datum(datum_kwargs={'slice': 5})
+    collector.append(('datum', datum_doc))
+    event_doc = compose_event(
+        data={'motor': 0, 'image': datum_doc['datum_id']},
+        timestamps={'motor': 0, 'image': 0}, filled={'image': False})
+    collector.append(('event', event_doc))
+    datum_page = compose_datum_page(datum_kwargs={'slice': [10, 15]})
+    collector.append(('datum_page', datum_page))
+    event_page = compose_event_page(data={'motor': [1, 2], 'image':
+                                          datum_page['datum_id']},
+                                    timestamps={'motor': [0, 0],
+                                                'image': [0, 0]},
+                                    filled={'image': [False, False]},
+                                    seq_num=[1, 2])
+    collector.append(('event_page', event_page))
+    stop_doc = compose_stop()
+    collector.append(('stop', stop_doc))
+
+    def gen():
+        for name, doc in collector:
+            yield name, doc
+
+    actual = []
+
+    def callback(name, doc):
+        actual.append((name, doc))
+
+    event_model.replay(gen(), callback)
+
+    assert actual == collector
