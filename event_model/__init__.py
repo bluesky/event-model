@@ -271,9 +271,13 @@ def register_coersion(name, func, overwrite=False):
     """
 
     if name in _coersion_registry and not overwrite:
+        # If we are re-registering the same object, there is no problem.
+        original = _coersion_registry[name]
+        if original is func:
+            return
         raise EventModelValueError(
             f"The coersion function {func} could not be registered for the "
-            f"name {name} because {_coersion_registry[func]} is already "
+            f"name {name} because {_coersion_registry[name]} is already "
             f"registered. Use overwrite=True to force it.")
     _coersion_registry[name] = func
 

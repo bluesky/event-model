@@ -876,6 +876,7 @@ def test_filler(tmp_path):
         assert filled_event_page is event_page
 
     with pytest.warns(UserWarning):
+        # warnings because inplace is not specified
         filler = event_model.Filler(reg)
 
     class OtherDummyHandler:
@@ -943,7 +944,7 @@ def test_filler(tmp_path):
             filler('event', event)
 
     with pytest.raises(event_model.MismatchedDataKeys):
-        with event_model.Filler(reg) as filler:
+        with event_model.Filler(reg, inplace=False) as filler:
             filler('start', run_bundle.start_doc)
             filler('descriptor', desc_bundle.descriptor_doc)
             filler('descriptor', desc_bundle_baseline.descriptor_doc)
@@ -1236,3 +1237,13 @@ def test_round_trip_datum_page_with_empty_data():
 
     page_again = event_model.pack_datum_page(*datums)
     assert page_again == datum_page
+
+
+def test_register_coersion():
+    # Re-registration should be fine.
+    assert 'as_is' in event_model._coersion_registry  # implementation detail
+    event_model.register_coersion('as_is', event_model.as_is)
+
+    # but registering something different to the same name should raise.
+    with pytest.raises(event_model.EventModelValueError):
+        event_model.register_coersion('as_is', object)
