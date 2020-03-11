@@ -876,7 +876,7 @@ DOCS_PASSED_IN_1_14_0_WARNING = (
     "The callback {callback!r} raised {err!r} when "
     "RunRouter passed it a {name!r} document. This is "
     "probably because in earlier releases the RunRouter "
-    "expected its factory functions forward the 'start' "
+    "expected its factory functions to forward the 'start' "
     "document, but starting in event-model 1.14.0 the "
     "RunRouter passes in the document, causing the "
     "callback to receive it twice and potentially raise "
