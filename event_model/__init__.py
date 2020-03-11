@@ -872,6 +872,18 @@ class NoFiller(Filler):
         return doc
 
 
+DOCS_PASSED_IN_1_14_0_WARNING = (
+    "The callback {callback!r} raised {err!r} when "
+    "RunRouter passed it a {name!r} document. This is "
+    "probably because in earlier releases the RunRouter "
+    "expected its factory functions to forward the 'start' "
+    "document, but starting in event-model 1.14.0 the "
+    "RunRouter passes in the document, causing the "
+    "callback to receive it twice and potentially raise "
+    "an error. Update the factory function. In a future "
+    "release this warning will become an error.")
+
+
 class RunRouter(DocumentRouter):
     """
     Routes documents, by run, to callbacks it creates from factory functions.
@@ -899,16 +911,17 @@ class RunRouter(DocumentRouter):
 
             callback(name, doc)
 
-        that will receive all subsequent documents from the run including the
-        RunStop document. All items in the second list should be "subfactories"
-        with the signature::
+        that will receive that RunStart document and all subsequent documents
+        from the run including the RunStop document. All items in the second
+        list should be "subfactories" with the signature::
 
             subfactory('descriptor', descriptor_doc) -> List[Callbacks]
 
         These will receive each of the EventDescriptor documents for the run,
         as they arrive. They must return one list, which may be empty,
-        containing callbacks that will receive all Events that reference that
-        EventDescriptor and finally the RunStop document for the run.
+        containing callbacks that will receive the RunStart document, that
+        EventDescriptor, all Events that reference that EventDescriptor and
+        finally the RunStop document for the run.
     handler_registry : dict, optional
         This is passed to the Filler or whatever class is given in the
         filler_class parametr below.
@@ -1006,6 +1019,13 @@ class RunRouter(DocumentRouter):
         # because Fillers do nothing with 'start'.
         for factory in self.factories:
             callbacks, subfactories = factory('start', doc)
+            for callback in callbacks:
+                try:
+                    callback('start', doc)
+                except Exception as err:
+                    warnings.warn(
+                        DOCS_PASSED_IN_1_14_0_WARNING.format(
+                            callback=callback, name='start', err=err))
             self._factory_cbs_by_start[uid].extend(callbacks)
             self._subfactories[uid].extend(subfactories)
 
@@ -1023,6 +1043,19 @@ class RunRouter(DocumentRouter):
             callbacks = subfactory('descriptor', doc)
             self._subfactory_cbs_by_start[start_uid].extend(callbacks)
             self._subfactory_cbs_by_descriptor[uid].extend(callbacks)
+            for callback in callbacks:
+                try:
+                    callback('start', doc)
+                except Exception as err:
+                    warnings.warn(
+                        DOCS_PASSED_IN_1_14_0_WARNING.format(
+                            callback=callback, name='start', err=err))
+                try:
+                    callback('descriptor', doc)
+                except Exception as err:
+                    warnings.warn(
+                        DOCS_PASSED_IN_1_14_0_WARNING.format(
+                            callback=callback, name='descriptor', err=err))
         # Keep track of the RunStart UID -> [EventDescriptor UIDs] mapping for
         # purposes of cleanup in stop().
         self._descriptors[start_uid].append(uid)
