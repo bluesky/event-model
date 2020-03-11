@@ -872,6 +872,18 @@ class NoFiller(Filler):
         return doc
 
 
+DOCS_PASSED_IN_1_14_0_WARNING = (
+    "The callback {callback!r} raised {err!r} when "
+    "RunRouter passed it a {name!r} document. This is "
+    "probably because in earlier releases the RunRouter "
+    "expected its factory functions forward the 'start' "
+    "document, but starting in event-model 1.14.0 the "
+    "RunRouter passes in the document, causing the "
+    "callback to receive it twice and potentially raise "
+    "an error. Update the factory function. In a future "
+    "release this warning will become an error.")
+
+
 class RunRouter(DocumentRouter):
     """
     Routes documents, by run, to callbacks it creates from factory functions.
@@ -1012,15 +1024,8 @@ class RunRouter(DocumentRouter):
                     callback('start', doc)
                 except Exception as err:
                     warnings.warn(
-                        f"The callback {callback} raised a {err} when "
-                        f"RunRouter passed it a 'start' document. This is "
-                        f"probably because in earlier releases the RunRouter "
-                        f"expected its factory functions forward the 'start' "
-                        f"document, but starting in event-model 1.14.0 the "
-                        f"RunRouter passes in the document, causing the "
-                        f"callback to receive it twice and potentially raise "
-                        f"an error. Update the factory function. In a future "
-                        f"release this warning will become an error.")
+                        DOCS_PASSED_IN_1_14_0_WARNING.format(
+                            callback=callback, name='start', err=err))
             self._factory_cbs_by_start[uid].extend(callbacks)
             self._subfactories[uid].extend(subfactories)
 
@@ -1043,28 +1048,14 @@ class RunRouter(DocumentRouter):
                     callback('start', doc)
                 except Exception as err:
                     warnings.warn(
-                        f"The callback {callback} raised a {err} when "
-                        f"RunRouter passed it a 'start' document. This is "
-                        f"probably because in earlier releases the RunRouter "
-                        f"expected its factory functions forward the 'start' "
-                        f"document, but starting in event-model 1.14.0 the "
-                        f"RunRouter passes in the document, causing the "
-                        f"callback to receive it twice and potentially raise "
-                        f"an error. Update the factory function. In a future "
-                        f"release this warning will become an error.")
+                        DOCS_PASSED_IN_1_14_0_WARNING.format(
+                            callback=callback, name='start', err=err))
                 try:
                     callback('descriptor', doc)
-                except Exception:
+                except Exception as err:
                     warnings.warn(
-                        f"The callback {callback} raised a {err} when "
-                        f"RunRouter passed it a 'descriptor' document. This is "
-                        f"probably because in earlier releases the RunRouter "
-                        f"expected its subfactory functions forward the 'descriptor' "
-                        f"document, but starting in event-model 1.14.0 the "
-                        f"RunRouter passes in the document, causing the "
-                        f"callback to receive it twice and potentially raise "
-                        f"an error. Update the subfactory function. In a future "
-                        f"release this warning will become an error.")
+                        DOCS_PASSED_IN_1_14_0_WARNING.format(
+                            callback=callback, name='descriptor', err=err))
         # Keep track of the RunStart UID -> [EventDescriptor UIDs] mapping for
         # purposes of cleanup in stop().
         self._descriptors[start_uid].append(uid)

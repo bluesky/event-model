@@ -1095,6 +1095,52 @@ def test_run_router(tmp_path):
     assert unexpected_item not in collected
     collected.clear()
 
+    # Test factory that expects old (pre-1.14.0) RunRouter behavior.
+
+    collected_header_docs = {}
+
+    class LocalException3(Exception):
+        ...
+
+    def collector(name, doc):
+        if name in ('start', 'stop', 'descriptor'):
+            key = (name, doc['uid'])
+            if key in collected_header_docs:
+                raise LocalException3
+            collected_header_docs[key] = doc
+
+
+    def all_factory(name, doc):
+        collector(name, doc)
+        return [collector], []
+
+    rr = event_model.RunRouter([all_factory])
+    with pytest.warns(UserWarning, match='1.14.0'):
+        for name, doc in docs:
+            rr(name, doc)
+
+    collected_header_docs.clear()
+
+    # Test subfactory that expects old (pre-1.14.0) RunRouter behavior.
+
+    def factory_with_subfactory_only(name, doc):
+        collector(name, doc)
+
+        def subfactory(name, doc):
+            if doc.get('name') == 'baseline':
+                collector(name, doc)
+                return [collector]
+            return []
+
+        return [], [subfactory]
+
+    rr = event_model.RunRouter([factory_with_subfactory_only])
+    with pytest.warns(UserWarning, match='1.14.0'):
+        for name, doc in docs:
+            rr(name, doc)
+
+    collected_header_docs.clear()
+
     # Test RunRouter with handler_registry.
 
     class FakeTiffHandler:
