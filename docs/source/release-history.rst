@@ -2,6 +2,36 @@
 Release History
 ***************
 
+v1.14.0 (2020-03-11)
+====================
+
+Fixed
+-----
+
+* Let :func:`~event_model.register_coersion` tolerate duplicate registration of
+  the same coersion as the long the duplicate is identical with the original
+  (i.e. `func is original_func`). This is now consistent with how handler
+  registration works.
+* Fix a critical typo in an error message codepath in
+  :func:`~event_model.register_coersion`.
+
+Changed
+-------
+
+* The :class:`~event_model.RunRouter` hands RunStart documents to its factory
+  functions so they can decide which if any callbacks to subscribe for that
+  run. Formerly, the :class:`~event_model.RunRouter` left it up to the factory
+  functions to pass the RunStart document through to any callbacks the factory
+  function returned. Now, the :class:`~event_model.RunRouter` passes the
+  RunStart document to the callbacks directly, removing that responsibility
+  from the factory.  To smooth this transition, it does so inside a
+  ``try...except`` block and warns if any ``Exception`` is raised. This is a best
+  effort at backward-compatibility with factories that are currently passing
+  the RunStart document in, though it may not work in every case depending on
+  the details of the callback. Likewise for subfactories: the callbacks that
+  they return will be given the RunStart document and the relevant
+  EventDescriptor document inside a ``try...except`` block.
+
 v1.13.3 (2020-03-05)
 ====================
 
