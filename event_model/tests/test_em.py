@@ -1102,17 +1102,16 @@ def test_run_router(tmp_path):
     class LocalException3(Exception):
         ...
 
-    def collector(name, doc):
+    def header_collector(name, doc):
         if name in ('start', 'stop', 'descriptor'):
             key = (name, doc['uid'])
             if key in collected_header_docs:
                 raise LocalException3
             collected_header_docs[key] = doc
 
-
     def all_factory(name, doc):
-        collector(name, doc)
-        return [collector], []
+        header_collector(name, doc)
+        return [header_collector], []
 
     rr = event_model.RunRouter([all_factory])
     with pytest.warns(UserWarning, match='1.14.0'):
@@ -1124,12 +1123,12 @@ def test_run_router(tmp_path):
     # Test subfactory that expects old (pre-1.14.0) RunRouter behavior.
 
     def factory_with_subfactory_only(name, doc):
-        collector(name, doc)
+        header_collector(name, doc)
 
         def subfactory(name, doc):
             if doc.get('name') == 'baseline':
-                collector(name, doc)
-                return [collector]
+                header_collector(name, doc)
+                return [header_collector]
             return []
 
         return [], [subfactory]
