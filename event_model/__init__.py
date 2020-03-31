@@ -88,14 +88,16 @@ class DocumentRouter:
                 event_page = pack_event_page(doc)
                 # Subclass' implementation of event_page may return a valid
                 # EventPage or None or NotImplemented.
-                output_event_page = self.event_page(event_page) or event_page
+                output_event_page = self.event_page(event_page)
+                output_event_page = output_event_page if output_event_page is not None else event_page
                 if output_event_page is not NotImplemented:
                     output_doc, = unpack_event_page(output_event_page)
             elif name == 'datum':
                 datum_page = pack_datum_page(doc)
                 # Subclass' implementation of datum_page may return a valid
                 # DatumPage or None or NotImplemented.
-                output_datum_page = self.datum_page(datum_page) or datum_page
+                output_datum_page = self.datum_page(datum_page)
+                output_datum_page = output_datum_page if output_datum_page is not None else datum_page
                 if output_datum_page is not NotImplemented:
                     output_doc, = unpack_datum_page(output_datum_page)
             elif name == 'event_page':
@@ -103,7 +105,8 @@ class DocumentRouter:
                 for event in unpack_event_page(doc):
                     # Subclass' implementation of event may return a valid
                     # Event or None or NotImplemented.
-                    output_event = self.event(event) or event
+                    output_event = self.event(event)
+                    output_event = output_event if output_event is not None else event
                     if output_event is NotImplemented:
                         break
                     output_events.append(output_event)
@@ -114,7 +117,8 @@ class DocumentRouter:
                 for datum in unpack_datum_page(doc):
                     # Subclass' implementation of datum may return a valid
                     # Datum or None or NotImplemented.
-                    output_datum = self.datum(datum) or datum
+                    output_datum = self.datum(datum)
+                    output_datum = output_datum if output_datum is not None else datum
                     if output_datum is NotImplemented:
                         break
                     output_datums.append(output_datum)
