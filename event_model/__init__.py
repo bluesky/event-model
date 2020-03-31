@@ -442,6 +442,61 @@ class Filler(DocumentRouter):
         self.retry_intervals = retry_intervals
         self._closed = False
 
+    def __eq__(self, other):
+        return (
+            type(self) is type(other) and
+            self.inplace == other.inplace and
+            self._coerce == other._coerce and
+            self.include == other.include and
+            self.exclude == other.exclude and
+            self.root_map == other.root_map and
+            type(self._handler_cache) is type(other._handler_cache) and
+            type(self._resource_cache) is type(other._resource_cache) and
+            type(self._datum_cache) is type(other._datum_cache) and
+            type(self._descriptor_cache) is type(other._descriptor_cache) and
+            self.retry_intervals == other.retry_intervals
+        )
+
+    def __getstate__(self):
+        return dict(
+            inplace=self._inplace,
+            coersion_func=self._coerce,
+            handler_registry=self._unpatched_handler_registry,
+            include=self.include,
+            exclude=self.exclude,
+            root_map=self.root_map,
+            handler_cache=self._handler_cache,
+            resource_cache=self._resource_cache,
+            datum_cache=self._datum_cache,
+            descriptor_cache=self._descriptor_cache,
+            retry_intervals=self.retry_intervals)
+
+    def __setstate__(self, d):
+        self._inplace = d['inplace']
+        self._coerce = d['coersion_func']
+
+        # See comments on coerision functions above for the use of
+        # _current_state, which is passed to coersion functions' `filler_state`
+        # parameter.
+        self._current_state = threading.local()
+        self._unpatched_handler_registry = {}
+        self._handler_registry = {}
+        for spec, handler_class in d['handler_registry'].items():
+            self.register_handler(spec, handler_class)
+        self.handler_registry = HandlerRegistryView(self._handler_registry)
+        self.include = d['include']
+        self.exclude = d['exclude']
+        self.root_map = d['root_map']
+        self._handler_cache = d['handler_cache']
+        self._resource_cache = d['resource_cache']
+        self._datum_cache = d['datum_cache']
+        self._descriptor_cache = d['descriptor_cache']
+        retry_intervals = d['retry_intervals']
+        if retry_intervals is None:
+            retry_intervals = []
+        self._retry_intervals = retry_intervals
+        self._closed = False
+
     @property
     def retry_intervals(self):
         return self._retry_intervals

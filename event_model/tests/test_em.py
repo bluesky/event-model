@@ -1,5 +1,7 @@
 import copy
 import json
+import pickle
+
 import event_model
 import numpy
 import pytest
@@ -1291,3 +1293,10 @@ def test_register_coersion():
     # but registering something different to the same name should raise.
     with pytest.raises(event_model.EventModelValueError):
         event_model.register_coersion('as_is', object)
+
+
+def test_pickle_filler():
+    filler = event_model.Filler({}, inplace=False)
+    serialized = pickle.dumps(filler)
+    deserialized = pickle.loads(serialized)
+    assert filler == deserialized
