@@ -2,6 +2,17 @@
 Release History
 ***************
 
+v1.14.1 (2020-04-06)
+====================
+
+Fixed
+-----
+
+* In v1.13.0, the :class:`~event_model.Filler` object was unintentionally made
+  un-pickleable. It can now be pickled.
+* For validation purposes, we accept numpy arrays as "array"-like.
+
+
 v1.14.0 (2020-03-11)
 ====================
 
