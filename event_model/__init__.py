@@ -53,6 +53,10 @@ class DocumentRouter:
 
         (name, getattr(router, name)(doc))
     """
+    def __init__(self):
+        self._start_doc = None
+        self._descriptors = dict()
+
     def __call__(self, name, doc, validate=False):
         """
         Process a document.
@@ -71,7 +75,27 @@ class DocumentRouter:
             The same name as what was passed in, and a doc that may be the same
             instance as doc, a copy of doc, or a different dict altogether.
         """
+        if name == 'start':
+            if self._start_doc is None:
+                self._start_doc = doc
+            elif self._start_doc['uid'] == doc['uid']:
+                warnings.warn(f'DocumentRouter received the same start document twice: uid {doc["uid"]}')
+            else:
+                self._start_doc = doc
+                # ??? self._descriptors = dict()
+        elif name == 'descriptor':
+            self._descriptors[doc['uid']] = doc
+
         return self._dispatch(name, doc, validate)
+
+    def get_start(self):
+        return self._start_doc
+
+    def get_descriptor(self, event_doc):
+        return self._descriptors[event_doc['descriptor']]
+
+    def get_stream_name(self, event_doc):
+        return self.get_descriptor(event_doc)['stream']
 
     def _dispatch(self, name, doc, validate):
         """
@@ -386,6 +410,7 @@ class Filler(DocumentRouter):
                  descriptor_cache=None, inplace=None,
                  retry_intervals=(0.001, 0.002, 0.004, 0.008, 0.016, 0.032,
                                   0.064, 0.128, 0.256, 0.512, 1.024)):
+        super().__init__()
 
         if inplace is None:
             self._inplace = True
@@ -1020,6 +1045,8 @@ class RunRouter(DocumentRouter):
     """
     def __init__(self, factories, handler_registry=None, *,
                  root_map=None, filler_class=Filler, fill_or_fail=False):
+        super().__init__()
+
         self.factories = factories
         self.handler_registry = handler_registry or {}
         self.filler_class = filler_class
