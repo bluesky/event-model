@@ -95,7 +95,7 @@ class DocumentRouter:
         return self._descriptors[event_doc['descriptor']]
 
     def get_stream_name(self, event_doc):
-        return self.get_descriptor(event_doc)['stream']
+        return self.get_descriptor(event_doc)['name']
 
     def _dispatch(self, name, doc, validate):
         """
