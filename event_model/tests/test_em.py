@@ -1189,7 +1189,7 @@ def test_run_router(tmp_path):
         return [header_collector], []
 
     rr = event_model.RunRouter([all_factory])
-    with pytest.warns(UserWarning, match='1.14.0'):
+    with pytest.warns(UserWarning, match='1.14.0'), pytest.raises(LocalException3):
         for name, doc in docs:
             rr(name, doc)
 
@@ -1209,7 +1209,7 @@ def test_run_router(tmp_path):
         return [], [subfactory]
 
     rr = event_model.RunRouter([factory_with_subfactory_only])
-    with pytest.warns(UserWarning, match='1.14.0'):
+    with pytest.warns(UserWarning, match='1.14.0'), pytest.raises(LocalException3):
         for name, doc in docs:
             rr(name, doc)
 
