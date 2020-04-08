@@ -1181,6 +1181,7 @@ class RunRouter(DocumentRouter):
                     warnings.warn(
                         DOCS_PASSED_IN_1_14_0_WARNING.format(
                             callback=callback, name='start', err=err))
+                    raise err
             self._factory_cbs_by_start[uid].extend(callbacks)
             self._subfactories[uid].extend(subfactories)
 
@@ -1205,12 +1206,14 @@ class RunRouter(DocumentRouter):
                     warnings.warn(
                         DOCS_PASSED_IN_1_14_0_WARNING.format(
                             callback=callback, name='start', err=err))
+                    raise err
                 try:
                     callback('descriptor', doc)
                 except Exception as err:
                     warnings.warn(
                         DOCS_PASSED_IN_1_14_0_WARNING.format(
                             callback=callback, name='descriptor', err=err))
+                    raise err
         # Keep track of the RunStart UID -> [EventDescriptor UIDs] mapping for
         # purposes of cleanup in stop().
         self._descriptors[start_uid].append(uid)
