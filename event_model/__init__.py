@@ -185,6 +185,7 @@ class SingleRunDocumentRouter(DocumentRouter):
     A DocumentRouter intended to process events from exactly one run.
     """
     def __init__(self):
+        super().__init__()
         self._start_doc = None
         self._descriptors = dict()
 
