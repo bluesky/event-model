@@ -214,15 +214,17 @@ class SingleRunDocumentRouter(DocumentRouter):
             if self._start_doc is None:
                 self._start_doc = doc
             else:
-                raise EventModelError(
-                    'SingleRunDocumentRouter received a second start document: uid {doc["uid"]}'
+                raise EventModelValueError(
+                    f'SingleRunDocumentRouter associated with start document {self._start_doc["uid"]} '
+                    f'received a second start document with uid {doc["uid"]}'
                 )
         elif name == 'descriptor':
             if doc['run_start'] == self._start_doc['uid']:
                 self._descriptors[doc['uid']] = doc
             else:
-                raise EventModelError(
-                    'SingleRunDocumentRouter received a descriptor associated with a different start document'
+                raise EventModelValueError(
+                    f'SingleRunDocumentRouter associated with start document {self._start_doc["uid"]} '
+                    f'received a descriptor {doc["uid"]} associated with start document {doc["run_start"]}'
                 )
 
         return super().__call__(name, doc, validate)
@@ -254,10 +256,10 @@ class SingleRunDocumentRouter(DocumentRouter):
         descriptor document : dict
         """
         if 'descriptor' not in doc:
-            raise ValueError(f'document is not associated with a descriptor:\n{doc}')
+            raise EventModelValueError(f'document is not associated with a descriptor:\n{doc}')
         elif doc['descriptor'] not in self._descriptors:
-            raise EventModelError(
-                'SingleRunDocumentRouter has not processed a descriptor with uid {doc["descriptor"]}'
+            raise EventModelValueError(
+                f'SingleRunDocumentRouter has not processed a descriptor with uid {doc["descriptor"]}'
             )
 
         return self._descriptors[doc['descriptor']]
