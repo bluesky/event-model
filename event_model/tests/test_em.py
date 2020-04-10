@@ -660,10 +660,10 @@ def test_single_run_document_router():
         seq_num=1)
     sr('event', event3)
 
-    with pytest.raises(ValueError):
+    with pytest.raises(event_model.EventModelValueError):
         sr.get_descriptor(res_bundle.resource_doc)
 
-    with pytest.raises(ValueError):
+    with pytest.raises(event_model.EventModelValueError):
         sr.get_descriptor(datum_doc1)
 
     assert sr.get_descriptor(event1) == desc_bundle.descriptor_doc
@@ -681,13 +681,26 @@ def test_single_run_document_router():
         timestamps={'motor': 0},
         seq_num=1)
 
-    with pytest.raises(event_model.EventModelError):
+    with pytest.raises(event_model.EventModelValueError):
         sr.get_descriptor(event4)
 
-    with pytest.raises(event_model.EventModelError):
+    with pytest.raises(event_model.EventModelValueError):
         sr.get_stream_name(event4)
 
     sr('stop', run_bundle.compose_stop())
+
+    # tests against a second run
+    run_bundle = event_model.compose_run()
+    with pytest.raises(event_model.EventModelValueError):
+        sr('start', run_bundle.start_doc)
+
+    desc_bundle = run_bundle.compose_descriptor(
+        data_keys={'motor': {'shape': [], 'dtype': 'number', 'source': '...'},
+                   'image': {'shape': [512, 512], 'dtype': 'number',
+                             'source': '...', 'external': 'FILESTORE:'}},
+        name='primary')
+    with pytest.raises(event_model.EventModelValueError):
+        sr('descriptor', desc_bundle.descriptor_doc)
 
 
 def test_filler(tmp_path):
