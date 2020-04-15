@@ -191,10 +191,10 @@ class SingleRunDocumentRouter(DocumentRouter):
 
     def __call__(self, name, doc, validate=False):
         """
-        Keep track of the start document and descriptor documents
-        passed to this SingleRunDocumentRouter.
+        Process a document.
 
-        Send documents to the superclass for processing.
+        Also, track of the start document and descriptor documents
+        passed to this SingleRunDocumentRouter in caches.
 
         Parameters
         ----------
@@ -226,7 +226,7 @@ class SingleRunDocumentRouter(DocumentRouter):
                     f'SingleRunDocumentRouter associated with start document {self._start_doc["uid"]} '
                     f'received a descriptor {doc["uid"]} associated with start document {doc["run_start"]}'
                 )
-
+        # Defer to superclass for dispatch/processing.
         return super().__call__(name, doc, validate)
 
     def get_start(self):
