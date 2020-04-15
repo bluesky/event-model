@@ -617,6 +617,92 @@ def test_document_router_dispatch_datum():
     datum_page_calls.clear()
 
 
+def test_single_run_document_router():
+    sr = event_model.SingleRunDocumentRouter()
+    with pytest.raises(event_model.EventModelError):
+        sr.get_start()
+
+    run_bundle = event_model.compose_run()
+    sr('start', run_bundle.start_doc)
+    assert sr.get_start() == run_bundle.start_doc
+
+    desc_bundle = run_bundle.compose_descriptor(
+        data_keys={'motor': {'shape': [], 'dtype': 'number', 'source': '...'},
+                   'image': {'shape': [512, 512], 'dtype': 'number',
+                             'source': '...', 'external': 'FILESTORE:'}},
+        name='primary')
+    sr('descriptor', desc_bundle.descriptor_doc)
+    desc_bundle_baseline = run_bundle.compose_descriptor(
+        data_keys={'motor': {'shape': [], 'dtype': 'number', 'source': '...'}},
+        name='baseline')
+    sr('descriptor', desc_bundle_baseline.descriptor_doc)
+    res_bundle = run_bundle.compose_resource(
+        spec='TIFF', root='/tmp', resource_path='stack.tiff',
+        resource_kwargs={})
+    sr('resource', res_bundle.resource_doc)
+    datum_doc1 = res_bundle.compose_datum(datum_kwargs={'slice': 5})
+    datum_doc2 = res_bundle.compose_datum(datum_kwargs={'slice': 10})
+    sr('datum', datum_doc1)
+    sr('datum', datum_doc2)
+    event1 = desc_bundle.compose_event(
+        data={'motor': 0, 'image': datum_doc1['datum_id']},
+        timestamps={'motor': 0, 'image': 0}, filled={'image': False},
+        seq_num=1)
+    sr('event', event1)
+    event2 = desc_bundle.compose_event(
+        data={'motor': 0, 'image': datum_doc2['datum_id']},
+        timestamps={'motor': 0, 'image': 0}, filled={'image': False},
+        seq_num=2)
+    sr('event', event2)
+    event3 = desc_bundle_baseline.compose_event(
+        data={'motor': 0},
+        timestamps={'motor': 0},
+        seq_num=1)
+    sr('event', event3)
+
+    with pytest.raises(event_model.EventModelValueError):
+        sr.get_descriptor(res_bundle.resource_doc)
+
+    with pytest.raises(event_model.EventModelValueError):
+        sr.get_descriptor(datum_doc1)
+
+    assert sr.get_descriptor(event1) == desc_bundle.descriptor_doc
+    assert sr.get_stream_name(event1) == desc_bundle.descriptor_doc.get('name')
+    assert sr.get_descriptor(event2) == desc_bundle.descriptor_doc
+    assert sr.get_stream_name(event2) == desc_bundle.descriptor_doc.get('name')
+    assert sr.get_descriptor(event3) == desc_bundle_baseline.descriptor_doc
+    assert sr.get_stream_name(event3) == desc_bundle_baseline.descriptor_doc.get('name')
+
+    desc_bundle_unused = run_bundle.compose_descriptor(
+        data_keys={'motor': {'shape': [], 'dtype': 'number', 'source': '...'}},
+        name='unused')
+    event4 = desc_bundle_unused.compose_event(
+        data={'motor': 0},
+        timestamps={'motor': 0},
+        seq_num=1)
+
+    with pytest.raises(event_model.EventModelValueError):
+        sr.get_descriptor(event4)
+
+    with pytest.raises(event_model.EventModelValueError):
+        sr.get_stream_name(event4)
+
+    sr('stop', run_bundle.compose_stop())
+
+    # tests against a second run
+    run_bundle = event_model.compose_run()
+    with pytest.raises(event_model.EventModelValueError):
+        sr('start', run_bundle.start_doc)
+
+    desc_bundle = run_bundle.compose_descriptor(
+        data_keys={'motor': {'shape': [], 'dtype': 'number', 'source': '...'},
+                   'image': {'shape': [512, 512], 'dtype': 'number',
+                             'source': '...', 'external': 'FILESTORE:'}},
+        name='primary')
+    with pytest.raises(event_model.EventModelValueError):
+        sr('descriptor', desc_bundle.descriptor_doc)
+
+
 def test_filler(tmp_path):
 
     class DummyHandler:
@@ -1116,7 +1202,7 @@ def test_run_router(tmp_path):
         return [header_collector], []
 
     rr = event_model.RunRouter([all_factory])
-    with pytest.warns(UserWarning, match='1.14.0'):
+    with pytest.warns(UserWarning, match='1.14.0'), pytest.raises(LocalException3):
         for name, doc in docs:
             rr(name, doc)
 
@@ -1136,7 +1222,7 @@ def test_run_router(tmp_path):
         return [], [subfactory]
 
     rr = event_model.RunRouter([factory_with_subfactory_only])
-    with pytest.warns(UserWarning, match='1.14.0'):
+    with pytest.warns(UserWarning, match='1.14.0'), pytest.raises(LocalException3):
         for name, doc in docs:
             rr(name, doc)
 

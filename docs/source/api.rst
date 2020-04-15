@@ -18,6 +18,10 @@ a schema and an associated :class:`jsonschema.IValidator`.
    :members:
    :undoc-members:
 
+.. autoclass:: event_model.SingleRunDocumentRouter
+   :members:
+   :undoc-members:
+
 .. autoclass:: event_model.DocumentRouter
    :members:
    :undoc-members:

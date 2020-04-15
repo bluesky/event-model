@@ -180,6 +180,105 @@ class DocumentRouter:
         self.datum_page(bulk_datum_to_datum_page(doc))
 
 
+class SingleRunDocumentRouter(DocumentRouter):
+    """
+    A DocumentRouter intended to process events from exactly one run.
+    """
+    def __init__(self):
+        super().__init__()
+        self._start_doc = None
+        self._descriptors = dict()
+
+    def __call__(self, name, doc, validate=False):
+        """
+        Process a document.
+
+        Also, track of the start document and descriptor documents
+        passed to this SingleRunDocumentRouter in caches.
+
+        Parameters
+        ----------
+        name : string
+        doc : dict
+        validate : boolean
+            Apply jsonschema validation to the documents coming *out*. This is
+            False by default.
+
+        Returns
+        -------
+        name, output_doc : string, dict
+            The same name as what was passed in, and a doc that may be the same
+            instance as doc, a copy of doc, or a different dict altogether.
+        """
+        if name == 'start':
+            if self._start_doc is None:
+                self._start_doc = doc
+            else:
+                raise EventModelValueError(
+                    f'SingleRunDocumentRouter associated with start document {self._start_doc["uid"]} '
+                    f'received a second start document with uid {doc["uid"]}'
+                )
+        elif name == 'descriptor':
+            if doc['run_start'] == self._start_doc['uid']:
+                self._descriptors[doc['uid']] = doc
+            else:
+                raise EventModelValueError(
+                    f'SingleRunDocumentRouter associated with start document {self._start_doc["uid"]} '
+                    f'received a descriptor {doc["uid"]} associated with start document {doc["run_start"]}'
+                )
+        # Defer to superclass for dispatch/processing.
+        return super().__call__(name, doc, validate)
+
+    def get_start(self):
+        """Convenience method returning the start document for the associated run.
+
+        If no start document has been processed EventModelError will be raised.
+
+        Returns
+        -------
+        start document : dict
+        """
+        if self._start_doc is None:
+            raise EventModelError('SingleRunDocumentRouter has not processed a start document yet')
+
+        return self._start_doc
+
+    def get_descriptor(self, doc):
+        """Convenience method returning the descriptor associated with the specified document.
+
+        Parameters
+        ----------
+        doc : dict
+            event-model document
+
+        Returns
+        -------
+        descriptor document : dict
+        """
+        if 'descriptor' not in doc:
+            raise EventModelValueError(f'document is not associated with a descriptor:\n{doc}')
+        elif doc['descriptor'] not in self._descriptors:
+            raise EventModelValueError(
+                f'SingleRunDocumentRouter has not processed a descriptor with uid {doc["descriptor"]}'
+            )
+
+        return self._descriptors[doc['descriptor']]
+
+    def get_stream_name(self, doc):
+        """Convenience method returning the name of the stream for the specified document.
+
+        Parameters
+        ----------
+        doc : dict
+            event-model document
+
+        Returns
+        -------
+        stream name : str
+        """
+        return self.get_descriptor(doc).get('name')
+
+
 class HandlerRegistryView(collections.abc.Mapping):
     def __init__(self, handler_registry):
         self._handler_registry = handler_registry
@@ -386,7 +485,6 @@ class Filler(DocumentRouter):
                  descriptor_cache=None, inplace=None,
                  retry_intervals=(0.001, 0.002, 0.004, 0.008, 0.016, 0.032,
                                   0.064, 0.128, 0.256, 0.512, 1.024)):
-
         if inplace is None:
             self._inplace = True
             warnings.warn(
@@ -1085,6 +1183,7 @@ class RunRouter(DocumentRouter):
                     warnings.warn(
                         DOCS_PASSED_IN_1_14_0_WARNING.format(
                             callback=callback, name='start', err=err))
+                    raise err
             self._factory_cbs_by_start[uid].extend(callbacks)
             self._subfactories[uid].extend(subfactories)
 
@@ -1109,12 +1208,14 @@ class RunRouter(DocumentRouter):
                     warnings.warn(
                         DOCS_PASSED_IN_1_14_0_WARNING.format(
                             callback=callback, name='start', err=err))
+                    raise err
                 try:
                     callback('descriptor', doc)
                 except Exception as err:
                     warnings.warn(
                         DOCS_PASSED_IN_1_14_0_WARNING.format(
                             callback=callback, name='descriptor', err=err))
+                    raise err
         # Keep track of the RunStart UID -> [EventDescriptor UIDs] mapping for
         # purposes of cleanup in stop().
         self._descriptors[start_uid].append(uid)
