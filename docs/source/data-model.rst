@@ -209,7 +209,7 @@ Typical example:
 
 Formal schema:
 
-.. literalinclude:: ../../event_model/schemas/run_start.json
+.. literalinclude:: ../../event_model/schemas/event_descriptor.json
 
 .. _event:
 
