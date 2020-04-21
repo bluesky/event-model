@@ -1,6 +1,9 @@
-*****************
-API Documentation
-*****************
+===================
+ API Documentation
+===================
+
+Schemas and Names
+=================
 
 The ``event-model`` Python package contains tooling for composing, validating,
 and transforming documents in the model.
@@ -13,6 +16,11 @@ There are two dictionaries, :data:`event_model.schemas` and
 :data:`event_model.schema_validators`, which are keyed on the members of the
 :class:`event_model.DocumentNames` enum and which are mapped, respectively, to
 a schema and an associated :class:`jsonschema.IValidator`.
+
+
+Routers
+=======
+
 
 .. autoclass:: event_model.RunRouter
    :members:
@@ -36,22 +44,14 @@ a schema and an associated :class:`jsonschema.IValidator`.
 
 .. autofunction:: event_model.as_is
 
+
 .. autofunction:: event_model.force_numpy
 
 .. autofunction:: event_model.verify_filled
 
-.. autofunction:: event_model.pack_event_page
 
-.. autofunction:: event_model.unpack_event_page
-
-.. autofunction:: event_model.pack_datum_page
-
-.. autofunction:: event_model.unpack_datum_page
-
-.. autofunction:: event_model.sanitize_doc
-
-.. autoclass:: event_model.NumpyEncoder
-   :members:
+Document Minting
+================
 
 .. autofunction:: event_model.compose_run
 
@@ -68,3 +68,21 @@ a schema and an associated :class:`jsonschema.IValidator`.
 .. autofunction:: event_model.compose_event_page
 
 .. autofunction:: event_model.compose_stop
+
+
+Document Munging
+================
+
+
+.. autofunction:: event_model.pack_event_page
+
+.. autofunction:: event_model.unpack_event_page
+
+.. autofunction:: event_model.pack_datum_page
+
+.. autofunction:: event_model.unpack_datum_page
+
+.. autofunction:: event_model.sanitize_doc
+
+.. autoclass:: event_model.NumpyEncoder
+   :members:
