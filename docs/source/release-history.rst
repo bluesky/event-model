@@ -2,6 +2,28 @@
 Release History
 ***************
 
+v1.15.0 (2020-04-27)
+====================
+
+Fixed
+-----
+
+* In the data model documentation an erroneous link to the RunStart schema
+  was corrected to a link to the EventDescriptor schema.
+
+Changed
+-------
+
+* :class:`~event_model.SingleRunDocumentRouter` was added with convenience
+  methods for getting the start document, the descriptor document for an event
+  document, and the stream name for an event document.
+* In v1.14.0, :class:`~event_model.RunRouter` was changed to pass the
+  RunStart document directly to its callbacks. To smooth the transition, any
+  ``Exception`` raised by the callbacks was squashed and a warning printed. With
+  v1.15.0 these ``Exception``s are allowed to propagate. The warning is still
+  printed.
+
+
 v1.14.1 (2020-04-06)
 ====================
 
