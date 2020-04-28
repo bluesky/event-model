@@ -20,7 +20,7 @@ Changed
 * In v1.14.0, :class:`~event_model.RunRouter` was changed to pass the
   RunStart document directly to its callbacks. To smooth the transition, any
   ``Exception`` raised by the callbacks was squashed and a warning printed. With
-  v1.15.0 these ``Exception``s are allowed to propagate. The warning is still
+  v1.15.0 these Exceptions are allowed to propagate. The warning is still
   printed.
 
 
