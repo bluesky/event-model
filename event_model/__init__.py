@@ -1146,7 +1146,7 @@ class RunRouter(DocumentRouter):
 
         # Map RunStart UID to the list EventDescriptor. This is used to
         # facilitate efficient cleanup of the caches above.
-        self._descriptors = defaultdict(list)
+        self._start_to_descriptors = defaultdict(list)
 
         # Map EventDescriptor UID to RunStart UID. This is used for looking up
         # Fillers.
@@ -1218,7 +1218,7 @@ class RunRouter(DocumentRouter):
                     raise err
         # Keep track of the RunStart UID -> [EventDescriptor UIDs] mapping for
         # purposes of cleanup in stop().
-        self._descriptors[start_uid].append(uid)
+        self._start_to_descriptors[start_uid].append(uid)
         # Keep track of the EventDescriptor UID -> RunStartUID for filling
         # purposes.
         self._descriptor_to_start[uid] = start_uid
@@ -1302,7 +1302,7 @@ class RunRouter(DocumentRouter):
         self._subfactories.pop(start_uid, None)
         self._factory_cbs_by_start.pop(start_uid, None)
         self._subfactory_cbs_by_start.pop(start_uid, None)
-        for descriptor_uid in self._descriptors.pop(start_uid, ()):
+        for descriptor_uid in self._start_to_descriptors.pop(start_uid, ()):
             self._descriptor_to_start.pop(descriptor_uid, None)
             self._factory_cbs_by_descriptor.pop(descriptor_uid, None)
             self._subfactory_cbs_by_descriptor.pop(descriptor_uid, None)
