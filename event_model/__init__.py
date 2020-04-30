@@ -1144,6 +1144,10 @@ class RunRouter(DocumentRouter):
         # keyed on the RunStart UID referenced by that EventDescriptor.
         self._subfactory_cbs_by_start = defaultdict(list)
 
+        # Map RunStart UID to RunStart document. This is used to send
+        # RunStart documents to subfactory callbacks.
+        self._start_to_start_doc = dict()
+
         # Map RunStart UID to the list EventDescriptor. This is used to
         # facilitate efficient cleanup of the caches above.
         self._start_to_descriptors = defaultdict(list)
@@ -1307,6 +1311,7 @@ class RunRouter(DocumentRouter):
             self._factory_cbs_by_descriptor.pop(descriptor_uid, None)
             self._subfactory_cbs_by_descriptor.pop(descriptor_uid, None)
         self._resources.pop(start_uid, None)
+        self._start_to_start_doc.pop(start_uid, None)
 
 
 class EventModelError(Exception):
