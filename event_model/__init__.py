@@ -1144,9 +1144,13 @@ class RunRouter(DocumentRouter):
         # keyed on the RunStart UID referenced by that EventDescriptor.
         self._subfactory_cbs_by_start = defaultdict(list)
 
+        # Map RunStart UID to RunStart document. This is used to send
+        # RunStart documents to subfactory callbacks.
+        self._start_to_start_doc = dict()
+
         # Map RunStart UID to the list EventDescriptor. This is used to
         # facilitate efficient cleanup of the caches above.
-        self._descriptors = defaultdict(list)
+        self._start_to_descriptors = defaultdict(list)
 
         # Map EventDescriptor UID to RunStart UID. This is used for looking up
         # Fillers.
@@ -1166,8 +1170,9 @@ class RunRouter(DocumentRouter):
                 f"\n".join(f"    {factory}" for factory in self.factories) +
                 f"])")
 
-    def start(self, doc):
-        uid = doc['uid']
+    def start(self, start_doc):
+        uid = start_doc['uid']
+        self._start_to_start_doc[uid] = start_doc
         filler = self.filler_class(self.handler_registry,
                                    root_map=self.root_map,
                                    inplace=False)
@@ -1175,10 +1180,10 @@ class RunRouter(DocumentRouter):
         # No need to pass the document to filler
         # because Fillers do nothing with 'start'.
         for factory in self.factories:
-            callbacks, subfactories = factory('start', doc)
+            callbacks, subfactories = factory('start', start_doc)
             for callback in callbacks:
                 try:
-                    callback('start', doc)
+                    callback('start', start_doc)
                 except Exception as err:
                     warnings.warn(
                         DOCS_PASSED_IN_1_14_0_WARNING.format(
@@ -1187,30 +1192,31 @@ class RunRouter(DocumentRouter):
             self._factory_cbs_by_start[uid].extend(callbacks)
             self._subfactories[uid].extend(subfactories)
 
-    def descriptor(self, doc):
-        uid = doc['uid']
-        start_uid = doc['run_start']
-        self._fillers[start_uid].descriptor(doc)
+    def descriptor(self, descriptor_doc):
+        uid = descriptor_doc['uid']
+        start_uid = descriptor_doc['run_start']
+        self._fillers[start_uid].descriptor(descriptor_doc)
         # Apply all factory cbs for this run to this descriptor, and run them.
         factory_cbs = self._factory_cbs_by_start[start_uid]
         self._factory_cbs_by_descriptor[uid].extend(factory_cbs)
         for callback in factory_cbs:
-            callback('descriptor', doc)
-        # Let all the subfactories add any relavant callbacks.
+            callback('descriptor', descriptor_doc)
+        # Let all the subfactories add any relevant callbacks.
         for subfactory in self._subfactories[start_uid]:
-            callbacks = subfactory('descriptor', doc)
+            callbacks = subfactory('descriptor', descriptor_doc)
             self._subfactory_cbs_by_start[start_uid].extend(callbacks)
             self._subfactory_cbs_by_descriptor[uid].extend(callbacks)
             for callback in callbacks:
                 try:
-                    callback('start', doc)
+                    start_doc = self._start_to_start_doc[start_uid]
+                    callback('start', start_doc)
                 except Exception as err:
                     warnings.warn(
                         DOCS_PASSED_IN_1_14_0_WARNING.format(
                             callback=callback, name='start', err=err))
                     raise err
                 try:
-                    callback('descriptor', doc)
+                    callback('descriptor', descriptor_doc)
                 except Exception as err:
                     warnings.warn(
                         DOCS_PASSED_IN_1_14_0_WARNING.format(
@@ -1218,7 +1224,7 @@ class RunRouter(DocumentRouter):
                     raise err
         # Keep track of the RunStart UID -> [EventDescriptor UIDs] mapping for
         # purposes of cleanup in stop().
-        self._descriptors[start_uid].append(uid)
+        self._start_to_descriptors[start_uid].append(uid)
         # Keep track of the EventDescriptor UID -> RunStartUID for filling
         # purposes.
         self._descriptor_to_start[uid] = start_uid
@@ -1302,11 +1308,12 @@ class RunRouter(DocumentRouter):
         self._subfactories.pop(start_uid, None)
         self._factory_cbs_by_start.pop(start_uid, None)
         self._subfactory_cbs_by_start.pop(start_uid, None)
-        for descriptor_uid in self._descriptors.pop(start_uid, ()):
+        for descriptor_uid in self._start_to_descriptors.pop(start_uid, ()):
             self._descriptor_to_start.pop(descriptor_uid, None)
             self._factory_cbs_by_descriptor.pop(descriptor_uid, None)
             self._subfactory_cbs_by_descriptor.pop(descriptor_uid, None)
         self._resources.pop(start_uid, None)
+        self._start_to_start_doc.pop(start_uid, None)
 
 
 class EventModelError(Exception):
