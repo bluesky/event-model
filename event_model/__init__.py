@@ -1192,30 +1192,31 @@ class RunRouter(DocumentRouter):
             self._factory_cbs_by_start[uid].extend(callbacks)
             self._subfactories[uid].extend(subfactories)
 
-    def descriptor(self, doc):
-        uid = doc['uid']
-        start_uid = doc['run_start']
-        self._fillers[start_uid].descriptor(doc)
+    def descriptor(self, descriptor_doc):
+        uid = descriptor_doc['uid']
+        start_uid = descriptor_doc['run_start']
+        self._fillers[start_uid].descriptor(descriptor_doc)
         # Apply all factory cbs for this run to this descriptor, and run them.
         factory_cbs = self._factory_cbs_by_start[start_uid]
         self._factory_cbs_by_descriptor[uid].extend(factory_cbs)
         for callback in factory_cbs:
-            callback('descriptor', doc)
-        # Let all the subfactories add any relavant callbacks.
+            callback('descriptor', descriptor_doc)
+        # Let all the subfactories add any relevant callbacks.
         for subfactory in self._subfactories[start_uid]:
-            callbacks = subfactory('descriptor', doc)
+            callbacks = subfactory('descriptor', descriptor_doc)
             self._subfactory_cbs_by_start[start_uid].extend(callbacks)
             self._subfactory_cbs_by_descriptor[uid].extend(callbacks)
             for callback in callbacks:
                 try:
-                    callback('start', doc)
+                    start_doc = self._start_to_start_doc[start_uid]
+                    callback('start', start_doc)
                 except Exception as err:
                     warnings.warn(
                         DOCS_PASSED_IN_1_14_0_WARNING.format(
                             callback=callback, name='start', err=err))
                     raise err
                 try:
-                    callback('descriptor', doc)
+                    callback('descriptor', descriptor_doc)
                 except Exception as err:
                     warnings.warn(
                         DOCS_PASSED_IN_1_14_0_WARNING.format(
