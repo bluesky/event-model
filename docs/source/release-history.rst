@@ -8,7 +8,7 @@ v1.15.1 (2020-05-01)
 Fixed
 -----
 
-* A bug was fixed in :class:`_event_model.RunRouter` which caused descriptor
+* A bug was fixed in :class:`~event_model.RunRouter` which caused descriptor
   documents to be sent to subfactory callback start methods.
 
 
