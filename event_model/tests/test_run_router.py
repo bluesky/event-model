@@ -197,6 +197,7 @@ def test_run_router(tmp_path):
 
 
 def test_subfactory():
+    # this test targeted the bug described in issue #170
     factory_documents = defaultdict(list)
     subfactory_documents = defaultdict(list)
 
@@ -212,24 +213,33 @@ def test_subfactory():
 
         return [collect_factory_documents], [subfactory]
 
-    rr = RunRouter([factory])
+    rr = event_model.RunRouter([factory])
 
-    run_bundle = compose_run()
+    run_bundle = event_model.compose_run()
     rr("start", run_bundle.start_doc)
     assert len(factory_documents) == 1
     assert len(factory_documents["start"]) == 1
     assert factory_documents["start"] == [run_bundle.start_doc]
     assert len(subfactory_documents) == 0
 
-    desc_bundle = run_bundle.compose_descriptor(
+    descriptor_bundle = run_bundle.compose_descriptor(
         data_keys={"motor": {"shape": [], "dtype": "number", "source": "..."}},
         name="primary",
     )
-    rr("descriptor", desc_bundle.descriptor_doc)
+    rr("descriptor", descriptor_bundle.descriptor_doc)
     assert len(factory_documents) == 2
     assert len(factory_documents["start"]) == 1
     assert factory_documents["start"] == [run_bundle.start_doc]
-    assert factory_documents["descriptor"] == [desc_bundle.descriptor_doc]
+    assert len(factory_documents["descriptor"]) == 1
+    assert factory_documents["descriptor"] == [descriptor_bundle.descriptor_doc]
+
     assert len(subfactory_documents) == 2
-    assert subfactory_documents["start"] == [desc_bundle.descriptor_doc]
-    assert subfactory_documents["descriptor"] == [desc_bundle.descriptor_doc]
+    assert len(subfactory_documents["start"]) == 1
+    assert subfactory_documents["start"] == [run_bundle.start_doc]
+    assert len(subfactory_documents["descriptor"]) == 1
+    assert subfactory_documents["descriptor"] == [descriptor_bundle.descriptor_doc]
+
+    stop_doc = run_bundle.compose_stop()
+    rr("stop", stop_doc)
+
+    assert len(rr._start_to_start_doc) == 0
