@@ -1170,8 +1170,9 @@ class RunRouter(DocumentRouter):
                 f"\n".join(f"    {factory}" for factory in self.factories) +
                 f"])")
 
-    def start(self, doc):
-        uid = doc['uid']
+    def start(self, start_doc):
+        uid = start_doc['uid']
+        self._start_to_start_doc[uid] = start_doc
         filler = self.filler_class(self.handler_registry,
                                    root_map=self.root_map,
                                    inplace=False)
@@ -1179,10 +1180,10 @@ class RunRouter(DocumentRouter):
         # No need to pass the document to filler
         # because Fillers do nothing with 'start'.
         for factory in self.factories:
-            callbacks, subfactories = factory('start', doc)
+            callbacks, subfactories = factory('start', start_doc)
             for callback in callbacks:
                 try:
-                    callback('start', doc)
+                    callback('start', start_doc)
                 except Exception as err:
                     warnings.warn(
                         DOCS_PASSED_IN_1_14_0_WARNING.format(
