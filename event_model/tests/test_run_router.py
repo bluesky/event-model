@@ -208,7 +208,7 @@ def test_subfactory():
             subfactory_documents[name].append(doc)
 
         def subfactory(name, descriptor_doc):
-            return [collect_factory_documents]
+            return [collect_subfactory_documents]
 
         return [collect_factory_documents], [subfactory]
 
