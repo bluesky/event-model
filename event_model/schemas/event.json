@@ -33,7 +33,6 @@
     "required": [
         "uid",
         "data",
-        "timestamps",
         "time",
         "descriptor",
         "seq_num"

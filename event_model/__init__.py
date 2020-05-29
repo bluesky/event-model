@@ -1506,7 +1506,7 @@ def compose_stop(*, start, event_counter, poison_pill,
     return doc
 
 
-def compose_event_page(*, descriptor, event_counter, data, timestamps, seq_num,
+def compose_event_page(*, descriptor, event_counter, data, timestamps=None, seq_num,
                        filled=None, uid=None, time=None, validate=True):
     N = len(seq_num)
     if uid is None:
@@ -1518,13 +1518,15 @@ def compose_event_page(*, descriptor, event_counter, data, timestamps, seq_num,
     doc = {'uid': uid,
            'time': time,
            'data': data,
-           'timestamps': timestamps,
            'seq_num': seq_num,
            'filled': filled,
            'descriptor': descriptor['uid']}
+    if timestamps is not None:
+        doc['timestamps'] = timestamps
     if validate:
         schema_validators[DocumentNames.event_page].validate(doc)
-        if not (descriptor['data_keys'].keys() == data.keys() == timestamps.keys()):
+        if not (descriptor['data_keys'].keys() == data.keys() and
+                (timestamps is None or data.keys() == timestamps.keys())):
             raise EventModelValidationError(
                 "These sets of keys must match:\n"
                 "event['data'].keys(): {}\n"
@@ -1539,7 +1541,7 @@ def compose_event_page(*, descriptor, event_counter, data, timestamps, seq_num,
     return doc
 
 
-def compose_event(*, descriptor, event_counter, data, timestamps, seq_num=None,
+def compose_event(*, descriptor, event_counter, data, timestamps=None, seq_num=None,
                   filled=None, uid=None, time=None, validate=True):
     if seq_num is None:
         seq_num = event_counter[descriptor['name']]
@@ -1552,13 +1554,15 @@ def compose_event(*, descriptor, event_counter, data, timestamps, seq_num=None,
     doc = {'uid': uid,
            'time': time,
            'data': data,
-           'timestamps': timestamps,
            'seq_num': seq_num,
            'filled': filled,
            'descriptor': descriptor['uid']}
+    if timestamps is not None:
+        doc['timestamps'] = timestamps
     if validate:
         schema_validators[DocumentNames.event].validate(doc)
-        if not (descriptor['data_keys'].keys() == data.keys() == timestamps.keys()):
+        if not (descriptor['data_keys'].keys() == data.keys() and
+                (timestamps is None or data.keys() == timestamps.keys())):
             raise EventModelValidationError(
                 "These sets of keys must match:\n"
                 "event['data'].keys(): {}\n"
