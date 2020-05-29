@@ -47,25 +47,33 @@ Routers
 
 .. autofunction:: event_model.force_numpy
 
-.. autofunction:: event_model.verify_filled
-
 
 Document Minting
 ================
 
+To use these functions start with :func:`.compose_run` which will
+return a :obj:`.ComposeRunBundle`.
+
 .. autofunction:: event_model.compose_run
+
+.. autoclass:: event_model.ComposeRunBundle
 
 .. autofunction:: event_model.compose_descriptor
 
+.. autoclass:: event_model.ComposeDescriptorBundle
+
+.. autofunction:: event_model.compose_event
+
+.. autofunction:: event_model.compose_event_page
+
 .. autofunction:: event_model.compose_resource
+
+.. autoclass:: event_model.ComposeResourceBundle
 
 .. autofunction:: event_model.compose_datum
 
 .. autofunction:: event_model.compose_datum_page
 
-.. autofunction:: event_model.compose_event
-
-.. autofunction:: event_model.compose_event_page
 
 .. autofunction:: event_model.compose_stop
 
@@ -83,6 +91,8 @@ Document Munging
 .. autofunction:: event_model.unpack_datum_page
 
 .. autofunction:: event_model.sanitize_doc
+
+.. autofunction:: event_model.verify_filled
 
 .. autoclass:: event_model.NumpyEncoder
    :members:
