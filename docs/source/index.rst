@@ -29,7 +29,7 @@ you should look for / put different kinds of information
 * Who you are / where you are → *Start* Document
 * References to external databases → *Start* Document
 * The Data™  → *Event* Document
-* Detector calibrations, dark frames, flat fields , or masks  → *Event* Document (probably in it's own stream)
+* Detector calibrations, dark frames, flat fields , or masks  → *Event* Document (probably in its own stream)
 * The shape / data type / units of The Data™  → *Event Descriptor* Document in the *data_keys* entry
 * Anything you read from the controls system that is not device configuration  → *Event* Document
 * Device configuration data  → *Event Descriptor* Document in the *configuration* entry
