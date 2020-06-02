@@ -6,6 +6,9 @@ matrix:
     - python: 3.6
     - python: 3.7
       env: PUBLISH_DOCS=1
+    - python: 3.7
+      env: JSONSCHEMA_2=1
+    - python: 3.8
     - python: nightly
   allow_failures:
     - python: nightly
@@ -27,6 +30,11 @@ install:
   - pip install .
   # Install extra requirements for running tests and building docs.
   - pip install -r requirements-dev.txt
+  # In some builds, tests against older jsonschema.
+  - |
+    if [ $JSONSCHEMA_2 ]; then
+      pip install "jsonschema==2"
+    fi
 
 script:
   - coverage run -m pytest  # Run the tests and check for test coverage.

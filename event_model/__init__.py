@@ -1,5 +1,6 @@
 from collections import defaultdict, deque, namedtuple
 import collections.abc
+from distutils.version import LooseVersion
 import copy
 import json
 from enum import Enum
@@ -9,6 +10,7 @@ import os
 from pkg_resources import resource_filename as rs_fn
 import threading
 import time as ttime
+import types
 import uuid
 import warnings
 
@@ -1166,9 +1168,9 @@ class RunRouter(DocumentRouter):
         self._fillers = {}
 
     def __repr__(self):
-        return (f"RunRouter([\n" +
-                f"\n".join(f"    {factory}" for factory in self.factories) +
-                f"])")
+        return ("RunRouter([\n" +
+                "\n".join(f"    {factory}" for factory in self.factories) +
+                "])")
 
     def start(self, start_doc):
         uid = start_doc['uid']
@@ -1406,23 +1408,32 @@ for name, filename in SCHEMA_NAMES.items():
         schemas[name] = json.load(fin)
 
 
-def _is_array(checker, instance):
-    return (
-        isinstance(instance, numpy.ndarray) or
-        jsonschema.validators.Draft7Validator.TYPE_CHECKER.is_type(instance, 'array') or
-        isinstance(instance, tuple)
-    )
+# We pin jsonschema >=3.0.0 in requirements.txt but due to pip's dependency
+# resolution it is easy to end up with an environment where that pin is not
+# respected. Thus, we maintain best-effort support for 2.x.
+if LooseVersion(jsonschema.__version__) >= LooseVersion("3.0.0"):
+    def _is_array(checker, instance):
+        return (
+            isinstance(instance, numpy.ndarray) or
+            jsonschema.validators.Draft7Validator.TYPE_CHECKER.is_type(instance, 'array') or
+            isinstance(instance, tuple)
+        )
 
+    _array_type_checker = jsonschema.validators.Draft7Validator.TYPE_CHECKER.redefine('array', _is_array)
 
-_array_type_checker = jsonschema.validators.Draft7Validator.TYPE_CHECKER.redefine('array', _is_array)
+    _Validator = jsonschema.validators.extend(
+        jsonschema.validators.Draft7Validator,
+        type_checker=_array_type_checker)
 
-
-_Validator = jsonschema.validators.extend(
-    jsonschema.validators.Draft7Validator,
-    type_checker=_array_type_checker)
-
-
-schema_validators = {name: _Validator(schema=schema) for name, schema in schemas.items()}
+    schema_validators = {name: _Validator(schema=schema) for name, schema in schemas.items()}
+else:
+    # Make objects that mock the one method on the jsonschema 3.x
+    # Draft7Validator API that we need.
+    schema_validators = {
+        name: types.SimpleNamespace(
+            validate=partial(jsonschema.validate, schema=schema, types={'array': (list, tuple)}))
+        for name, schema in schemas.items()
+    }
 
 
 __version__ = get_versions()['version']
