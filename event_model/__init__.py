@@ -348,6 +348,8 @@ def force_numpy(handler_class, filler_state):
             raw_result = super().__call__(*args, **kwargs)
             result_as_array = numpy.asarray(raw_result)
             return result_as_array
+    Subclass.__name__ = f"Subclassed{handler_class.__name__}"
+    Subclass.__qualname__ = f"Subclassed{handler_class.__qualname__}"
     return Subclass
 
 
