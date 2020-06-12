@@ -2,6 +2,17 @@
 Release History
 ***************
 
+v1.15.2 (2020-06-12)
+====================
+
+Added
+-----
+
+* Various documentation additions.
+* ``jsonschema 2.x`` compatibility.
+* Better naming for handler subclasses.
+
+
 v1.15.1 (2020-05-01)
 ====================
 
