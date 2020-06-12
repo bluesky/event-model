@@ -1162,9 +1162,9 @@ class RunRouter(DocumentRouter):
         self._fillers = {}
 
     def __repr__(self):
-        return (f"RunRouter([\n" +
-                f"\n".join(f"    {factory}" for factory in self.factories) +
-                f"])")
+        return ("RunRouter([\n" +
+                "\n".join(f"    {factory}" for factory in self.factories) +
+                "])")
 
     def start(self, doc):
         uid = doc['uid']
