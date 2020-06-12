@@ -9,7 +9,7 @@ Added
 -----
 
 * Various documentation additions.
-* `jsonschema 2.x` compatibility.
+* ``jsonschema 2.x`` compatibility.
 * Better naming for handler subclasses.
 
 
