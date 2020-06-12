@@ -1641,6 +1641,10 @@ def compose_run(*, uid=None, time=None, metadata=None, validate=True):
         Additional metadata include the document
     validate : boolean, optional
         Validate this document conforms to the schema.
+
+    Returns
+    -------
+    ComposeRunBundle
     """
     if uid is None:
         uid = str(uuid.uuid4())
