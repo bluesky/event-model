@@ -6,6 +6,7 @@ import json
 from enum import Enum
 from functools import partial
 import itertools
+import inspect
 import os
 from pkg_resources import resource_filename as rs_fn
 import threading
@@ -13,6 +14,7 @@ import time as ttime
 import types
 import uuid
 import warnings
+import weakref
 
 import jsonschema
 import numpy
@@ -54,7 +56,42 @@ class DocumentRouter:
     Finally, the call to ``router(name, doc)`` returns::
 
         (name, getattr(router, name)(doc))
+
+    Parameters
+    ----------
+    emit: callable, optional
+        Expected signature ``f(name, doc)``
     """
+    def __init__(self, *, emit=None):
+        # Put in some extra effort to validate `emit` carefully, because if
+        # this is used incorrectly the resultant errors can be confusing.
+        if emit is not None:
+            if not callable(emit):
+                raise ValueError("emit must be a callable")
+            sig = inspect.signature(emit)
+            try:
+                # Does this function accept two positional arguments?
+                sig.bind(None, None)
+            except TypeError:
+                raise ValueError("emit must accept two position arguments, name and doc")
+            # Stash a weak reference to `emit`.
+            if inspect.ismethod(emit):
+                self._downstream = weakref.WeakMethod(emit)
+            else:
+                self._downstream = weakref.ref(emit)
+        else:
+            self._downstream = None
+
+    def emit(self, name, doc):
+        """
+        Emit to the callable provided an instantiation time, if any.
+        """
+        if self._downstream is not None:
+            # Call the weakref.
+            ref = self._downstream()
+            if ref is not None:
+                ref(name, doc)
+
     def __call__(self, name, doc, validate=False):
         """
         Process a document.
