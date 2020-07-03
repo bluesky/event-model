@@ -4,6 +4,41 @@
             "title" : "data_type",
             "patternProperties": {"^([^./]+)$": {"$ref": "#/definitions/data_type"}},
             "additionalProperties": false
+        },
+        "projection": {
+            "description": "Where to get the data from",
+            "type": "object",
+            "properties" : {
+                "stream": {"type": "string"},
+                "location": {"enum" : ["event", "configuration"]},
+                "field": {"type": "string"},
+                "slice_args": {
+                    "type": "array", 
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            },
+            "required" : ["stream", "location", "field"],
+            "additionalProperties": false
+        },
+        "projections": {
+            "title" : "Describe how to interperet this run as the given technique",
+            "properties":{
+                "name": {"type": "string",
+                            "description": "The name of the projection"},
+                "version": {"type": "string",
+                            "description": "The version of the projection spec. Can specify the version of an external specification."},
+                "configuration" : {"type": "object",
+                                "description": "Static information about technique"},
+                "projection" : {
+                    "type": "object",
+                    "patternProperties": {".": {"$ref": "#/definitions/projection"}},
+                    "additionalProperties": false
+                }
+            },
+            "additionalProperties":  false,
+            "required" : ["projection", "version", "configuration", "projection"]
         }
     },
     "properties": {
@@ -34,6 +69,10 @@
         "owner": {
             "type": "string",
             "description": "Unix owner to associate this data with"
+        },
+        "projections": {
+            "type": "array",
+            "items": {"$ref": "#/definitions/projections"}
         },
         "hints": {
             "type": "object",
