@@ -76,21 +76,21 @@ class DocumentRouter:
                 raise ValueError("emit must accept two positional arguments, name and doc")
             # Stash a weak reference to `emit`.
             if inspect.ismethod(emit):
-                self._downstream = weakref.WeakMethod(emit)
+                self._emit_ref = weakref.WeakMethod(emit)
             else:
-                self._downstream = weakref.ref(emit)
+                self._emit_ref = weakref.ref(emit)
         else:
-            self._downstream = None
+            self._emit_ref = None
 
     def emit(self, name, doc):
         """
         Emit to the callable provided an instantiation time, if any.
         """
-        if self._downstream is not None:
+        if self._emit_ref is not None:
             # Call the weakref.
-            ref = self._downstream()
-            if ref is not None:
-                ref(name, doc)
+            emit = self._emit_ref()
+            if emit is not None:
+                emit(name, doc)
 
     def __call__(self, name, doc, validate=False):
         """
