@@ -73,7 +73,7 @@ class DocumentRouter:
                 # Does this function accept two positional arguments?
                 sig.bind(None, None)
             except TypeError:
-                raise ValueError("emit must accept two position arguments, name and doc")
+                raise ValueError("emit must accept two positional arguments, name and doc")
             # Stash a weak reference to `emit`.
             if inspect.ismethod(emit):
                 self._downstream = weakref.WeakMethod(emit)
