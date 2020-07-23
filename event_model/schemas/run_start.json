@@ -10,7 +10,7 @@
             "type": "object",
             "properties" : {
                 "stream": {"type": "string"},
-                "location": {"enum" : ["event", "configuration"]},
+                "location": {"enum" : ["event", "configuration"], "description": "event comes from event, configuration comes from fieles inthe run_start document"},
                 "field": {"type": "string"},
                 "slice_args": {
                     "type": "array", 
@@ -19,18 +19,15 @@
                     }
                 }
             },
-            "required" : ["stream", "location", "field"],
+            "required" : ["location", "field"],
             "additionalProperties": false
         },
         "projections": {
-            "title" : "Describe how to interperet this run as the given technique",
+            "title" : "Describe how to interperet this run as the given projection",
             "properties":{
-                "name": {"type": "string",
-                            "description": "The name of the projection"},
-                "version": {"type": "string",
-                            "description": "The version of the projection spec. Can specify the version of an external specification."},
-                "configuration" : {"type": "object",
-                                "description": "Static information about technique"},
+                "name": {"type": "string", "description": "The name of the projection"},
+                "version": {"type": "string", "description": "The version of the projection spec. Can specify the version of an external specification."},
+                "configuration" : {"type": "object", "description": "Static information about projection"},
                 "projection" : {
                     "type": "object",
                     "patternProperties": {".": {"$ref": "#/definitions/projection"}},
