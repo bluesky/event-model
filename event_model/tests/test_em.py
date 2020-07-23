@@ -5,7 +5,6 @@ import pickle
 import event_model
 import numpy
 import pytest
-from jsonschema.exceptions import ValidationError
 
 def test_documents():
     dn = event_model.DocumentNames
@@ -1197,46 +1196,3 @@ def test_pickle_filler():
     deserialized = pickle.loads(serialized)
     assert filler == deserialized
 
-def test_projections():
-    event_model.schema_validators[event_model.DocumentNames.start].validate(
-    {
-        "uid": "abc",
-        "time": 0,
-        "projections": [
-            {
-                "name": "test",
-                "version": "42.0.0",
-                "configuration": {},
-                "projection": {
-                    'Entry/instrument/detector/data': {
-                        'location': 'event', 
-                        'stream': 'primary', 
-                        'field': 'ccd',
-                        'slice_args': ['sdfsdfds']
-                    },
-                },
-            }
-        ],
-    })
-
-    with pytest.raises(ValidationError):
-            event_model.schema_validators[event_model.DocumentNames.start].validate(
-            {
-                "uid": "abc",
-                "time": 0,
-                "projections": [
-                    {
-                        "name": "test",
-                        "version": "42.0.0",
-                        "configuration": {},
-                        "projection": {
-                            'Entry/instrument/detector/data': {
-                                'location': 'THIS IS NOT VALID', 
-                                'stream': 'primary', 
-                                'field': 'ccd',
-                                'slice_args': ['sdfsdfds', 1]
-                            },
-                        },
-                    }
-                ],
-            })
