@@ -40,13 +40,22 @@ valid_projections = [
                 "name": "test",
                 "version": "42.0.0",
                 "configuration": {},
+                
                 "projection": {
                     'entry/instrument/detector/data': {
+                        'type': 'linked',
                         'location': 'event', 
                         'stream': 'primary', 
                         'field': 'ccd',
                         'slice_args': ['sdfsdfds']
                     },
+                    '/entry/instrument/wavelength': {
+                        'type': 'calculated',
+                        'calculation': {
+                            'callable': 'pizza.order:slice',
+                            'kwargs': {'toppings': 'cheese'}
+                        }
+                    }
                 },
             }
         ]
