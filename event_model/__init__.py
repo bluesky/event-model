@@ -1625,7 +1625,7 @@ def compose_descriptor(*, start, streams, event_counter,
         partial(compose_event_page, descriptor=doc, event_counter=event_counter))
 
 
-def compose_run(*, uid=None, time=None, metadata=None, validate=True, projections=None):
+def compose_run(*, uid=None, time=None, metadata=None, validate=True):
     """
     Compose a RunStart document and factory functions for related documents.
 
@@ -1641,8 +1641,6 @@ def compose_run(*, uid=None, time=None, metadata=None, validate=True, projection
         Additional metadata include the document
     validate : boolean, optional
         Validate this document conforms to the schema.
-    projections: dict, optional
-        Additional projection data 
 
     Returns
     -------
@@ -1654,8 +1652,6 @@ def compose_run(*, uid=None, time=None, metadata=None, validate=True, projection
         time = ttime.time()
     if metadata is None:
         metadata = {}
-    if projections is not None:
-        metadata['projections'] = projections
     doc = dict(uid=uid, time=time, **metadata)
     # Define some mutable state to be shared internally by the closures composed
     # below.
