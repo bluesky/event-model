@@ -9,9 +9,9 @@
             "description": "Where to get the data from",
             "type": "object",
             "properties" : {
-                "type": {"type": "string", "enum": ["linked", "calculated"], "description": "linked: a value linked from the data set, calculated: a value that requires calculation "},
+                "type": {"type": "string", "enum": ["linked", "calculated", "static"], "description": "linked: a value linked from the data set, calculated: a value that requires calculation, static:  a value defined here in the projection "},
                 "stream": {"type": "string"},
-                "location": {"enum" : ["event", "run_start"], "description": "event comes from event, configuration comes from fields inthe run_start document"},
+                "location": {"enum" : ["event", "configuration"], "description": "event comes from event, configuration comes from fields inthe run_start document"},
                 "field": {"type": "string"},
                 "calculation": {
                     "title" : "calculation properties",

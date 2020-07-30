@@ -32,7 +32,6 @@ valid_projections = [
                         'location': 'event', 
                         'stream': 'primary', 
                         'field': 'ccd',
-                        'slice_args': ['sdfsdfds']
                     },
                     '/entry/instrument/wavelength': {
                         'type': 'calculated',
@@ -56,7 +55,6 @@ invalid_projections = [
                             'location': 'THIS IS NOT VALID', 
                             'stream': 'primary', 
                             'field': 'ccd',
-                            'slice_args': ['sdfsdfds', 1]
                         },
                     },
                 }
