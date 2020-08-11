@@ -1195,4 +1195,3 @@ def test_pickle_filler():
     serialized = pickle.dumps(filler)
     deserialized = pickle.loads(serialized)
     assert filler == deserialized
-
