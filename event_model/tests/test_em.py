@@ -6,6 +6,7 @@ import event_model
 import numpy
 import pytest
 
+
 def test_documents():
     dn = event_model.DocumentNames
     for k in ('stop', 'start', 'descriptor',
