@@ -39,7 +39,7 @@
                 }
             },
             "additionalProperties":  false,
-            "required" : ["projection", "version", "configuration", "projection"]
+            "required" : ["projection", "version", "configuration"]
         }
     },
     "properties": {
