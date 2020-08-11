@@ -4,6 +4,42 @@
             "title" : "data_type",
             "patternProperties": {"^([^./]+)$": {"$ref": "#/definitions/data_type"}},
             "additionalProperties": false
+        },
+        "projection": {
+            "description": "Where to get the data from",
+            "type": "object",
+            "properties" : {
+                "type": {"type": "string", "enum": ["linked", "calculated", "static"], "description": "linked: a value linked from the data set, calculated: a value that requires calculation, static:  a value defined here in the projection "},
+                "stream": {"type": "string"},
+                "location": {"enum" : ["event", "configuration"], "description": "event comes from event, configuration comes from fields inthe run_start document"},
+                "field": {"type": "string"},
+                "calculation": {
+                    "title" : "calculation properties",
+                    "properties": {
+                        "callable": {"type": "string", "description": "callable function to perform calculation"},
+                        "args": {"type": "array", "decription": "args for calculation callable"},
+                        "kwargs": {"type": "object", "description": "kwargs for calcalation callable"}
+                    },
+                    "required": ["callable"]
+                }
+            },
+            "required" : ["type"],
+            "additionalProperties": false
+        },
+        "projections": {
+            "title" : "Describe how to interperet this run as the given projection",
+            "properties":{
+                "name": {"type": "string", "description": "The name of the projection"},
+                "version": {"type": "string", "description": "The version of the projection spec. Can specify the version of an external specification."},
+                "configuration" : {"type": "object", "description": "Static information about projection"},
+                "projection" : {
+                    "type": "object",
+                    "patternProperties": {".": {"$ref": "#/definitions/projection"}},
+                    "additionalProperties": false
+                }
+            },
+            "additionalProperties":  false,
+            "required" : ["projection", "version", "configuration"]
         }
     },
     "properties": {
@@ -34,6 +70,10 @@
         "owner": {
             "type": "string",
             "description": "Unix owner to associate this data with"
+        },
+        "projections": {
+            "type": "array",
+            "items": {"$ref": "#/definitions/projections"}
         },
         "hints": {
             "type": "object",
