@@ -731,6 +731,7 @@ class Filler(DocumentRouter):
                 resource_uid, spec_ = key
                 if spec == spec_:
                     del self._handler_cache[key]
+        return handler
 
     def resource(self, doc):
         # Defer creating the handler instance until we actually need it, when
