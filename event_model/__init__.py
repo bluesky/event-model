@@ -940,6 +940,7 @@ class Filler(DocumentRouter):
         self._handler_cache = None
         self._resource_cache = None
         self._datum_cache = None
+        self._descriptor_cache = None
 
     def clear_handler_cache(self):
         """
