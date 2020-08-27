@@ -941,6 +941,24 @@ class Filler(DocumentRouter):
         self._resource_cache = None
         self._datum_cache = None
 
+    def clear_handler_cache(self):
+        """
+        Clear any cached handler instances.
+
+        This operation may free significant memory, depending on the
+        implementation of the handlers.
+        """
+        self._handler_cache.clear()
+
+    def clear_document_caches(self):
+        """
+        Clear any cached documents.
+        """
+        self._resource_cache.clear()
+        self._datum_cache.clear()
+        self._descriptor_cache.clear()
+        self._datum_cache.clear()
+
     def __exit__(self, *exc_details):
         self.close()
 
