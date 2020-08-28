@@ -905,6 +905,8 @@ class Filler(DocumentRouter):
                     resource_uid,
                     f"Datum with id {datum_id} refers to unknown Resource "
                     f"uid {resource_uid}") from err
+            self._current_state.resource = resource
+            self._current_state.datum = datum_doc
             handler = self._get_handler_maybe_cached(resource)
             error_to_raise = DataNotAccessible(
                     f"Filler was unable to load the data referenced by "
@@ -922,6 +924,8 @@ class Filler(DocumentRouter):
             filled_doc['filled'][key] = datum_id
         self._current_state.key = None
         self._current_state.descriptor = None
+        self._current_state.resource = None
+        self._current_state.datum = None
         return filled_doc
 
     def descriptor(self, doc):
