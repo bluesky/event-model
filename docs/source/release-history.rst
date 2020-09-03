@@ -18,8 +18,15 @@ Added
 * The method :meth:`~event_model.Filler.deregister_handler` returns the handler
   that it has deregistered.
 * The ``filler_state`` attribute of :class:`~event_model.Filler` now includes
-  attributes ``resource`` and ``datum`` which may be used by coersion functions
+  attributes ``resource`` and ``datum`` which may be used by coercion functions
   to work around incorrect ``shape`` metadata.
+
+Changed
+-------
+
+* The function :func:`~event_model.register_coercion` replaces
+  the misspelled :func:`~event_model.register_coersion`, which is retained as
+  an alias for backward-compatibility.
 
 v1.15.2 (2020-06-12)
 ====================
