@@ -1000,7 +1000,6 @@ class Filler(DocumentRouter):
         Clear any cached documents.
         """
         self._resource_cache.clear()
-        self._datum_cache.clear()
         self._descriptor_cache.clear()
         self._datum_cache.clear()
 
