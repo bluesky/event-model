@@ -705,6 +705,23 @@ class Filler(DocumentRouter):
                       retry_intervals=retry_intervals)
 
     def register_handler(self, spec, handler, overwrite=False):
+        """
+        Register a handler.
+
+        Parameters
+        ----------
+        spec: str
+        handler: Handler
+        overwrite: boolean, optional
+            False by default
+
+        Raises
+        ------
+        DuplicateHandler
+            If a handler is already registered for spec and overwrite is False
+
+        See https://blueskyproject.io/event-model/external.html
+        """
         if (not overwrite) and (spec in self._handler_registry):
             original = self._unpatched_handler_registry[spec]
             if original is handler:
@@ -724,6 +741,22 @@ class Filler(DocumentRouter):
             handler, self._current_state)
 
     def deregister_handler(self, spec):
+        """
+        Deregister a handler.
+
+        If no handler is registered for this spec, it is no-op and returns
+        None.
+
+        Parameters
+        ----------
+        spec: str
+
+        Returns
+        -------
+        handler: Handler or None
+
+        See https://blueskyproject.io/event-model/external.html
+        """
         handler = self._handler_registry.pop(spec, None)
         if handler is not None:
             self._unpatched_handler_registry.pop(spec)
@@ -731,6 +764,7 @@ class Filler(DocumentRouter):
                 resource_uid, spec_ = key
                 if spec == spec_:
                     del self._handler_cache[key]
+        return handler
 
     def resource(self, doc):
         # Defer creating the handler instance until we actually need it, when
@@ -936,6 +970,12 @@ class Filler(DocumentRouter):
         return self
 
     def close(self):
+        """
+        Drop cached documents and handlers.
+
+        They are *not* explicitly cleared, so if there are other references to
+        these caches they will remain.
+        """
         # Drop references to the caches. If the user holds another reference to
         # them it's the user's problem to manage their lifecycle. If the user
         # does not (e.g. they are the default caches) the gc will look after
@@ -944,6 +984,28 @@ class Filler(DocumentRouter):
         self._handler_cache = None
         self._resource_cache = None
         self._datum_cache = None
+        self._descriptor_cache = None
+
+    @property
+    def closed(self):
+        return self._closed
+
+    def clear_handler_cache(self):
+        """
+        Clear any cached handler instances.
+
+        This operation may free significant memory, depending on the
+        implementation of the handlers.
+        """
+        self._handler_cache.clear()
+
+    def clear_document_caches(self):
+        """
+        Clear any cached documents.
+        """
+        self._resource_cache.clear()
+        self._descriptor_cache.clear()
+        self._datum_cache.clear()
 
     def __exit__(self, *exc_details):
         self.close()
