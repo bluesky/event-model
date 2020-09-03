@@ -379,3 +379,16 @@ def test_mismatched_data_keys():
             event = copy.deepcopy(raw_event)
             del event['data']['image']
             filler('event', event)
+
+
+def test_clear_caches(filler):
+    "Test that methods that clear the caches work."
+    assert filler._descriptor_cache  # implementation detail
+    assert filler._resource_cache  # implementation detail
+    filler.clear_document_caches()
+    assert not filler._descriptor_cache  # implementation detail
+    assert not filler._resource_cache  # implementation detail
+
+    assert filler._handler_cache  # implementation detail
+    filler.clear_handler_cache()
+    assert not filler._handler_cache  # implementation detail
