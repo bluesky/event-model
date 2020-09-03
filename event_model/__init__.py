@@ -982,6 +982,10 @@ class Filler(DocumentRouter):
         self._datum_cache = None
         self._descriptor_cache = None
 
+    @property
+    def closed(self):
+        return self._closed
+
     def clear_handler_cache(self):
         """
         Clear any cached handler instances.

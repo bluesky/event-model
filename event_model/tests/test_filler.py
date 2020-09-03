@@ -55,7 +55,7 @@ def filler():
     filler('event', event)
     assert event['data']['image'].shape == (5, 5)
     filler('stop', stop_doc)
-    assert not filler._closed
+    assert not filler.closed
     return filler
 
 
@@ -105,9 +105,9 @@ def test_context_manager():
         assert name == 'event'
         assert doc is event
         filler('stop', stop_doc)
-        assert not filler._closed
+        assert not filler.closed
     assert event['data']['image'].shape == (5, 5)
-    assert filler._closed
+    assert filler.closed
 
 
 def test_context_manager_with_event_page():
@@ -122,9 +122,9 @@ def test_context_manager_with_event_page():
         assert name == 'event_page'
         assert doc is event_page
         filler('stop', stop_doc)
-        assert not filler._closed
+        assert not filler.closed
     assert event_page['data']['image'][0].shape == (5, 5)
-    assert filler._closed
+    assert filler.closed
 
 
 def test_undefined_handler_spec():
@@ -167,7 +167,7 @@ def test_include_and_exclude():
             event = copy.deepcopy(raw_event)
             filler('event', event)
             filler('stop', stop_doc)
-            assert not filler._closed
+            assert not filler.closed
     assert event['data']['image'].shape == (5, 5)
 
     with pytest.warns(DeprecationWarning):
@@ -181,7 +181,7 @@ def test_include_and_exclude():
             event = copy.deepcopy(raw_event)
             filler('event', event)
             filler('stop', stop_doc)
-            assert not filler._closed
+            assert not filler.closed
     assert event['data']['image'].shape == (5, 5)
 
 
@@ -212,7 +212,7 @@ def test_root_map():
         event = copy.deepcopy(raw_event)
         filler('event', event)
         filler('stop', stop_doc)
-        assert not filler._closed
+        assert not filler.closed
     assert event['data']['image'].shape == (5, 5)
 
 
