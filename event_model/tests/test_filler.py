@@ -351,7 +351,8 @@ def test_handler_registry_access():
         name, filled_event = filler('event', event)
         assert filled_event is not event
         assert isinstance(event['data']['image'], str)
-        filler.deregister_handler('DUMMY')
+        handler = filler.deregister_handler('DUMMY')
+        assert handler is OtherDummyHandler
         assert not filler.handler_registry
         assert not filler._handler_cache  # implementation detail
 
