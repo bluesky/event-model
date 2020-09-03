@@ -2,6 +2,32 @@
 Release History
 ***************
 
+v1.16.0 (2020-09-03)
+====================
+
+Added
+-----
+
+* The schema for Run Start documents now includes an optional "projections"
+  key. See :ref:`projections`.
+* Added the method :class:`~event_model.DocumentRouter.emit` and an ``emit``
+  parameter to :class:`~event_model.DocumentRouter` to support chaining them.
+* The :class:`~event_model.Filler` now provides public methods for clearing its caches,
+  :meth:`~event_model.Filler.clear_handler_cache` and
+  :meth:`~event_model.Filler.clear_document_caches`.
+* The method :meth:`~event_model.Filler.deregister_handler` returns the handler
+  that it has deregistered.
+* The ``filler_state`` attribute of :class:`~event_model.Filler` now includes
+  attributes ``resource`` and ``datum`` which may be used by coercion functions
+  to work around incorrect ``shape`` metadata.
+
+Changed
+-------
+
+* The function :func:`~event_model.register_coercion` replaces
+  the misspelled :func:`~event_model.register_coersion`, which is retained as
+  an alias for backward-compatibility.
+
 v1.15.2 (2020-06-12)
 ====================
 

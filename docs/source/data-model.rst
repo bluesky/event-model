@@ -139,13 +139,19 @@ A typical example
     Time is given in UNIX time (seconds since 1970). Software for looking at
     the data would, of course, translate that into a more human-readable form.
 
-Projections (Experimental):
+.. _projections:
 
-The run_start metadata can include a projections field.
-It is intended that a projection is an aid to interacting with external systems using standardized vocabularies.
-Projections might be used in a variety of use cases such as providing run data to analysis tools or suitcases.
-Each projection represents multiple ways to represent data from the run. Each field in the projection dictionary 
-is an unique and externally-identifiable string and each value is an instruction for accessing dat from the run. 
+Projections (Experimental)
+^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+The Run Start document may include a ``projections`` field. It is intended
+that a projection is an aid to interacting with external systems using
+standardized vocabularies. Projections might be used in a variety of use cases
+such as providing run data to analysis tools or suitcases. Each projection
+represents multiple ways to represent data from the run. Each field in the
+projection dictionary is an unique and externally-identifiable string and each
+value is an instruction for accessing data from the run. This feature is
+experimetal and subject to backward-incompatible changes in future releases.
 
 The run start document formal schema:
 

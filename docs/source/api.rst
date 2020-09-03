@@ -40,7 +40,7 @@ Routers
 .. autoclass:: event_model.NoFiller
    :members:
 
-.. autofunction:: event_model.register_coersion
+.. autofunction:: event_model.register_coercion
 
 .. autofunction:: event_model.as_is
 
