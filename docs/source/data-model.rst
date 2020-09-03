@@ -144,13 +144,13 @@ A typical example
 Projections (Experimental)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-The Run Start document may include a ``projections`` field.  It is intended
+The Run Start document may include a ``projections`` field. It is intended
 that a projection is an aid to interacting with external systems using
-standardized vocabularies.  Projections might be used in a variety of use cases
-such as providing run data to analysis tools or suitcases.  Each projection
+standardized vocabularies. Projections might be used in a variety of use cases
+such as providing run data to analysis tools or suitcases. Each projection
 represents multiple ways to represent data from the run. Each field in the
 projection dictionary is an unique and externally-identifiable string and each
-value is an instruction for accessing data from the run.  This feature is
+value is an instruction for accessing data from the run. This feature is
 experimetal and subject to backward-incompatible changes in future releases.
 
 The run start document formal schema:
