@@ -3,6 +3,7 @@ import collections.abc
 from distutils.version import LooseVersion
 import copy
 import json
+import entrypoints
 from enum import Enum
 from functools import partial
 import itertools
