@@ -7,7 +7,7 @@ To further complicate things, we can consider that a document stream might be be
 
 
 Use Case - Tomography Tiling and MongoDB Serialization
-____________________________
+_______________________________________________________
 A common pattern in tomography is the concept of "tiling". When tiling, a single location is chosen, a number of scans are taken around an axis to create a volume for the tile, then the sample is moved to take another tile. Post processing tools then stitch the various tiles together, creating a mosaic.
 
 How are these best represented in event model documents? We consider two alternative, based on the relationship between Event and Event Descriptor documents:
