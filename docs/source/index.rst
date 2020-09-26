@@ -43,4 +43,5 @@ you should look for / put different kinds of information
    data-model
    api
    external
+   use-cases
    release-history
