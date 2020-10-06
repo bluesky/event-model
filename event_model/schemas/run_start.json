@@ -11,7 +11,7 @@
             "properties" : {
                 "type": {"enum": ["linked", "calculated", "static"], "description": "linked: a value linked from the data set, calculated: a value that requires calculation, static:  a value defined here in the projection "},
                 "stream": {"type": "string"},
-                "location": {"enum" : ["event", "configuration"], "description": "event comes from event, configuration comes from fields inthe run_start document"},
+                "location": {"enum" : ["start", "event", "configuration"], "description": "start comes from metadata fields in the start document, event comes from event, configuration comes from configuration fields in the event_descriptor document"},
                 "field": {"type": "string"},
                 "calculation": {
                     "title" : "calculation properties",
