@@ -3,19 +3,35 @@ import pytest
 from jsonschema.exceptions import ValidationError
 
 
-def test_projection_start_doc():
+@pytest.fixture
+def start():
+    run_bundle = event_model.compose_run()
+    return run_bundle.start_doc
+
+
+def test_projection_in_start_doc():
     run_bundle = event_model.compose_run(uid="42", metadata={"projections": valid_projections})
     start_doc = run_bundle.start_doc
     assert start_doc['projections'] == valid_projections
 
 
-def test_projection_schema():
-    start_doc['projections'] = valid_projections
-    event_model.schema_validators[event_model.DocumentNames.start].validate(start_doc)
+def test_projection_schema(start):
+    start['projections'] = valid_projections
+    event_model.schema_validators[event_model.DocumentNames.start].validate(start)
 
     with pytest.raises(ValidationError):
-        start_doc['projections'] = invalid_projections
-        event_model.schema_validators[event_model.DocumentNames.start].validate(start_doc)
+        start['projections'] = invalid_projections
+        event_model.schema_validators[event_model.DocumentNames.start].validate(start)
+
+    invalid_calc_projections = valid_projections.copy()
+    invalid_calc_projections[0]['projection']['calc_field'] = {'linked_field': {
+                                                        'type': 'linked',
+                                                        'location': 'event',
+                                                        'stream': 'primary',
+                                                        'field': 'ccd',
+                                                        }}  # calc requires the calc fields
+    with pytest.raises(ValidationError, ):
+        event_model.schema_validators[event_model.DocumentNames.start].validate(start)
 
 
 valid_projections = [
@@ -24,13 +40,13 @@ valid_projections = [
                 "version": "42.0.0",
                 "configuration": {},
                 "projection": {
-                    'entry/instrument/detector/data': {
+                    'linked_field': {
                         'type': 'linked',
                         'location': 'event',
                         'stream': 'primary',
                         'field': 'ccd',
                     },
-                    '/entry/instrument/wavelength': {
+                    'calc_field': {
                         'type': 'calculated',
                         'calculation': {
                             'callable': 'pizza.order:slice',
@@ -55,8 +71,3 @@ invalid_projections = [
                     },
                 }
             ]
-
-start_doc = {
-    "uid": "abc",
-    "time": 0,
-}
