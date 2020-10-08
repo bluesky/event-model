@@ -13,6 +13,8 @@
                 "stream": {"type": "string"},
                 "location": {"enum" : ["start", "event", "configuration"], "description": "start comes from metadata fields in the start document, event comes from event, configuration comes from configuration fields in the event_descriptor document"},
                 "field": {"type": "string"},
+                "config_index": {"type": "integer"},
+                "config_device": {"type": "string"},
                 "calculation": {
                     "title" : "calculation properties",
                     "description": "required fields if type is calculated",
@@ -24,21 +26,23 @@
                     "required": ["callable"]
                 }
             },
-            "anyOf":[
+            "allOf": [
                 {
-                    "properties": {
-                        "type": {"const": "calculated"}
-                    },
-                    "required": ["calculation"]
+                    "if": {"properties": {"location": {"enum": "configuration"}}},
+                    "then": {"required": ["type", "config_index", "config_device", "field", "stream"]},
+                    "else": {"required" : ["type"]}
                 },
                 {
-                    "properties": {
-                        "type": {"const": "linked"}
-                    },
-                    "required": ["location"]
+                    "if": {"properties": {"location": {"enum": "event"}}},
+                    "then": {"required": ["type", "field", "stream"]},
+                    "else": {"required" : ["type"]}
+                },
+                {
+                    "if": {"properties": {"type": {"enum": "calculation"}}},
+                    "then": {"required": ["type", "field", "stream", "calculation"]},
+                    "else": {"required" : ["type"]}
                 }
-            ],
-            "required" : ["type"],
+            ],      
             "additionalProperties": false
         },
         "projections": {
