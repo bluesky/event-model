@@ -38,8 +38,13 @@
                     "else": {"required" : ["type"]}
                 },
                 {
-                    "if": {"properties": {"type": {"enum": "calculation"}}},
-                    "then": {"required": ["type", "field", "stream", "calculation"]},
+                    "if": {
+                        "allOf": [  
+                            {"properties": {"type": {"enum": "calculated"}}}, 
+                            {"properties": {"location": {"enum": "event"}}}
+                        ]
+                    },
+                    "then": {"required": ["type", "field", "stream",  "calculation"]},
                     "else": {"required" : ["type"]}
                 }
             ],      
