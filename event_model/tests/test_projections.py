@@ -6,6 +6,7 @@ import jsonschema
 
 skip_json_validations = LooseVersion(jsonschema.__version__) < LooseVersion('3.0.0')
 
+
 @pytest.fixture
 def start():
     run_bundle = event_model.compose_run()
@@ -42,6 +43,7 @@ def test_bad_calc_field(start):
     with pytest.raises(ValidationError, ):
         event_model.schema_validators[event_model.DocumentNames.start].validate(start)
 
+
 @pytest.mark.skipif(skip_json_validations, reason="projection schema uses draft7 conditions")
 def test_bad_configuration_field(start):
     bad_configuration_projections = [
@@ -62,6 +64,7 @@ def test_bad_configuration_field(start):
     start["projections"] = bad_configuration_projections
     with pytest.raises(ValidationError, ):
         event_model.schema_validators[event_model.DocumentNames.start].validate(start)
+
 
 @pytest.mark.skipif(skip_json_validations, reason="projection schema uses draft7 conditions")
 def test_bad_event_field(start):
