@@ -24,28 +24,37 @@
                         "kwargs": {"type": "object", "description": "kwargs for calcalation callable"}
                     },
                     "required": ["callable"]
-                }
+                },
+                "value": {"description": "value explicitely defined in the projection when type==static."}
             },
             "allOf": [
                 {
-                    "if": {"properties": {"location": {"enum": "configuration"}}},
-                    "then": {"required": ["type", "config_index", "config_device", "field", "stream"]},
-                    "else": {"required" : ["type"]}
-                },
-                {
-                    "if": {"properties": {"location": {"enum": "event"}}},
-                    "then": {"required": ["type", "field", "stream"]},
-                    "else": {"required" : ["type"]}
+                    "if": {
+                        "allOf": [
+                            {"properties": {"location": {"enum": "configuration"}}},
+                            {"properties": {"type": {"enum": "linked"}}}
+                        ]},
+                    "then": {"required": ["type", "location", "config_index", "config_device", "field", "stream"]}
                 },
                 {
                     "if": {
-                        "allOf": [  
-                            {"properties": {"type": {"enum": "calculated"}}}, 
-                            {"properties": {"location": {"enum": "event"}}}
-                        ]
-                    },
-                    "then": {"required": ["type", "field", "stream",  "calculation"]},
-                    "else": {"required" : ["type"]}
+                        "allOf": [
+                            {"properties": {"location": {"enum": "event"}}},
+                            {"properties": {"type": {"enum": "linked"}}}
+                        ]},
+                    "then": {"required": ["type", "field", "stream"]}
+                },
+                {
+                    "if": {
+                        "allOf": [
+                            {"properties": {"location": {"enum": "event"}}},
+                            {"properties": {"type": {"enum": "calculated"}}}
+                        ]},
+                    "then": {"required": ["type", "field", "stream",  "calculation"]}
+                },
+                {
+                    "if": {"properties": {"type": {"enum": "static"}}},
+                    "then": {"required": ["type", "value"]}
                 }
             ],      
             "additionalProperties": false
