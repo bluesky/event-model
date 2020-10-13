@@ -23,7 +23,9 @@ def test_projection_schema(start):
     start["projections"] = valid_projections
     event_model.schema_validators[event_model.DocumentNames.start].validate(start)
 
-@pytest.mark.skipif(skip_json_validations, reason="projection schema uses draft7 conditions")
+
+@pytest.mark.skipif(skip_json_validations,
+                    reason="projection schema uses draft7 conditions")
 def test_bad_calc_field(start):
     bad_calc_projections = [
                 # calc requires the calc fields
@@ -44,7 +46,8 @@ def test_bad_calc_field(start):
         event_model.schema_validators[event_model.DocumentNames.start].validate(start)
 
 
-@pytest.mark.skipif(skip_json_validations, reason="projection schema uses draft7 conditions")
+@pytest.mark.skipif(skip_json_validations,
+                    reason="projection schema uses draft7 conditions")
 def test_bad_configuration_field(start):
     bad_configuration_projections = [
                 {
@@ -66,7 +69,8 @@ def test_bad_configuration_field(start):
         event_model.schema_validators[event_model.DocumentNames.start].validate(start)
 
 
-@pytest.mark.skipif(skip_json_validations, reason="projection schema uses draft7 conditions")
+@pytest.mark.skipif(skip_json_validations,
+                    reason="projection schema uses draft7 conditions")
 def test_bad_event_field(start):
     bad_event_projections = [
                 {
@@ -84,7 +88,9 @@ def test_bad_event_field(start):
     with pytest.raises(ValidationError, ):
         event_model.schema_validators[event_model.DocumentNames.start].validate(start)
 
-@pytest.mark.skipif(skip_json_validations, reason="projection schema uses draft7 conditions")
+
+@pytest.mark.skipif(skip_json_validations,
+                    reason="projection schema uses draft7 conditions")
 def test_bad_location_field(start):
     bad_event_projections = [
                 {
@@ -102,7 +108,9 @@ def test_bad_location_field(start):
     with pytest.raises(ValidationError, ):
         event_model.schema_validators[event_model.DocumentNames.start].validate(start)
 
-@pytest.mark.skipif(skip_json_validations, reason="projection schema uses draft7 conditions")
+
+@pytest.mark.skipif(skip_json_validations,
+                    reason="projection schema uses draft7 conditions")
 def test_bad_static_field(start):
     bad_event_projections = [
                 {

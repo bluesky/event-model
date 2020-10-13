@@ -42,7 +42,7 @@
                             {"properties": {"location": {"enum": "event"}}},
                             {"properties": {"type": {"enum": "linked"}}}
                         ]},
-                    "then": {"required": ["type", "field", "stream"]}
+                    "then": {"required": ["type", "location", "field", "stream"]}
                 },
                 {
                     "if": {
