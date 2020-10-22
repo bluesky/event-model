@@ -9,21 +9,54 @@
             "description": "Where to get the data from",
             "type": "object",
             "properties" : {
-                "type": {"type": "string", "enum": ["linked", "calculated", "static"], "description": "linked: a value linked from the data set, calculated: a value that requires calculation, static:  a value defined here in the projection "},
+                "type": {"enum": ["linked", "calculated", "static"], "description": "linked: a value linked from the data set, calculated: a value that requires calculation, static:  a value defined here in the projection "},
                 "stream": {"type": "string"},
-                "location": {"enum" : ["event", "configuration"], "description": "event comes from event, configuration comes from fields inthe run_start document"},
+                "location": {"enum" : ["start", "event", "configuration"], "description": "start comes from metadata fields in the start document, event comes from event, configuration comes from configuration fields in the event_descriptor document"},
                 "field": {"type": "string"},
+                "config_index": {"type": "integer"},
+                "config_device": {"type": "string"},
                 "calculation": {
                     "title" : "calculation properties",
+                    "description": "required fields if type is calculated",
                     "properties": {
                         "callable": {"type": "string", "description": "callable function to perform calculation"},
                         "args": {"type": "array", "decription": "args for calculation callable"},
                         "kwargs": {"type": "object", "description": "kwargs for calcalation callable"}
                     },
                     "required": ["callable"]
-                }
+                },
+                "value": {"description": "value explicitely defined in the projection when type==static."}
             },
-            "required" : ["type"],
+            "allOf": [
+                {
+                    "if": {
+                        "allOf": [
+                            {"properties": {"location": {"enum": "configuration"}}},
+                            {"properties": {"type": {"enum": "linked"}}}
+                        ]},
+                    "then": {"required": ["type", "location", "config_index", "config_device", "field", "stream"]}
+                },
+                {
+                    "if": {
+                        "allOf": [
+                            {"properties": {"location": {"enum": "event"}}},
+                            {"properties": {"type": {"enum": "linked"}}}
+                        ]},
+                    "then": {"required": ["type", "location", "field", "stream"]}
+                },
+                {
+                    "if": {
+                        "allOf": [
+                            {"properties": {"location": {"enum": "event"}}},
+                            {"properties": {"type": {"enum": "calculated"}}}
+                        ]},
+                    "then": {"required": ["type", "field", "stream",  "calculation"]}
+                },
+                {
+                    "if": {"properties": {"type": {"enum": "static"}}},
+                    "then": {"required": ["type", "value"]}
+                }
+            ],      
             "additionalProperties": false
         },
         "projections": {
