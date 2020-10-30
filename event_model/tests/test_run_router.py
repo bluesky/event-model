@@ -243,3 +243,17 @@ def test_subfactory():
     rr("stop", stop_doc)
 
     assert len(rr._start_to_start_doc) == 0
+
+
+def test_same_start_doc_twice():
+    "If the user sends us the same uid twice, raise helpfully."
+    rr = event_model.RunRouter([])
+    doc = {'time': 0, 'uid': 'stuff'}
+    rr('start', doc)
+    with pytest.raises(ValueError):
+        rr('start', doc)  # exact same object
+    with pytest.raises(ValueError):
+        rr('start', doc.copy())  # same content
+    doc2 = {'time': 1, 'uid': 'stuff'}
+    with pytest.raises(ValueError):
+        rr('start', doc2)  # same uid, different content
