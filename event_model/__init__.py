@@ -1282,6 +1282,20 @@ class RunRouter(DocumentRouter):
 
     def start(self, start_doc):
         uid = start_doc['uid']
+        # If we get the same uid twice, weird things will happen, so check for
+        # that and give a nice error message.
+        if uid in self._start_to_start_doc:
+            if self._start_to_start_doc[uid] == start_doc:
+                raise ValueError(
+                    "RunRouter received the same 'start' document twice:\n"
+                    "{start_doc!r}"
+                )
+            else:
+                raise ValueError(
+                    "RunRouter received two 'start' documents with different "
+                    "contents but the same uid:\n"
+                    "First: {self._start_to_start_doc[uid]!r}\n"
+                    "Second: {start_doc!r}")
         self._start_to_start_doc[uid] = start_doc
         filler = self.filler_class(self.handler_registry,
                                    root_map=self.root_map,
