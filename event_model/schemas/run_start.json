@@ -76,7 +76,7 @@
         }
     },
     "properties": {
-        "auth_session": {
+        "data_session": {
             "type": "array", "items": {"type": "string"},              
             "description": "An optional filtering field to associate runs with authorization/privilege frameworks"
         },
