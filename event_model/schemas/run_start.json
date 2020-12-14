@@ -77,8 +77,12 @@
     },
     "properties": {
         "data_session": {
+            "type": "string",              
+            "description": "An optional field for grouping runs. The meaning is not mandated, but this is a data management grouping and not a scientific grouping. It is intended to group runs in a visit or set of trials."
+        },
+        "data_groups": {
             "type": "array", "items": {"type": "string"},              
-            "description": "An optional filtering field to associate runs with authorization/privilege frameworks"
+            "description": "An optional list of data access groups that have meaning to some external system. Examples might include facility, beamline, end stations, proposal, safety form."
         },
         "project": {
             "type": "string",

@@ -115,7 +115,8 @@ A typical example
 .. code-block:: python
 
    # 'run start' document
-   {'auth_session': ['bl42', 'proposal12345'],
+   {'data_session': 'vist54321',
+    'data_groups': ['bl42', 'proposal12345'],
     'detectors': ['random_walk:x'],
     'hints': {'dimensions': [(['random_walk:dt'], 'primary')]},
     'motors': ('random_walk:dt',),
