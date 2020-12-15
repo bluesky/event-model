@@ -1,0 +1,47 @@
+name: Unit Tests
+
+on:
+  push:
+  pull_request:
+  schedule:
+      - cron: '00 4 * * *'  # daily at 4AM
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: [3.6, 3.7, 3.8]
+        # We still test against jsonschema 2.x because pip's dependency resolver
+        # very often gives us 2.x even though we ask for 3.x. The event-model
+        # code has codepaths for either, conditional on what is installed.
+        # See https://github.com/bluesky/event-model/pull/175 and
+        # https://github.com/bluesky/event-model/issues/145 for more context.
+        jsonschema_version: [2, 3]
+      fail-fast: false
+    steps:
+
+    - uses: actions/checkout@v2
+
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v2
+      with:
+        python-version: ${{ matrix.python-version }}
+
+    - name: Install
+      shell: bash -l {0}
+      run: source continuous_integration/scripts/install.sh
+
+    - name: Install test requirements
+      shell: bash -l {0}
+      run: |
+        python -m pip install -r requirements-dev.txt
+        python -m pip list
+
+    - name: Test with pytest
+      shell: bash -l {0}
+      run: |
+        coverage run -m pytest -v
+        coverage combine
+        coverage report
