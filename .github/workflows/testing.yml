@@ -42,7 +42,7 @@ jobs:
     - name: Pin jsonschema
       shell: bash -l {0}
       run: |
-        python -m pip install --upgrade "jsonschema <= ${{ matrix.jsonschema-version }}"
+        python -m pip install --upgrade "jsonschema==${{ matrix.jsonschema-version }}.*"
         python -m pip list
 
     - name: Test with pytest
