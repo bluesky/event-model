@@ -36,18 +36,20 @@ jobs:
     - name: Install test requirements
       shell: bash -l {0}
       run: |
+        set -vxeuo pipefail
         python -m pip install -r requirements-dev.txt
         python -m pip list
 
     - name: Pin jsonschema
       shell: bash -l {0}
       run: |
+        set -vxeuo pipefail
         python -m pip install --upgrade "jsonschema==${{ matrix.jsonschema-version }}.*"
         python -m pip list
 
     - name: Test with pytest
       shell: bash -l {0}
       run: |
+        set -vxeuo pipefail
         coverage run -m pytest -v
-        coverage combine
         coverage report
