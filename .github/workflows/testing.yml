@@ -18,7 +18,7 @@ jobs:
         # code has codepaths for either, conditional on what is installed.
         # See https://github.com/bluesky/event-model/pull/175 and
         # https://github.com/bluesky/event-model/issues/145 for more context.
-        jsonschema_version: [2, 3]
+        jsonschema-version: [2, 3]
       fail-fast: false
     steps:
 
@@ -37,6 +37,12 @@ jobs:
       shell: bash -l {0}
       run: |
         python -m pip install -r requirements-dev.txt
+        python -m pip list
+
+    - name: Pin jsonschema
+      shell: bash -l {0}
+      run: |
+        python -m pip install --upgrade "jsonschema <= ${{ matrix.jsonschema-version }}"
         python -m pip list
 
     - name: Test with pytest
