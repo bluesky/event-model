@@ -2,6 +2,20 @@
 Release History
 ***************
 
+v1.17.0 (2020-12-17)
+====================
+
+Added
+-----
+
+* Added ``data_session`` and ``data_groups`` to Run Start document schema.
+
+Changed
+-------
+
+* The package requirements have been relaxed to accept jsonschema versions 2 or
+  3. Both are supported.
+
 v1.16.1 (2020-10-15)
 ====================
 
@@ -13,9 +27,6 @@ Added
   Additionally, validation of projections was enhanced.
 * The method :class:`~event_model.RunRouter.start` was enhanced to check for repeated runs with
   colliding uids, raising an ValueError when this occurs.
-
-Changed
--------
 
 v1.16.0 (2020-09-03)
 ====================
