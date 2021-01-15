@@ -1536,9 +1536,9 @@ for name, filename in SCHEMA_NAMES.items():
 if LooseVersion(jsonschema.__version__) >= LooseVersion("3.0.0"):
     def _is_array(checker, instance):
         return (
-            isinstance(instance, numpy.ndarray) or
             jsonschema.validators.Draft7Validator.TYPE_CHECKER.is_type(instance, 'array') or
-            isinstance(instance, tuple)
+            isinstance(instance, tuple) or
+            hasattr(instance, "__array__")
         )
 
     _array_type_checker = jsonschema.validators.Draft7Validator.TYPE_CHECKER.redefine('array', _is_array)
