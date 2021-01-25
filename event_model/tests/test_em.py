@@ -866,3 +866,11 @@ def test_pickle_filler():
     serialized = pickle.dumps(filler)
     deserialized = pickle.loads(serialized)
     assert filler == deserialized
+
+
+def test_array_like():
+	"Accept any __array__-like as an array."
+	dask_array = pytest.importorskip("dask.array")
+	bundle = event_model.compose_run()
+	desc_bundle = bundle.compose_descriptor(data_keys={"a": {"shape": (3,), "dtype": "array", "source": ""}}, name="primary")
+	desc_bundle.compose_event_page(data={"a": dask_array.ones((5, 3))}, timestamps={"a": [1, 2, 3]}, seq_num=[1, 2, 3])
