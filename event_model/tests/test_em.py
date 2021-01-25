@@ -1,9 +1,14 @@
+from distutils.version import LooseVersion
 import json
 import pickle
 
 import event_model
+import jsonschema
 import numpy
 import pytest
+
+
+JSONSCHEMA_2 = LooseVersion(jsonschema.__version__) < LooseVersion("3.0.0")
 
 
 def test_documents():
@@ -866,3 +871,19 @@ def test_pickle_filler():
     serialized = pickle.dumps(filler)
     deserialized = pickle.loads(serialized)
     assert filler == deserialized
+
+
+@pytest.mark.skipif(JSONSCHEMA_2, reason="requres jsonschema >= 3")
+def test_array_like():
+    "Accept any __array__-like as an array."
+    dask_array = pytest.importorskip("dask.array")
+    bundle = event_model.compose_run()
+    desc_bundle = bundle.compose_descriptor(
+        data_keys={"a": {"shape": (3,), "dtype": "array", "source": ""}},
+        name="primary"
+    )
+    desc_bundle.compose_event_page(
+        data={"a": dask_array.ones((5, 3))},
+        timestamps={"a": [1, 2, 3]},
+        seq_num=[1, 2, 3]
+    )
