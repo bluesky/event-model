@@ -2,6 +2,16 @@
 Release History
 ***************
 
+v1.17.1 (2021-01-29)
+====================
+
+Added
+-----
+
+* Any object that implements ``__array__`` is accepted by the schema validators
+  as any array. This enables the validator to tolerate numpy-like variants that
+  are not literal numpy arrays, such as dask, sparse, or cupy arrays.
+
 v1.17.0 (2020-12-17)
 ====================
 
