@@ -297,6 +297,9 @@ Formal schema:
 
 .. _event_page:
 
+Event Page
+----------
+
 Event contents can also be represented in "paged" form, where multiple
 rows are contained in one structure for efficient transport and vectorized
 computation. The representations contain equivalent information: an EventPage
@@ -441,6 +444,9 @@ Formal schema:
 .. literalinclude:: ../../event_model/schemas/datum.json
 
 .. _datum_page:
+
+Datum Page
+----------
 
 Like Events, Datum contents can also be represented in "paged" form, and the
 representations contain equivalent information. This is the Datum example above
