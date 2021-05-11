@@ -257,3 +257,40 @@ def test_same_start_doc_twice():
     doc2 = {'time': 1, 'uid': 'stuff'}
     with pytest.raises(ValueError):
         rr('start', doc2)  # same uid, different content
+
+
+def test_subfactory_callback_exception():
+    """
+    Test that RunRouter._start_to_descriptors and RunRouter._descriptor_to_start
+    are updated in the case that a subfactory callback raises an Exception.
+    """
+
+    def exception_callback(name, doc):
+        """ a callback that always raises Exception """
+        raise Exception()
+
+    def exception_callback_subfactory(descriptor_doc_name, descriptor_doc):
+        """ a subfactory that always returns one exception_callback """
+        return [exception_callback]
+
+    def exception_callback_factory(start_doc_name, start_doc):
+        """ a factory that return 0 callbacks and one exception_callback_subfactory """
+        return (
+            [],
+            [exception_callback_subfactory]
+        )
+
+    rr = event_model.RunRouter([exception_callback_factory])
+
+    start_doc = {'time': 0, 'uid': 'abcdef'}
+    rr('start', start_doc)
+
+    descriptor_doc = {'run_start': 'abcdef', 'uid': 'ghijkl'}
+    with pytest.raises(Exception):
+        rr('descriptor', descriptor_doc)
+
+    assert rr._start_to_descriptors['abcdef'] == ['ghijkl']
+    assert rr._descriptor_to_start['ghijkl'] == 'abcdef'
+
+    event_document = {'descriptor': 'ghijkl', 'uid': 'mnopqr'}
+    rr.event(event_document)

@@ -1317,19 +1317,27 @@ class RunRouter(DocumentRouter):
             self._subfactories[uid].extend(subfactories)
 
     def descriptor(self, descriptor_doc):
-        uid = descriptor_doc['uid']
+        descriptor_uid = descriptor_doc['uid']
         start_uid = descriptor_doc['run_start']
+
+        # Keep track of the RunStart UID -> [EventDescriptor UIDs] mapping for
+        # purposes of cleanup in stop().
+        self._start_to_descriptors[start_uid].append(descriptor_uid)
+        # Keep track of the EventDescriptor UID -> RunStartUID for filling
+        # purposes.
+        self._descriptor_to_start[descriptor_uid] = start_uid
+
         self._fillers[start_uid].descriptor(descriptor_doc)
         # Apply all factory cbs for this run to this descriptor, and run them.
         factory_cbs = self._factory_cbs_by_start[start_uid]
-        self._factory_cbs_by_descriptor[uid].extend(factory_cbs)
+        self._factory_cbs_by_descriptor[descriptor_uid].extend(factory_cbs)
         for callback in factory_cbs:
             callback('descriptor', descriptor_doc)
         # Let all the subfactories add any relevant callbacks.
         for subfactory in self._subfactories[start_uid]:
             callbacks = subfactory('descriptor', descriptor_doc)
             self._subfactory_cbs_by_start[start_uid].extend(callbacks)
-            self._subfactory_cbs_by_descriptor[uid].extend(callbacks)
+            self._subfactory_cbs_by_descriptor[descriptor_uid].extend(callbacks)
             for callback in callbacks:
                 try:
                     start_doc = self._start_to_start_doc[start_uid]
@@ -1346,12 +1354,6 @@ class RunRouter(DocumentRouter):
                         DOCS_PASSED_IN_1_14_0_WARNING.format(
                             callback=callback, name='descriptor', err=err))
                     raise err
-        # Keep track of the RunStart UID -> [EventDescriptor UIDs] mapping for
-        # purposes of cleanup in stop().
-        self._start_to_descriptors[start_uid].append(uid)
-        # Keep track of the EventDescriptor UID -> RunStartUID for filling
-        # purposes.
-        self._descriptor_to_start[uid] = start_uid
 
     def event_page(self, doc):
         descriptor_uid = doc['descriptor']
