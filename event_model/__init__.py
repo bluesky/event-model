@@ -1595,18 +1595,20 @@ def compose_datum_page(*, resource, counter, datum_kwargs, validate=True):
 default_path_semantics = {'posix': 'posix', 'nt': 'windows'}[os.name]
 
 
-def compose_resource(*, start, spec, root, resource_path, resource_kwargs,
-                     path_semantics=default_path_semantics, uid=None, validate=True):
+def compose_resource(*, spec, root, resource_path, resource_kwargs,
+                     path_semantics=default_path_semantics, start=None, uid=None, validate=True):
     if uid is None:
         uid = str(uuid.uuid4())
     counter = itertools.count()
     doc = {'uid': uid,
-           'run_start': start['uid'],
            'spec': spec,
            'root': root,
            'resource_path': resource_path,
            'resource_kwargs': resource_kwargs,
            'path_semantics': path_semantics}
+    if start:
+        doc['run_start'] = start['uid']
+
     if validate:
         schema_validators[DocumentNames.resource].validate(doc)
 

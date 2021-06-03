@@ -887,3 +887,9 @@ def test_array_like():
         timestamps={"a": [1, 2, 3]},
         seq_num=[1, 2, 3]
     )
+
+
+def test_resource_start_optional():
+    event_model.compose_resource(
+        spec="TEST", root="/", resource_path="", resource_kwargs={}
+    )
