@@ -19,12 +19,8 @@ def scrub(hdrs, new_epoch, start_scan_id, filter_start=lambda x: x):
 
     start_scan_id : int
 
-        The first header is deemed to be at this scan_id, the rest of the
-        scan_ids will be adjusted accordingly.
-
-    filter_start : Callable[Dict][Dict], optional
-        Return a the filtered start document
-
+       The first header is deemed to be at this scan_id, the rest of the
+       scan_ids will be adjusted accordingly.
 
     Yields
     ------
@@ -61,7 +57,8 @@ def scrub(hdrs, new_epoch, start_scan_id, filter_start=lambda x: x):
                 yield name, doc
             elif name == "resource":
                 res = dict(doc)
-                res["run_uid"] = run_bundle.start_doc["uid"]
+                res["run_start"] = run_bundle.start_doc["uid"]
+                yield name, res
             elif name == "descriptor":
                 desc = dict(doc)
                 desc["configuration"] = dict(desc["configuration"])
@@ -89,13 +86,14 @@ def scrub(hdrs, new_epoch, start_scan_id, filter_start=lambda x: x):
                         k: [t - time_offset for t in v]
                         for k, v in doc["timestamps"].items()
                     },
+                    filled=doc["filled"],
                 )
                 yield "event_page", event_page
             elif name == "stop":
                 yield name, run_bundle.compose_stop(
                     exit_status=doc["exit_status"],
                     time=doc["time"] - time_offset,
-                    reason=doc["reason"],
+                    reason=doc.get("reason", ""),
                 )
             else:
                 raise Exception("unexpected document!")
