@@ -2,6 +2,21 @@
 Release History
 ***************
 
+v1.17.2 (2021-06-21)
+====================
+
+Added
+-----
+
+* Event, Datum Page were added to TOC
+
+Changed
+-------
+
+* The ``start document`` parameter to :func:`~event_model.compose_resource` is now optional
+* :meth:`~event_model.RunRouter.descriptor` has been modified to record descriptor document
+  id before executing callbacks
+
 v1.17.1 (2021-01-29)
 ====================
 
