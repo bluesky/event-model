@@ -46,9 +46,9 @@
                 ],
                 "type": "object"
             },
-            "data_type": {
-                "title" : "data_type",
-                "patternProperties": {"^([^./]+)$": {"$ref": "#/definitions/data_type"}},
+            "user_data_object": {
+                "title" : "user_data_object",
+                "patternProperties": {"^([^./]+)$": {"$ref": "#/definitions/user_data_object"}},
                 "additionalProperties": false
             },
             "object_hints": {
@@ -132,7 +132,7 @@
             }
         },
         "patternProperties": {
-            "^([^./]+)$": {"$ref": "#/definitions/data_type"}},
+            "^([^./]+)$": {"$ref": "#/definitions/user_data_object"}},
         "additionalProperties": false,
         "required": [
             "uid",
