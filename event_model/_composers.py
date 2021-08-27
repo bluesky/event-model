@@ -161,7 +161,7 @@ def compose_event_page(
                 "Keys in event['filled'] {} must be a subset of those in "
                 "event['data'] {}".format(filled.keys(), data.keys())
             )
-    event_counter[descriptor["name"]] += len(data)
+    event_counter[descriptor["name"]] += len(seq_num)
     return doc
 
 
