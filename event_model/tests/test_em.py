@@ -48,7 +48,7 @@ def test_compose_run():
     assert bundle.compose_stop is compose_stop
     bundle = compose_descriptor(
         data_keys={'motor': {'shape': [], 'dtype': 'number', 'source': '...'},
-                   'image': {'shape': [512, 512], 'dtype': 'number',
+                   'image': {'shape': [512, 512], 'dtype': 'array',
                              'source': '...', 'external': 'FILESTORE:'}},
         name='primary')
     descriptor_doc, compose_event, compose_event_page = bundle
@@ -85,7 +85,7 @@ def test_round_trip_pagination():
     run_bundle = event_model.compose_run()
     desc_bundle = run_bundle.compose_descriptor(
         data_keys={'motor': {'shape': [], 'dtype': 'number', 'source': '...'},
-                   'image': {'shape': [512, 512], 'dtype': 'number',
+                   'image': {'shape': [512, 512], 'dtype': 'array',
                              'source': '...', 'external': 'FILESTORE:'}},
         name='primary')
     res_bundle = run_bundle.compose_resource(
@@ -185,7 +185,7 @@ def test_bulk_events_to_event_page(tmp_path):
     run_bundle = event_model.compose_run()
     desc_bundle = run_bundle.compose_descriptor(
         data_keys={'motor': {'shape': [], 'dtype': 'number', 'source': '...'},
-                   'image': {'shape': [512, 512], 'dtype': 'number',
+                   'image': {'shape': [512, 512], 'dtype': 'array',
                              'source': '...', 'external': 'FILESTORE:'}},
         name='primary')
     desc_bundle_baseline = run_bundle.compose_descriptor(
@@ -223,7 +223,7 @@ def test_sanitize_doc():
     run_bundle = event_model.compose_run()
     desc_bundle = run_bundle.compose_descriptor(
         data_keys={'motor': {'shape': [], 'dtype': 'number', 'source': '...'},
-                   'image': {'shape': [512, 512], 'dtype': 'number',
+                   'image': {'shape': [512, 512], 'dtype': 'array',
                              'source': '...', 'external': 'FILESTORE:'}},
         name='primary')
     desc_bundle_baseline = run_bundle.compose_descriptor(
@@ -272,7 +272,7 @@ def test_document_router_smoke_test():
     dr('start', run_bundle.start_doc)
     desc_bundle = run_bundle.compose_descriptor(
         data_keys={'motor': {'shape': [], 'dtype': 'number', 'source': '...'},
-                   'image': {'shape': [512, 512], 'dtype': 'number',
+                   'image': {'shape': [512, 512], 'dtype': 'array',
                              'source': '...', 'external': 'FILESTORE:'}},
         name='primary')
     dr('descriptor', desc_bundle.descriptor_doc)
@@ -312,7 +312,7 @@ def test_document_router_with_validation():
     dr('start', run_bundle.start_doc, validate=True)
     desc_bundle = run_bundle.compose_descriptor(
         data_keys={'motor': {'shape': [], 'dtype': 'number', 'source': '...'},
-                   'image': {'shape': [512, 512], 'dtype': 'number',
+                   'image': {'shape': [512, 512], 'dtype': 'array',
                              'source': '...', 'external': 'FILESTORE:'}},
         name='primary')
     dr('descriptor', desc_bundle.descriptor_doc, validate=True)
@@ -632,7 +632,7 @@ def test_single_run_document_router():
 
     desc_bundle = run_bundle.compose_descriptor(
         data_keys={'motor': {'shape': [], 'dtype': 'number', 'source': '...'},
-                   'image': {'shape': [512, 512], 'dtype': 'number',
+                   'image': {'shape': [512, 512], 'dtype': 'array',
                              'source': '...', 'external': 'FILESTORE:'}},
         name='primary')
     sr('descriptor', desc_bundle.descriptor_doc)
@@ -700,7 +700,7 @@ def test_single_run_document_router():
 
     desc_bundle = run_bundle.compose_descriptor(
         data_keys={'motor': {'shape': [], 'dtype': 'number', 'source': '...'},
-                   'image': {'shape': [512, 512], 'dtype': 'number',
+                   'image': {'shape': [512, 512], 'dtype': 'array',
                              'source': '...', 'external': 'FILESTORE:'}},
         name='primary')
     with pytest.raises(event_model.EventModelValueError):
