@@ -1,6 +1,8 @@
 import json
-
+import typing
 import numpy
+
+from ._errors import EventModelValueError
 
 
 def sanitize_doc(doc):
@@ -51,3 +53,49 @@ class NumpyEncoder(json.JSONEncoder):
                 return obj.item()
             return obj.tolist()
         return json.JSONEncoder.default(self, obj)
+
+
+def infer_datakeys(val):
+    """
+    Given a value, infer what the datatype (as Ewent Model would describe it).
+
+    Parameters
+    ----------
+    val : Any
+
+    """
+    bad_iterables = (str, bytes, dict)
+    _type_map = {
+        "number": (float, numpy.floating, complex),
+        "array": (numpy.ndarray, list, tuple),
+        "string": (str,),
+        "integer": (int, numpy.integer),
+    }
+
+    if isinstance(val, typing.Iterable) and not isinstance(val, bad_iterables):
+        dtype = "array"
+    else:
+        for json_type, py_types in _type_map.items():
+            if isinstance(val, py_types):
+                dtype = json_type
+                break
+        else:
+            raise EventModelValueError(
+                f"Cannot determine the appropriate bluesky-friendly data type for "
+                f"value {val} of Python type {type(val)}. "
+                f"Supported types include: int, float, str, and iterables such as "
+                f"list, tuple, np.ndarray, and so on."
+            )
+
+    # this should only make a copy if it _has to_.  If we have lots of
+    # non-already-numpy arrays flowing through and this is doing things like
+    # computing huge dask arrays etc.
+    arr_val = numpy.asanyarray(val)
+    arr_dtype = arr_val.dtype
+
+    return {
+        "dtype": dtype,
+        "dtype_str": arr_dtype.str,
+        "dtype_descr": arr_dtype.descr,
+        "shape": list(arr_val.shape),
+    }
