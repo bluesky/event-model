@@ -1,1 +1,1 @@
-event_model/_version.py export-subst
+src/*/_version_git.py export-subst

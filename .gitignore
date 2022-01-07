@@ -1,7 +1,6 @@
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
-*$py.class
 
 # C extensions
 *.so
@@ -20,7 +19,6 @@ lib64/
 parts/
 sdist/
 var/
-venv/
 *.egg-info/
 .installed.cfg
 *.egg
@@ -43,8 +41,9 @@ htmlcov/
 .cache
 nosetests.xml
 coverage.xml
-*,cover
-.hypothesis/
+cov.xml
+.pytest_cache/
+.mypy_cache/
 
 # Translations
 *.mo
@@ -54,32 +53,13 @@ coverage.xml
 *.log
 
 # Sphinx documentation
-docs/build/
-docs/source/generated/
-
-# pytest
-.pytest_cache/
+docs/_build/
 
 # PyBuilder
 target/
 
-# Editor files
-#mac
-.DS_Store
-*~
-
-#vim
-*.swp
-*.swo
-
-#pycharm
-.idea/*
-
-#vscode
-.vscode/*
-
-#Ipython Notebook
-.ipynb_checkpoints
-
-# precomit
-.pre-commit-config.yaml
+# DLS build dir and virtual environment
+/prefix/
+/venv/
+/lightweight-venv/
+/installed.files
