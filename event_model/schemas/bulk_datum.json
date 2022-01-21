@@ -1,6 +1,6 @@
 {
     "properties": {
-        "datum_kwargs_list": {
+        "datum_kwarg_list": {
             "type": "array",
             "items": {"type": "object"},
             "description": "Array of arguments to pass to the Handler to retrieve one quanta of data"
@@ -16,9 +16,9 @@
         }
     },
     "required": [
-        "datum_kwargs",
+        "datum_kwarg_list",
         "resource",
-        "datum_id"
+        "datum_ids"
     ],
     "additionalProperties": false,
     "type": "object",
