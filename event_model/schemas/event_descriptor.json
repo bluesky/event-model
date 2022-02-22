@@ -1,5 +1,15 @@
     {
         "definitions": {
+            "np_dtype": {
+                "title": "nd_dtype",
+                "type": ["array", "string"],
+                "pattern": "[|<>][tbiufcmMOSUV][0-9]+",
+                "items": {
+                    "type": "array",
+                    "items": [{"type": "string"}, {"$ref": "#/definitions/np_dtype"}],
+                    "additionalItems": {"type": "array", "items": {"type":"integer"}}
+                }
+            },
             "data_key": {
                 "title": "data_key",
                 "description": "Describes the objects in the data property of Event documents",
@@ -14,6 +24,20 @@
                         ],
                         "type": "string",
                         "description": "The type of the data in the event."
+                    },
+                    "dtype_str" : {
+                        "type": "string",
+                        "description": "The __array_protocol__ typestring of the 'inner' data",
+                        "pattern": "[|<>][tbiufcmMOSUV][0-9]+"
+                    },
+                    "dtype_descr" : {
+                        "type": "array",
+                        "description": "The __array_protocol__ description of the 'inner' data.  This maybe nested.",
+                        "items": {
+                            "type": "array",
+                            "items": [{"type": "string"}, {"$ref": "#/definitions/np_dtype"}],
+                            "additionalItems": {"type": "array", "items": {"type":"integer"}}
+                        }
                     },
                     "external": {
                         "pattern": "^[A-Z]+:?",
@@ -46,9 +70,9 @@
                 ],
                 "type": "object"
             },
-            "data_type": {
-                "title" : "data_type",
-                "patternProperties": {"^([^./]+)$": {"$ref": "#/definitions/data_type"}},
+            "user_data_object": {
+                "title" : "user_data_object",
+                "patternProperties": {"^([^./]+)$": {"$ref": "#/definitions/user_data_object"}},
                 "additionalProperties": false
             },
             "object_hints": {
@@ -132,7 +156,7 @@
             }
         },
         "patternProperties": {
-            "^([^./]+)$": {"$ref": "#/definitions/data_type"}},
+            "^([^./]+)$": {"$ref": "#/definitions/user_data_object"}},
         "additionalProperties": false,
         "required": [
             "uid",

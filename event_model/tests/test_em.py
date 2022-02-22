@@ -1,12 +1,14 @@
 from distutils.version import LooseVersion
 import json
 import pickle
+import numpy as np
+
 
 import event_model
 import jsonschema
 import numpy
 import pytest
-
+from event_model._numpy import infer_datakeys
 
 JSONSCHEMA_2 = LooseVersion(jsonschema.__version__) < LooseVersion("3.0.0")
 
@@ -46,46 +48,62 @@ def test_compose_run():
     assert bundle.compose_descriptor is compose_descriptor
     assert bundle.compose_resource is compose_resource
     assert bundle.compose_stop is compose_stop
+    motor_data = 5.0
+    counter_data = 10
+    image_data = np.zeros((512, 512))
     bundle = compose_descriptor(
-        data_keys={'motor': {'shape': [], 'dtype': 'number', 'source': '...'},
-                   'image': {'shape': [512, 512], 'dtype': 'number',
-                             'source': '...', 'external': 'FILESTORE:'}},
-        name='primary')
+        data_keys={
+            "motor": {"source": "...", **infer_datakeys(motor_data)},
+            "counter": {"source": "...", **infer_datakeys(counter_data)},
+            "image": {
+                **infer_datakeys(image_data),
+                "source": "...",
+                "external": "FILESTORE:",
+            },
+        },
+        name="primary",
+    )
     descriptor_doc, compose_event, compose_event_page = bundle
     assert bundle.descriptor_doc is descriptor_doc
     assert bundle.compose_event is compose_event
     assert bundle.compose_event_page is compose_event_page
     bundle = compose_resource(
-        spec='TIFF', root='/tmp', resource_path='stack.tiff',
-        resource_kwargs={})
+        spec="TIFF", root="/tmp", resource_path="stack.tiff", resource_kwargs={}
+    )
     resource_doc, compose_datum, compose_datum_page = bundle
     assert bundle.resource_doc is resource_doc
     assert bundle.compose_datum is compose_datum
     assert bundle.compose_datum_page is compose_datum_page
-    datum_doc = compose_datum(datum_kwargs={'slice': 5})
+    datum_doc = compose_datum(datum_kwargs={"slice": 5})
     event_doc = compose_event(
-        data={'motor': 0, 'image': datum_doc['datum_id']},
-        timestamps={'motor': 0, 'image': 0}, filled={'image': False})
-    datum_page = compose_datum_page(datum_kwargs={'slice': [10, 15]})
-    event_page = compose_event_page(data={'motor': [1, 2], 'image':
-                                          datum_page['datum_id']},
-                                    timestamps={'motor': [0, 0],
-                                                'image': [0, 0]},
-                                    filled={'image': [False, False]},
-                                    seq_num=[1, 2])
-    assert 'descriptor' in event_doc
-    assert 'descriptor' in event_page
-    assert event_doc['seq_num'] == 1
+        data={"motor": 0.0, "counter": 1, "image": datum_doc["datum_id"]},
+        timestamps={"motor": 0, "counter": 0, "image": 0},
+        filled={"image": False},
+    )
+    datum_page = compose_datum_page(datum_kwargs={"slice": [10, 15]})
+    event_page = compose_event_page(
+        data={
+            "motor": [1.0, 2.0],
+            "image": datum_page["datum_id"],
+            "counter": [10, 11],
+        },
+        timestamps={"motor": [0, 0], "image": [0, 0], "counter": [0, 0]},
+        filled={"image": [False, False]},
+        seq_num=[1, 2],
+    )
+    assert "descriptor" in event_doc
+    assert "descriptor" in event_page
+    assert event_doc["seq_num"] == 1
     stop_doc = compose_stop()
-    assert 'primary' in stop_doc['num_events']
-    assert stop_doc['num_events']['primary'] == 3
+    assert "primary" in stop_doc["num_events"]
+    assert stop_doc["num_events"]["primary"] == 3
 
 
 def test_round_trip_pagination():
     run_bundle = event_model.compose_run()
     desc_bundle = run_bundle.compose_descriptor(
         data_keys={'motor': {'shape': [], 'dtype': 'number', 'source': '...'},
-                   'image': {'shape': [512, 512], 'dtype': 'number',
+                   'image': {'shape': [512, 512], 'dtype': 'array',
                              'source': '...', 'external': 'FILESTORE:'}},
         name='primary')
     res_bundle = run_bundle.compose_resource(
@@ -185,7 +203,7 @@ def test_bulk_events_to_event_page(tmp_path):
     run_bundle = event_model.compose_run()
     desc_bundle = run_bundle.compose_descriptor(
         data_keys={'motor': {'shape': [], 'dtype': 'number', 'source': '...'},
-                   'image': {'shape': [512, 512], 'dtype': 'number',
+                   'image': {'shape': [512, 512], 'dtype': 'array',
                              'source': '...', 'external': 'FILESTORE:'}},
         name='primary')
     desc_bundle_baseline = run_bundle.compose_descriptor(
@@ -223,7 +241,7 @@ def test_sanitize_doc():
     run_bundle = event_model.compose_run()
     desc_bundle = run_bundle.compose_descriptor(
         data_keys={'motor': {'shape': [], 'dtype': 'number', 'source': '...'},
-                   'image': {'shape': [512, 512], 'dtype': 'number',
+                   'image': {'shape': [512, 512], 'dtype': 'array',
                              'source': '...', 'external': 'FILESTORE:'}},
         name='primary')
     desc_bundle_baseline = run_bundle.compose_descriptor(
@@ -272,7 +290,7 @@ def test_document_router_smoke_test():
     dr('start', run_bundle.start_doc)
     desc_bundle = run_bundle.compose_descriptor(
         data_keys={'motor': {'shape': [], 'dtype': 'number', 'source': '...'},
-                   'image': {'shape': [512, 512], 'dtype': 'number',
+                   'image': {'shape': [512, 512], 'dtype': 'array',
                              'source': '...', 'external': 'FILESTORE:'}},
         name='primary')
     dr('descriptor', desc_bundle.descriptor_doc)
@@ -312,7 +330,7 @@ def test_document_router_with_validation():
     dr('start', run_bundle.start_doc, validate=True)
     desc_bundle = run_bundle.compose_descriptor(
         data_keys={'motor': {'shape': [], 'dtype': 'number', 'source': '...'},
-                   'image': {'shape': [512, 512], 'dtype': 'number',
+                   'image': {'shape': [512, 512], 'dtype': 'array',
                              'source': '...', 'external': 'FILESTORE:'}},
         name='primary')
     dr('descriptor', desc_bundle.descriptor_doc, validate=True)
@@ -632,7 +650,7 @@ def test_single_run_document_router():
 
     desc_bundle = run_bundle.compose_descriptor(
         data_keys={'motor': {'shape': [], 'dtype': 'number', 'source': '...'},
-                   'image': {'shape': [512, 512], 'dtype': 'number',
+                   'image': {'shape': [512, 512], 'dtype': 'array',
                              'source': '...', 'external': 'FILESTORE:'}},
         name='primary')
     sr('descriptor', desc_bundle.descriptor_doc)
@@ -700,7 +718,7 @@ def test_single_run_document_router():
 
     desc_bundle = run_bundle.compose_descriptor(
         data_keys={'motor': {'shape': [], 'dtype': 'number', 'source': '...'},
-                   'image': {'shape': [512, 512], 'dtype': 'number',
+                   'image': {'shape': [512, 512], 'dtype': 'array',
                              'source': '...', 'external': 'FILESTORE:'}},
         name='primary')
     with pytest.raises(event_model.EventModelValueError):
