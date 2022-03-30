@@ -1,14 +1,16 @@
-from distutils.version import LooseVersion
+import importlib.metadata
 import json
+import packaging.version
 import pickle
 
 import event_model
-import jsonschema
 import numpy
 import pytest
 
 
-JSONSCHEMA_2 = LooseVersion(jsonschema.__version__) < LooseVersion("3.0.0")
+JSONSCHEMA_2 = packaging.version.parse(
+    importlib.metadata.version("jsonschema")
+) < packaging.version.parse("3.0.0")
 
 
 def test_documents():

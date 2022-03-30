@@ -1,13 +1,14 @@
 from collections import defaultdict, deque, namedtuple
 import collections.abc
-from distutils.version import LooseVersion
 import copy
 import json
 from enum import Enum
 from functools import partial
+import importlib.metadata
 import itertools
 import inspect
 import os
+import packaging.version
 from pkg_resources import resource_filename as rs_fn
 import threading
 import time as ttime
@@ -1535,7 +1536,7 @@ for name, filename in SCHEMA_NAMES.items():
 # We pin jsonschema >=3.0.0 in requirements.txt but due to pip's dependency
 # resolution it is easy to end up with an environment where that pin is not
 # respected. Thus, we maintain best-effort support for 2.x.
-if LooseVersion(jsonschema.__version__) >= LooseVersion("3.0.0"):
+if packaging.version.parse(importlib.metadata.version("jsonschema")) >= packaging.version.parse("3.0.0"):
     def _is_array(checker, instance):
         return (
             jsonschema.validators.Draft7Validator.TYPE_CHECKER.is_type(instance, 'array') or
