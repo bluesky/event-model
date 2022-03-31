@@ -33,6 +33,8 @@ class DocumentNames(Enum):
     resource = 'resource'
     event_page = 'event_page'
     datum_page = 'datum_page'
+    stream_resource = 'stream_resource'
+    stream_datum = 'stream_datum'
     bulk_datum = 'bulk_datum'  # deprecated
     bulk_events = 'bulk_events'  # deprecated
 
@@ -1523,6 +1525,8 @@ SCHEMA_NAMES = {DocumentNames.start: 'schemas/run_start.json',
                 DocumentNames.datum: 'schemas/datum.json',
                 DocumentNames.datum_page: 'schemas/datum_page.json',
                 DocumentNames.resource: 'schemas/resource.json',
+                DocumentNames.stream_datum: 'schemas/stream_datum.json',
+                DocumentNames.stream_resource: 'schemas/stream_resource.json',
                 # DEPRECATED:
                 DocumentNames.bulk_events: 'schemas/bulk_events.json',
                 DocumentNames.bulk_datum: 'schemas/bulk_datum.json'}
