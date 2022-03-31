@@ -1,5 +1,7 @@
 from collections import defaultdict, deque, namedtuple
 import collections.abc
+from dataclasses import dataclass
+from typing import Union
 from distutils.version import LooseVersion
 import copy
 import json
@@ -1567,13 +1569,28 @@ else:
 __version__ = get_versions()['version']
 del get_versions
 
-ComposeRunBundle = namedtuple('ComposeRunBundle',
-                              'start_doc compose_descriptor compose_resource '
-                              'compose_stop')
+@dataclass
+class ComposeRunBundle:
+    """Extensible compose run bundle. This maintains backward compatibility by unpacking into a basic
+    run bundle (start, compose_descriptor, compose_resource, stop). Further extensions are optional and
+    require keyword referencing (i.e. compose_stream_resource).
+    """
+    start_doc: dict
+    compose_descriptor: callable
+    compose_resource: callable
+    compose_stop: callable
+    compose_stream_resource: Union[callable, None] = None
+
+    def __iter__(self):
+        return iter((self.start_doc, self.compose_descriptor, self.compose_resource, self.compose_stop))
+
+
 ComposeDescriptorBundle = namedtuple('ComposeDescriptorBundle',
                                      'descriptor_doc compose_event compose_event_page')
 ComposeResourceBundle = namedtuple('ComposeResourceBundle',
                                    'resource_doc compose_datum compose_datum_page')
+ComposeStreamResourceBundle = namedtuple('ComposeStreamResourceBundle',
+                                         'stream_resource_doc compose_stream_datum')
 
 
 def compose_datum(*, resource, counter, datum_kwargs, validate=True):
@@ -1622,6 +1639,46 @@ def compose_resource(*, spec, root, resource_path, resource_kwargs,
         doc,
         partial(compose_datum, resource=doc, counter=counter),
         partial(compose_datum_page, resource=doc, counter=counter))
+
+
+def compose_stream_datum(*, stream_resource, stream_name, counter, datum_kwargs, event_offset=0, validate=True):
+    resource_uid = stream_resource['uid']
+    block_id = next(counter)
+    doc = dict(stream_resource=resource_uid,
+               datum_kwargs=datum_kwargs,
+               uid=f"{resource_uid}/{stream_name}/{block_id}",
+               stream_name=stream_name,
+               block_id=block_id,
+               event_offset=event_offset,
+               )
+    if validate:
+        schema_validators[DocumentNames.stream_datum].validate(doc)
+    return doc
+
+
+def compose_stream_resource(*, spec, root, resource_path, resource_kwargs, stream_names, counter=None,
+                            path_semantics=default_path_semantics, start=None, uid=None, validate=True):
+    if uid is None:
+        uid = str(uuid.uuid4())
+    if counter is None:
+        counter = itertools.count()
+    doc = dict(uid=uid,
+               spec=spec,
+               root=root,
+               resource_path=resource_path,
+               resource_kwargs=resource_kwargs,
+               stream_names=stream_names,
+               path_semantics=path_semantics)
+    if start:
+        doc["run_start"] = start["uid"]
+
+    if validate:
+        schema_validators[DocumentNames.stream_resource].validate(doc)
+
+    return ComposeStreamResourceBundle(
+        doc,
+        partial(compose_stream_datum, stream_resource=doc, counter=counter)
+    )
 
 
 def compose_stop(*, start, event_counter, poison_pill,
