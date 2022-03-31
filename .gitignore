@@ -80,3 +80,6 @@ target/
 
 #Ipython Notebook
 .ipynb_checkpoints
+
+# precomit
+.pre-commit-config.yaml
