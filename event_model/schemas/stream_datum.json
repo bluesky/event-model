@@ -17,18 +17,18 @@
             "description": "The name of the stream that this Datum is providing a block of."
         },
         "block_id": {
-            "type": "int",
+            "type": "integer",
             "description": "The order in the stream of this block of data. This must be contiguous for a given stream."
         },
         "event_offset": {
-            "type": "int",
+            "type": "integer",
             "description": "The sequence number of the first event in this block. This increasing value allows the presence of gaps."
         }
 
     },
     "required": [
         "datum_kwargs",
-        "resource",
+        "stream_resource",
         "uid",
         "stream_name",
         "block_id"
