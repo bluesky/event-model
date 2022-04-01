@@ -1853,7 +1853,9 @@ def compose_run(*, uid=None, time=None, metadata=None, validate=True):
                 event_counter=event_counter),
         partial(compose_resource, start=doc),
         partial(compose_stop, start=doc, event_counter=event_counter,
-                poison_pill=poison_pill))
+                poison_pill=poison_pill),
+        compose_stream_resource=partial(compose_stream_resource, start=doc)
+    )
 
 
 def pack_event_page(*events):
