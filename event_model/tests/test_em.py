@@ -82,6 +82,29 @@ def test_compose_run():
     assert stop_doc['num_events']['primary'] == 3
 
 
+def test_compose_stream_resource():
+    """
+    Following the example of test_compose_run, focus only on the stream resource and
+    datum functionality
+    """
+    bundle = event_model.compose_run()
+    compose_stream_resource = bundle.compose_stream_resource
+    assert bundle.compose_stream_resource is compose_stream_resource
+    stream_names = ["stream_1", "stream_2"]
+    bundle = compose_stream_resource(spec="TIFF_STREAM", root="/tmp", resource_path="test_streams",
+                                     resource_kwargs={}, stream_names=stream_names)
+    resource_doc, compose_stream_data = bundle
+    assert bundle.stream_resource_doc is resource_doc
+    assert bundle.compose_stream_data is compose_stream_data
+    assert compose_stream_data[0] is not compose_stream_data[1]
+    datum_doc_0, datum_doc_1 = (compose_stream_datum(datum_kwargs={})
+                                for compose_stream_datum in compose_stream_data)
+    # Ensure independent counters
+    assert datum_doc_0['block_id'] == datum_doc_1["block_id"]
+    datum_doc_1a = compose_stream_data[1](datum_kwargs={})
+    assert datum_doc_1a["block_id"] != datum_doc_1["block_id"]
+
+
 def test_round_trip_pagination():
     run_bundle = event_model.compose_run()
     desc_bundle = run_bundle.compose_descriptor(

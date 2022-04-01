@@ -1591,7 +1591,7 @@ ComposeDescriptorBundle = namedtuple('ComposeDescriptorBundle',
 ComposeResourceBundle = namedtuple('ComposeResourceBundle',
                                    'resource_doc compose_datum compose_datum_page')
 ComposeStreamResourceBundle = namedtuple('ComposeStreamResourceBundle',
-                                         'stream_resource_doc compose_stream_datum')
+                                         'stream_resource_doc compose_stream_data')
 
 
 def compose_datum(*, resource, counter, datum_kwargs, validate=True):
@@ -1657,12 +1657,17 @@ def compose_stream_datum(*, stream_resource, stream_name, counter, datum_kwargs,
     return doc
 
 
-def compose_stream_resource(*, spec, root, resource_path, resource_kwargs, stream_names, counter=None,
+def compose_stream_resource(*, spec, root, resource_path, resource_kwargs, stream_names, counters=(),
                             path_semantics=default_path_semantics, start=None, uid=None, validate=True):
     if uid is None:
         uid = str(uuid.uuid4())
-    if counter is None:
-        counter = itertools.count()
+    if isinstance(stream_names, str):
+        stream_names = [stream_names, ]
+    if len(counters) == 0:
+        counters = [itertools.count() for _ in stream_names]
+    elif len(counters) > len(stream_names):
+        raise ValueError(f"Insufficient number of counters {len(counters)} for stream names: {stream_names}")
+
     doc = dict(uid=uid,
                spec=spec,
                root=root,
@@ -1678,7 +1683,8 @@ def compose_stream_resource(*, spec, root, resource_path, resource_kwargs, strea
 
     return ComposeStreamResourceBundle(
         doc,
-        partial(compose_stream_datum, stream_resource=doc, counter=counter)
+        [partial(compose_stream_datum, stream_resource=doc, stream_name=stream_name, counter=counter) for
+         stream_name, counter in zip(stream_names, counters)]
     )
 
 
