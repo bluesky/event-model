@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: [3.6, 3.7, 3.8]
+        python-version: ["3.8", "3.9", "3.10"]
         # We still test against jsonschema 2.x because pip's dependency resolver
         # very often gives us 2.x even though we ask for 3.x. The event-model
         # code has codepaths for either, conditional on what is installed.
