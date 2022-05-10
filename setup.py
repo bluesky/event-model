@@ -7,7 +7,7 @@ import versioneer
 # NOTE: This file must remain Python 2 compatible for the foreseeable future,
 # to ensure that we error out properly for people with outdated setuptools
 # and/or pip.
-min_version = (3, 6)
+min_version = (3, 8)
 if sys.version_info < min_version:
     error = """
 event-model does not support Python {0}.{1}.
