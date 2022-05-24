@@ -99,9 +99,9 @@
                 "description": "This describes the data in the Event Documents.",
                 "title": "data_keys",
                 "not": {
-                    "required": [
-                        "time",
-                        "seq_num"
+                    "anyOf": [
+                        { "required": ["time"] },
+                        { "required": ["seq_num"] }
                     ]
                 }
             },
