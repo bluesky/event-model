@@ -97,7 +97,13 @@
                 },
                 "type": "object",
                 "description": "This describes the data in the Event Documents.",
-                "title": "data_keys"
+                "title": "data_keys",
+                "not": {
+                    "required": [
+                        "time",
+                        "seq_num"
+                    ]
+                }
             },
             "uid": {
                 "type": "string",
