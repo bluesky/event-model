@@ -80,7 +80,6 @@ def test_reserved_keys():
         )
 
 
-
 def test_compose_run():
     # Compose each kind of document type. These calls will trigger
     # jsonschema.validate and ensure that the document-generation code composes
