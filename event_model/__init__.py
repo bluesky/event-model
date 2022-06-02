@@ -1705,6 +1705,8 @@ def compose_resource(*, spec, root, resource_path, resource_kwargs,
 def compose_stream_datum(*, stream_resource, stream_name, counter, datum_kwargs,
                          event_count=1, event_offset=0, validate=True):
     resource_uid = stream_resource['uid']
+    if stream_name not in stream_resource["stream_names"]:
+        raise EventModelKeyError("Attempt to create stream_datum with name not included in stream_resource")
     block_id = next(counter)
     doc = dict(stream_resource=resource_uid,
                datum_kwargs=datum_kwargs,

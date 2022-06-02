@@ -104,6 +104,12 @@ def test_compose_stream_resource():
     datum_doc_1a = compose_stream_data[1](datum_kwargs={})
     assert datum_doc_1a["block_id"] != datum_doc_1["block_id"]
 
+    # Ensure safety check
+    from itertools import count
+    with pytest.raises(KeyError):
+        event_model.compose_stream_datum(stream_resource=resource_doc, stream_name="stream_NA",
+                                         counter=count(), datum_kwargs={})
+
 
 def test_round_trip_pagination():
     run_bundle = event_model.compose_run()
