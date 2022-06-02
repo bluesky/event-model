@@ -1,7 +1,7 @@
 from collections import defaultdict, deque, namedtuple
 import collections.abc
 from dataclasses import dataclass
-from typing import Union
+from typing import Optional
 from distutils.version import LooseVersion
 import copy
 import json
@@ -1640,7 +1640,7 @@ class ComposeRunBundle:
     compose_descriptor: callable
     compose_resource: callable
     compose_stop: callable
-    compose_stream_resource: Union[callable, None] = None
+    compose_stream_resource: Optional[callable] = None
 
     def __iter__(self):
         return iter((self.start_doc, self.compose_descriptor, self.compose_resource, self.compose_stop))
