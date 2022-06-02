@@ -1,7 +1,7 @@
 from collections import defaultdict, deque, namedtuple
 import collections.abc
 from dataclasses import dataclass
-from typing import Union
+from typing import Optional
 from distutils.version import LooseVersion
 import copy
 import json
