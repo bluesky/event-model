@@ -100,9 +100,9 @@ def test_compose_stream_resource():
     datum_doc_0, datum_doc_1 = (compose_stream_datum(datum_kwargs={})
                                 for compose_stream_datum in compose_stream_data)
     # Ensure independent counters
-    assert datum_doc_0['block_id'] == datum_doc_1["block_id"]
+    assert datum_doc_0['block_idx'] == datum_doc_1["block_idx"]
     datum_doc_1a = compose_stream_data[1](datum_kwargs={})
-    assert datum_doc_1a["block_id"] != datum_doc_1["block_id"]
+    assert datum_doc_1a["block_idx"] != datum_doc_1["block_idx"]
 
     # Ensure safety check
     from itertools import count

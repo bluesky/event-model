@@ -1707,12 +1707,12 @@ def compose_stream_datum(*, stream_resource, stream_name, counter, datum_kwargs,
     resource_uid = stream_resource['uid']
     if stream_name not in stream_resource["stream_names"]:
         raise EventModelKeyError("Attempt to create stream_datum with name not included in stream_resource")
-    block_id = next(counter)
+    block_idx = next(counter)
     doc = dict(stream_resource=resource_uid,
                datum_kwargs=datum_kwargs,
-               uid=f"{resource_uid}/{stream_name}/{block_id}",
+               uid=f"{resource_uid}/{stream_name}/{block_idx}",
                stream_name=stream_name,
-               block_id=block_id,
+               block_idx=block_idx,
                event_count=event_count,
                event_offset=event_offset,
                )

@@ -16,7 +16,7 @@
             "type": "string",
             "description": "The name of the stream that this Datum is providing a block of."
         },
-        "block_id": {
+        "block_idx": {
             "type": "integer",
             "description": "The order in the stream of this block of data. This must be contiguous for a given stream."
         },
@@ -35,7 +35,7 @@
         "stream_resource",
         "uid",
         "stream_name",
-        "block_id",
+        "block_idx",
         "event_count"
     ],
     "additionalProperties": false,
