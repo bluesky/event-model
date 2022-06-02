@@ -1642,7 +1642,8 @@ def compose_resource(*, spec, root, resource_path, resource_kwargs,
         partial(compose_datum_page, resource=doc, counter=counter))
 
 
-def compose_stream_datum(*, stream_resource, stream_name, counter, datum_kwargs, event_offset=0, validate=True):
+def compose_stream_datum(*, stream_resource, stream_name, counter, datum_kwargs,
+                         event_count=1, event_offset=0, validate=True):
     resource_uid = stream_resource['uid']
     block_id = next(counter)
     doc = dict(stream_resource=resource_uid,
@@ -1650,6 +1651,7 @@ def compose_stream_datum(*, stream_resource, stream_name, counter, datum_kwargs,
                uid=f"{resource_uid}/{stream_name}/{block_id}",
                stream_name=stream_name,
                block_id=block_id,
+               event_count=event_count,
                event_offset=event_offset,
                )
     if validate:

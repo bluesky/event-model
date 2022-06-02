@@ -20,6 +20,10 @@
             "type": "integer",
             "description": "The order in the stream of this block of data. This must be contiguous for a given stream."
         },
+        "event_count": {
+            "type": "integer",
+            "description": "The number of events in this datum."
+        },
         "event_offset": {
             "type": "integer",
             "description": "The sequence number of the first event in this block. This increasing value allows the presence of gaps."
