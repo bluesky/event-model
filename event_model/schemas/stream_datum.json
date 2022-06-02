@@ -35,7 +35,8 @@
         "stream_resource",
         "uid",
         "stream_name",
-        "block_id"
+        "block_id",
+        "event_count"
     ],
     "additionalProperties": false,
     "type": "object",
