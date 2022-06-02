@@ -207,6 +207,12 @@ class DocumentRouter:
     def datum_page(self, doc):
         return NotImplemented
 
+    def stream_datum(self, doc):
+        return NotImplemented
+
+    def stream_resource(self, doc):
+        return NotImplemented
+
     def bulk_events(self, doc):
         # Do not modify this in a subclass. Use event_page.
         warnings.warn(
@@ -490,6 +496,10 @@ class Filler(DocumentRouter):
         A cache of Datum documents. If None, a dict is used.
     descriptor_cache : dict, optional
         A cache of EventDescriptor documents. If None, a dict is used.
+    stream_resource_cache : dict, optional
+        A cache of StreamResource documents. If None, a dict is used.
+    stream_datum_cache : dict, optional
+        A cache of StreamDatum documents. If None, a dict is used.
     retry_intervals : Iterable, optional
         If data is not found on the first try, there may a race between the
         I/O systems creating the external data and this stream of Documents
@@ -530,7 +540,8 @@ class Filler(DocumentRouter):
     def __init__(self, handler_registry, *,
                  include=None, exclude=None, root_map=None, coerce='as_is',
                  handler_cache=None, resource_cache=None, datum_cache=None,
-                 descriptor_cache=None, inplace=None,
+                 descriptor_cache=None, stream_resource_cache=None,
+                 stream_datum_cache=None, inplace=None,
                  retry_intervals=(0.001, 0.002, 0.004, 0.008, 0.016, 0.032,
                                   0.064, 0.128, 0.256, 0.512, 1.024)):
         if inplace is None:
@@ -583,10 +594,16 @@ class Filler(DocumentRouter):
             datum_cache = self.get_default_datum_cache()
         if descriptor_cache is None:
             descriptor_cache = self.get_default_descriptor_cache()
+        if stream_resource_cache is None:
+            stream_resource_cache = self.get_default_stream_resource_cache()
+        if stream_datum_cache is None:
+            stream_datum_cache = self.get_default_stream_datum_cache()
         self._handler_cache = handler_cache
         self._resource_cache = resource_cache
         self._datum_cache = datum_cache
         self._descriptor_cache = descriptor_cache
+        self._stream_resource_cache = stream_resource_cache
+        self._stream_datum_cache = stream_datum_cache
         if retry_intervals is None:
             retry_intervals = []
         self.retry_intervals = retry_intervals
@@ -604,6 +621,8 @@ class Filler(DocumentRouter):
             type(self._resource_cache) is type(other._resource_cache) and
             type(self._datum_cache) is type(other._datum_cache) and
             type(self._descriptor_cache) is type(other._descriptor_cache) and
+            type(self._stream_resource_cache) is type(other._stream_resource_cache) and
+            type(self._stream_datum_cache) is type(other._stream_datum_cache) and
             self.retry_intervals == other.retry_intervals
         )
 
@@ -619,6 +638,8 @@ class Filler(DocumentRouter):
             resource_cache=self._resource_cache,
             datum_cache=self._datum_cache,
             descriptor_cache=self._descriptor_cache,
+            stream_resource_cache=self._stream_resource_cache,
+            stream_datum_cache=self._stream_datum_cache,
             retry_intervals=self.retry_intervals)
 
     def __setstate__(self, d):
@@ -641,6 +662,8 @@ class Filler(DocumentRouter):
         self._resource_cache = d['resource_cache']
         self._datum_cache = d['datum_cache']
         self._descriptor_cache = d['descriptor_cache']
+        self._stream_resource_cache = d['stream_resource_cache']
+        self._stream_datum_cache = d['stream_datum_cache']
         retry_intervals = d['retry_intervals']
         if retry_intervals is None:
             retry_intervals = []
@@ -674,6 +697,14 @@ class Filler(DocumentRouter):
     def get_default_handler_cache():
         return {}
 
+    @staticmethod
+    def get_default_stream_datum_cache():
+        return {}
+
+    @staticmethod
+    def get_default_stream_resource_cache():
+        return {}
+
     @property
     def inplace(self):
         return self._inplace
@@ -681,7 +712,8 @@ class Filler(DocumentRouter):
     def clone(self, handler_registry=None, *,
               root_map=None, coerce=None,
               handler_cache=None, resource_cache=None, datum_cache=None,
-              descriptor_cache=None, inplace=None,
+              descriptor_cache=None, stream_resource_cache=None,
+              stream_datum_cache=None, inplace=None,
               retry_intervals=None):
         """
         Create a new Filler instance from this one.
@@ -708,6 +740,8 @@ class Filler(DocumentRouter):
                       resource_cache=resource_cache,
                       datum_cache=datum_cache,
                       descriptor_cache=descriptor_cache,
+                      stream_resource_cache=stream_resource_cache,
+                      stream_datum_cache=stream_datum_cache,
                       inplace=inplace,
                       retry_intervals=retry_intervals)
 
@@ -791,6 +825,13 @@ class Filler(DocumentRouter):
     def datum(self, doc):
         self._datum_cache[doc['datum_id']] = doc
         return doc
+
+    def stream_resource(self, doc):
+        self._stream_resource_cache[doc["uid"]] = doc
+        return doc
+
+    def stream_datum(self, doc):
+        self._stream_datum_cache[doc["uid"]] = doc
 
     def event_page(self, doc):
         # TODO We may be able to fill a page in place, and that may be more
@@ -1272,6 +1313,7 @@ class RunRouter(DocumentRouter):
 
         # Map Resource UID to RunStart UID.
         self._resources = {}
+        self._stream_resources = {}
 
         # Old-style Resources that do not have a RunStart UID
         self._unlabeled_resources = deque(maxlen=10000)
@@ -1402,6 +1444,15 @@ class RunRouter(DocumentRouter):
             for callback in self._subfactory_cbs_by_start[start_uid]:
                 callback('datum_page', doc)
 
+    def stream_datum(self, doc):
+        resource_uid = doc["stream_resource"]
+        start_uid = self._stream_resources[resource_uid]
+        self._fillers[start_uid].stream_datum(doc)
+        for callback in self._factory_cbs_by_start[start_uid]:
+            callback("stream_datum", doc)
+        for callback in self._subfactory_cbs_by_start[start_uid]:
+            callback("stream_datum", doc)
+
     def resource(self, doc):
         try:
             start_uid = doc['run_start']
@@ -1426,6 +1477,15 @@ class RunRouter(DocumentRouter):
                 callback('resource', doc)
             for callback in self._subfactory_cbs_by_start[start_uid]:
                 callback('resource', doc)
+
+    def stream_resource(self, doc):
+        start_uid = doc["run_start"]  # No need for Try
+        self._fillers[start_uid].stream_resource(doc)
+        self._stream_resources[doc["uid"]] = doc["run_start"]
+        for callback in self._factory_cbs_by_start[start_uid]:
+            callback("stream_resource", doc)
+        for callback in self._subfactory_cbs_by_start[start_uid]:
+            callback("stream_resource", doc)
 
     def stop(self, doc):
         start_uid = doc['run_start']
