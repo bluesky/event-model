@@ -196,6 +196,48 @@ def test_run_router(tmp_path):
         rr(name, doc)
 
 
+def test_run_router_streams(tmp_path):
+    bundle = event_model.compose_run()
+    docs = []
+    start_doc, compose_stream_resource, stop_doc = \
+        bundle.start_doc, bundle.compose_stream_resource, bundle.compose_stop()
+    docs.append(("start", start_doc))
+    stream_names = ["stream_1", "stream_2"]
+    stream_resource_doc, compose_stream_data = \
+        compose_stream_resource(spec="TIFF_STREAM", root=str(tmp_path), resource_path="test_streams",
+                                resource_kwargs={}, stream_names=stream_names)
+    docs.append(("stream_resource", stream_resource_doc))
+    datum_doc_0, datum_doc_1 = (compose_stream_datum(datum_kwargs={})
+                                for compose_stream_datum in compose_stream_data)
+    docs.append(("stream_datum", datum_doc_0))
+    docs.append(("stream_datum", datum_doc_1))
+    docs.append(("stop", stop_doc))
+
+    # Empty list of factories. Just make sure nothing blows up.
+    rr = event_model.RunRouter([])
+    for name, doc in docs:
+        rr(name, doc)
+
+    # Collector factory for stream resource and data
+    resource_list = []
+    data_list = []
+
+    def collector(name, doc):
+        if name == "stream_resource":
+            resource_list.append((name, doc))
+        elif name == "stream_datum":
+            data_list.append((name, doc))
+
+    def all_factory(name, doc):
+        return [collector], []
+
+    rr = event_model.RunRouter([all_factory])
+    for name, doc in docs:
+        rr(name, doc)
+    assert len(resource_list) == 1
+    assert len(data_list) == 2
+
+
 def test_subfactory():
     # this test targeted the bug described in issue #170
     factory_documents = defaultdict(list)
