@@ -82,7 +82,7 @@ def test_compose_run():
     assert stop_doc['num_events']['primary'] == 3
 
 
-def test_compose_stream_resource():
+def test_compose_stream_resource(tmp_path):
     """
     Following the example of test_compose_run, focus only on the stream resource and
     datum functionality
@@ -91,7 +91,7 @@ def test_compose_stream_resource():
     compose_stream_resource = bundle.compose_stream_resource
     assert bundle.compose_stream_resource is compose_stream_resource
     stream_names = ["stream_1", "stream_2"]
-    bundle = compose_stream_resource(spec="TIFF_STREAM", root="/tmp", resource_path="test_streams",
+    bundle = compose_stream_resource(spec="TIFF_STREAM", root=str(tmp_path), resource_path="test_streams",
                                      resource_kwargs={}, stream_names=stream_names)
     resource_doc, compose_stream_data = bundle
     assert bundle.stream_resource_doc is resource_doc
@@ -336,7 +336,7 @@ def test_document_router_smoke_test():
     dr('stop', run_bundle.compose_stop())
 
 
-def test_document_router_streams_smoke_test():
+def test_document_router_streams_smoke_test(tmp_path):
     dr = event_model.DocumentRouter()
     run_bundle = event_model.compose_run()
     compose_stream_resource = run_bundle.compose_stream_resource
@@ -344,7 +344,7 @@ def test_document_router_streams_smoke_test():
     dr("start", start)
     stream_names = ["stream_1", "stream_2"]
     stream_resource_doc, compose_stream_data = \
-        compose_stream_resource(spec="TIFF_STREAM", root="/tmp", resource_path="test_streams",
+        compose_stream_resource(spec="TIFF_STREAM", root=str(tmp_path), resource_path="test_streams",
                                 resource_kwargs={}, stream_names=stream_names)
     dr("stream_resource", stream_resource_doc)
     datum_doc_0, datum_doc_1 = (compose_stream_datum(datum_kwargs={})
