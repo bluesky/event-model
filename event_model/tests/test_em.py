@@ -336,6 +336,24 @@ def test_document_router_smoke_test():
     dr('stop', run_bundle.compose_stop())
 
 
+def test_document_router_streams_smoke_test():
+    dr = event_model.DocumentRouter()
+    run_bundle = event_model.compose_run()
+    compose_stream_resource = run_bundle.compose_stream_resource
+    start = run_bundle.start_doc
+    dr("start", start)
+    stream_names = ["stream_1", "stream_2"]
+    stream_resource_doc, compose_stream_data = \
+        compose_stream_resource(spec="TIFF_STREAM", root="/tmp", resource_path="test_streams",
+                                resource_kwargs={}, stream_names=stream_names)
+    dr("stream_resource", stream_resource_doc)
+    datum_doc_0, datum_doc_1 = (compose_stream_datum(datum_kwargs={})
+                                for compose_stream_datum in compose_stream_data)
+    dr("stream_datum", datum_doc_0)
+    dr("stream_datum", datum_doc_1)
+    dr('stop', run_bundle.compose_stop())
+
+
 def test_document_router_with_validation():
     dr = event_model.DocumentRouter()
     run_bundle = event_model.compose_run()
