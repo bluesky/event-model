@@ -36,7 +36,8 @@
         "uid",
         "stream_name",
         "block_idx",
-        "event_count"
+        "event_count",
+        "event_offset"
     ],
     "additionalProperties": false,
     "type": "object",
