@@ -3,6 +3,7 @@ import collections.abc
 from distutils.version import LooseVersion
 import copy
 import json
+import entrypoints
 from enum import Enum
 from functools import partial
 import itertools
@@ -2229,3 +2230,47 @@ class NumpyEncoder(json.JSONEncoder):
                 return obj.item()
             return obj.tolist()
         return json.JSONEncoder.default(self, obj)
+
+def discover_handlers(entrypoint_group_name='databroker.handlers',
+                      skip_failures=True):
+    """
+    Discover handlers via entrypoints.
+    Parameters
+    ----------
+    entrypoint_group_name: str
+        Default is 'databroker.handlers', the "official" databroker entrypoint
+        for handlers.
+    skip_failures: boolean
+        True by default. Errors loading a handler class are converted to
+        warnings if this is True.
+    Returns
+    -------
+    handler_registry: dict
+        A suitable default handler registry
+    """
+    group = entrypoints.get_group_named(entrypoint_group_name)
+    group_all = entrypoints.get_group_all(entrypoint_group_name)
+    if len(group_all) != len(group):
+        # There are some name collisions. Let's go digging for them.
+        for name, matches in itertools.groupby(group_all, lambda ep: ep.name):
+            matches = list(matches)
+            if len(matches) != 1:
+                winner = group[name]
+                warnings.warn(
+                    f"There are {len(matches)} entrypoints for the "
+                    f"databroker handler spec {name!r}. "
+                    f"They are {matches}. The match {winner} has won the race.")
+    handler_registry = {}
+    for name, entrypoint in group.items():
+        try:
+            handler_class = entrypoint.load()
+        except Exception as exc:
+            if skip_failures:
+                warnings.warn(f"Skipping {entrypoint!r} which failed to load. "
+                              f"Exception: {exc!r}")
+                continue
+            else:
+                raise
+        handler_registry[name] = handler_class
+
+    return handler_registry
