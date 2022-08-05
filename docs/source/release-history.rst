@@ -2,6 +2,20 @@
 Release History
 ***************
 
+v1.18.0 (2022-08-05)
+====================
+
+Added
+-----
+
+* GitHub workflow to publish releases on PyPI
+
+Changed
+-------
+
+* Fix for databroker.v0 API
+* Fix versioneer compatibility with py311
+
 v1.17.2 (2021-06-21)
 ====================
 
