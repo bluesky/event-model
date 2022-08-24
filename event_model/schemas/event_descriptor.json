@@ -37,6 +37,10 @@
                     "source": {
                         "type": "string",
                         "description": "The source (ex piece of hardware) of the data."
+                    },
+                    "object_name": {
+                        "type": "string",
+                        "description": "The name of the object this key was pulled from."
                     }
                 },
                 "required": [
