@@ -9,6 +9,7 @@ import itertools
 import inspect
 import os
 from pkg_resources import resource_filename as rs_fn
+from importlib.metadata import version
 import threading
 import time as ttime
 import types
@@ -1531,11 +1532,10 @@ for name, filename in SCHEMA_NAMES.items():
     with open(rs_fn('event_model', filename)) as fin:
         schemas[name] = json.load(fin)
 
-
 # We pin jsonschema >=3.0.0 in requirements.txt but due to pip's dependency
 # resolution it is easy to end up with an environment where that pin is not
 # respected. Thus, we maintain best-effort support for 2.x.
-if LooseVersion(jsonschema.__version__) >= LooseVersion("3.0.0"):
+if LooseVersion(version("jsonschema")) >= LooseVersion("3.0.0"):
     def _is_array(checker, instance):
         return (
             jsonschema.validators.Draft7Validator.TYPE_CHECKER.is_type(instance, 'array') or
