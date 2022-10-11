@@ -1535,7 +1535,7 @@ for name, filename in SCHEMA_NAMES.items():
 # We pin jsonschema >=3.0.0 in requirements.txt but due to pip's dependency
 # resolution it is easy to end up with an environment where that pin is not
 # respected. Thus, we maintain best-effort support for 2.x.
-if LooseVersion(version(jsonschema)) >= LooseVersion("3.0.0"):
+if LooseVersion(version("jsonschema")) >= LooseVersion("3.0.0"):
     def _is_array(checker, instance):
         return (
             jsonschema.validators.Draft7Validator.TYPE_CHECKER.is_type(instance, 'array') or
