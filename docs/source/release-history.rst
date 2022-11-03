@@ -2,6 +2,25 @@
 Release History
 ***************
 
+v1.19.0 (2022-11-03)
+====================
+
+Added
+-----
+
+* Add two experimental new document types: a `stream_resource` that manages an
+  unknown number of contiguous `stream_datum`, with the potential for multiple
+  streams. This is especially relevant when the data is expected to be ragged
+  or has no pre-determined shape (number of rows).
+
+Changed
+-------
+
+* Added ``object_name`` to Event Descriptor schema. The RunEngine has been
+  adding this for many years. This change merely documents the status quo.
+* Use ``importlib`` instead of ``__version__`` to implement logic conditional
+  on jsonschema version.
+
 v1.18.0 (2022-08-05)
 ====================
 
