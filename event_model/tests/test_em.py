@@ -15,12 +15,13 @@ def test_documents():
     dn = event_model.DocumentNames
     for k in ('stop', 'start', 'descriptor',
               'event', 'bulk_events', 'datum',
-              'resource', 'bulk_datum', 'event_page', 'datum_page'):
+              'resource', 'bulk_datum', 'event_page', 'datum_page',
+              'stream_resource', 'stream_datum'):
         assert dn(k) == getattr(dn, k)
 
 
 def test_len():
-    assert 10 == len(event_model.DocumentNames)
+    assert 12 == len(event_model.DocumentNames)
 
 
 def test_schemas():
@@ -79,6 +80,35 @@ def test_compose_run():
     stop_doc = compose_stop()
     assert 'primary' in stop_doc['num_events']
     assert stop_doc['num_events']['primary'] == 3
+
+
+def test_compose_stream_resource(tmp_path):
+    """
+    Following the example of test_compose_run, focus only on the stream resource and
+    datum functionality
+    """
+    bundle = event_model.compose_run()
+    compose_stream_resource = bundle.compose_stream_resource
+    assert bundle.compose_stream_resource is compose_stream_resource
+    stream_names = ["stream_1", "stream_2"]
+    bundle = compose_stream_resource(spec="TIFF_STREAM", root=str(tmp_path), resource_path="test_streams",
+                                     resource_kwargs={}, stream_names=stream_names)
+    resource_doc, compose_stream_data = bundle
+    assert bundle.stream_resource_doc is resource_doc
+    assert bundle.compose_stream_data is compose_stream_data
+    assert compose_stream_data[0] is not compose_stream_data[1]
+    datum_doc_0, datum_doc_1 = (compose_stream_datum(datum_kwargs={})
+                                for compose_stream_datum in compose_stream_data)
+    # Ensure independent counters
+    assert datum_doc_0['block_idx'] == datum_doc_1["block_idx"]
+    datum_doc_1a = compose_stream_data[1](datum_kwargs={})
+    assert datum_doc_1a["block_idx"] != datum_doc_1["block_idx"]
+
+    # Ensure safety check
+    from itertools import count
+    with pytest.raises(KeyError):
+        event_model.compose_stream_datum(stream_resource=resource_doc, stream_name="stream_NA",
+                                         counter=count(), datum_kwargs={})
 
 
 def test_round_trip_pagination():
@@ -303,6 +333,24 @@ def test_document_router_smoke_test():
         timestamps={'motor': 0},
         seq_num=1)
     dr('event', event3)
+    dr('stop', run_bundle.compose_stop())
+
+
+def test_document_router_streams_smoke_test(tmp_path):
+    dr = event_model.DocumentRouter()
+    run_bundle = event_model.compose_run()
+    compose_stream_resource = run_bundle.compose_stream_resource
+    start = run_bundle.start_doc
+    dr("start", start)
+    stream_names = ["stream_1", "stream_2"]
+    stream_resource_doc, compose_stream_data = \
+        compose_stream_resource(spec="TIFF_STREAM", root=str(tmp_path), resource_path="test_streams",
+                                resource_kwargs={}, stream_names=stream_names)
+    dr("stream_resource", stream_resource_doc)
+    datum_doc_0, datum_doc_1 = (compose_stream_datum(datum_kwargs={})
+                                for compose_stream_datum in compose_stream_data)
+    dr("stream_datum", datum_doc_0)
+    dr("stream_datum", datum_doc_1)
     dr('stop', run_bundle.compose_stop())
 
 

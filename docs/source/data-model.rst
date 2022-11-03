@@ -24,7 +24,7 @@ with useful components.
 Overview
 ========
 
-The data model is composed of six types of Documents, which in Python are
+The data model is composed of eight types of Documents, which in Python are
 represented as dictionaries but could be represented as nested mappings (e.g.
 JSON) in any language. Each document class has a defined, but flexible, schema.
 
@@ -35,8 +35,13 @@ JSON) in any language. Each document class has a defined, but flexible, schema.
 * Event Descriptor --- Metadata about a series of Events. Envision
   richly-detail column headings in a table, encompassing physical units,
   hardware configuration information, etc.
-* Resource --- A pointer to an external file (or resource in general).
+* Resource --- A pointer to an external file (or resource in general) that has
+  predictable and fixed dimensionality.
 * Datum --- A pointer to a specific slice of data within a Resource.
+* Stream Resource (Experimental) --- A pointer to an external resource that contains a stream
+  of data without restriction on the length of the stream. This resources with
+  know 'column' dimension without a known number of rows (e.g., time series, point detectors).
+* Stream Datum (Experimental) --- A pointer to a specific slice of data within a Stream Resource.
 * Run Stop Document ---  Everything that we can only know at the very end, such
   as the time it ended and the exit status (succeeded, aborted, failed due to
   error).
@@ -462,6 +467,87 @@ strucuted as a Datum Page with one row:
 Formal Datum Page schema:
 
 .. literalinclude:: ../../event_model/schemas/datum_page.json
+
+.. _stream_resource:
+
+Stream Resource Document (Experimental)
+---------------------------------------
+
+See :doc:`external` for details on the role Stream Resource documents play in
+referencing external assets that are natively ragged, such as single-photon detectors,
+or assets where there are many relatively small data sets (e.g. scanned fluorescence data).
+
+Minimal nontrivial valid example:
+
+.. code-block:: python
+
+   # 'Stream Resource' document
+   {'path_semantics': 'posix',
+    'resource_kwargs': {},
+    'resource_path': '/local/path/subdirectory/data_file',
+    'root': '/local/path/',
+    'run_start': '10bf6945-4afd-43ca-af36-6ad8f3540bcd',
+    'spec': 'SOME_SPEC',
+    'stream_names': ['point_det'],
+    'uid': '272132cf-564f-428f-bf6b-149ee4287024'}
+
+Typical example:
+
+.. code-block:: python
+
+   # resource
+   {'spec': 'AD_HDF5',
+    'root': '/GPFS/DATA/Andor/',
+    'resource_path': '2020/01/03/8ff08ff9-a2bf-48c3-8ff3-dcac0f309d7d.h5',
+    'resource_kwargs': {'frame_per_point': 1},
+    'path_semantics': 'posix',
+    'stream_names': ['point_det'],
+    'uid': '3b300e6f-b431-4750-a635-5630d15c81a8',
+    'run_start': '10bf6945-4afd-43ca-af36-6ad8f3540bcd'}
+
+Formal schema:
+
+.. literalinclude:: ../../event_model/schemas/stream_resource.json
+
+.. _stream_datum:
+
+Stream Datum Document
+---------------------
+
+See :doc:`external` for details on the role Stream Datum documents play in referencing
+external assets that are natively ragged, such as single-photon detectors,
+or assets where there are many relatively small data sets (e.g. scanned fluorescence data).
+
+Minimal nontrivial valid example:
+
+.. code-block:: python
+
+   # 'datum' document
+   {'resource': '272132cf-564f-428f-bf6b-149ee4287024',  # foreign key
+    'datum_kwargs': {},  # format-specific parameters
+    'datum_id': '272132cf-564f-428f-bf6b-149ee4287024/1',
+    'block_idx': 0,
+    'event_count': 1
+    }
+
+Typical example:
+
+.. code-block:: python
+
+   # datum
+   {'resource': '3b300e6f-b431-4750-a635-5630d15c81a8',
+    'datum_kwargs': {'index': 3},
+    'datum_id': '3b300e6f-b431-4750-a635-5630d15c81a8/3',
+    'block_idx': 0,
+    'event_count': 5,
+    'event_offset': 14}
+
+It is an implementation detail that ``datum_id`` is often formatted as
+``{resource}/{counter}`` but this should not be considered part of the schema.
+
+Formal schema:
+
+.. literalinclude:: ../../event_model/schemas/stream_datum.json
 
 .. _bulk_events:
 
