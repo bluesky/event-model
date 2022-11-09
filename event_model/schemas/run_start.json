@@ -84,14 +84,6 @@
             "type": "array", "items": {"type": "string"},              
             "description": "An optional list of data access groups that have meaning to some external system. Examples might include facility, beamline, end stations, proposal, safety form."
         },
-        "project": {
-            "type": "string",
-            "description": "Name of project that this run is part of"
-        },
-        "sample": {
-            "type": ["object", "string"],
-            "description": "Information about the sample, may be a UID to another collection"
-        },
         "scan_id": {
             "type": "integer",
             "description": "Scan ID number, not globally unique"
@@ -103,14 +95,6 @@
         "uid": {
             "type": "string",
             "description": "Globally unique ID for this run"
-        },
-        "group": {
-            "type": "string",
-            "description": "Unix group to associate this data with"
-        },
-        "owner": {
-            "type": "string",
-            "description": "Unix owner to associate this data with"
         },
         "projections": {
             "type": "array",
