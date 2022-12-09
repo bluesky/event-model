@@ -5,7 +5,7 @@ Release History
 v1.19.1 (2022-12-09)
 ====================
 
-This release fixes compatibility with Python 2.7, which was inadvertently
+This release fixes compatibility with Python 3.7, which was inadvertently
 broken in the previous release, 1.19.0.
 
 v1.19.0 (2022-11-03)
