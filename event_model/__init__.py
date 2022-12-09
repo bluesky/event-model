@@ -11,7 +11,7 @@ import itertools
 import inspect
 import os
 from pkg_resources import resource_filename as rs_fn
-from importlib.metadata import version
+import sys
 import threading
 import time as ttime
 import types
@@ -23,6 +23,11 @@ import jsonschema
 import numpy
 
 from ._version import get_versions
+
+if sys.version_info < (3, 8):
+    from importlib_metadata import version
+else:
+    from importlib.metadata import version
 
 __all__ = ['DocumentNames', 'schemas', 'schema_validators', 'compose_run']
 
