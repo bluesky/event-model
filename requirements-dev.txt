@@ -12,3 +12,6 @@ matplotlib
 numpydoc
 sphinx-copybutton
 sphinx_rtd_theme
+mypy
+# For generating the schema
+pydantic

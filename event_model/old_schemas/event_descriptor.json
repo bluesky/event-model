@@ -1,0 +1,150 @@
+    {
+        "definitions": {
+            "data_key": {
+                "title": "data_key",
+                "description": "Describes the objects in the data property of Event documents",
+                "properties": {
+                    "dtype": {
+                        "enum": [
+                            "string",
+                            "number",
+                            "array",
+                            "boolean",
+                            "integer"
+                        ],
+                        "type": "string",
+                        "description": "The type of the data in the event."
+                    },
+                    "external": {
+                        "pattern": "^[A-Z]+:?",
+                        "type": "string",
+                        "description": "Where the data is stored if it is stored external to the events."
+                    },
+                    "shape": {
+                        "type": "array",
+                        "items": {
+                            "type": "integer"
+                        },
+                        "description": "The shape of the data.  Empty list indicates scalar data."
+                    },
+                    "dims": {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "description": "The names for dimensions of the data. Null or empty list if scalar data"
+                    },
+                    "source": {
+                        "type": "string",
+                        "description": "The source (ex piece of hardware) of the data."
+                    },
+                    "object_name": {
+                        "type": "string",
+                        "description": "The name of the object this key was pulled from."
+                    }
+                },
+                "required": [
+                    "source",
+                    "dtype",
+                    "shape"
+                ],
+                "type": "object"
+            },
+            "data_type": {
+                "title" : "data_type",
+                "patternProperties": {"^([^./]+)$": {"$ref": "#/definitions/data_type"}},
+                "additionalProperties": false
+            },
+            "object_hints": {
+                "title": "Object Hints",
+                "patternProperties": {"^([^./]+)$": {"$ref": "#/definitions/per_object_hint"}},
+                "additionalProperties": false
+            },
+            "per_object_hint": {
+                "type": "object",
+                "properties": {
+                    "fields":
+                    {
+                        "description": "The 'interesting' data keys for this device.",
+                        "type": "array",
+                        "items":{
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            "configuration": {
+                "type": "object",
+                "properties": {
+                    "data": {
+                        "type": "object",
+                        "description": "The actual measurement data"
+                    },
+                    "timestamps": {
+                        "type": "object",
+                        "description": "The timestamps of the individual measurement data"
+                    },
+                    "data_keys": {
+                        "additionalProperties": {
+                            "$ref": "#/definitions/data_key"
+                        },
+                        "type": "object",
+                        "description": "This describes the data stored alongside it in this configuration object."
+                    }
+                }
+            }
+        },
+        "properties": {
+            "data_keys": {
+                "additionalProperties": {
+                    "$ref": "#/definitions/data_key"
+                },
+                "type": "object",
+                "description": "This describes the data in the Event Documents.",
+                "title": "data_keys"
+            },
+            "uid": {
+                "type": "string",
+                "description": "Globally unique ID for this event descriptor.",
+                "title": "uid"
+            },
+            "run_start": {
+                "type": "string",
+                "description": "Globally unique ID of this run's 'start' document."
+            },
+            "time": {
+                "type": "number",
+                "description": "Creation time of the document as unix epoch time."
+            },
+            "hints": {
+                "$ref": "#/definitions/object_hints"
+            },
+            "object_keys": {
+                "type": "object",
+                "description": "Maps a Device/Signal name to the names of the entries it produces in data_keys."
+            },
+            "name": {
+                "type": "string",
+                "description": "A human-friendly name for this data stream, such as 'primary' or 'baseline'."
+            },
+            "configuration": {
+                "additionalProperties": {
+                    "$ref": "#/definitions/configuration"
+                },
+                "type": "object",
+                "description": "Readings of configurational fields necessary for interpreting data in the Events."
+            }
+        },
+        "patternProperties": {
+            "^([^./]+)$": {"$ref": "#/definitions/data_type"}},
+        "additionalProperties": false,
+        "required": [
+            "uid",
+            "data_keys",
+            "run_start",
+            "time"
+        ],
+        "type": "object",
+        "title": "event_descriptor",
+        "description": "Document to describe the data captured in the associated event documents"
+    }

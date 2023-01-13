@@ -1,0 +1,164 @@
+{
+    "definitions": {
+        "data_type": {
+            "title" : "data_type",
+            "patternProperties": {"^([^./]+)$": {"$ref": "#/definitions/data_type"}},
+            "additionalProperties": false
+        },
+        "projection": {
+            "description": "Where to get the data from",
+            "type": "object",
+            "properties" : {
+                "type": {"enum": ["linked", "calculated", "static"], "description": "linked: a value linked from the data set, calculated: a value that requires calculation, static:  a value defined here in the projection "},
+                "stream": {"type": "string"},
+                "location": {"enum" : ["start", "event", "configuration"], "description": "start comes from metadata fields in the start document, event comes from event, configuration comes from configuration fields in the event_descriptor document"},
+                "field": {"type": "string"},
+                "config_index": {"type": "integer"},
+                "config_device": {"type": "string"},
+                "calculation": {
+                    "title" : "calculation properties",
+                    "description": "required fields if type is calculated",
+                    "properties": {
+                        "callable": {"type": "string", "description": "callable function to perform calculation"},
+                        "args": {"type": "array", "decription": "args for calculation callable"},
+                        "kwargs": {"type": "object", "description": "kwargs for calcalation callable"}
+                    },
+                    "required": ["callable"]
+                },
+                "value": {"description": "value explicitely defined in the projection when type==static."}
+            },
+            "allOf": [
+                {
+                    "if": {
+                        "allOf": [
+                            {"properties": {"location": {"enum": "configuration"}}},
+                            {"properties": {"type": {"enum": "linked"}}}
+                        ]},
+                    "then": {"required": ["type", "location", "config_index", "config_device", "field", "stream"]}
+                },
+                {
+                    "if": {
+                        "allOf": [
+                            {"properties": {"location": {"enum": "event"}}},
+                            {"properties": {"type": {"enum": "linked"}}}
+                        ]},
+                    "then": {"required": ["type", "location", "field", "stream"]}
+                },
+                {
+                    "if": {
+                        "allOf": [
+                            {"properties": {"location": {"enum": "event"}}},
+                            {"properties": {"type": {"enum": "calculated"}}}
+                        ]},
+                    "then": {"required": ["type", "field", "stream",  "calculation"]}
+                },
+                {
+                    "if": {"properties": {"type": {"enum": "static"}}},
+                    "then": {"required": ["type", "value"]}
+                }
+            ],      
+            "additionalProperties": false
+        },
+        "projections": {
+            "title" : "Describe how to interperet this run as the given projection",
+            "properties":{
+                "name": {"type": "string", "description": "The name of the projection"},
+                "version": {"type": "string", "description": "The version of the projection spec. Can specify the version of an external specification."},
+                "configuration" : {"type": "object", "description": "Static information about projection"},
+                "projection" : {
+                    "type": "object",
+                    "patternProperties": {".": {"$ref": "#/definitions/projection"}},
+                    "additionalProperties": false
+                }
+            },
+            "additionalProperties":  false,
+            "required" : ["projection", "version", "configuration"]
+        }
+    },
+    "properties": {
+        "data_session": {
+            "type": "string",              
+            "description": "An optional field for grouping runs. The meaning is not mandated, but this is a data management grouping and not a scientific grouping. It is intended to group runs in a visit or set of trials."
+        },
+        "data_groups": {
+            "type": "array", "items": {"type": "string"},              
+            "description": "An optional list of data access groups that have meaning to some external system. Examples might include facility, beamline, end stations, proposal, safety form."
+        },
+        "project": {
+            "type": "string",
+            "description": "Name of project that this run is part of"
+        },
+        "sample": {
+            "type": ["object", "string"],
+            "description": "Information about the sample, may be a UID to another collection"
+        },
+        "scan_id": {
+            "type": "integer",
+            "description": "Scan ID number, not globally unique"
+        },
+        "time": {
+            "type": "number",
+            "description": "Time the run started.  Unix epoch time"
+        },
+        "uid": {
+            "type": "string",
+            "description": "Globally unique ID for this run"
+        },
+        "group": {
+            "type": "string",
+            "description": "Unix group to associate this data with"
+        },
+        "owner": {
+            "type": "string",
+            "description": "Unix owner to associate this data with"
+        },
+        "projections": {
+            "type": "array",
+            "items": {"$ref": "#/definitions/projections"}
+        },
+        "hints": {
+            "type": "object",
+            "description": "Start-level hints",
+            "properties": {
+                "dimensions": {
+                    "type": "array",
+                    "description": "The independent axes of the experiment.  Ordered slow to fast",
+                    "items": {
+                        "type": "array",
+                        "description": "Each entry in this list is of the from ([<FIELD>, ...], <STREAM>).  A 1d scan will have 1 such entry, a scan with 3 independent entries would have 3",
+                        "items": [
+                            {
+                                "type": "array",
+                                "description": "The data key(s) for the given dimension.",
+                                "items":
+                                {
+                                    "type": "string"
+                                }
+                            },
+                            {
+                                "type": "string",
+                                "description": "The stream to find the datakeys in."
+
+                            }
+                        ],
+                        "additionalItems": false,
+                        "minItems": 2
+
+                    }
+                }
+            },
+            "patternProperties": {
+                "^([^.]+)$": {"$ref": "#/definitions/data_type"}},
+            "additionalProperties": false
+        }
+    },
+    "patternProperties": {
+        "^([^./]+)$": {"$ref": "#/definitions/data_type"}},
+    "additionalProperties": false,
+    "required": [
+        "uid",
+        "time"
+     ],
+    "type": "object",
+    "description": "Document created at the start of run.  Provides a seach target and later documents link to it"
+}

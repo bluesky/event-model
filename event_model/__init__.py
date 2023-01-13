@@ -1,7 +1,20 @@
 from collections import defaultdict, deque, namedtuple
 import collections.abc
 from dataclasses import dataclass
-from typing import Optional
+from typing import (
+    Optional,
+    Callable,
+    Tuple,
+    Type,
+    Iterable,
+    Any,
+    Iterator,
+    Generator,
+    Union,
+    List,
+    no_type_check,
+)
+
 from distutils.version import LooseVersion
 import copy
 import json
@@ -24,27 +37,37 @@ import numpy
 
 from ._version import get_versions
 
+from .document_typed_dicts.datum_page import DatumPage
+from .document_typed_dicts.datum import Datum
+from .document_typed_dicts.event_descriptor import EventDescriptor
+from .document_typed_dicts.event_page import EventPage
+from .document_typed_dicts.event import Event
+from .document_typed_dicts.run_start import RunStart
+from .document_typed_dicts.run_stop import RunStop
+from .document_typed_dicts.stream_datum import StreamDatum
+from .document_typed_dicts.stream_resource import StreamResource
+
 if sys.version_info < (3, 8):
     from importlib_metadata import version
 else:
     from importlib.metadata import version
 
-__all__ = ['DocumentNames', 'schemas', 'schema_validators', 'compose_run']
+__all__ = ["DocumentNames", "schemas", "schema_validators", "compose_run"]
 
 
 class DocumentNames(Enum):
-    stop = 'stop'
-    start = 'start'
-    descriptor = 'descriptor'
-    event = 'event'
-    datum = 'datum'
-    resource = 'resource'
-    event_page = 'event_page'
-    datum_page = 'datum_page'
-    stream_resource = 'stream_resource'
-    stream_datum = 'stream_datum'
-    bulk_datum = 'bulk_datum'  # deprecated
-    bulk_events = 'bulk_events'  # deprecated
+    stop: str = "stop"
+    start: str = "start"
+    descriptor: str = "descriptor"
+    event: str = "event"
+    datum: str = "datum"
+    resource: str = "resource"
+    event_page: str = "event_page"
+    datum_page: str = "datum_page"
+    stream_resource: str = "stream_resource"
+    stream_datum: str = "stream_datum"
+    bulk_datum: str = "bulk_datum"  # deprecated
+    bulk_events: str = "bulk_events"  # deprecated
 
 
 class DocumentRouter:
@@ -72,9 +95,13 @@ class DocumentRouter:
     emit: callable, optional
         Expected signature ``f(name, doc)``
     """
-    def __init__(self, *, emit=None):
+
+    def __init__(self, *, emit: Optional[Callable] = None) -> None:
         # Put in some extra effort to validate `emit` carefully, because if
         # this is used incorrectly the resultant errors can be confusing.
+
+        self._emit_ref: Optional[Callable] = None
+
         if emit is not None:
             if not callable(emit):
                 raise ValueError("emit must be a callable")
@@ -83,16 +110,16 @@ class DocumentRouter:
                 # Does this function accept two positional arguments?
                 sig.bind(None, None)
             except TypeError:
-                raise ValueError("emit must accept two positional arguments, name and doc")
+                raise ValueError(
+                    "emit must accept two positional arguments, name and doc"
+                )
             # Stash a weak reference to `emit`.
             if inspect.ismethod(emit):
                 self._emit_ref = weakref.WeakMethod(emit)
             else:
                 self._emit_ref = weakref.ref(emit)
-        else:
-            self._emit_ref = None
 
-    def emit(self, name, doc):
+    def emit(self, name: str, doc: dict) -> None:
         """
         Emit to the callable provided an instantiation time, if any.
         """
@@ -102,7 +129,9 @@ class DocumentRouter:
             if emit is not None:
                 emit(name, doc)
 
-    def __call__(self, name, doc, validate=False):
+    def __call__(
+        self, name: str, doc: dict, validate: bool = False
+    ) -> Tuple[str, dict]:
         """
         Process a document.
 
@@ -122,7 +151,7 @@ class DocumentRouter:
         """
         return self._dispatch(name, doc, validate)
 
-    def _dispatch(self, name, doc, validate):
+    def _dispatch(self, name: str, doc: dict, validate: bool) -> Tuple[str, dict]:
         """
         Dispatch to the method corresponding to the `name`.
 
@@ -133,23 +162,27 @@ class DocumentRouter:
         # If 'event' is not defined by the subclass but 'event_page' is, or
         # vice versa, use that. And the same for 'datum_page' / 'datum.
         if output_doc is NotImplemented:
-            if name == 'event':
+            if name == "event":
                 event_page = pack_event_page(doc)
                 # Subclass' implementation of event_page may return a valid
                 # EventPage or None or NotImplemented.
                 output_event_page = self.event_page(event_page)
-                output_event_page = output_event_page if output_event_page is not None else event_page
+                output_event_page = (
+                    output_event_page if output_event_page is not None else event_page
+                )
                 if output_event_page is not NotImplemented:
-                    output_doc, = unpack_event_page(output_event_page)
-            elif name == 'datum':
+                    (output_doc,) = unpack_event_page(output_event_page)
+            elif name == "datum":
                 datum_page = pack_datum_page(doc)
                 # Subclass' implementation of datum_page may return a valid
                 # DatumPage or None or NotImplemented.
                 output_datum_page = self.datum_page(datum_page)
-                output_datum_page = output_datum_page if output_datum_page is not None else datum_page
+                output_datum_page = (
+                    output_datum_page if output_datum_page is not None else datum_page
+                )
                 if output_datum_page is not NotImplemented:
-                    output_doc, = unpack_datum_page(output_datum_page)
-            elif name == 'event_page':
+                    (output_doc,) = unpack_datum_page(output_datum_page)
+            elif name == "event_page":
                 output_events = []
                 for event in unpack_event_page(doc):
                     # Subclass' implementation of event may return a valid
@@ -161,7 +194,7 @@ class DocumentRouter:
                     output_events.append(output_event)
                 else:
                     output_doc = pack_event_page(*output_events)
-            elif name == 'datum_page':
+            elif name == "datum_page":
                 output_datums = []
                 for datum in unpack_datum_page(doc):
                     # Subclass' implementation of datum may return a valid
@@ -189,49 +222,51 @@ class DocumentRouter:
     # to how Python uses NotImplemented in arithmetic operations, as described
     # in the documentation.
 
-    def start(self, doc):
+    def start(self, doc: dict):
         return NotImplemented
 
-    def stop(self, doc):
+    def stop(self, doc: dict):
         return NotImplemented
 
-    def descriptor(self, doc):
+    def descriptor(self, doc: dict):
         return NotImplemented
 
-    def resource(self, doc):
+    def resource(self, doc: dict):
         return NotImplemented
 
-    def event(self, doc):
+    def event(self, doc: dict):
         return NotImplemented
 
-    def datum(self, doc):
+    def datum(self, doc: dict):
         return NotImplemented
 
-    def event_page(self, doc):
+    def event_page(self, doc: dict):
         return NotImplemented
 
-    def datum_page(self, doc):
+    def datum_page(self, doc: dict):
         return NotImplemented
 
-    def stream_datum(self, doc):
+    def stream_datum(self, doc: dict):
         return NotImplemented
 
-    def stream_resource(self, doc):
+    def stream_resource(self, doc: dict):
         return NotImplemented
 
-    def bulk_events(self, doc):
+    def bulk_events(self, doc: dict) -> None:
         # Do not modify this in a subclass. Use event_page.
         warnings.warn(
             "The document type 'bulk_events' has been deprecated in favor of "
-            "'event_page', whose structure is a transpose of 'bulk_events'.")
+            "'event_page', whose structure is a transpose of 'bulk_events'."
+        )
         for page in bulk_events_to_event_pages(doc):
             self.event_page(page)
 
-    def bulk_datum(self, doc):
+    def bulk_datum(self, doc: dict) -> None:
         # Do not modify this in a subclass. Use event_page.
         warnings.warn(
             "The document type 'bulk_datum' has been deprecated in favor of "
-            "'datum_page', whose structure is a transpose of 'bulk_datum'.")
+            "'datum_page', whose structure is a transpose of 'bulk_datum'."
+        )
         self.datum_page(bulk_datum_to_datum_page(doc))
 
 
@@ -239,12 +274,15 @@ class SingleRunDocumentRouter(DocumentRouter):
     """
     A DocumentRouter intended to process events from exactly one run.
     """
-    def __init__(self):
-        super().__init__()
-        self._start_doc = None
-        self._descriptors = dict()
 
-    def __call__(self, name, doc, validate=False):
+    def __init__(self) -> None:
+        super().__init__()
+        self._start_doc: Optional[dict] = None
+        self._descriptors: dict = dict()
+
+    def __call__(
+        self, name: str, doc: dict, validate: bool = False
+    ) -> Tuple[str, dict]:
         """
         Process a document.
 
@@ -265,7 +303,7 @@ class SingleRunDocumentRouter(DocumentRouter):
             The same name as what was passed in, and a doc that may be the same
             instance as doc, a copy of doc, or a different dict altogether.
         """
-        if name == 'start':
+        if name == "start":
             if self._start_doc is None:
                 self._start_doc = doc
             else:
@@ -273,18 +311,19 @@ class SingleRunDocumentRouter(DocumentRouter):
                     f'SingleRunDocumentRouter associated with start document {self._start_doc["uid"]} '
                     f'received a second start document with uid {doc["uid"]}'
                 )
-        elif name == 'descriptor':
-            if doc['run_start'] == self._start_doc['uid']:
-                self._descriptors[doc['uid']] = doc
+        elif name == "descriptor":
+            assert isinstance(self._start_doc, dict)
+            if doc["run_start"] == self._start_doc["uid"]:
+                self._descriptors[doc["uid"]] = doc
             else:
                 raise EventModelValueError(
                     f'SingleRunDocumentRouter associated with start document {self._start_doc["uid"]} '
                     f'received a descriptor {doc["uid"]} associated with start document {doc["run_start"]}'
                 )
         # Defer to superclass for dispatch/processing.
-        return super().__call__(name, doc, validate)
+        return super().__call__(name, doc, validate=validate)
 
-    def get_start(self):
+    def get_start(self) -> dict:
         """Convenience method returning the start document for the associated run.
 
         If no start document has been processed EventModelError will be raised.
@@ -294,11 +333,13 @@ class SingleRunDocumentRouter(DocumentRouter):
         start document : dict
         """
         if self._start_doc is None:
-            raise EventModelError('SingleRunDocumentRouter has not processed a start document yet')
+            raise EventModelError(
+                "SingleRunDocumentRouter has not processed a start document yet"
+            )
 
         return self._start_doc
 
-    def get_descriptor(self, doc):
+    def get_descriptor(self, doc: dict) -> EventDescriptor:
         """Convenience method returning the descriptor associated with the specified document.
 
         Parameters
@@ -310,16 +351,18 @@ class SingleRunDocumentRouter(DocumentRouter):
         -------
         descriptor document : dict
         """
-        if 'descriptor' not in doc:
-            raise EventModelValueError(f'document is not associated with a descriptor:\n{doc}')
-        elif doc['descriptor'] not in self._descriptors:
+        if "descriptor" not in doc:
+            raise EventModelValueError(
+                f"document is not associated with a descriptor:\n{doc}"
+            )
+        elif doc["descriptor"] not in self._descriptors:
             raise EventModelValueError(
                 f'SingleRunDocumentRouter has not processed a descriptor with uid {doc["descriptor"]}'
             )
 
-        return self._descriptors[doc['descriptor']]
+        return self._descriptors[doc["descriptor"]]
 
-    def get_stream_name(self, doc):
+    def get_stream_name(self, doc: dict) -> str:
         """Convenience method returning the name of the stream for the specified document.
 
         Parameters
@@ -331,34 +374,37 @@ class SingleRunDocumentRouter(DocumentRouter):
         -------
         stream name : str
         """
-        return self.get_descriptor(doc).get('name')
+        return str(self.get_descriptor(doc).get("name"))
 
 
 class HandlerRegistryView(collections.abc.Mapping):
-    def __init__(self, handler_registry):
+    def __init__(self, handler_registry: dict) -> None:
         self._handler_registry = handler_registry
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return f"HandlerRegistryView({self._handler_registry!r})"
 
-    def __getitem__(self, key):
+    def __getitem__(self, key: str) -> str:
         return self._handler_registry[key]
 
-    def __iter__(self):
+    def __iter__(self) -> Generator:
         yield from self._handler_registry
 
-    def __len__(self):
+    def __len__(self) -> int:
         return len(self._handler_registry)
 
-    def __setitem__(self, key, value):
+    def __setitem__(self, key: str, val: Any) -> None:
         raise EventModelTypeError(
             "The handler registry cannot be edited directly. "
-            "Instead, use the method Filler.register_handler.")
+            "Instead, use the method Filler.register_handler."
+        )
 
-    def __delitem__(self, key):
+    def __delitem__(self, key: str) -> None:
         raise EventModelTypeError(
             "The handler registry cannot be edited directly. "
-            "Instead, use the method Filler.deregister_handler.")
+            "Instead, use the method Filler.deregister_handler."
+        )
+
 
 # A "coercion funcion" is a hook that Filler can use to, for example, ensure
 # all the external data read in my handlers is an *actual* numpy array as
@@ -389,29 +435,31 @@ class HandlerRegistryView(collections.abc.Mapping):
 # delayed-computation framework (e.g. dask) in event-model itself.
 
 
-def as_is(handler_class, filler_state):
+def as_is(handler_class, filler_state) -> Type:
     "A no-op coercion function that returns handler_class unchanged."
     return handler_class
 
 
-def force_numpy(handler_class, filler_state):
+@no_type_check
+def force_numpy(handler_class: Type, filler_state) -> Any:
     "A coercion that makes handler_class.__call__ return actual numpy.ndarray."
+
     class Subclass(handler_class):
         def __call__(self, *args, **kwargs):
             raw_result = super().__call__(*args, **kwargs)
             result_as_array = numpy.asarray(raw_result)
             return result_as_array
+
     Subclass.__name__ = f"Subclassed{handler_class.__name__}"
     Subclass.__qualname__ = f"Subclassed{handler_class.__qualname__}"
     return Subclass
 
 
 # maps coerce option to corresponding coercion function
-_coercion_registry = {'as_is': as_is,
-                      'force_numpy': force_numpy}
+_coercion_registry = {"as_is": as_is, "force_numpy": force_numpy}
 
 
-def register_coercion(name, func, overwrite=False):
+def register_coercion(name: str, func: Callable, overwrite: bool = False) -> None:
     """
     Register a new option for :class:`Filler`'s ``coerce`` argument.
 
@@ -438,7 +486,8 @@ def register_coercion(name, func, overwrite=False):
         raise EventModelValueError(
             f"The coercion function {func} could not be registered for the "
             f"name {name} because {_coercion_registry[name]} is already "
-            f"registered. Use overwrite=True to force it.")
+            f"registered. Use overwrite=True to force it."
+        )
     _coercion_registry[name] = func
 
 
@@ -543,19 +592,43 @@ class Filler(DocumentRouter):
     ...
     >>> del filler  # Free up memory from potentially large caches.
     """
-    def __init__(self, handler_registry, *,
-                 include=None, exclude=None, root_map=None, coerce='as_is',
-                 handler_cache=None, resource_cache=None, datum_cache=None,
-                 descriptor_cache=None, stream_resource_cache=None,
-                 stream_datum_cache=None, inplace=None,
-                 retry_intervals=(0.001, 0.002, 0.004, 0.008, 0.016, 0.032,
-                                  0.064, 0.128, 0.256, 0.512, 1.024)):
+
+    def __init__(
+        self,
+        handler_registry: dict,
+        *,
+        include: Optional[Iterable] = None,
+        exclude: Optional[Iterable] = None,
+        root_map: Optional[dict] = None,
+        coerce: str = "as_is",
+        handler_cache: Optional[dict] = None,
+        resource_cache: Optional[dict] = None,
+        datum_cache: Optional[dict] = None,
+        descriptor_cache: Optional[dict] = None,
+        stream_resource_cache: Optional[dict] = None,
+        stream_datum_cache: Optional[dict] = None,
+        inplace: Optional[bool] = None,
+        retry_intervals: List = [
+            0.001,
+            0.002,
+            0.004,
+            0.008,
+            0.016,
+            0.032,
+            0.064,
+            0.128,
+            0.256,
+            0.512,
+            1.024,
+        ],
+    ) -> None:
         if inplace is None:
             self._inplace = True
             warnings.warn(
                 "'inplace' argument not specified. It is recommended to "
                 "specify True or False. In future releases, 'inplace' "
-                "will default to False.")
+                "will default to False."
+            )
         else:
             self._inplace = inplace
 
@@ -563,33 +636,39 @@ class Filler(DocumentRouter):
             raise EventModelValueError(
                 "The parameters `include` and `exclude` are mutually "
                 "incompatible. At least one must be left as the default, "
-                "None.")
+                "None."
+            )
         try:
             self._coercion_func = _coercion_registry[coerce]
         except KeyError:
             raise EventModelKeyError(
                 f"The option coerce={coerce!r} was given to event_model.Filler. "
-                f"The valid options are {set(_coercion_registry)}.")
+                f"The valid options are {set(_coercion_registry)}."
+            )
         self._coerce = coerce
 
         # See comments on coerision functions above for the use of
         # _current_state, which is passed to coercion functions' `filler_state`
         # parameter.
         self._current_state = threading.local()
-        self._unpatched_handler_registry = {}
-        self._handler_registry = {}
+        self._unpatched_handler_registry: dict = {}
+        self._handler_registry: dict = {}
         for spec, handler_class in handler_registry.items():
             self.register_handler(spec, handler_class)
         self.handler_registry = HandlerRegistryView(self._handler_registry)
         if include is not None:
             warnings.warn(
                 "In a future release of event-model, the argument `include` "
-                "will be removed from Filler.", DeprecationWarning)
+                "will be removed from Filler.",
+                DeprecationWarning,
+            )
         self.include = include
         if exclude is not None:
             warnings.warn(
                 "In a future release of event-model, the argument `exclude` "
-                "will be removed from Filler.", DeprecationWarning)
+                "will be removed from Filler.",
+                DeprecationWarning,
+            )
         self.exclude = exclude
         self.root_map = root_map or {}
         if handler_cache is None:
@@ -615,24 +694,24 @@ class Filler(DocumentRouter):
         self.retry_intervals = retry_intervals
         self._closed = False
 
-    def __eq__(self, other):
+    def __eq__(self, other: Any) -> bool:
         return (
-            type(self) is type(other) and
-            self.inplace == other.inplace and
-            self._coerce == other._coerce and
-            self.include == other.include and
-            self.exclude == other.exclude and
-            self.root_map == other.root_map and
-            type(self._handler_cache) is type(other._handler_cache) and
-            type(self._resource_cache) is type(other._resource_cache) and
-            type(self._datum_cache) is type(other._datum_cache) and
-            type(self._descriptor_cache) is type(other._descriptor_cache) and
-            type(self._stream_resource_cache) is type(other._stream_resource_cache) and
-            type(self._stream_datum_cache) is type(other._stream_datum_cache) and
-            self.retry_intervals == other.retry_intervals
+            type(self) is type(other)
+            and self.inplace == other.inplace
+            and self._coerce == other._coerce
+            and self.include == other.include
+            and self.exclude == other.exclude
+            and self.root_map == other.root_map
+            and type(self._handler_cache) is type(other._handler_cache)
+            and type(self._resource_cache) is type(other._resource_cache)
+            and type(self._datum_cache) is type(other._datum_cache)
+            and type(self._descriptor_cache) is type(other._descriptor_cache)
+            and type(self._stream_resource_cache) is type(other._stream_resource_cache)
+            and type(self._stream_datum_cache) is type(other._stream_datum_cache)
+            and self.retry_intervals == other.retry_intervals
         )
 
-    def __getstate__(self):
+    def __getstate__(self) -> dict:
         return dict(
             inplace=self._inplace,
             coercion_func=self._coerce,
@@ -646,11 +725,12 @@ class Filler(DocumentRouter):
             descriptor_cache=self._descriptor_cache,
             stream_resource_cache=self._stream_resource_cache,
             stream_datum_cache=self._stream_datum_cache,
-            retry_intervals=self.retry_intervals)
+            retry_intervals=self.retry_intervals,
+        )
 
-    def __setstate__(self, d):
-        self._inplace = d['inplace']
-        self._coerce = d['coercion_func']
+    def __setstate__(self, d: dict) -> None:
+        self._inplace = d["inplace"]
+        self._coerce = d["coercion_func"]
 
         # See comments on coerision functions above for the use of
         # _current_state, which is passed to coercion functions' `filler_state`
@@ -658,69 +738,78 @@ class Filler(DocumentRouter):
         self._current_state = threading.local()
         self._unpatched_handler_registry = {}
         self._handler_registry = {}
-        for spec, handler_class in d['handler_registry'].items():
+        for spec, handler_class in d["handler_registry"].items():
             self.register_handler(spec, handler_class)
         self.handler_registry = HandlerRegistryView(self._handler_registry)
-        self.include = d['include']
-        self.exclude = d['exclude']
-        self.root_map = d['root_map']
-        self._handler_cache = d['handler_cache']
-        self._resource_cache = d['resource_cache']
-        self._datum_cache = d['datum_cache']
-        self._descriptor_cache = d['descriptor_cache']
-        self._stream_resource_cache = d['stream_resource_cache']
-        self._stream_datum_cache = d['stream_datum_cache']
-        retry_intervals = d['retry_intervals']
+        self.include = d["include"]
+        self.exclude = d["exclude"]
+        self.root_map = d["root_map"]
+        self._handler_cache = d["handler_cache"]
+        self._resource_cache = d["resource_cache"]
+        self._datum_cache = d["datum_cache"]
+        self._descriptor_cache = d["descriptor_cache"]
+        self._stream_resource_cache = d["stream_resource_cache"]
+        self._stream_datum_cache = d["stream_datum_cache"]
+        retry_intervals = d["retry_intervals"]
         if retry_intervals is None:
             retry_intervals = []
         self._retry_intervals = retry_intervals
         self._closed = False
 
     @property
-    def retry_intervals(self):
+    def retry_intervals(self) -> List:
         return self._retry_intervals
 
     @retry_intervals.setter
-    def retry_intervals(self, value):
+    def retry_intervals(self, value: Any) -> None:
         self._retry_intervals = list(value)
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return "<Filler>" if not self._closed else "<Closed Filler>"
 
     @staticmethod
-    def get_default_resource_cache():
+    def get_default_resource_cache() -> dict:
         return {}
 
     @staticmethod
-    def get_default_descriptor_cache():
+    def get_default_descriptor_cache() -> dict:
         return {}
 
     @staticmethod
-    def get_default_datum_cache():
+    def get_default_datum_cache() -> dict:
         return {}
 
     @staticmethod
-    def get_default_handler_cache():
+    def get_default_handler_cache() -> dict:
         return {}
 
     @staticmethod
-    def get_default_stream_datum_cache():
+    def get_default_stream_datum_cache() -> dict:
         return {}
 
     @staticmethod
-    def get_default_stream_resource_cache():
+    def get_default_stream_resource_cache() -> dict:
         return {}
 
     @property
-    def inplace(self):
+    def inplace(self) -> bool:
         return self._inplace
 
-    def clone(self, handler_registry=None, *,
-              root_map=None, coerce=None,
-              handler_cache=None, resource_cache=None, datum_cache=None,
-              descriptor_cache=None, stream_resource_cache=None,
-              stream_datum_cache=None, inplace=None,
-              retry_intervals=None):
+    def clone(
+        self,
+        handler_registry: Optional[dict] = None,
+        *,
+        root_map: Optional[dict] = None,
+        coerce: Optional[str] = None,
+        handler_cache: Optional[dict] = None,
+        resource_cache: Optional[dict] = None,
+        datum_cache: Optional[dict] = None,
+        descriptor_cache: Optional[dict] = None,
+        stream_resource_cache: Optional[dict] = None,
+        stream_datum_cache: Optional[dict] = None,
+        inplace: Optional[bool] = None,
+        retry_intervals: Optional[List] = None,
+    ) -> "Filler":
         """
         Create a new Filler instance from this one.
 
@@ -740,18 +829,23 @@ class Filler(DocumentRouter):
             inplace = self.inplace
         if retry_intervals is None:
             retry_intervals = self.retry_intervals
-        return Filler(handler_registry, root_map=root_map,
-                      coerce=coerce,
-                      handler_cache=handler_cache,
-                      resource_cache=resource_cache,
-                      datum_cache=datum_cache,
-                      descriptor_cache=descriptor_cache,
-                      stream_resource_cache=stream_resource_cache,
-                      stream_datum_cache=stream_datum_cache,
-                      inplace=inplace,
-                      retry_intervals=retry_intervals)
+        return Filler(
+            handler_registry,
+            root_map=root_map,
+            coerce=coerce,
+            handler_cache=handler_cache,
+            resource_cache=resource_cache,
+            datum_cache=datum_cache,
+            descriptor_cache=descriptor_cache,
+            stream_resource_cache=stream_resource_cache,
+            stream_datum_cache=stream_datum_cache,
+            inplace=inplace,
+            retry_intervals=retry_intervals,
+        )
 
-    def register_handler(self, spec, handler, overwrite=False):
+    def register_handler(
+        self, spec: str, handler: Any, overwrite: bool = False
+    ) -> None:
         """
         Register a handler.
 
@@ -777,17 +871,17 @@ class Filler(DocumentRouter):
                 f"There is already a handler registered for the spec {spec!r}. "
                 f"Use overwrite=True to deregister the original.\n"
                 f"Original: {original}\n"
-                f"New: {handler}")
+                f"New: {handler}"
+            )
 
         self.deregister_handler(spec)
         # Keep a raw copy, unused above for identifying redundant registration.
         self._unpatched_handler_registry[spec] = handler
         # Let the 'coerce' argument to Filler.__init__ modify the handler if it
         # wants to.
-        self._handler_registry[spec] = self._coercion_func(
-            handler, self._current_state)
+        self._handler_registry[spec] = self._coercion_func(handler, self._current_state)
 
-    def deregister_handler(self, spec):
+    def deregister_handler(self, spec: str) -> Any:
         """
         Deregister a handler.
 
@@ -813,64 +907,71 @@ class Filler(DocumentRouter):
                     del self._handler_cache[key]
         return handler
 
-    def resource(self, doc):
+    def resource(self, doc: dict) -> dict:
         # Defer creating the handler instance until we actually need it, when
         # we fill the first Event field that requires this Resource.
-        self._resource_cache[doc['uid']] = doc
+        self._resource_cache[doc["uid"]] = doc
         return doc
 
     # Handlers operate document-wise, so we'll explode pages into individual
     # documents.
 
-    def datum_page(self, doc):
+    def datum_page(self, doc: dict) -> dict:
         datum = self.datum  # Avoid attribute lookup in hot loop.
         for datum_doc in unpack_datum_page(doc):
             datum(datum_doc)
         return doc
 
-    def datum(self, doc):
-        self._datum_cache[doc['datum_id']] = doc
+    def datum(self, doc: dict) -> dict:
+        self._datum_cache[doc["datum_id"]] = doc
         return doc
 
-    def stream_resource(self, doc):
+    def stream_resource(self, doc: dict) -> dict:
         self._stream_resource_cache[doc["uid"]] = doc
         return doc
 
-    def stream_datum(self, doc):
+    def stream_datum(self, doc: dict) -> None:
         self._stream_datum_cache[doc["uid"]] = doc
 
-    def event_page(self, doc):
+    def event_page(self, doc: dict) -> dict:
         # TODO We may be able to fill a page in place, and that may be more
         # efficient than unpacking the page in to Events, filling them, and the
         # re-packing a new page. But that seems tricky in general since the
         # page may be implemented as a DataFrame or dict, etc.
-        filled_doc = self.fill_event_page(doc, include=self.include,
-                                          exclude=self.exclude)
+        filled_doc = self.fill_event_page(
+            doc, include=self.include, exclude=self.exclude
+        )
         return filled_doc
 
-    def event(self, doc):
-        filled_doc = self.fill_event(doc, include=self.include,
-                                     exclude=self.exclude)
+    def event(self, doc: dict) -> dict:
+        filled_doc = self.fill_event(doc, include=self.include, exclude=self.exclude)
         return filled_doc
 
-    def fill_event_page(self, doc, include=None, exclude=None, inplace=None):
+    def fill_event_page(
+        self,
+        doc: dict,
+        include: Optional[Iterable] = None,
+        exclude: Optional[Iterable] = None,
+        inplace: Optional[bool] = None,
+    ) -> dict:
         filled_events = []
         for event_doc in unpack_event_page(doc):
-            filled_events.append(self.fill_event(event_doc,
-                                                 include=include,
-                                                 exclude=exclude,
-                                                 inplace=True))
+            filled_events.append(
+                self.fill_event(
+                    event_doc, include=include, exclude=exclude, inplace=True
+                )
+            )
         filled_doc = pack_event_page(*filled_events)
         if inplace is None:
             inplace = self._inplace
         if inplace:
-            doc['data'] = filled_doc['data']
-            doc['filled'] = filled_doc['filled']
+            doc["data"] = filled_doc["data"]
+            doc["filled"] = filled_doc["filled"]
             return doc
         else:
             return filled_doc
 
-    def get_handler(self, resource):
+    def get_handler(self, resource: dict) -> Any:
         """
         Return a new Handler instance for this Resource.
 
@@ -884,43 +985,51 @@ class Filler(DocumentRouter):
         """
         if self._closed:
             raise EventModelRuntimeError(
-                "This Filler has been closed and is no longer usable.")
+                "This Filler has been closed and is no longer usable."
+            )
         try:
-            handler_class = self.handler_registry[resource['spec']]
+            handler_class = self.handler_registry[resource["spec"]]
         except KeyError as err:
             raise UndefinedAssetSpecification(
                 f"Resource document with uid {resource['uid']} "
                 f"refers to spec {resource['spec']!r} which is "
                 f"not defined in the Filler's "
-                f"handler registry.") from err
+                f"handler registry."
+            ) from err
         # Apply root_map.
-        resource_path = resource['resource_path']
-        original_root = resource.get('root', '')
+        resource_path = resource["resource_path"]
+        original_root = resource.get("root", "")
         root = self.root_map.get(original_root, original_root)
         if root:
             resource_path = os.path.join(root, resource_path)
-        msg = (f"Error instantiating handler "
-               f"class {handler_class} "
-               f"with Resource document {resource}. ")
+        msg = (
+            f"Error instantiating handler "
+            f"class {handler_class} "
+            f"with Resource document {resource}. "
+        )
         if root != original_root:
-            msg += (f"Its 'root' field was "
-                    f"mapped from {original_root} to {root} by root_map.")
+            msg += (
+                f"Its 'root' field was "
+                f"mapped from {original_root} to {root} by root_map."
+            )
         else:
-            msg += (f"Its 'root' field {original_root} was "
-                    f"*not* modified by root_map.")
+            msg += (
+                f"Its 'root' field {original_root} was " f"*not* modified by root_map."
+            )
         error_to_raise = EventModelError(msg)
         handler = _attempt_with_retries(
             func=handler_class,
             args=(resource_path,),
-            kwargs=resource['resource_kwargs'],
+            kwargs=resource["resource_kwargs"],
             intervals=[0] + self.retry_intervals,
             error_to_catch=IOError,
-            error_to_raise=error_to_raise)
+            error_to_raise=error_to_raise,
+        )
         return handler
 
-    def _get_handler_maybe_cached(self, resource):
+    def _get_handler_maybe_cached(self, resource: dict) -> Any:
         "Get a cached handler for this resource or make one and cache it."
-        key = (resource['uid'], resource['spec'])
+        key = (resource["uid"], resource["spec"])
         try:
             handler = self._handler_cache[key]
         except KeyError:
@@ -928,24 +1037,30 @@ class Filler(DocumentRouter):
             self._handler_cache[key] = handler
         return handler
 
-    def fill_event(self, doc, include=None, exclude=None, inplace=None):
+    def fill_event(
+        self,
+        doc,
+        include: Optional[Iterable] = None,
+        exclude: Optional[Iterable] = None,
+        inplace: Optional[bool] = None,
+    ) -> Any:
         if inplace is None:
             inplace = self._inplace
         if inplace:
             filled_doc = doc
         else:
             filled_doc = copy.deepcopy(doc)
-        descriptor = self._descriptor_cache[doc['descriptor']]
+        descriptor = self._descriptor_cache[doc["descriptor"]]
         from_datakeys = False
         self._current_state.descriptor = descriptor
         try:
-            needs_filling = {key for key, val in doc['filled'].items()
-                             if val is False}
+            needs_filling = {key for key, val in doc["filled"].items() if val is False}
         except KeyError:
             # This document is not telling us which, if any, keys are filled.
             # Infer that none of the external data is filled.
-            needs_filling = {key for key, val in descriptor['data_keys'].items()
-                             if 'external' in val}
+            needs_filling = {
+                key for key, val in descriptor["data_keys"].items() if "external" in val
+            }
             from_datakeys = True
         for key in needs_filling:
             self._current_state.key = key
@@ -954,7 +1069,7 @@ class Filler(DocumentRouter):
             if include is not None and key not in include:
                 continue
             try:
-                datum_id = doc['data'][key]
+                datum_id = doc["data"][key]
             except KeyError as err:
                 if from_datakeys:
                     raise MismatchedDataKeys(
@@ -965,7 +1080,8 @@ class Filler(DocumentRouter):
                         "must equal descriptor['data_keys'].keys(). "
                         f"event['data'].keys(): {doc['data'].keys()}, "
                         "descriptor['data_keys'].keys(): "
-                        f"{descriptor['data_keys'].keys()}") from err
+                        f"{descriptor['data_keys'].keys()}"
+                    ) from err
                 else:
                     raise MismatchedDataKeys(
                         "The documents are not valid.  Either because they "
@@ -975,7 +1091,8 @@ class Filler(DocumentRouter):
                         "must be a subset of event['data'].keys(). "
                         f"event['data'].keys(): {doc['data'].keys()}, "
                         "event['filled'].keys(): "
-                        f"{doc['filled'].keys()}") from err
+                        f"{doc['filled'].keys()}"
+                    ) from err
             # Look up the cached Datum doc.
             try:
                 datum_doc = self._datum_cache[datum_id]
@@ -983,8 +1100,9 @@ class Filler(DocumentRouter):
                 raise UnresolvableForeignKeyError(
                     datum_id,
                     f"Event with uid {doc['uid']} refers to unknown Datum "
-                    f"datum_id {datum_id}") from err
-            resource_uid = datum_doc['resource']
+                    f"datum_id {datum_id}",
+                ) from err
+            resource_uid = datum_doc["resource"]
             # Look up the cached Resource.
             try:
                 resource = self._resource_cache[resource_uid]
@@ -992,38 +1110,42 @@ class Filler(DocumentRouter):
                 raise UnresolvableForeignKeyError(
                     resource_uid,
                     f"Datum with id {datum_id} refers to unknown Resource "
-                    f"uid {resource_uid}") from err
+                    f"uid {resource_uid}",
+                ) from err
             self._current_state.resource = resource
             self._current_state.datum = datum_doc
             handler = self._get_handler_maybe_cached(resource)
             error_to_raise = DataNotAccessible(
-                    f"Filler was unable to load the data referenced by "
-                    f"the Datum document {datum_doc} and the Resource "
-                    f"document {resource}.")
+                f"Filler was unable to load the data referenced by "
+                f"the Datum document {datum_doc} and the Resource "
+                f"document {resource}."
+            )
             payload = _attempt_with_retries(
                 func=handler,
                 args=(),
-                kwargs=datum_doc['datum_kwargs'],
+                kwargs=datum_doc["datum_kwargs"],
                 intervals=[0] + self.retry_intervals,
                 error_to_catch=IOError,
-                error_to_raise=error_to_raise)
+                error_to_raise=error_to_raise,
+            )
             # Here we are intentionally modifying doc in place.
-            filled_doc['data'][key] = payload
-            filled_doc['filled'][key] = datum_id
+            filled_doc["data"][key] = payload
+            filled_doc["filled"][key] = datum_id
         self._current_state.key = None
         self._current_state.descriptor = None
         self._current_state.resource = None
         self._current_state.datum = None
         return filled_doc
 
-    def descriptor(self, doc):
-        self._descriptor_cache[doc['uid']] = doc
+    def descriptor(self, doc: dict) -> dict:
+        self._descriptor_cache[doc["uid"]] = doc
         return doc
 
     def __enter__(self):
         return self
 
-    def close(self):
+    @no_type_check
+    def close(self) -> None:
         """
         Drop cached documents and handlers.
 
@@ -1041,10 +1163,10 @@ class Filler(DocumentRouter):
         self._descriptor_cache = None
 
     @property
-    def closed(self):
+    def closed(self) -> bool:
         return self._closed
 
-    def clear_handler_cache(self):
+    def clear_handler_cache(self) -> None:
         """
         Clear any cached handler instances.
 
@@ -1053,7 +1175,7 @@ class Filler(DocumentRouter):
         """
         self._handler_cache.clear()
 
-    def clear_document_caches(self):
+    def clear_document_caches(self) -> None:
         """
         Clear any cached documents.
         """
@@ -1061,19 +1183,31 @@ class Filler(DocumentRouter):
         self._descriptor_cache.clear()
         self._datum_cache.clear()
 
-    def __exit__(self, *exc_details):
+    def __exit__(self, *exc_details) -> None:
         self.close()
 
-    def __call__(self, name, doc, validate=False):
+    def __call__(
+        self, name: str, doc: dict, validate: bool = False
+    ) -> Tuple[str, dict]:
         if self._closed:
             raise EventModelRuntimeError(
-                "This Filler has been closed and is no longer usable.")
+                "This Filler has been closed and is no longer usable."
+            )
         return super().__call__(name, doc, validate)
 
 
-def _attempt_with_retries(func, args, kwargs,
-                          intervals,
-                          error_to_catch, error_to_raise):
+class EventModelError(Exception):
+    ...
+
+
+def _attempt_with_retries(
+    func,
+    args,
+    kwargs,
+    intervals: Iterable,
+    error_to_catch: Type[OSError],
+    error_to_raise: EventModelError,
+) -> Any:
     """
     Return func(*args, **kwargs), using a retry loop.
 
@@ -1112,33 +1246,47 @@ class NoFiller(Filler):
     a delayed computation, but we want to make sure in advance that we have all
     the information that we will need when that computation occurs.
     """
-    def __init__(self, *args, **kwargs):
+
+    def __init__(self, *args, **kwargs) -> None:
         # Do not make Filler make copies because we are not going to alter the
         # documents anyway.
-        kwargs.setdefault('inplace', True)
+        kwargs.setdefault("inplace", True)
         super().__init__(*args, **kwargs)
 
-    def fill_event_page(self, doc, include=None, exclude=None):
+    def fill_event_page(
+        self,
+        doc: dict,
+        include: Optional[Iterable] = None,
+        exclude: Optional[Iterable] = None,
+        *kwargs,
+    ) -> dict:
         filled_events = []
         for event_doc in unpack_event_page(doc):
-            filled_events.append(self.fill_event(event_doc,
-                                                 include=include,
-                                                 exclude=exclude,
-                                                 inplace=True))
+            filled_events.append(
+                self.fill_event(
+                    event_doc, include=include, exclude=exclude, inplace=True
+                )
+            )
         filled_doc = pack_event_page(*filled_events)
         return filled_doc
 
-    def fill_event(self, doc, include=None, exclude=None, inplace=None):
-        descriptor = self._descriptor_cache[doc['descriptor']]
+    def fill_event(
+        self,
+        doc,
+        include: Optional[Iterable] = None,
+        exclude: Optional[Iterable] = None,
+        inplace: Optional[bool] = None,
+    ) -> dict:
+        descriptor = self._descriptor_cache[doc["descriptor"]]
         from_datakeys = False
         try:
-            needs_filling = {key for key, val in doc['filled'].items()
-                             if val is False}
+            needs_filling = {key for key, val in doc["filled"].items() if val is False}
         except KeyError:
             # This document is not telling us which, if any, keys are filled.
             # Infer that none of the external data is filled.
-            needs_filling = {key for key, val in descriptor['data_keys'].items()
-                             if 'external' in val}
+            needs_filling = {
+                key for key, val in descriptor["data_keys"].items() if "external" in val
+            }
             from_datakeys = True
         for key in needs_filling:
             if exclude is not None and key in exclude:
@@ -1146,7 +1294,7 @@ class NoFiller(Filler):
             if include is not None and key not in include:
                 continue
             try:
-                datum_id = doc['data'][key]
+                datum_id = doc["data"][key]
             except KeyError as err:
                 if from_datakeys:
                     raise MismatchedDataKeys(
@@ -1157,7 +1305,8 @@ class NoFiller(Filler):
                         "must equal descriptor['data_keys'].keys(). "
                         f"event['data'].keys(): {doc['data'].keys()}, "
                         "descriptor['data_keys'].keys(): "
-                        f"{descriptor['data_keys'].keys()}") from err
+                        f"{descriptor['data_keys'].keys()}"
+                    ) from err
                 else:
                     raise MismatchedDataKeys(
                         "The documents are not valid.  Either because they "
@@ -1167,7 +1316,8 @@ class NoFiller(Filler):
                         "must be a subset of event['data'].keys(). "
                         f"event['data'].keys(): {doc['data'].keys()}, "
                         "event['filled'].keys(): "
-                        f"{doc['filled'].keys()}") from err
+                        f"{doc['filled'].keys()}"
+                    ) from err
             # Look up the cached Datum doc.
             try:
                 datum_doc = self._datum_cache[datum_id]
@@ -1175,10 +1325,11 @@ class NoFiller(Filler):
                 err_with_key = UnresolvableForeignKeyError(
                     datum_id,
                     f"Event with uid {doc['uid']} refers to unknown Datum "
-                    f"datum_id {datum_id}")
+                    f"datum_id {datum_id}",
+                )
                 err_with_key.key = datum_id
                 raise err_with_key from err
-            resource_uid = datum_doc['resource']
+            resource_uid = datum_doc["resource"]
             # Look up the cached Resource.
             try:
                 self._resource_cache[resource_uid]
@@ -1186,7 +1337,8 @@ class NoFiller(Filler):
                 raise UnresolvableForeignKeyError(
                     datum_id,
                     f"Datum with id {datum_id} refers to unknown Resource "
-                    f"uid {resource_uid}") from err
+                    f"uid {resource_uid}",
+                ) from err
         return doc
 
 
@@ -1199,7 +1351,8 @@ DOCS_PASSED_IN_1_14_0_WARNING = (
     "RunRouter passes in the document, causing the "
     "callback to receive it twice and potentially raise "
     "an error. Update the factory function. In a future "
-    "release this warning will become an error.")
+    "release this warning will become an error."
+)
 
 
 class RunRouter(DocumentRouter):
@@ -1277,8 +1430,16 @@ class RunRouter(DocumentRouter):
         if set to True, fill everything and `raise
         ``UndefinedAssetSpecification`` if some unknown spec is encountered.
     """
-    def __init__(self, factories, handler_registry=None, *,
-                 root_map=None, filler_class=Filler, fill_or_fail=False):
+
+    def __init__(
+        self,
+        factories,
+        handler_registry: Optional[dict] = None,
+        *,
+        root_map: Optional[dict] = None,
+        filler_class: Type[Filler] = Filler,
+        fill_or_fail: bool = False,
+    ) -> None:
         self.factories = factories
         self.handler_registry = handler_registry or {}
         self.filler_class = filler_class
@@ -1287,53 +1448,55 @@ class RunRouter(DocumentRouter):
 
         # Map RunStart UID to "subfactory" functions that want all
         # EventDescriptors from that run.
-        self._subfactories = defaultdict(list)
+        self._subfactories: defaultdict = defaultdict(list)
 
         # Callbacks that want all the documents from a given run, keyed on
         # RunStart UID.
-        self._factory_cbs_by_start = defaultdict(list)
+        self._factory_cbs_by_start: defaultdict = defaultdict(list)
 
         # Callbacks that want all the documents from a given run, keyed on
         # each EventDescriptor UID in the run.
-        self._factory_cbs_by_descriptor = defaultdict(list)
+        self._factory_cbs_by_descriptor: defaultdict = defaultdict(list)
 
         # Callbacks that want documents related to a given EventDescriptor,
         # keyed on EventDescriptor UID.
-        self._subfactory_cbs_by_descriptor = defaultdict(list)
+        self._subfactory_cbs_by_descriptor: defaultdict = defaultdict(list)
 
         # Callbacks that want documents related to a given EventDescriptor,
         # keyed on the RunStart UID referenced by that EventDescriptor.
-        self._subfactory_cbs_by_start = defaultdict(list)
+        self._subfactory_cbs_by_start: defaultdict = defaultdict(list)
 
         # Map RunStart UID to RunStart document. This is used to send
         # RunStart documents to subfactory callbacks.
-        self._start_to_start_doc = dict()
+        self._start_to_start_doc: dict = dict()
 
         # Map RunStart UID to the list EventDescriptor. This is used to
         # facilitate efficient cleanup of the caches above.
-        self._start_to_descriptors = defaultdict(list)
+        self._start_to_descriptors: defaultdict = defaultdict(list)
 
         # Map EventDescriptor UID to RunStart UID. This is used for looking up
         # Fillers.
-        self._descriptor_to_start = {}
+        self._descriptor_to_start: dict = {}
 
         # Map Resource UID to RunStart UID.
-        self._resources = {}
-        self._stream_resources = {}
+        self._resources: dict = {}
+        self._stream_resources: dict = {}
 
         # Old-style Resources that do not have a RunStart UID
-        self._unlabeled_resources = deque(maxlen=10000)
+        self._unlabeled_resources: deque = deque(maxlen=10000)
 
         # Map Runstart UID to instances of self.filler_class.
-        self._fillers = {}
+        self._fillers: dict = {}
 
     def __repr__(self):
-        return ("RunRouter([\n" +
-                "\n".join(f"    {factory}" for factory in self.factories) +
-                "])")
+        return (
+            "RunRouter([\n"
+            + "\n".join(f"    {factory}" for factory in self.factories)
+            + "])"
+        )
 
-    def start(self, start_doc):
-        uid = start_doc['uid']
+    def start(self, start_doc: dict) -> None:
+        uid = start_doc["uid"]
         # If we get the same uid twice, weird things will happen, so check for
         # that and give a nice error message.
         if uid in self._start_to_start_doc:
@@ -1347,30 +1510,33 @@ class RunRouter(DocumentRouter):
                     "RunRouter received two 'start' documents with different "
                     "contents but the same uid:\n"
                     "First: {self._start_to_start_doc[uid]!r}\n"
-                    "Second: {start_doc!r}")
+                    "Second: {start_doc!r}"
+                )
         self._start_to_start_doc[uid] = start_doc
-        filler = self.filler_class(self.handler_registry,
-                                   root_map=self.root_map,
-                                   inplace=False)
+        filler = self.filler_class(
+            self.handler_registry, root_map=self.root_map, inplace=False
+        )
         self._fillers[uid] = filler
         # No need to pass the document to filler
         # because Fillers do nothing with 'start'.
         for factory in self.factories:
-            callbacks, subfactories = factory('start', start_doc)
+            callbacks, subfactories = factory("start", start_doc)
             for callback in callbacks:
                 try:
-                    callback('start', start_doc)
+                    callback("start", start_doc)
                 except Exception as err:
                     warnings.warn(
                         DOCS_PASSED_IN_1_14_0_WARNING.format(
-                            callback=callback, name='start', err=err))
+                            callback=callback, name="start", err=err
+                        )
+                    )
                     raise err
             self._factory_cbs_by_start[uid].extend(callbacks)
             self._subfactories[uid].extend(subfactories)
 
-    def descriptor(self, descriptor_doc):
-        descriptor_uid = descriptor_doc['uid']
-        start_uid = descriptor_doc['run_start']
+    def descriptor(self, descriptor_doc: dict) -> None:
+        descriptor_uid = descriptor_doc["uid"]
+        start_uid = descriptor_doc["run_start"]
 
         # Keep track of the RunStart UID -> [EventDescriptor UIDs] mapping for
         # purposes of cleanup in stop().
@@ -1384,31 +1550,35 @@ class RunRouter(DocumentRouter):
         factory_cbs = self._factory_cbs_by_start[start_uid]
         self._factory_cbs_by_descriptor[descriptor_uid].extend(factory_cbs)
         for callback in factory_cbs:
-            callback('descriptor', descriptor_doc)
+            callback("descriptor", descriptor_doc)
         # Let all the subfactories add any relevant callbacks.
         for subfactory in self._subfactories[start_uid]:
-            callbacks = subfactory('descriptor', descriptor_doc)
+            callbacks = subfactory("descriptor", descriptor_doc)
             self._subfactory_cbs_by_start[start_uid].extend(callbacks)
             self._subfactory_cbs_by_descriptor[descriptor_uid].extend(callbacks)
             for callback in callbacks:
                 try:
                     start_doc = self._start_to_start_doc[start_uid]
-                    callback('start', start_doc)
+                    callback("start", start_doc)
                 except Exception as err:
                     warnings.warn(
                         DOCS_PASSED_IN_1_14_0_WARNING.format(
-                            callback=callback, name='start', err=err))
+                            callback=callback, name="start", err=err
+                        )
+                    )
                     raise err
                 try:
-                    callback('descriptor', descriptor_doc)
+                    callback("descriptor", descriptor_doc)
                 except Exception as err:
                     warnings.warn(
                         DOCS_PASSED_IN_1_14_0_WARNING.format(
-                            callback=callback, name='descriptor', err=err))
+                            callback=callback, name="descriptor", err=err
+                        )
+                    )
                     raise err
 
-    def event_page(self, doc):
-        descriptor_uid = doc['descriptor']
+    def event_page(self, doc: dict) -> None:
+        descriptor_uid = doc["descriptor"]
         start_uid = self._descriptor_to_start[descriptor_uid]
         try:
             doc = self._fillers[start_uid].event_page(doc)
@@ -1416,19 +1586,20 @@ class RunRouter(DocumentRouter):
             if self.fill_or_fail:
                 raise
         for callback in self._factory_cbs_by_descriptor[descriptor_uid]:
-            callback('event_page', doc)
+            callback("event_page", doc)
         for callback in self._subfactory_cbs_by_descriptor[descriptor_uid]:
-            callback('event_page', doc)
+            callback("event_page", doc)
 
-    def datum_page(self, doc):
-        resource_uid = doc['resource']
+    def datum_page(self, doc: dict) -> None:
+        resource_uid = doc["resource"]
         try:
             start_uid = self._resources[resource_uid]
         except KeyError:
             if resource_uid not in self._unlabeled_resources:
                 raise UnresolvableForeignKeyError(
                     resource_uid,
-                    f"DatumPage refers to unknown Resource uid {resource_uid}")
+                    f"DatumPage refers to unknown Resource uid {resource_uid}",
+                )
             # Old Resources do not have a reference to a RunStart document,
             # so in turn we cannot immediately tell which run these datum
             # documents belong to.
@@ -1437,20 +1608,20 @@ class RunRouter(DocumentRouter):
             # expected to be an increasingly rare case.
             for callbacks in self._factory_cbs_by_start.values():
                 for callback in callbacks:
-                    callback('datum_page', doc)
+                    callback("datum_page", doc)
             for callbacks in self._subfactory_cbs_by_start.values():
                 for callback in callbacks:
-                    callback('datum_page', doc)
+                    callback("datum_page", doc)
             for filler in self._fillers.values():
                 filler.datum_page(doc)
         else:
             self._fillers[start_uid].datum_page(doc)
             for callback in self._factory_cbs_by_start[start_uid]:
-                callback('datum_page', doc)
+                callback("datum_page", doc)
             for callback in self._subfactory_cbs_by_start[start_uid]:
-                callback('datum_page', doc)
+                callback("datum_page", doc)
 
-    def stream_datum(self, doc):
+    def stream_datum(self, doc: dict) -> None:
         resource_uid = doc["stream_resource"]
         start_uid = self._stream_resources[resource_uid]
         self._fillers[start_uid].stream_datum(doc)
@@ -1459,32 +1630,32 @@ class RunRouter(DocumentRouter):
         for callback in self._subfactory_cbs_by_start[start_uid]:
             callback("stream_datum", doc)
 
-    def resource(self, doc):
+    def resource(self, doc: dict) -> None:
         try:
-            start_uid = doc['run_start']
+            start_uid = doc["run_start"]
         except KeyError:
             # Old Resources do not have a reference to a RunStart document.
             # Fan them out to every run currently flowing through RunRouter. If
             # they are not applicable they will do no harm, and this is
             # expected to be an increasingly rare case.
-            self._unlabeled_resources.append(doc['uid'])
+            self._unlabeled_resources.append(doc["uid"])
             for callbacks in self._factory_cbs_by_start.values():
                 for callback in callbacks:
-                    callback('resource', doc)
+                    callback("resource", doc)
             for callbacks in self._subfactory_cbs_by_start.values():
                 for callback in callbacks:
-                    callback('resource', doc)
+                    callback("resource", doc)
             for filler in self._fillers.values():
                 filler.resource(doc)
         else:
             self._fillers[start_uid].resource(doc)
-            self._resources[doc['uid']] = doc['run_start']
+            self._resources[doc["uid"]] = doc["run_start"]
             for callback in self._factory_cbs_by_start[start_uid]:
-                callback('resource', doc)
+                callback("resource", doc)
             for callback in self._subfactory_cbs_by_start[start_uid]:
-                callback('resource', doc)
+                callback("resource", doc)
 
-    def stream_resource(self, doc):
+    def stream_resource(self, doc: dict) -> None:
         start_uid = doc["run_start"]  # No need for Try
         self._fillers[start_uid].stream_resource(doc)
         self._stream_resources[doc["uid"]] = doc["run_start"]
@@ -1493,12 +1664,12 @@ class RunRouter(DocumentRouter):
         for callback in self._subfactory_cbs_by_start[start_uid]:
             callback("stream_resource", doc)
 
-    def stop(self, doc):
-        start_uid = doc['run_start']
+    def stop(self, doc: dict) -> None:
+        start_uid = doc["run_start"]
         for callback in self._factory_cbs_by_start[start_uid]:
-            callback('stop', doc)
+            callback("stop", doc)
         for callback in self._subfactory_cbs_by_start[start_uid]:
-            callback('stop', doc)
+            callback("stop", doc)
         # Clean up references.
         self._fillers.pop(start_uid, None)
         self._subfactories.pop(start_uid, None)
@@ -1511,9 +1682,6 @@ class RunRouter(DocumentRouter):
         self._resources.pop(start_uid, None)
         self._start_to_start_doc.pop(start_uid, None)
 
-
-class EventModelError(Exception):
-    ...
 
 # Here we define subclasses of all of the built-in Python exception types (as
 # needed, not a comprehensive list) so that all errors raised *directly* by
@@ -1545,33 +1713,39 @@ class EventModelValidationError(EventModelError):
 
 class UnfilledData(EventModelError):
     """raised when unfilled data is found"""
+
     ...
 
 
 class UndefinedAssetSpecification(EventModelKeyError):
     """raised when a resource spec is missing from the handler registry"""
+
     ...
 
 
 class DataNotAccessible(EventModelError, IOError):
     """raised when attempts to load data referenced by Datum document fail"""
+
     ...
 
 
 class UnresolvableForeignKeyError(EventModelValueError):
     """when we see a foreign before we see the thing to which it refers"""
-    def __init__(self, key, message):
+
+    def __init__(self, key: Any, message: str) -> None:
         self.key = key
         self.message = message
 
 
 class DuplicateHandler(EventModelRuntimeError):
     """raised when a handler is already registered for a given spec"""
+
     ...
 
 
 class InvalidData(EventModelError):
     """raised when the data is invalid"""
+
     ...
 
 
@@ -1581,57 +1755,70 @@ class MismatchedDataKeys(InvalidData):
     event['data'].keys(), descriptor['data_keys'].keys(),
     event['timestamp'].keys(), event['filled'].keys()
     """
+
     ...
 
 
-SCHEMA_PATH = 'schemas'
-SCHEMA_NAMES = {DocumentNames.start: 'schemas/run_start.json',
-                DocumentNames.stop: 'schemas/run_stop.json',
-                DocumentNames.event: 'schemas/event.json',
-                DocumentNames.event_page: 'schemas/event_page.json',
-                DocumentNames.descriptor: 'schemas/event_descriptor.json',
-                DocumentNames.datum: 'schemas/datum.json',
-                DocumentNames.datum_page: 'schemas/datum_page.json',
-                DocumentNames.resource: 'schemas/resource.json',
-                DocumentNames.stream_datum: 'schemas/stream_datum.json',
-                DocumentNames.stream_resource: 'schemas/stream_resource.json',
-                # DEPRECATED:
-                DocumentNames.bulk_events: 'schemas/bulk_events.json',
-                DocumentNames.bulk_datum: 'schemas/bulk_datum.json'}
+SCHEMA_PATH = "schemas"
+SCHEMA_NAMES = {
+    DocumentNames.start: "schemas/run_start.json",
+    DocumentNames.stop: "schemas/run_stop.json",
+    DocumentNames.event: "schemas/event.json",
+    DocumentNames.event_page: "schemas/event_page.json",
+    DocumentNames.descriptor: "schemas/event_descriptor.json",
+    DocumentNames.datum: "schemas/datum.json",
+    DocumentNames.datum_page: "schemas/datum_page.json",
+    DocumentNames.resource: "schemas/resource.json",
+    DocumentNames.stream_datum: "schemas/stream_datum.json",
+    DocumentNames.stream_resource: "schemas/stream_resource.json",
+    # DEPRECATED:
+    DocumentNames.bulk_events: "schemas/bulk_events.json",
+    DocumentNames.bulk_datum: "schemas/bulk_datum.json",
+}
 schemas = {}
 for name, filename in SCHEMA_NAMES.items():
-    with open(rs_fn('event_model', filename)) as fin:
+    with open(rs_fn("event_model", filename)) as fin:
         schemas[name] = json.load(fin)
 
 # We pin jsonschema >=3.0.0 in requirements.txt but due to pip's dependency
 # resolution it is easy to end up with an environment where that pin is not
 # respected. Thus, we maintain best-effort support for 2.x.
 if LooseVersion(version("jsonschema")) >= LooseVersion("3.0.0"):
-    def _is_array(checker, instance):
+
+    def _is_array(checker: Any, instance: Any) -> bool:
         return (
-            jsonschema.validators.Draft7Validator.TYPE_CHECKER.is_type(instance, 'array') or
-            isinstance(instance, tuple) or
-            hasattr(instance, "__array__")
+            jsonschema.validators.Draft7Validator.TYPE_CHECKER.is_type(
+                instance, "array"
+            )
+            or isinstance(instance, tuple)
+            or hasattr(instance, "__array__")
         )
 
-    _array_type_checker = jsonschema.validators.Draft7Validator.TYPE_CHECKER.redefine('array', _is_array)
+    _array_type_checker = jsonschema.validators.Draft7Validator.TYPE_CHECKER.redefine(
+        "array", _is_array
+    )
 
     _Validator = jsonschema.validators.extend(
-        jsonschema.validators.Draft7Validator,
-        type_checker=_array_type_checker)
+        jsonschema.validators.Draft7Validator, type_checker=_array_type_checker
+    )
 
-    schema_validators = {name: _Validator(schema=schema) for name, schema in schemas.items()}
+    schema_validators = {
+        name: _Validator(schema=schema) for name, schema in schemas.items()
+    }
 else:
     # Make objects that mock the one method on the jsonschema 3.x
     # Draft7Validator API that we need.
     schema_validators = {
         name: types.SimpleNamespace(
-            validate=partial(jsonschema.validate, schema=schema, types={'array': (list, tuple)}))
+            validate=partial(
+                jsonschema.validate, schema=schema, types={"array": (list, tuple)}
+            )
+        )
         for name, schema in schemas.items()
     }
 
 
-__version__ = get_versions()['version']
+__version__ = get_versions()["version"]
 del get_versions
 
 
@@ -1641,62 +1828,100 @@ class ComposeRunBundle:
     run bundle (start, compose_descriptor, compose_resource, stop). Further extensions are optional and
     require keyword referencing (i.e. compose_stream_resource).
     """
-    start_doc: dict
-    compose_descriptor: callable
-    compose_resource: callable
-    compose_stop: callable
-    compose_stream_resource: Optional[callable] = None
 
-    def __iter__(self):
-        return iter((self.start_doc, self.compose_descriptor, self.compose_resource, self.compose_stop))
+    start_doc: RunStart
+    compose_descriptor: Callable
+    compose_resource: Callable
+    compose_stop: Callable
+    compose_stream_resource: Optional[Callable] = None
+
+    def __iter__(self) -> Iterator:
+        return iter(
+            (
+                self.start_doc,
+                self.compose_descriptor,
+                self.compose_resource,
+                self.compose_stop,
+            )
+        )
 
 
-ComposeDescriptorBundle = namedtuple('ComposeDescriptorBundle',
-                                     'descriptor_doc compose_event compose_event_page')
-ComposeResourceBundle = namedtuple('ComposeResourceBundle',
-                                   'resource_doc compose_datum compose_datum_page')
-ComposeStreamResourceBundle = namedtuple('ComposeStreamResourceBundle',
-                                         'stream_resource_doc compose_stream_data')
+ComposeDescriptorBundle = namedtuple(
+    "ComposeDescriptorBundle", "descriptor_doc compose_event compose_event_page"
+)
+ComposeResourceBundle = namedtuple(
+    "ComposeResourceBundle", "resource_doc compose_datum compose_datum_page"
+)
+ComposeStreamResourceBundle = namedtuple(
+    "ComposeStreamResourceBundle", "stream_resource_doc compose_stream_data"
+)
 
 
-def compose_datum(*, resource, counter, datum_kwargs, validate=True):
-    resource_uid = resource['uid']
-    doc = {'resource': resource_uid,
-           'datum_kwargs': datum_kwargs,
-           'datum_id': '{}/{}'.format(resource_uid, next(counter))}
+def compose_datum(
+    *,
+    resource: dict,
+    counter: Iterator,
+    datum_kwargs: Iterable,
+    validate: bool = True,
+) -> Datum:
+    resource_uid = resource["uid"]
+    doc = Datum(
+        resource=resource_uid,
+        datum_kwargs=datum_kwargs,
+        datum_id="{}/{}".format(resource_uid, next(counter)),
+    )
     if validate:
         schema_validators[DocumentNames.datum].validate(doc)
     return doc
 
 
-def compose_datum_page(*, resource, counter, datum_kwargs, validate=True):
-    resource_uid = resource['uid']
+def compose_datum_page(
+    *,
+    resource: dict,
+    counter: Iterator,
+    datum_kwargs: dict,
+    validate: bool = True,
+) -> DatumPage:
+    resource_uid = resource["uid"]
     any_column, *_ = datum_kwargs.values()
     N = len(any_column)
-    doc = {'resource': resource_uid,
-           'datum_kwargs': datum_kwargs,
-           'datum_id': ['{}/{}'.format(resource_uid, next(counter)) for _ in range(N)]}
+    doc = DatumPage(
+        resource=resource_uid,
+        datum_kwargs=datum_kwargs,
+        datum_id=["{}/{}".format(resource_uid, next(counter)) for _ in range(N)],
+    )
     if validate:
         schema_validators[DocumentNames.datum_page].validate(doc)
     return doc
 
 
-default_path_semantics = {'posix': 'posix', 'nt': 'windows'}[os.name]
+default_path_semantics = {"posix": "posix", "nt": "windows"}[os.name]
 
 
-def compose_resource(*, spec, root, resource_path, resource_kwargs,
-                     path_semantics=default_path_semantics, start=None, uid=None, validate=True):
+def compose_resource(
+    *,
+    spec: str,
+    root: str,
+    resource_path: str,
+    resource_kwargs: Iterable,
+    path_semantics: str = default_path_semantics,
+    start: Optional[dict] = None,
+    uid: Optional[str] = None,
+    validate: bool = True,
+) -> ComposeResourceBundle:
     if uid is None:
         uid = str(uuid.uuid4())
     counter = itertools.count()
-    doc = {'uid': uid,
-           'spec': spec,
-           'root': root,
-           'resource_path': resource_path,
-           'resource_kwargs': resource_kwargs,
-           'path_semantics': path_semantics}
+    doc = {
+        "uid": uid,
+        "spec": spec,
+        "root": root,
+        "resource_path": resource_path,
+        "resource_kwargs": resource_kwargs,
+        "path_semantics": path_semantics,
+    }
     if start:
-        doc['run_start'] = start['uid']
+        doc["run_start"] = start["uid"]
 
     if validate:
         schema_validators[DocumentNames.resource].validate(doc)
@@ -1704,46 +1929,75 @@ def compose_resource(*, spec, root, resource_path, resource_kwargs,
     return ComposeResourceBundle(
         doc,
         partial(compose_datum, resource=doc, counter=counter),
-        partial(compose_datum_page, resource=doc, counter=counter))
+        partial(compose_datum_page, resource=doc, counter=counter),
+    )
 
 
-def compose_stream_datum(*, stream_resource, stream_name, counter, datum_kwargs,
-                         event_count=1, event_offset=0, validate=True):
-    resource_uid = stream_resource['uid']
+def compose_stream_datum(
+    *,
+    stream_resource: StreamResource,
+    stream_name: str,
+    counter: Iterator,
+    datum_kwargs: Iterable,
+    event_count: int = 1,
+    event_offset: int = 0,
+    validate: bool = True,
+) -> StreamDatum:
+    resource_uid = stream_resource["uid"]
     if stream_name not in stream_resource["stream_names"]:
-        raise EventModelKeyError("Attempt to create stream_datum with name not included in stream_resource")
+        raise EventModelKeyError(
+            "Attempt to create stream_datum with name not included in stream_resource"
+        )
     block_idx = next(counter)
-    doc = dict(stream_resource=resource_uid,
-               datum_kwargs=datum_kwargs,
-               uid=f"{resource_uid}/{stream_name}/{block_idx}",
-               stream_name=stream_name,
-               block_idx=block_idx,
-               event_count=event_count,
-               event_offset=event_offset,
-               )
+    doc = StreamDatum(
+        stream_resource=resource_uid,
+        datum_kwargs=datum_kwargs,
+        uid=f"{resource_uid}/{stream_name}/{block_idx}",
+        stream_name=stream_name,
+        block_idx=block_idx,
+        event_count=event_count,
+        event_offset=event_offset,
+    )
     if validate:
         schema_validators[DocumentNames.stream_datum].validate(doc)
     return doc
 
 
-def compose_stream_resource(*, spec, root, resource_path, resource_kwargs, stream_names, counters=(),
-                            path_semantics=default_path_semantics, start=None, uid=None, validate=True):
+def compose_stream_resource(
+    *,
+    spec: str,
+    root: str,
+    resource_path: str,
+    resource_kwargs: Iterable,
+    stream_names: Union[List, str],
+    counters: List = [],
+    path_semantics: str = default_path_semantics,
+    start: Optional[dict] = None,
+    uid: Optional[str] = None,
+    validate: bool = True,
+) -> ComposeStreamResourceBundle:
     if uid is None:
         uid = str(uuid.uuid4())
     if isinstance(stream_names, str):
-        stream_names = [stream_names, ]
+        stream_names = [
+            stream_names,
+        ]
     if len(counters) == 0:
         counters = [itertools.count() for _ in stream_names]
     elif len(counters) > len(stream_names):
-        raise ValueError(f"Insufficient number of counters {len(counters)} for stream names: {stream_names}")
+        raise ValueError(
+            f"Insufficient number of counters {len(counters)} for stream names: {stream_names}"
+        )
 
-    doc = dict(uid=uid,
-               spec=spec,
-               root=root,
-               resource_path=resource_path,
-               resource_kwargs=resource_kwargs,
-               stream_names=stream_names,
-               path_semantics=path_semantics)
+    doc = StreamResource(
+        uid=uid,
+        spec=spec,
+        root=root,
+        resource_path=resource_path,
+        resource_kwargs=resource_kwargs,
+        stream_names=stream_names,
+        path_semantics=path_semantics,
+    )
     if start:
         doc["run_start"] = start["uid"]
 
@@ -1752,36 +2006,63 @@ def compose_stream_resource(*, spec, root, resource_path, resource_kwargs, strea
 
     return ComposeStreamResourceBundle(
         doc,
-        [partial(compose_stream_datum, stream_resource=doc, stream_name=stream_name, counter=counter) for
-         stream_name, counter in zip(stream_names, counters)]
+        [
+            partial(
+                compose_stream_datum,
+                stream_resource=doc,
+                stream_name=stream_name,
+                counter=counter,
+            )
+            for stream_name, counter in zip(stream_names, counters)
+        ],
     )
 
 
-def compose_stop(*, start, event_counter, poison_pill,
-                 exit_status='success', reason='',
-                 uid=None, time=None,
-                 validate=True):
+def compose_stop(
+    *,
+    start: dict,
+    event_counter: dict,
+    poison_pill: List,
+    exit_status: str = "success",
+    reason: str = "",
+    uid: Optional[str] = None,
+    time: Optional[float] = None,
+    validate: bool = True,
+) -> RunStop:
     if poison_pill:
-        raise EventModelError("Already composed a RunStop document for run "
-                              "{!r}.".format(start['uid']))
+        raise EventModelError(
+            "Already composed a RunStop document for run " "{!r}.".format(start["uid"])
+        )
     poison_pill.append(object())
     if uid is None:
         uid = str(uuid.uuid4())
     if time is None:
         time = ttime.time()
-    doc = {'uid': uid,
-           'time': time,
-           'run_start': start['uid'],
-           'exit_status': exit_status,
-           'reason': reason,
-           'num_events': {k: v - 1 for k, v in event_counter.items()}}
+    doc = RunStop(
+        uid=uid,
+        time=time,
+        run_start=start["uid"],
+        exit_status=exit_status,
+        reason=reason,
+        num_events={k: v - 1 for k, v in event_counter.items()},
+    )
     if validate:
         schema_validators[DocumentNames.stop].validate(doc)
     return doc
 
 
-def compose_event_page(*, descriptor, event_counter, data, timestamps, seq_num,
-                       filled=None, uid=None, time=None, validate=True):
+def compose_event_page(
+    *,
+    descriptor: dict,
+    event_counter: dict,
+    data: dict,
+    timestamps: dict,
+    seq_num: List,
+    filled: Optional[dict] = None,
+    uid: Optional[List] = None,
+    time: Optional[List] = None,
+    validate: bool = True,
+) -> EventPage:
     N = len(seq_num)
     if uid is None:
         uid = [str(uuid.uuid4()) for _ in range(N)]
@@ -1789,68 +2070,98 @@ def compose_event_page(*, descriptor, event_counter, data, timestamps, seq_num,
         time = [ttime.time()] * N
     if filled is None:
         filled = {}
-    doc = {'uid': uid,
-           'time': time,
-           'data': data,
-           'timestamps': timestamps,
-           'seq_num': seq_num,
-           'filled': filled,
-           'descriptor': descriptor['uid']}
+    doc = EventPage(
+        uid=uid,
+        time=time,
+        data=data,
+        timestamps=timestamps,
+        seq_num=seq_num,
+        filled=filled,
+        descriptor=descriptor["uid"],
+    )
     if validate:
         schema_validators[DocumentNames.event_page].validate(doc)
-        if not (descriptor['data_keys'].keys() == data.keys() == timestamps.keys()):
+        if not (descriptor["data_keys"].keys() == data.keys() == timestamps.keys()):
             raise EventModelValidationError(
                 "These sets of keys must match:\n"
                 "event['data'].keys(): {}\n"
                 "event['timestamps'].keys(): {}\n"
                 "descriptor['data_keys'].keys(): {}\n".format(
-                    data.keys(), timestamps.keys(), descriptor['data_keys'].keys()))
+                    data.keys(), timestamps.keys(), descriptor["data_keys"].keys()
+                )
+            )
         if set(filled) - set(data):
             raise EventModelValidationError(
                 "Keys in event['filled'] {} must be a subset of those in "
-                "event['data'] {}".format(filled.keys(), data.keys()))
-    event_counter[descriptor['name']] += len(data)
+                "event['data'] {}".format(filled.keys(), data.keys())
+            )
+    event_counter[descriptor["name"]] += len(data)
     return doc
 
 
-def compose_event(*, descriptor, event_counter, data, timestamps, seq_num=None,
-                  filled=None, uid=None, time=None, validate=True):
+def compose_event(
+    *,
+    descriptor: dict,
+    event_counter: dict,
+    data: dict,
+    timestamps: dict,
+    seq_num: Optional[int] = None,
+    filled: Optional[dict] = None,
+    uid: Optional[str] = None,
+    time: Optional[float] = None,
+    validate: bool = True,
+) -> Event:
     if seq_num is None:
-        seq_num = event_counter[descriptor['name']]
+        seq_num = event_counter[descriptor["name"]]
     if uid is None:
         uid = str(uuid.uuid4())
     if time is None:
         time = ttime.time()
     if filled is None:
         filled = {}
-    doc = {'uid': uid,
-           'time': time,
-           'data': data,
-           'timestamps': timestamps,
-           'seq_num': seq_num,
-           'filled': filled,
-           'descriptor': descriptor['uid']}
+    doc = Event(
+        uid=uid,
+        time=time,
+        data=data,
+        timestamps=timestamps,
+        seq_num=seq_num,
+        filled=filled,
+        descriptor=descriptor["uid"],
+    )
     if validate:
         schema_validators[DocumentNames.event].validate(doc)
-        if not (descriptor['data_keys'].keys() == data.keys() == timestamps.keys()):
+        if not (descriptor["data_keys"].keys() == data.keys() == timestamps.keys()):
             raise EventModelValidationError(
                 "These sets of keys must match:\n"
                 "event['data'].keys(): {}\n"
                 "event['timestamps'].keys(): {}\n"
                 "descriptor['data_keys'].keys(): {}\n".format(
-                    data.keys(), timestamps.keys(), descriptor['data_keys'].keys()))
+                    data.keys(), timestamps.keys(), descriptor["data_keys"].keys()
+                )
+            )
         if set(filled) - set(data):
             raise EventModelValidationError(
                 "Keys in event['filled'] {} must be a subset of those in "
-                "event['data'] {}".format(filled.keys(), data.keys()))
-    event_counter[descriptor['name']] += 1
+                "event['data'] {}".format(filled.keys(), data.keys())
+            )
+    event_counter[descriptor["name"]] += 1
     return doc
 
 
-def compose_descriptor(*, start, streams, event_counter,
-                       name, data_keys, uid=None, time=None,
-                       object_keys=None, configuration=None, hints=None,
-                       validate=True):
+def compose_descriptor(
+    *,
+    start: dict,
+    streams: dict,
+    event_counter: dict,
+    name: str,
+    data_keys: Iterable,
+    uid: Optional[str] = None,
+    time: Optional[float] = None,
+    object_keys: Optional[dict] = None,
+    configuration: Optional[dict] = None,
+    hints: Optional[dict] = None,
+    validate: bool = True,
+) -> ComposeDescriptorBundle:
     if uid is None:
         uid = str(uuid.uuid4())
     if time is None:
@@ -1861,21 +2172,24 @@ def compose_descriptor(*, start, streams, event_counter,
         configuration = {}
     if hints is None:
         hints = {}
-    doc = {'uid': uid,
-           'time': time,
-           'run_start': start['uid'],
-           'name': name,
-           'data_keys': data_keys,
-           'object_keys': object_keys,
-           'hints': hints,
-           'configuration': configuration}
+    doc = EventDescriptor(
+        uid=uid,
+        time=time,
+        run_start=start["uid"],
+        name=name,
+        data_keys=data_keys,
+        object_keys=object_keys,
+        hints=hints,
+        configuration=configuration,
+    )
     if validate:
         if name in streams and streams[name] != set(data_keys):
             raise EventModelValidationError(
                 "A descriptor with the name {} has already been composed with "
                 "data_keys {}. The requested data_keys were {}. All "
                 "descriptors in a given stream must have the same "
-                "data_keys.".format(name, streams[name], set(data_keys)))
+                "data_keys.".format(name, streams[name], set(data_keys))
+            )
         schema_validators[DocumentNames.descriptor].validate(doc)
     if name not in streams:
         streams[name] = set(data_keys)
@@ -1883,10 +2197,17 @@ def compose_descriptor(*, start, streams, event_counter,
     return ComposeDescriptorBundle(
         doc,
         partial(compose_event, descriptor=doc, event_counter=event_counter),
-        partial(compose_event_page, descriptor=doc, event_counter=event_counter))
+        partial(compose_event_page, descriptor=doc, event_counter=event_counter),
+    )
 
 
-def compose_run(*, uid=None, time=None, metadata=None, validate=True):
+def compose_run(
+    *,
+    uid: Optional[str] = None,
+    time: Optional[float] = None,
+    metadata: Optional[dict] = None,
+    validate: bool = True,
+) -> ComposeRunBundle:
     """
     Compose a RunStart document and factory functions for related documents.
 
@@ -1913,27 +2234,32 @@ def compose_run(*, uid=None, time=None, metadata=None, validate=True):
         time = ttime.time()
     if metadata is None:
         metadata = {}
-    doc = dict(uid=uid, time=time, **metadata)
+    doc = RunStart(uid=uid, time=time, **metadata)
     # Define some mutable state to be shared internally by the closures composed
     # below.
-    streams = {}
-    event_counter = {}
-    poison_pill = []
+    streams: dict = {}
+    event_counter: dict = {}
+    poison_pill: List = []
     if validate:
         schema_validators[DocumentNames.start].validate(doc)
 
     return ComposeRunBundle(
         doc,
-        partial(compose_descriptor, start=doc, streams=streams,
-                event_counter=event_counter),
+        partial(
+            compose_descriptor, start=doc, streams=streams, event_counter=event_counter
+        ),
         partial(compose_resource, start=doc),
-        partial(compose_stop, start=doc, event_counter=event_counter,
-                poison_pill=poison_pill),
-        compose_stream_resource=partial(compose_stream_resource, start=doc)
+        partial(
+            compose_stop,
+            start=doc,
+            event_counter=event_counter,
+            poison_pill=poison_pill,
+        ),
+        compose_stream_resource=partial(compose_stream_resource, start=doc),
     )
 
 
-def pack_event_page(*events):
+def pack_event_page(*events: dict) -> EventPage:
     """
     Transform one or more Event documents into an EventPage document.
 
@@ -1950,7 +2276,8 @@ def pack_event_page(*events):
         raise ValueError(
             "The pack_event_page() function was called with empty *args. "
             "Cannot create an EventPage from an empty collection of Events "
-            "because the 'descriptor' field in an EventPage cannot be NULL.")
+            "because the 'descriptor' field in an EventPage cannot be NULL."
+        )
     time_list = []
     uid_list = []
     seq_num_list = []
@@ -1958,21 +2285,25 @@ def pack_event_page(*events):
     filled_list = []
     timestamps_list = []
     for event in events:
-        time_list.append(event['time'])
-        uid_list.append(event['uid'])
-        seq_num_list.append(event['seq_num'])
-        filled_list.append(event.get('filled', {}))
-        data_list.append(event['data'])
-        timestamps_list.append(event['timestamps'])
-    event_page = {'time': time_list, 'uid': uid_list, 'seq_num': seq_num_list,
-                  'descriptor': event['descriptor'],
-                  'filled': _transpose_list_of_dicts(filled_list),
-                  'data': _transpose_list_of_dicts(data_list),
-                  'timestamps': _transpose_list_of_dicts(timestamps_list)}
+        time_list.append(event["time"])
+        uid_list.append(event["uid"])
+        seq_num_list.append(event["seq_num"])
+        filled_list.append(event.get("filled", {}))
+        data_list.append(event["data"])
+        timestamps_list.append(event["timestamps"])
+    event_page = EventPage(
+        time=time_list,
+        uid=uid_list,
+        seq_num=seq_num_list,
+        descriptor=event["descriptor"],
+        filled=_transpose_list_of_dicts(filled_list),
+        data=_transpose_list_of_dicts(data_list),
+        timestamps=_transpose_list_of_dicts(timestamps_list),
+    )
     return event_page
 
 
-def unpack_event_page(event_page):
+def unpack_event_page(event_page: dict) -> Generator:
     """
     Transform an EventPage document into individual Event documents.
 
@@ -1984,25 +2315,32 @@ def unpack_event_page(event_page):
     ------
     event : dict
     """
-    descriptor = event_page['descriptor']
-    data_list = _transpose_dict_of_lists(event_page['data'])
-    timestamps_list = _transpose_dict_of_lists(event_page['timestamps'])
-    filled_list = _transpose_dict_of_lists(event_page.get('filled', {}))
+    descriptor = event_page["descriptor"]
+    data_list = _transpose_dict_of_lists(event_page["data"])
+    timestamps_list = _transpose_dict_of_lists(event_page["timestamps"])
+    filled_list = _transpose_dict_of_lists(event_page.get("filled", {}))
     for uid, time, seq_num, data, timestamps, filled in itertools.zip_longest(
-            event_page['uid'],
-            event_page['time'],
-            event_page['seq_num'],
-            data_list,
-            timestamps_list,
-            filled_list,
-            fillvalue={}):
-        event = {'descriptor': descriptor,
-                 'uid': uid, 'time': time, 'seq_num': seq_num,
-                 'data': data, 'timestamps': timestamps, 'filled': filled}
+        event_page["uid"],
+        event_page["time"],
+        event_page["seq_num"],
+        data_list,
+        timestamps_list,
+        filled_list,
+        fillvalue={},
+    ):
+        event = {
+            "descriptor": descriptor,
+            "uid": uid,
+            "time": time,
+            "seq_num": seq_num,
+            "data": data,
+            "timestamps": timestamps,
+            "filled": filled,
+        }
         yield event
 
 
-def pack_datum_page(*datum):
+def pack_datum_page(*datum: dict) -> DatumPage:
     """
     Transform one or more Datum documents into a DatumPage document.
 
@@ -2019,19 +2357,22 @@ def pack_datum_page(*datum):
         raise ValueError(
             "The pack_datum_page() function was called with empty *args. "
             "Cannot create an DatumPage from an empty collection of Datum "
-            "because the 'resource' field in a DatumPage cannot be NULL.")
+            "because the 'resource' field in a DatumPage cannot be NULL."
+        )
     datum_id_list = []
     datum_kwarg_list = []
     for datum_ in datum:
-        datum_id_list.append(datum_['datum_id'])
-        datum_kwarg_list.append(datum_['datum_kwargs'])
-    datum_page = {'resource': datum_['resource'],
-                  'datum_id': datum_id_list,
-                  'datum_kwargs': _transpose_list_of_dicts(datum_kwarg_list)}
+        datum_id_list.append(datum_["datum_id"])
+        datum_kwarg_list.append(datum_["datum_kwargs"])
+    datum_page = DatumPage(
+        resource=datum_["resource"],
+        datum_id=datum_id_list,
+        datum_kwargs=_transpose_list_of_dicts(datum_kwarg_list),
+    )
     return datum_page
 
 
-def unpack_datum_page(datum_page):
+def unpack_datum_page(datum_page: dict) -> Generator:
     """
     Transform a DatumPage document into individual Datum documents.
 
@@ -2043,18 +2384,22 @@ def unpack_datum_page(datum_page):
     ------
     datum : dict
     """
-    resource = datum_page['resource']
-    datum_kwarg_list = _transpose_dict_of_lists(datum_page['datum_kwargs'])
+    resource = datum_page["resource"]
+    datum_kwarg_list = _transpose_dict_of_lists(datum_page["datum_kwargs"])
+    datum_id: Any
+    datum_kwargs: Any
     for datum_id, datum_kwargs in itertools.zip_longest(
-            datum_page['datum_id'],
-            datum_kwarg_list,
-            fillvalue={}):
-        datum = {'datum_id': datum_id, 'datum_kwargs': datum_kwargs,
-                 'resource': resource}
+        datum_page["datum_id"], datum_kwarg_list, fillvalue={}
+    ):
+        datum = {
+            "datum_id": datum_id,
+            "datum_kwargs": datum_kwargs,
+            "resource": resource,
+        }
         yield datum
 
 
-def rechunk_event_pages(event_pages, chunk_size):
+def rechunk_event_pages(event_pages: Iterable, chunk_size: int) -> Generator:
     """
     Resizes the event_pages in a iterable of event_pages.
 
@@ -2072,34 +2417,41 @@ def rechunk_event_pages(event_pages, chunk_size):
     remainder = chunk_size
     chunk_list = []
 
-    def page_chunks(page, chunk_size, remainder):
+    def page_chunks(page: dict, chunk_size: int, remainder: int) -> Generator:
         """
         Yields chunks of a event_page.
         The first chunk will be of size remainder, the following chunks will be
         of size chunk_size. The last chunk will be what ever is left over.
         """
-        array_keys = ['seq_num', 'time', 'uid']
-        page_size = len(page['uid'])  # Number of events in the page.
+        array_keys = ["seq_num", "time", "uid"]
+        page_size = len(page["uid"])  # Number of events in the page.
 
         # Make a list of the chunk indexes.
         chunks = [(0, remainder)]
-        chunks.extend([(i, i + chunk_size) for i
-                       in range(remainder, page_size, chunk_size)])
+        chunks.extend(
+            [(i, i + chunk_size) for i in range(remainder, page_size, chunk_size)]
+        )
 
         for start, stop in chunks:
-            yield {'descriptor': page['descriptor'],
-                   **{key: page[key][start:stop] for key in array_keys},
-                   'data': {key: page['data'][key][start:stop]
-                            for key in page['data'].keys()},
-                   'timestamps': {key: page['timestamps'][key][start: stop]
-                                  for key in page['timestamps'].keys()},
-                   'filled': {key: page['filled'][key][start:stop]
-                              for key in page['data'].keys()}}
+            yield {
+                "descriptor": page["descriptor"],
+                **{key: page[key][start:stop] for key in array_keys},
+                "data": {
+                    key: page["data"][key][start:stop] for key in page["data"].keys()
+                },
+                "timestamps": {
+                    key: page["timestamps"][key][start:stop]
+                    for key in page["timestamps"].keys()
+                },
+                "filled": {
+                    key: page["filled"][key][start:stop] for key in page["data"].keys()
+                },
+            }
 
     for page in event_pages:
         new_chunks = page_chunks(page, chunk_size, remainder)
         for chunk in new_chunks:
-            remainder -= len(chunk['uid'])  # Subtract the size of the chunk.
+            remainder -= len(chunk["uid"])  # Subtract the size of the chunk.
             chunk_list.append(chunk)
             if remainder == 0:
                 yield merge_event_pages(chunk_list)
@@ -2109,7 +2461,7 @@ def rechunk_event_pages(event_pages, chunk_size):
         yield merge_event_pages(chunk_list)
 
 
-def merge_event_pages(event_pages):
+def merge_event_pages(event_pages: Iterable[EventPage]) -> EventPage:
     """
     Combines a iterable of event_pages to a single event_page.
 
@@ -2126,23 +2478,38 @@ def merge_event_pages(event_pages):
     if len(pages) == 1:
         return pages[0]
 
-    array_keys = ['seq_num', 'time', 'uid']
+    array_keys = ["seq_num", "time", "uid"]
 
-    return {'descriptor': pages[0]['descriptor'],
-            **{key: list(itertools.chain.from_iterable(
-                    [page[key] for page in pages])) for key in array_keys},
-            'data': {key: list(itertools.chain.from_iterable(
-                    [page['data'][key] for page in pages]))
-                    for key in pages[0]['data'].keys()},
-            'timestamps': {key: list(itertools.chain.from_iterable(
-                    [page['timestamps'][key] for page in pages]))
-                    for key in pages[0]['data'].keys()},
-            'filled': {key: list(itertools.chain.from_iterable(
-                    [page['filled'][key] for page in pages]))
-                    for key in pages[0]['data'].keys()}}
+    return EventPage(
+        descriptor=pages[0]["descriptor"],
+        **{
+            key: list(itertools.chain.from_iterable([page[key] for page in pages]))
+            for key in array_keys
+        },
+        data={
+            key: list(
+                itertools.chain.from_iterable([page["data"][key] for page in pages])
+            )
+            for key in pages[0]["data"].keys()
+        },
+        timestamps={
+            key: list(
+                itertools.chain.from_iterable(
+                    [page["timestamps"][key] for page in pages]
+                )
+            )
+            for key in pages[0]["data"].keys()
+        },
+        filled={
+            key: list(
+                itertools.chain.from_iterable([page["filled"][key] for page in pages])
+            )
+            for key in pages[0]["data"].keys()
+        },
+    )
 
 
-def rechunk_datum_pages(datum_pages, chunk_size):
+def rechunk_datum_pages(datum_pages: Iterable, chunk_size: int) -> Generator:
     """
     Resizes the datum_pages in a iterable of event_pages.
 
@@ -2160,31 +2527,36 @@ def rechunk_datum_pages(datum_pages, chunk_size):
     remainder = chunk_size
     chunk_list = []
 
-    def page_chunks(page, chunk_size, remainder):
+    def page_chunks(page: dict, chunk_size: int, remainder: int) -> Generator:
         """
         Yields chunks of a datum_page.
         The first chunk will be of size remainder, the following chunks will be
         of size chunk_size. The last chunk will be what ever is left over.
         """
 
-        array_keys = ['datum_id']
-        page_size = len(page['datum_id'])  # Number of datum in the page.
+        array_keys = ["datum_id"]
+        page_size = len(page["datum_id"])  # Number of datum in the page.
 
         # Make a list of the chunk indexes.
         chunks = [(0, remainder)]
-        chunks.extend([(i, i + chunk_size) for i
-                       in range(remainder, page_size, chunk_size)])
+        chunks.extend(
+            [(i, i + chunk_size) for i in range(remainder, page_size, chunk_size)]
+        )
 
         for start, stop in chunks:
-            yield {'resource': page['resource'],
-                   **{key: page[key][start:stop] for key in array_keys},
-                   'datum_kwargs': {key: page['datum_kwargs'][key][start:stop]
-                                    for key in page['datum_kwargs'].keys()}}
+            yield {
+                "resource": page["resource"],
+                **{key: page[key][start:stop] for key in array_keys},
+                "datum_kwargs": {
+                    key: page["datum_kwargs"][key][start:stop]
+                    for key in page["datum_kwargs"].keys()
+                },
+            }
 
     for page in datum_pages:
         new_chunks = page_chunks(page, chunk_size, remainder)
         for chunk in new_chunks:
-            remainder -= len(chunk['datum_id'])  # Subtract the size of the chunk.
+            remainder -= len(chunk["datum_id"])  # Subtract the size of the chunk.
             chunk_list.append(chunk)
             if remainder == 0:
                 yield merge_datum_pages(chunk_list)
@@ -2194,7 +2566,7 @@ def rechunk_datum_pages(datum_pages, chunk_size):
         yield merge_datum_pages(chunk_list)
 
 
-def merge_datum_pages(datum_pages):
+def merge_datum_pages(datum_pages: Iterable) -> DatumPage:
     """
     Combines a iterable of datum_pages to a single datum_page.
 
@@ -2211,17 +2583,26 @@ def merge_datum_pages(datum_pages):
     if len(pages) == 1:
         return pages[0]
 
-    array_keys = ['datum_id']
+    array_keys = ["datum_id"]
 
-    return {'resource': pages[0]['resource'],
-            **{key: list(itertools.chain.from_iterable(
-                    [page[key] for page in pages])) for key in array_keys},
-            'datum_kwargs': {key: list(itertools.chain.from_iterable(
-                    [page['datum_kwargs'][key] for page in pages]))
-                    for key in pages[0]['datum_kwargs'].keys()}}
+    return DatumPage(
+        resource=pages[0]["resource"],
+        **{
+            key: list(itertools.chain.from_iterable([page[key] for page in pages]))
+            for key in array_keys
+        },
+        datum_kwargs={
+            key: list(
+                itertools.chain.from_iterable(
+                    [page["datum_kwargs"][key] for page in pages]
+                )
+            )
+            for key in pages[0]["datum_kwargs"].keys()
+        },
+    )
 
 
-def bulk_events_to_event_pages(bulk_events):
+def bulk_events_to_event_pages(bulk_events: dict) -> list:
     """
     Transform a BulkEvents document into a list of EventPage documents.
 
@@ -2237,49 +2618,49 @@ def bulk_events_to_event_pages(bulk_events):
     """
     # This is for a deprecated document type, so we are not being fussy
     # about efficiency/laziness here.
-    event_pages = {}  # descriptor uid mapped to page
+    event_pages: dict = {}  # descriptor uid mapped to page
     for events in bulk_events.values():
         for event in events:
-            descriptor = event['descriptor']
+            descriptor = event["descriptor"]
             try:
                 page = event_pages[descriptor]
             except KeyError:
-                page = {'time': [], 'uid': [], 'seq_num': [],
-                        'descriptor': descriptor}
-                page['data'] = {k: [] for k in event['data']}
-                page['timestamps'] = {k: [] for k in event['timestamps']}
-                page['filled'] = {k: [] for k in event.get('filled', {})}
+                page = {"time": [], "uid": [], "seq_num": [], "descriptor": descriptor}
+                page["data"] = {k: [] for k in event["data"]}
+                page["timestamps"] = {k: [] for k in event["timestamps"]}
+                page["filled"] = {k: [] for k in event.get("filled", {})}
                 event_pages[descriptor] = page
-            page['uid'].append(event['uid'])
-            page['time'].append(event['time'])
-            page['seq_num'].append(event['seq_num'])
-            page_data = page['data']
-            for k, v in event['data'].items():
+            page["uid"].append(event["uid"])
+            page["time"].append(event["time"])
+            page["seq_num"].append(event["seq_num"])
+            page_data = page["data"]
+            for k, v in event["data"].items():
                 page_data[k].append(v)
-            page_timestamps = page['timestamps']
-            for k, v in event['timestamps'].items():
+            page_timestamps = page["timestamps"]
+            for k, v in event["timestamps"].items():
                 page_timestamps[k].append(v)
-            page_filled = page['filled']
-            for k, v in event.get('filled', {}).items():
+            page_filled = page["filled"]
+            for k, v in event.get("filled", {}).items():
                 page_filled[k].append(v)
     return list(event_pages.values())
 
 
-def bulk_datum_to_datum_page(bulk_datum):
+def bulk_datum_to_datum_page(bulk_datum: dict) -> DatumPage:
     """
     Transform one BulkDatum into one DatumPage.
 
     Note: There is only one known usage of BulkDatum "in the wild", and the
     BulkDatum layout has been deprecated in favor of DatumPage.
     """
-    datum_page = {'datum_id': bulk_datum['datum_ids'],
-                  'resource': bulk_datum['resource'],
-                  'datum_kwargs': _transpose_list_of_dicts(
-                      bulk_datum['datum_kwarg_list'])}
+    datum_page = DatumPage(
+        datum_id=bulk_datum["datum_ids"],
+        resource=bulk_datum["resource"],
+        datum_kwargs=_transpose_list_of_dicts(bulk_datum["datum_kwarg_list"]),
+    )
     return datum_page
 
 
-def _transpose_list_of_dicts(list_of_dicts):
+def _transpose_list_of_dicts(list_of_dicts: list) -> dict:
     "Transform list-of-dicts into dict-of-lists (i.e. DataFrame-like)."
     dict_of_lists = defaultdict(list)
     for row in list_of_dicts:
@@ -2288,7 +2669,7 @@ def _transpose_list_of_dicts(list_of_dicts):
     return dict(dict_of_lists)
 
 
-def _transpose_dict_of_lists(dict_of_lists):
+def _transpose_dict_of_lists(dict_of_lists: dict) -> list:
     "Transform dict-of-lists (i.e. DataFrame-like) into list-of-dicts."
     list_of_dicts = []
     keys = list(dict_of_lists)
@@ -2297,8 +2678,8 @@ def _transpose_dict_of_lists(dict_of_lists):
     return list_of_dicts
 
 
-def verify_filled(event_page):
-    '''Take an event_page document and verify that it is completely filled.
+def verify_filled(event_page: dict) -> None:
+    """Take an event_page document and verify that it is completely filled.
 
     Parameters
     ----------
@@ -2310,20 +2691,22 @@ def verify_filled(event_page):
     UnfilledData
         Raised if any of the data in the event_page is unfilled, when raised it
         inlcudes a list of unfilled data objects in the exception message.
-    '''
-    if not all(map(all, event_page['filled'].values())):
+    """
+    if not all(map(all, event_page["filled"].values())):
         # check that all event_page data is filled.
         unfilled_data = []
-        for field, filled in event_page['filled'].items():
+        for field, filled in event_page["filled"].items():
             if not all(filled):
                 unfilled_data.append(field)
-                raise UnfilledData(f"Unfilled data found in fields "
-                                   f"{unfilled_data!r}. Use "
-                                   f"`event_model.Filler`.")
+                raise UnfilledData(
+                    f"Unfilled data found in fields "
+                    f"{unfilled_data!r}. Use "
+                    f"`event_model.Filler`."
+                )
 
 
-def sanitize_doc(doc):
-    '''Return a copy with any numpy objects converted to built-in Python types.
+def sanitize_doc(doc: dict) -> dict:
+    """Return a copy with any numpy objects converted to built-in Python types.
 
     This function takes in an event-model document and returns a copy with any
     numpy objects converted to built-in Python types. It is useful for
@@ -2340,7 +2723,7 @@ def sanitize_doc(doc):
     sanitized_doc : event-model document
         The event-model document with numpy objects converted to built-in
         Python types.
-    '''
+    """
     return json.loads(json.dumps(doc, cls=NumpyEncoder))
 
 
@@ -2355,10 +2738,13 @@ class NumpyEncoder(json.JSONEncoder):
 
     >>> json.dumps({'a': {'b': numpy.array([1, 2, 3])}}, cls=NumpyEncoder)
     """
+
     # Credit: https://stackoverflow.com/a/47626762/1221924
-    def default(self, obj):
+    @no_type_check
+    def default(self, obj: object) -> Any:
         try:
             import dask.array
+
             if isinstance(obj, dask.array.Array):
                 obj = numpy.asarray(obj)
         except ImportError:

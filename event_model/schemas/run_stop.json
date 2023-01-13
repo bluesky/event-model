@@ -1,50 +1,63 @@
 {
-    "definitions": {
-        "data_type": {
-            "title" : "data_type",
-            "patternProperties": {"^([^./]+)$": {"$ref": "#/definitions/data_type"}},
-            "additionalProperties": false
-        }
-    },
-    "properties": {
-        "run_start": {
-            "type": "string",
-            "description": "Reference back to the run_start document that this document is paired with."
-        },
-        "reason": {
-            "type": "string",
-            "description": "Long-form description of why the run ended"
-        },
-        "time": {
-            "type": "number",
-            "description": "The time the run ended. Unix epoch"
-        },
-        "exit_status": {
-            "type": "string",
-            "enum": ["success", "abort", "fail"],
-            "description": "State of the run when it ended"
-        },
-        "uid": {
-            "type": "string",
-            "description": "Globally unique ID for this document"
-        },
-        "num_events": {
-            "type": "object",
-            "properties": {},
-            "additionalProperties": { "type": "integer" },
-            "description": "Number of Events per named stream"
-        }
-    },
-    "patternProperties": {
-        "^([^./]+)$": {"$ref": "#/definitions/data_type"}},
-    "additionalProperties": false,
-    "required": [
-        "uid",
-        "run_start",
-        "time",
-        "exit_status"
-    ],
-    "type": "object",
-    "description": "Document for the end of a run indicating the success/fail state of the run and the end time"
-
+   "title": "run_stop",
+   "description": "Document for the end of a run indicating the success/fail state of the run and the end time",
+   "type": "object",
+   "properties": {
+      "reason": {
+         "title": "Reason",
+         "description": "Long-form description of why the run ended",
+         "type": "string"
+      },
+      "num_events": {
+         "title": "Num Events",
+         "description": "Number of Events per named stream",
+         "type": "object",
+         "additionalProperties": {
+            "type": "integer"
+         }
+      },
+      "data_type": {
+         "$ref": "#/definitions/DataType"
+      },
+      "run_start": {
+         "title": "Run Start",
+         "description": "Reference back to the run_start document that this document is paired with.",
+         "type": "string"
+      },
+      "time": {
+         "title": "Time",
+         "description": "The time the run ended. Unix epoch",
+         "type": "number"
+      },
+      "exit_status": {
+         "title": "Exit Status",
+         "description": "State of the run when it ended",
+         "enum": [
+            "success",
+            "abort",
+            "fail"
+         ],
+         "type": "string"
+      },
+      "uid": {
+         "title": "Uid",
+         "description": "Globally unique ID for this document",
+         "type": "string"
+      }
+   },
+   "required": [
+      "run_start",
+      "time",
+      "exit_status",
+      "uid"
+   ],
+   "additionalProperties": false,
+   "definitions": {
+      "DataType": {
+         "title": "DataType",
+         "pattern": "^([^./]+)$",
+         "type": "string",
+         "additionalProperties": false
+      }
+   }
 }

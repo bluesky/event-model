@@ -1,0 +1,44 @@
+{
+    "properties": {
+        "spec": {
+            "type": "string",
+            "description": "String identifying the format/type of this Resource, used to identify a compatible Handler"
+        },
+        "resource_path": {
+            "type": "string",
+            "description": "Filepath or URI for locating this resource"
+        },
+        "resource_kwargs": {
+            "type": "object",
+            "description": "Additional argument to pass to the Handler to read a Resource"
+        },
+        "root": {
+            "type": "string",
+            "description": "Subset of resource_path that is a local detail, not semantic."
+        },
+        "path_semantics": {
+            "type": "string",
+            "description": "Rules for joining paths",
+            "enum": ["posix", "windows"]
+        },
+        "uid": {
+            "type": "string",
+            "description": "Globally unique identifier for this Resource"
+        },
+        "run_start": {
+            "type": "string",
+            "description": "Globally unique ID to the run_start document this resource is associated with."
+        }
+    },
+    "required": [
+        "spec",
+        "resource_path",
+        "resource_kwargs",
+        "root",
+        "uid"
+    ],
+    "additionalProperties": false,
+    "type": "object",
+    "title": "resource",
+    "description": "Document to reference a collection (e.g. file or group of files) of externally-stored data"
+}

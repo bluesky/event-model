@@ -1,0 +1,46 @@
+{
+    "properties": {
+        "datum_kwargs": {
+            "type": "object",
+            "description": "Arguments to pass to the Handler to retrieve one quanta of data"
+        },
+        "stream_resource": {
+            "type": "string",
+            "description": "The UID of the Stream Resource to which this Datum belongs"
+        },
+        "uid": {
+            "type": "string",
+            "description": "Globally unique identifier for this Datum. A suggested formatting being '<stream_resource>/<stream_name>/<block_id>"
+        },
+        "stream_name": {
+            "type": "string",
+            "description": "The name of the stream that this Datum is providing a block of."
+        },
+        "block_idx": {
+            "type": "integer",
+            "description": "The order in the stream of this block of data. This must be contiguous for a given stream."
+        },
+        "event_count": {
+            "type": "integer",
+            "description": "The number of events in this datum."
+        },
+        "event_offset": {
+            "type": "integer",
+            "description": "The sequence number of the first event in this block. This increasing value allows the presence of gaps."
+        }
+
+    },
+    "required": [
+        "datum_kwargs",
+        "stream_resource",
+        "uid",
+        "stream_name",
+        "block_idx",
+        "event_count",
+        "event_offset"
+    ],
+    "additionalProperties": false,
+    "type": "object",
+    "title": "stream_datum",
+    "description": "Document to reference a quanta of an externally-stored stream of data."
+}

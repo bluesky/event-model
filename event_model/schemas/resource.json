@@ -1,44 +1,54 @@
 {
-    "properties": {
-        "spec": {
-            "type": "string",
-            "description": "String identifying the format/type of this Resource, used to identify a compatible Handler"
-        },
-        "resource_path": {
-            "type": "string",
-            "description": "Filepath or URI for locating this resource"
-        },
-        "resource_kwargs": {
-            "type": "object",
-            "description": "Additional argument to pass to the Handler to read a Resource"
-        },
-        "root": {
-            "type": "string",
-            "description": "Subset of resource_path that is a local detail, not semantic."
-        },
-        "path_semantics": {
-            "type": "string",
-            "description": "Rules for joining paths",
-            "enum": ["posix", "windows"]
-        },
-        "uid": {
-            "type": "string",
-            "description": "Globally unique identifier for this Resource"
-        },
-        "run_start": {
-            "type": "string",
-            "description": "Globally unique ID to the run_start document this resource is associated with."
-        }
-    },
-    "required": [
-        "spec",
-        "resource_path",
-        "resource_kwargs",
-        "root",
-        "uid"
-    ],
-    "additionalProperties": false,
-    "type": "object",
-    "title": "resource",
-    "description": "Document to reference a collection (e.g. file or group of files) of externally-stored data"
+   "title": "resource",
+   "description": "Document to reference a collection (e.g. file or group of files) of externally-stored data",
+   "type": "object",
+   "properties": {
+      "path_semantics": {
+         "title": "Path Semantics",
+         "description": "Rules for joining paths",
+         "enum": [
+            "posix",
+            "windows"
+         ],
+         "type": "string"
+      },
+      "run_start": {
+         "title": "Run Start",
+         "description": "Globally unique ID to the run_start document this resource is associated with.",
+         "type": "string"
+      },
+      "spec": {
+         "title": "Spec",
+         "description": "String identifying the format/type of this Resource, used to identify a compatible Handler",
+         "type": "string"
+      },
+      "resource_path": {
+         "title": "Resource Path",
+         "description": "Filepath or URI for locating this resource",
+         "type": "string"
+      },
+      "resource_kwargs": {
+         "title": "Resource Kwargs",
+         "description": "Additional argument to pass to the Handler to read a Resource",
+         "type": "object"
+      },
+      "root": {
+         "title": "Root",
+         "description": "Subset of resource_path that is a local detail, not semantic.",
+         "type": "string"
+      },
+      "uid": {
+         "title": "Uid",
+         "description": "Globally unique identifier for this Resource",
+         "type": "string"
+      }
+   },
+   "required": [
+      "spec",
+      "resource_path",
+      "resource_kwargs",
+      "root",
+      "uid"
+   ],
+   "additionalProperties": false
 }

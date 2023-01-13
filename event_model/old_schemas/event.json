@@ -1,0 +1,45 @@
+{
+    "properties": {
+        "data": {
+            "type": "object",
+            "description": "The actual measurement data"
+        },
+        "timestamps": {
+            "type": "object",
+            "description": "The timestamps of the individual measurement data"
+        },
+        "filled": {
+            "type": "object",
+            "additionalProperties": {"type": ["boolean", "string"]},
+            "description": "Mapping each of the keys of externally-stored data to the boolean False, indicating that the data has not been loaded, or to foreign keys (moved here from 'data' when the data was loaded)"
+        },
+        "descriptor": {
+            "type": "string",
+            "description": "UID of the EventDescriptor to which this Event belongs"
+        },
+        "seq_num": {
+            "type": "integer",
+            "description": "Sequence number to identify the location of this Event in the Event stream"
+        },
+        "time": {
+            "type": "number",
+            "description": "The event time. This maybe different than the timestamps on each of the data entries."
+        },
+        "uid": {
+            "type": "string",
+            "description": "Globally unique identifier for this Event"
+        }
+    },
+    "required": [
+        "uid",
+        "data",
+        "timestamps",
+        "time",
+        "descriptor",
+        "seq_num"
+    ],
+    "additionalProperties": false,
+    "type": "object",
+    "title": "event",
+    "description": "Document to record a quanta of collected data"
+}
