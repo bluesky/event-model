@@ -35,6 +35,7 @@ import weakref
 import jsonschema
 import numpy
 
+# type: ignore
 from ._version import get_versions
 
 if sys.version_info < (3, 8):
