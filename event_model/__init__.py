@@ -12,8 +12,7 @@ from typing import (
     Generator,
     Union,
     List,
-    TypeVar,
-    Generic,
+    no_type_check,
 )
 
 from distutils.version import LooseVersion
@@ -426,16 +425,13 @@ class HandlerRegistryView(collections.abc.Mapping):
 # delayed-computation framework (e.g. dask) in event-model itself.
 
 
-#  Type annotation for handler_class
-T = TypeVar("T")
-
-
-def as_is(handler_class, filler_state) -> type:
+def as_is(handler_class, filler_state) -> Type:
     "A no-op coercion function that returns handler_class unchanged."
     return handler_class
 
 
-def force_numpy(handler_class: Iterable[T], filler_state) -> Any:
+@no_type_check
+def force_numpy(handler_class: Type, filler_state) -> Any:
     "A coercion that makes handler_class.__call__ return actual numpy.ndarray."
 
     class Subclass(handler_class):
@@ -2733,7 +2729,8 @@ class NumpyEncoder(json.JSONEncoder):
     """
 
     # Credit: https://stackoverflow.com/a/47626762/1221924
-    def default(self, obj: object) -> Any:
+    @no_type_check
+    def default(self, obj: object) -> Any:  # type: ignore
         try:
             import dask.array
 
