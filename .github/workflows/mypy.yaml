@@ -23,5 +23,5 @@ jobs:
 
       - name: Run mypy
         shell: bash -l {0}
-        run: mypy --install-types --exclude event_model/_version.py --non-interactive event_model/__init__.py 
+        run: mypy --install-types --exclude '/_version\.py$' --non-interactive event_model/__init__.py 
 
