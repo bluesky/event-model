@@ -20,6 +20,7 @@ jobs:
           python -m pip install -r requirements.txt
           python -m pip install -r requirements-dev.txt
           python -m pip list
+          mypy --install-types
 
       - name: Run mypy
         shell: bash -l {0}
