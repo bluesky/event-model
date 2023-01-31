@@ -1,14 +1,14 @@
 API
 ===
 
-.. automodule:: python3_pip_skeleton
+.. automodule:: event_model
 
-    ``python3_pip_skeleton``
+    ``event_model``
     -----------------------------------
 
-This is the internal API reference for python3_pip_skeleton
+This is the internal API reference for event_model
 
-.. data:: python3_pip_skeleton.__version__
+.. data:: event_model.__version__
     :type: str
 
     Version number as calculated by https://github.com/pypa/setuptools_scm
