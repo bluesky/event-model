@@ -14,8 +14,8 @@ v1.19.0 (2022-11-03)
 Added
 -----
 
-* Add two experimental new document types: a `stream_resource` that manages an
-  unknown number of contiguous `stream_datum`, with the potential for multiple
+* Add two experimental new document types: a :std:ref:`stream_resource` that manages an
+  unknown number of contiguous :std:ref:`stream_datum`, with the potential for multiple
   streams. This is especially relevant when the data is expected to be ragged
   or has no pre-determined shape (number of rows).
 

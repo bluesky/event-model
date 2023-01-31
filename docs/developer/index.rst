@@ -33,7 +33,6 @@ side-bar.
             how-to/update-tools
             how-to/make-release
             how-to/pin-requirements
-            how-to/test-container
 
         +++
 
@@ -58,6 +57,7 @@ side-bar.
             :maxdepth: 1
 
             reference/standards
+            reference/release-history
 
         +++
 

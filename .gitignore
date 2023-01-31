@@ -1,10 +1,6 @@
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
-<<<<<<< HEAD
-*$py.class
-=======
->>>>>>> skeleton-merge-branch
 
 # C extensions
 *.so
@@ -12,10 +8,7 @@ __pycache__/
 # Distribution / packaging
 .Python
 env/
-<<<<<<< HEAD
-=======
 .venv
->>>>>>> skeleton-merge-branch
 build/
 develop-eggs/
 dist/
@@ -27,17 +20,9 @@ lib64/
 parts/
 sdist/
 var/
-<<<<<<< HEAD
-venv/
 *.egg-info/
 .installed.cfg
 *.egg
-=======
-*.egg-info/
-.installed.cfg
-*.egg
-**/_version.py
->>>>>>> skeleton-merge-branch
 
 # PyInstaller
 #  Usually these files are written by a python script from a template
@@ -57,14 +42,9 @@ htmlcov/
 .cache
 nosetests.xml
 coverage.xml
-<<<<<<< HEAD
-*,cover
-.hypothesis/
-=======
 cov.xml
 .pytest_cache/
 .mypy_cache/
->>>>>>> skeleton-merge-branch
 
 # Translations
 *.mo
@@ -74,41 +54,11 @@ cov.xml
 *.log
 
 # Sphinx documentation
-<<<<<<< HEAD
-docs/build/
-docs/source/generated/
-
-# pytest
-.pytest_cache/
-=======
 docs/_build/
->>>>>>> skeleton-merge-branch
 
 # PyBuilder
 target/
 
-<<<<<<< HEAD
-# Editor files
-#mac
-.DS_Store
-*~
-
-#vim
-*.swp
-*.swo
-
-#pycharm
-.idea/*
-
-#vscode
-.vscode/*
-
-#Ipython Notebook
-.ipynb_checkpoints
-
-# precomit
-.pre-commit-config.yaml
-=======
 # likely venv names
 .venv*
 venv*
@@ -116,4 +66,3 @@ venv*
 # further build artifacts
 lockfiles/
 
->>>>>>> skeleton-merge-branch

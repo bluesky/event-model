@@ -1,52 +1,29 @@
-event_model
+Event Model
 ===========================
 
 |code_ci| |docs_ci| |coverage| |pypi_version| |license|
 
-.. note::
-
-    This project contains template code only. For documentation on how to
-    adopt this skeleton project see
-    https://bluesky.github.io/event_model-cli
-
-This is where you should write a short paragraph that describes what your module does,
-how it does it, and why people should use it.
-
 ============== ==============================================================
-PyPI           ``pip install event_model``
-Source code    https://github.com/bluesky/event_model
-Documentation  https://bluesky.github.io/event_model
-Releases       https://github.com/bluesky/event_model/releases
+PyPI           ``pip install event-model``
+Source code    https://github.com/bluesky/event-model
+Documentation  https://blueskyproject.io/event-model
+Releases       https://github.com/bluesky/event-model/releases
 ============== ==============================================================
 
-This is where you should put some images or code snippets that illustrate
-some relevant examples. If it is a library then you might put some
-introductory code here:
-
-.. code-block:: python
-
-    from event_model import __version__
-
-    print(f"Hello event_model {__version__}")
-
-Or if it is a commandline tool then you might put some example commands here::
-
-    $ python -m event_model --version
-
-.. |code_ci| image:: https://github.com/bluesky/event_model/actions/workflows/code.yml/badge.svg?branch=main
-    :target: https://github.com/bluesky/event_model/actions/workflows/code.yml
+.. |code_ci| image:: https://github.com/bluesky/event-model/actions/workflows/code.yml/badge.svg?branch=main
+    :target: https://github.com/bluesky/event-model/actions/workflows/code.yml
     :alt: Code CI
 
-.. |docs_ci| image:: https://github.com/bluesky/event_model/actions/workflows/docs.yml/badge.svg?branch=main
-    :target: https://github.com/bluesky/event_model/actions/workflows/docs.yml
+.. |docs_ci| image:: https://github.com/bluesky/event-model/actions/workflows/docs.yml/badge.svg?branch=main
+    :target: https://github.com/bluesky/event-model/actions/workflows/docs.yml
     :alt: Docs CI
 
-.. |coverage| image:: https://codecov.io/gh/bluesky/event_model/branch/main/graph/badge.svg
-    :target: https://codecov.io/gh/bluesky/event_model
+.. |coverage| image:: https://codecov.io/gh/bluesky/event-model/branch/main/graph/badge.svg
+    :target: https://codecov.io/gh/bluesky/event-model
     :alt: Test Coverage
 
-.. |pypi_version| image:: https://img.shields.io/pypi/v/event_model.svg
-    :target: https://pypi.org/project/event_model
+.. |pypi_version| image:: https://img.shields.io/pypi/v/event-model.svg
+    :target: https://pypi.org/project/event-model
     :alt: Latest PyPI version
 
 .. |license| image:: https://img.shields.io/badge/License-Apache%202.0-blue.svg
@@ -57,4 +34,4 @@ Or if it is a commandline tool then you might put some example commands here::
     Anything below this line is used when viewing README.rst and will be replaced
     when included in index.rst
 
-See https://bluesky.github.io/event_model for more detailed documentation.
+See https://blueskyproject.io/event-model for more detailed documentation.
