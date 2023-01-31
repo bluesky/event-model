@@ -1634,7 +1634,6 @@ else:
 __version__ = get_versions()['version']
 del get_versions
 
-
 @dataclass
 class ComposeRunBundle:
     """Extensible compose run bundle. This maintains backward compatibility by unpacking into a basic
