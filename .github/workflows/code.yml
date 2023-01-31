@@ -104,8 +104,8 @@ jobs:
           install_options: dist/*.whl
 
       - name: Test module --version works using the installed wheel
-        # If more than one module in src/ replace with module name to test
-        run: python -m $(ls src | head -1) --version
+        run: python -m event_model --version
+
 
   release:
     # upload to PyPI and make a release on every tag
@@ -113,7 +113,7 @@ jobs:
     if: ${{ github.event_name == 'push' && startsWith(github.ref, 'refs/tags') }}
     runs-on: ubuntu-latest
     env:
-      HAS_PYPI_TOKEN: ${{ secrets.PYPI_TOKEN != '' }}
+      HAS_PYPI_TOKEN: ${{ secrets.PYPI_API_TOKEN != '' }}
 
     steps:
       - uses: actions/download-artifact@v3
@@ -139,4 +139,4 @@ jobs:
         if: ${{ env.HAS_PYPI_TOKEN }}
         uses: pypa/gh-action-pypi-publish@release/v1
         with:
-          password: ${{ secrets.PYPI_TOKEN }}
+          password: ${{ secrets.PYPI_API_TOKEN }}

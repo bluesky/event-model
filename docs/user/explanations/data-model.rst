@@ -59,7 +59,7 @@ Resource and Datum document types manage references to externally-stored data.
 Example Runs
 ============
 
-.. image:: _static/document-generation-timeline.svg
+.. image:: ../../images/document-generation-timeline.svg
    :width: 100%
    :align: center
 
@@ -162,7 +162,7 @@ experimetal and subject to backward-incompatible changes in future releases.
 
 The run start document formal schema:
 
-.. literalinclude:: ../../event_model/schemas/run_start.json
+.. literalinclude:: ../../../event_model/schemas/run_start.json
 
 .. _descriptor:
 
@@ -241,7 +241,7 @@ Typical example:
 
 Formal schema:
 
-.. literalinclude:: ../../event_model/schemas/event_descriptor.json
+.. literalinclude:: ../../../event_model/schemas/event_descriptor.json
 
 .. _event:
 
@@ -298,7 +298,7 @@ overall event 'time' is often more useful.
 
 Formal schema:
 
-.. literalinclude:: ../../event_model/schemas/event.json
+.. literalinclude:: ../../../event_model/schemas/event.json
 
 .. _event_page:
 
@@ -326,7 +326,7 @@ the example Event above structured as an Event Page with a single row:
 
 Formal Event Page schema:
 
-.. literalinclude:: ../../event_model/schemas/event_page.json
+.. literalinclude:: ../../../event_model/schemas/event_page.json
 
 It is intentional that the values in the "data" and "timestamps" dictionaries
 do not have structure. The values may be numeric, bool, null (``None``), or a
@@ -375,7 +375,7 @@ Typical example:
 
 Formal schema:
 
-.. literalinclude:: ../../event_model/schemas/run_stop.json
+.. literalinclude:: ../../../event_model/schemas/run_stop.json
 
 .. _resource:
 
@@ -413,7 +413,7 @@ Typical example:
 
 Formal schema:
 
-.. literalinclude:: ../../event_model/schemas/resource.json
+.. literalinclude:: ../../../event_model/schemas/resource.json
 
 .. _datum:
 
@@ -446,7 +446,7 @@ It is an implementation detail that ``datum_id`` is often formatted as
 
 Formal schema:
 
-.. literalinclude:: ../../event_model/schemas/datum.json
+.. literalinclude:: ../../../event_model/schemas/datum.json
 
 .. _datum_page:
 
@@ -466,7 +466,7 @@ strucuted as a Datum Page with one row:
 
 Formal Datum Page schema:
 
-.. literalinclude:: ../../event_model/schemas/datum_page.json
+.. literalinclude:: ../../../event_model/schemas/datum_page.json
 
 .. _stream_resource:
 
@@ -507,7 +507,7 @@ Typical example:
 
 Formal schema:
 
-.. literalinclude:: ../../event_model/schemas/stream_resource.json
+.. literalinclude:: ../../../event_model/schemas/stream_resource.json
 
 .. _stream_datum:
 
@@ -547,7 +547,7 @@ It is an implementation detail that ``datum_id`` is often formatted as
 
 Formal schema:
 
-.. literalinclude:: ../../event_model/schemas/stream_datum.json
+.. literalinclude:: ../../../event_model/schemas/stream_datum.json
 
 .. _bulk_events:
 
@@ -557,7 +557,7 @@ Formal schema:
 This is another representation of Events. This representation is deprecated.
 Use EventPage instead.
 
-.. literalinclude:: ../../event_model/schemas/bulk_events.json
+.. literalinclude:: ../../../event_model/schemas/bulk_events.json
 
 .. _bulk_datum:
 
@@ -567,4 +567,4 @@ Use EventPage instead.
 This is another representation of Datum. This representation is deprecated. Use
 DatumPage instead.
 
-.. literalinclude:: ../../event_model/schemas/bulk_datum.json
+.. literalinclude:: ../../../event_model/schemas/bulk_datum.json

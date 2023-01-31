@@ -10,33 +10,18 @@ Clone the repository
 First clone the repository locally using `Git
 <https://git-scm.com/downloads>`_::
 
-    $ git clone git://github.com/bluesky/event-model-fork.git
+    $ git clone git://github.com/bluesky/event-model.git
 
 Install dependencies
 --------------------
 
-You can choose to either develop on the host machine using a `venv` (which
-requires python 3.8 or later) or to run in a container under `VSCode
-<https://code.visualstudio.com/>`_
+You should install into a `venv` (which requires python 3.8 or later):
+.. code::
 
-.. tab-set::
-
-    .. tab-item:: Local virtualenv
-
-        .. code::
-
-            $ cd event-model-fork
-            $ python3 -m venv venv
-            $ source venv/bin/activate
-            $ pip install -e '.[dev]'
-
-    .. tab-item:: VSCode devcontainer
-
-        .. code::
-
-            $ vscode event-model-fork
-            # Click on 'Reopen in Container' when prompted
-            # Open a new terminal
+    $ cd event-model
+    $ python3 -m venv venv
+    $ source venv/bin/activate
+    $ pip install -e '.[dev]'
 
 See what was installed
 ----------------------

@@ -42,6 +42,20 @@ jobs:
       - name: Write switcher.json
         run: python .github/pages/make_switcher.py --add $DOCS_VERSION ${{ github.repository }} .github/pages/switcher.json
 
+      - name: Deploy documentation to blueskyproject.io.
+        if: github.event_name == 'push' && github.actor != 'dependabot[bot]'
+        # We pin to the SHA, not the tag, for security reasons.
+        # https://docs.github.com/en/actions/learn-github-actions/security-hardening-for-github-actions#using-third-party-actions
+        uses: peaceiris/actions-gh-pages@bbdfb200618d235585ad98e965f4aafc39b4c501  # v3.7.3
+        with:
+          deploy_key: ${{ secrets.ACTIONS_DOCUMENTATION_DEPLOY_KEY }}
+          publish_branch: master
+          publish_dir: ./docs/build/html
+          external_repository: bluesky/blueskyproject.io
+          destination_dir: ${{ env.REPOSITORY_NAME }}  # just the repo name, without the "bluesky/"
+          keep_files: true
+          force_orphan: false  # Keep git history.
+        
       - name: Publish Docs to gh-pages
         if: github.event_name == 'push' && github.actor != 'dependabot[bot]'
         # We pin to the SHA, not the tag, for security reasons.
