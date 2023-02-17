@@ -2,7 +2,6 @@ from collections import defaultdict, deque, namedtuple
 import collections.abc
 from dataclasses import dataclass
 from typing import Optional
-from distutils.version import LooseVersion
 import copy
 import json
 from enum import Enum
@@ -25,7 +24,10 @@ import numpy
 
 from ._version import get_versions
 
-
+if sys.version_info < (3, 8):
+    from importlib_metadata import metadata
+else:
+    from importlib.metadata import metadata
 
 __all__ = ['DocumentNames', 'schemas', 'schema_validators', 'compose_run']
 
@@ -1604,7 +1606,7 @@ for name, filename in SCHEMA_NAMES.items():
 # We pin jsonschema >=3.0.0 in requirements.txt but due to pip's dependency
 # resolution it is easy to end up with an environment where that pin is not
 # respected. Thus, we maintain best-effort support for 2.x.
-if LooseVersion(version("jsonschema")) >= LooseVersion("3.0.0"):
+if version.parse(metadata("jsonschema")["version"]) >= version.parse("3.0.0"):
     def _is_array(checker, instance):
         return (
             jsonschema.validators.Draft7Validator.TYPE_CHECKER.is_type(instance, 'array') or
