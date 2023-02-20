@@ -16,7 +16,6 @@ from typing import (
     no_type_check,
 )
 
-from distutils.version import LooseVersion
 import copy
 import json
 from enum import Enum
@@ -51,12 +50,11 @@ from .document_typed_dicts.stream_datum import StreamDatum
 from .document_typed_dicts.stream_resource import StreamResource
 
 if sys.version_info < (3, 8):
-    from importlib_metadata import version
+    from importlib_metadata import metadata
 else:
-    from importlib.metadata import version
+    from importlib.metadata import metadata
 
 __all__ = ["DocumentNames", "schemas", "schema_validators", "compose_run"]
-
 
 
 class DocumentNames(Enum):
