@@ -10,7 +10,7 @@ Clone the repository
 First clone the repository locally using `Git
 <https://git-scm.com/downloads>`_::
 
-    $ git clone git://github.com/DiamondLightSource/python3-pip-skeleton.git
+    $ git clone git://github.com/bluesky/python3-pip-skeleton.git
 
 Install dependencies
 --------------------

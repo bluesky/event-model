@@ -105,7 +105,7 @@ inheritance_graph_attrs = dict(rankdir="TB")
 
 # Common links that should be available on every page
 rst_epilog = """
-.. _Diamond Light Source: http://www.diamond.ac.uk
+.. _NSLS: https://www.bnl.gov/nsls2
 .. _black: https://github.com/psf/black
 .. _flake8: https://flake8.pycqa.org/en/latest/
 .. _isort: https://github.com/PyCQA/isort
@@ -128,7 +128,7 @@ copybutton_prompt_is_regexp = True
 #
 html_theme = "pydata_sphinx_theme"
 github_repo = project
-github_user = "DiamondLightSource"
+github_user = "bluesky"
 switcher_json = f"https://{github_user}.github.io/{github_repo}/switcher.json"
 switcher_exists = requests.get(switcher_json).ok
 if not switcher_exists:
