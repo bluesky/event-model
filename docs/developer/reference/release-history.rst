@@ -2,6 +2,15 @@
 Release History
 ***************
 
+
+v1.19.2 (2023-02-24)
+====================
+
+Changed
+-------
+
+* Fix warnings about distutils being deprecated in Python>=3.10
+
 v1.19.1 (2022-12-09)
 ====================
 
