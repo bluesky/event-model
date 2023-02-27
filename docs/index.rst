@@ -44,13 +44,13 @@ The documentation is split into 2 sections:
         :link: user/index
         :link-type: doc
 
-        The User Guide contains documentation on how to install and use event-model-fork.
+        The User Guide contains documentation on how to install and use event-model.
 
     .. grid-item-card:: :material-regular:`code;4em`
         :link: developer/index
         :link-type: doc
 
-        The Developer Guide contains documentation on how to develop and contribute changes back to event-model-fork.
+        The Developer Guide contains documentation on how to develop and contribute changes back to event-model.
 
 .. toctree::
     :hidden:
