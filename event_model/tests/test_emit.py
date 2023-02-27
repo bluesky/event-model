@@ -1,7 +1,8 @@
 import gc
 
-import event_model
 import pytest
+
+import event_model
 
 
 def test_emit():
@@ -11,8 +12,8 @@ def test_emit():
         collector.append((name, doc))
 
     router = event_model.DocumentRouter(emit=cb)
-    name = 'start'
-    doc = {'uid': 'asdf', 'time': 0}
+    name = "start"
+    doc = {"uid": "asdf", "time": 0}
     router.emit(name, doc)
     assert len(collector) == 1
     assert collector == [(name, doc)]
@@ -34,8 +35,8 @@ def test_emit_with_method():
     thing = Thing()
 
     router = event_model.DocumentRouter(emit=thing.cb)
-    name = 'start'
-    doc = {'uid': 'asdf', 'time': 0}
+    name = "start"
+    doc = {"uid": "asdf", "time": 0}
     router.emit(name, doc)
     assert len(collector) == 1
     assert collector == [(name, doc)]
