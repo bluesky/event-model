@@ -11,7 +11,7 @@ Accepted
 Context
 -------
 
-We should use the following `pip-skeleton <https://github.com/DiamondLightSource/python3-pip-skeleton>`_.
+We should use the following `pip-skeleton <https://github.com/bluesky/python3-pip-skeleton>`_.
 The skeleton will ensure consistency in developer
 environments and package management.
 

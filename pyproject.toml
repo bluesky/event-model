@@ -40,7 +40,7 @@ dev = [
 python3-pip-skeleton = "python3_pip_skeleton.__main__:main"
 
 [project.urls]
-GitHub = "https://github.com/DiamondLightSource/python3-pip-skeleton"
+GitHub = "https://github.com/bluesky/python3-pip-skeleton"
 
 [[project.authors]] # Further authors may be added by duplicating this section
 email = "email@address.com"
