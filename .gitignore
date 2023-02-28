@@ -1,7 +1,6 @@
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
-*$py.class
 
 # C extensions
 *.so
@@ -9,6 +8,7 @@ __pycache__/
 # Distribution / packaging
 .Python
 env/
+.venv
 build/
 develop-eggs/
 dist/
@@ -20,10 +20,10 @@ lib64/
 parts/
 sdist/
 var/
-venv/
 *.egg-info/
 .installed.cfg
 *.egg
+**/_version.py
 
 # PyInstaller
 #  Usually these files are written by a python script from a template
@@ -43,8 +43,9 @@ htmlcov/
 .cache
 nosetests.xml
 coverage.xml
-*,cover
-.hypothesis/
+cov.xml
+.pytest_cache/
+.mypy_cache/
 
 # Translations
 *.mo
@@ -54,32 +55,15 @@ coverage.xml
 *.log
 
 # Sphinx documentation
-docs/build/
-docs/source/generated/
-
-# pytest
-.pytest_cache/
+docs/_build/
 
 # PyBuilder
 target/
 
-# Editor files
-#mac
-.DS_Store
-*~
+# likely venv names
+.venv*
+venv*
 
-#vim
-*.swp
-*.swo
+# further build artifacts
+lockfiles/
 
-#pycharm
-.idea/*
-
-#vscode
-.vscode/*
-
-#Ipython Notebook
-.ipynb_checkpoints
-
-# precomit
-.pre-commit-config.yaml
