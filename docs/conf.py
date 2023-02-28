@@ -10,15 +10,15 @@ from subprocess import check_output
 
 import requests
 
-import python3_pip_skeleton
+import event_model
 
 # -- General configuration ------------------------------------------------
 
 # General information about the project.
-project = "python3-pip-skeleton"
+project = "event-model-fork"
 
 # The full version, including alpha/beta/rc tags.
-release = python3_pip_skeleton.__version__
+release = event_model.__version__
 
 # The short X.Y version.
 if "+" in release:
