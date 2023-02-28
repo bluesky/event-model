@@ -3,7 +3,7 @@ requires = ["setuptools>=64", "setuptools_scm[toml]>=6.2", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "event-model-fork"
+name = "event-model"
 classifiers = [
     "Development Status :: 3 - Alpha",
     "License :: OSI Approved :: Apache Software License",
@@ -57,9 +57,9 @@ dev = [
 [project.urls]
 GitHub = "https://github.com/bluesky/event-model"
 
-[[project.authors]] # Further authors may be added by duplicating this section
-email = "eva.lott@diamond.ac.uk"
-name = "Eva Lott"
+#[[project.authors]] # Further authors may be added by duplicating this section
+# email = "email@email.com"
+# name = "Firstname Lastname"
 
 
 [tool.mypy]
