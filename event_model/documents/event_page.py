@@ -1,6 +1,7 @@
 from typing import Dict, List, Union
 
-from ._type_wrapper import Field, Annotated, Optional, TypedDict
+from ._type_wrapper import Field, Annotated, Optional
+from typing import TypedDict
 
 
 class EventPageOptional(TypedDict, total=False):

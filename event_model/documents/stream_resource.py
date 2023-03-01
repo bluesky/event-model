@@ -1,6 +1,6 @@
-from typing import Any, Dict, List
+from typing import Any, Dict, List, TypedDict, Literal
 
-from ._type_wrapper import Field, Annotated, Optional, TypedDict, Literal
+from ._type_wrapper import Field, Annotated, Optional
 
 
 class StreamResourceOptional(TypedDict, total=False):

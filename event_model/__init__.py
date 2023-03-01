@@ -4,8 +4,10 @@ from dataclasses import dataclass
 
 from typing import (
     Optional,
+    Literal,
     Callable,
     Tuple,
+    Dict,
     Type,
     Iterable,
     Any,
@@ -39,15 +41,15 @@ import numpy
 from ._version import get_versions
 
 
-from .document_typed_dicts.datum_page import DatumPage
-from .document_typed_dicts.datum import Datum
-from .document_typed_dicts.event_descriptor import EventDescriptor
-from .document_typed_dicts.event_page import EventPage
-from .document_typed_dicts.event import Event
-from .document_typed_dicts.run_start import RunStart
-from .document_typed_dicts.run_stop import RunStop
-from .document_typed_dicts.stream_datum import StreamDatum
-from .document_typed_dicts.stream_resource import StreamResource
+from .documents.datum_page import DatumPage
+from .documents.datum import Datum
+from .documents.event_descriptor import EventDescriptor, DataKey
+from .documents.event_page import EventPage
+from .documents.event import Event
+from .documents.run_start import RunStart
+from .documents.run_stop import RunStop
+from .documents.stream_datum import StreamDatum
+from .documents.stream_resource import StreamResource
 
 if sys.version_info < (3, 8):
     from importlib_metadata import metadata
@@ -242,7 +244,7 @@ class DocumentRouter:
     def datum(self, doc: dict):
         return NotImplemented
 
-    def event_page(self, doc: dict):
+    def event_page(self, doc: dict) -> Union[Type[NotImplemented], EventPage]:
         return NotImplemented
 
     def datum_page(self, doc: dict):
@@ -935,7 +937,7 @@ class Filler(DocumentRouter):
     def stream_datum(self, doc: dict) -> None:
         self._stream_datum_cache[doc["uid"]] = doc
 
-    def event_page(self, doc: dict) -> dict:
+    def event_page(self, doc: dict) -> EventPage:
         # TODO We may be able to fill a page in place, and that may be more
         # efficient than unpacking the page in to Events, filling them, and the
         # re-packing a new page. But that seems tricky in general since the
@@ -955,7 +957,7 @@ class Filler(DocumentRouter):
         include: Optional[Iterable] = None,
         exclude: Optional[Iterable] = None,
         inplace: Optional[bool] = None,
-    ) -> dict:
+    ) -> EventPage:
         filled_events = []
         for event_doc in unpack_event_page(doc):
             filled_events.append(
@@ -969,7 +971,7 @@ class Filler(DocumentRouter):
         if inplace:
             doc["data"] = filled_doc["data"]
             doc["filled"] = filled_doc["filled"]
-            return doc
+            return EventPage(**doc)
         else:
             return filled_doc
 
@@ -1261,7 +1263,7 @@ class NoFiller(Filler):
         include: Optional[Iterable] = None,
         exclude: Optional[Iterable] = None,
         *kwargs,
-    ) -> dict:
+    ) -> EventPage:
         filled_events = []
         for event_doc in unpack_event_page(doc):
             filled_events.append(
@@ -1579,7 +1581,7 @@ class RunRouter(DocumentRouter):
                     )
                     raise err
 
-    def event_page(self, doc: dict) -> None:
+    def event_page(self, doc: dict):
         descriptor_uid = doc["descriptor"]
         start_uid = self._descriptor_to_start[descriptor_uid]
         try:
@@ -1787,8 +1789,8 @@ for name, filename in SCHEMA_NAMES.items():
 # respected. Thus, we maintain best-effort support for 2.x.
 
 if version.parse(metadata("jsonschema")["version"]) >= version.parse("3.0.0"):
-    def _is_array(checker, instance):
 
+    def _is_array(checker, instance):
         return (
             jsonschema.validators.Draft7Validator.TYPE_CHECKER.is_type(
                 instance, "array"
@@ -1864,7 +1866,7 @@ def compose_datum(
     *,
     resource: dict,
     counter: Iterator,
-    datum_kwargs: Iterable,
+    datum_kwargs: Dict[str, Any],
     validate: bool = True,
 ) -> Datum:
     resource_uid = resource["uid"]
@@ -1898,7 +1900,10 @@ def compose_datum_page(
     return doc
 
 
-default_path_semantics = {"posix": "posix", "nt": "windows"}[os.name]
+default_path_semantics: Literal["posix", "windows"] = {
+    "posix": "posix",
+    "nt": "windows",
+}[os.name]
 
 
 def compose_resource(
@@ -1907,7 +1912,7 @@ def compose_resource(
     root: str,
     resource_path: str,
     resource_kwargs: Iterable,
-    path_semantics: str = default_path_semantics,
+    path_semantics: Literal["posix", "windows", None] = default_path_semantics,
     start: Optional[dict] = None,
     uid: Optional[str] = None,
     validate: bool = True,
@@ -1941,7 +1946,7 @@ def compose_stream_datum(
     stream_resource: StreamResource,
     stream_name: str,
     counter: Iterator,
-    datum_kwargs: Iterable,
+    datum_kwargs: Dict[str, Any],
     event_count: int = 1,
     event_offset: int = 0,
     validate: bool = True,
@@ -1971,10 +1976,10 @@ def compose_stream_resource(
     spec: str,
     root: str,
     resource_path: str,
-    resource_kwargs: Iterable,
+    resource_kwargs: Dict[str, Any],
     stream_names: Union[List, str],
     counters: List = [],
-    path_semantics: str = default_path_semantics,
+    path_semantics: Literal["posix", "windows"] = default_path_semantics,
     start: Optional[dict] = None,
     uid: Optional[str] = None,
     validate: bool = True,
@@ -2026,7 +2031,7 @@ def compose_stop(
     start: dict,
     event_counter: dict,
     poison_pill: List,
-    exit_status: str = "success",
+    exit_status: Literal["success", "abort", "fail"] = "success",
     reason: str = "",
     uid: Optional[str] = None,
     time: Optional[float] = None,
@@ -2157,7 +2162,7 @@ def compose_descriptor(
     streams: dict,
     event_counter: dict,
     name: str,
-    data_keys: Iterable,
+    data_keys: Dict[str, DataKey],
     uid: Optional[str] = None,
     time: Optional[float] = None,
     object_keys: Optional[dict] = None,

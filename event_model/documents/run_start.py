@@ -1,12 +1,11 @@
-from typing import (
-    Any,
-    Dict,
-    List,
-    Union,
-    TYPE_CHECKING,
-)
+from typing import Any, Dict, List, Union, TYPE_CHECKING, TypedDict, Literal
 
-from ._type_wrapper import Field, Annotated, Optional, TypedDict, Literal
+from event_model.documents._type_wrapper import (
+    Field,
+    Annotated,
+    Optional,
+)
+from event_model.documents._type_wrapper import add_extra_schema
 
 
 class Hints(TypedDict, total=False):
@@ -187,6 +186,7 @@ class RunStartOptional(TypedDict, total=False):
     data_type: Annotated[Optional[DataType], Field(description="")]
 
 
+@add_extra_schema(RUN_START_EXTRA_SCHEMA)
 class RunStart(RunStartOptional):
     """Document created at the start of run.  Provides a seach target and later documents link to it"""
 

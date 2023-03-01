@@ -1,6 +1,6 @@
-from typing import Any, Dict
+from typing import Any, Dict, TypedDict
 
-from ._type_wrapper import Field, Annotated, TypedDict
+from ._type_wrapper import Field, Annotated
 
 
 class StreamDatum(TypedDict):

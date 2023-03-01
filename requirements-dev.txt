@@ -15,3 +15,5 @@ sphinx_rtd_theme
 mypy
 # For generating the schema
 pydantic
+black
+flake8

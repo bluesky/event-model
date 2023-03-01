@@ -1,6 +1,7 @@
 from typing import Any, Dict
 
-from ._type_wrapper import Field, Annotated, Optional, TypedDict, Literal
+from ._type_wrapper import Field, Annotated, Optional
+from typing import Literal, TypedDict
 
 
 class ResourceOptional(TypedDict, total=False):

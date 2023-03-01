@@ -5,7 +5,8 @@ from typing import (
     TYPE_CHECKING,
 )
 
-from ._type_wrapper import Field, Annotated, Optional, TypedDict, Literal
+from ._type_wrapper import Field, Annotated, Optional
+from typing import TypedDict, Literal
 
 
 class DataKeyOptional(TypedDict, total=False):
