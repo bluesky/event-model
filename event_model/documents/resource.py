@@ -4,21 +4,23 @@ from ._type_wrapper import Field, Annotated, Optional
 from typing import Literal, TypedDict
 
 
-class ResourceOptional(TypedDict, total=False):
-    path_semantics: Annotated[
-        Optional[Literal["posix", "windows"]],
-        Field(description="Rules for joining paths"),
-    ]
-    run_start: Annotated[
-        Optional[str],
-        Field(
-            description="Globally unique ID to the run_start document this resource is associated with.",
-        ),
-    ]
-
-
-class Resource(ResourceOptional):
+class Resource(TypedDict):
     """Document to reference a collection (e.g. file or group of files) of externally-stored data"""
+
+    path_semantics: Optional[
+        Annotated[
+            Literal["posix", "windows"],
+            Field(description="Rules for joining paths"),
+        ]
+    ]
+    run_start: Optional[
+        Annotated[
+            str,
+            Field(
+                description="Globally unique ID to the run_start document this resource is associated with.",
+            ),
+        ]
+    ]
 
     spec: Annotated[
         str,

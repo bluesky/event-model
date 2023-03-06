@@ -67,13 +67,10 @@
          "properties": {
             "external": {
                "title": "External",
-               "description": "Where the data is stored if it is stored external to the events.",
-               "pattern": "^[A-Z]+:?",
                "type": "string"
             },
             "dims": {
                "title": "Dims",
-               "description": "The names for dimensions of the data. Null or empty list if scalar data",
                "type": "array",
                "items": {
                   "type": "string"
@@ -81,7 +78,6 @@
             },
             "object_name": {
                "title": "Object Name",
-               "description": "The name of the object this key was pulled from.",
                "type": "string"
             },
             "dtype": {
@@ -111,6 +107,9 @@
             }
          },
          "required": [
+            "external",
+            "dims",
+            "object_name",
             "dtype",
             "shape",
             "source"
@@ -123,23 +122,25 @@
          "properties": {
             "data": {
                "title": "Data",
-               "description": "The actual measurement data",
                "type": "object"
             },
             "timestamps": {
                "title": "Timestamps",
-               "description": "The timestamps of the individual measurement data",
                "type": "object"
             },
             "data_keys": {
                "title": "Data Keys",
-               "description": "This describes the data stored alongside it in this configuration object.",
                "type": "object",
                "additionalProperties": {
                   "$ref": "#/definitions/DataKey"
                }
             }
          },
+         "required": [
+            "data",
+            "timestamps",
+            "data_keys"
+         ],
          "additionalProperties": false
       }
    }

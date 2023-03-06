@@ -4,19 +4,19 @@ from ._type_wrapper import Field, Annotated, Optional
 from typing import TypedDict
 
 
-class EventOptional(TypedDict, total=False):
-    filled: Annotated[
-        Optional[Dict[str, Union[bool, str]]],
-        Field(
-            description="Mapping each of the keys of externally-stored data to the boolean False, "
-            "indicating that the data has not been loaded, or to foreign keys (moved here from 'data' "
-            "when the data was loaded)"
-        ),
-    ]
-
-
-class Event(EventOptional):
+class Event(TypedDict):
     """Document to record a quanta of collected data"""
+
+    filled: Optional[
+        Annotated[
+            Dict[str, Union[bool, str]],
+            Field(
+                description="Mapping each of the keys of externally-stored data to the boolean False, "
+                "indicating that the data has not been loaded, or to foreign keys (moved here from 'data' "
+                "when the data was loaded)"
+            ),
+        ]
+    ]
 
     data: Annotated[Dict[str, Any], Field(description="The actual measurement data")]
     timestamps: Annotated[

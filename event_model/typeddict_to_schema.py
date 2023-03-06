@@ -1,3 +1,5 @@
+import typing
+from typing import Union
 from pathlib import Path
 import re
 import json
@@ -76,6 +78,25 @@ class Config(BaseConfig):
         return re.sub(r"(?<!^)(?=[A-Z])", "_", string_to_be_aliased).lower()
 
 
+def is_optional(field):
+    return typing.get_origin(field) is Union and type(None) in typing.get_args(field)
+
+
+def is_annotated(field):
+    return typing.get_origin(typing.get_args(field)[0]) is typing.Annotated
+
+
+def swap_annotation_and_optional(field):
+    assert typing.get_origin(field) == typing.Union
+    annotated = typing.get_args(field)[0]
+
+    if typing.get_origin(annotated) != typing.Annotated:
+        return field
+
+    t, field = typing.get_args(annotated)
+    return typing.Annotated[Optional[t], field]
+
+
 # From https://github.com/pydantic/pydantic/issues/760#issuecomment-589708485
 def parse_typeddict_to_schema(
     typed_dict: Any,
@@ -83,12 +104,27 @@ def parse_typeddict_to_schema(
 ) -> Type[BaseModel]:
     annotations: Dict[str, Any] = {}
 
+    print(typed_dict)
+
+    # For storing optional fields to we can generate a TypedDict(total=False)
     for name, field in typed_dict.__annotations__.items():
-        if isinstance(field, dict):
+        if is_optional(field) and is_annotated(field):
+            field = swap_annotation_and_optional(field)
+
+        origin_list = [typing.get_origin(arg) for arg in typing.get_args(field)]
+        print("\n\n" + name)
+        print(typing.get_origin(field))
+        print(typing.get_args(field)[0])
+        print(typing.get_origin(typing.get_args(field)[0]))
+        if field == typing.TypedDict:
+            print("::::::::::::::::::::::::::::::::::: It's a dict!!!")
+        if typing.TypedDict in origin_list:
+            print("::::::::::::::::::::::::::::::::::: ISDICT")
             annotations[name] = (
                 parse_typeddict_to_schema(field),
                 ...,
             )
+
         else:
             default_value = getattr(typed_dict, name, ...)
             annotations[name] = (field, default_value)

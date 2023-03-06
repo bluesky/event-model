@@ -4,19 +4,19 @@ from ._type_wrapper import Field, Annotated, Optional
 from typing import TypedDict
 
 
-class EventPageOptional(TypedDict, total=False):
-    filled: Annotated[
-        Optional[Dict[str, Union[bool, str, float, List]]],
-        Field(
-            description="Mapping each of the keys of externally-stored data to an array containing the boolean "
-            "False, indicating that the data has not been loaded, or to foreign keys (moved here from "
-            "'data' when the data was loaded)"
-        ),
-    ]
-
-
-class EventPage(EventPageOptional):
+class EventPage(TypedDict):
     """Page of documents to record a quanta of collected data"""
+
+    filled: Optional[
+        Annotated[
+            Dict[str, Union[bool, str, float, List]],
+            Field(
+                description="Mapping each of the keys of externally-stored data to an array containing the boolean "
+                "False, indicating that the data has not been loaded, or to foreign keys (moved here from "
+                "'data' when the data was loaded)"
+            ),
+        ]
+    ]
 
     descriptor: Annotated[
         str,

@@ -1,24 +1,18 @@
-from typing import (
-    Dict,
-    List,
-    Union,
-)
-
 from ._type_wrapper import Field, Annotated, Optional
-from typing import TypedDict
+from typing import Dict, List, Union, TypedDict
 
 
-class DatumPageOptional(TypedDict, total=False):
-    datum_kwargs: Annotated[
-        Optional[Dict[str, Union[bool, str, float, List]]],
-        Field(
-            description="Array of arguments to pass to the Handler to retrieve one quanta of data"
-        ),
-    ]
-
-
-class DatumPage(DatumPageOptional):
+class DatumPage(TypedDict):
     """Page of documents to reference a quanta of externally-stored data"""
+
+    datum_kwargs: Optional[
+        Annotated[
+            Dict[str, Union[bool, str, float, List]],
+            Field(
+                description="Array of arguments to pass to the Handler to retrieve one quanta of data"
+            ),
+        ]
+    ]
 
     resource: Annotated[
         str,

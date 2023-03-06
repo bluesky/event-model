@@ -244,7 +244,7 @@ class DocumentRouter:
     def datum(self, doc: dict):
         return NotImplemented
 
-    def event_page(self, doc: dict) -> Union[Type[NotImplemented], EventPage]:
+    def event_page(self, doc: dict) -> Union[type[NotImplemented], EventPage]:
         return NotImplemented
 
     def datum_page(self, doc: dict):

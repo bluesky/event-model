@@ -11,22 +11,22 @@ else:
         __root__: Annotated[str, Field(title="data_type", regex="^([^./]+)$")]
 
 
-class RunStopOptional(TypedDict, total=False):
-    reason: Annotated[
-        Optional[str], Field(description="Long-form description of why the run ended")
-    ]
-
-    num_events: Annotated[
-        Optional[Dict[str, int]],
-        Field(
-            description="Number of Events per named stream",
-        ),
-    ]
-    data_type: Annotated[Optional[DataType], Field(description="")]
-
-
-class RunStop(RunStopOptional):
+class RunStop(TypedDict):
     """Document for the end of a run indicating the success/fail state of the run and the end time"""
+
+    reason: Optional[
+        Annotated[str, Field(description="Long-form description of why the run ended")]
+    ]
+
+    num_events: Optional[
+        Annotated[
+            Dict[str, int],
+            Field(
+                description="Number of Events per named stream",
+            ),
+        ]
+    ]
+    data_type: Optional[Annotated[DataType, Field(description="")]]
 
     run_start: Annotated[
         str,
