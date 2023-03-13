@@ -1,7 +1,8 @@
-from typing import Any, Dict, TYPE_CHECKING, TypedDict, Literal
+from typing import TYPE_CHECKING, Any, Dict, Literal, TypedDict
 
-from ._type_wrapper import Field, Annotated, Optional
+from typing_extensions import Annotated, NotRequired
 
+from ._type_wrapper import Field
 
 if TYPE_CHECKING:
     DataType = Any
@@ -14,11 +15,11 @@ else:
 class RunStop(TypedDict):
     """Document for the end of a run indicating the success/fail state of the run and the end time"""
 
-    reason: Optional[
+    reason: NotRequired[
         Annotated[str, Field(description="Long-form description of why the run ended")]
     ]
 
-    num_events: Optional[
+    num_events: NotRequired[
         Annotated[
             Dict[str, int],
             Field(
@@ -26,7 +27,7 @@ class RunStop(TypedDict):
             ),
         ]
     ]
-    data_type: Optional[Annotated[DataType, Field(description="")]]
+    data_type: NotRequired[Annotated[DataType, Field(description="")]]
 
     run_start: Annotated[
         str,

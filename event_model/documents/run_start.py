@@ -1,15 +1,11 @@
-from typing import Any, Dict, List, Union, TYPE_CHECKING, TypedDict, Literal
+from typing import TYPE_CHECKING, Any, Dict, List, Literal, TypedDict, Union
 
-from event_model.documents._type_wrapper import (
-    Field,
-    Annotated,
-    Optional,
-)
-from event_model.documents._type_wrapper import add_extra_schema
+from event_model.documents._type_wrapper import Field, add_extra_schema
+from typing_extensions import Annotated, NotRequired
 
 
 class Hints(TypedDict):
-    dimensions: Optional[
+    dimensions: NotRequired[
         Annotated[
             List[List[Union[List[str], str]]],
             Field(
@@ -28,9 +24,9 @@ else:
 
 
 class Calculation(TypedDict):
-    args: Optional[List]
+    args: NotRequired[List]
 
-    kwargs: Optional[
+    kwargs: NotRequired[
         Annotated[Dict[str, Any], Field(description="kwargs for calcalation callable")]
     ]
 
@@ -40,7 +36,7 @@ class Calculation(TypedDict):
 
 
 class Projection(TypedDict):
-    type: Optional[
+    type: NotRequired[
         Annotated[
             Literal["linked", "calculated", "static"],
             Field(
@@ -50,8 +46,8 @@ class Projection(TypedDict):
             ),
         ]
     ]
-    stream: Optional[str]
-    location: Optional[
+    stream: NotRequired[str]
+    location: NotRequired[
         Annotated[
             Literal["start", "event", "configuration"],
             Field(
@@ -60,10 +56,10 @@ class Projection(TypedDict):
             ),
         ]
     ]
-    field: Optional[str]
-    config_index: Optional[int]
-    config_device: Optional[str]
-    calculation: Optional[
+    field: NotRequired[str]
+    config_index: NotRequired[int]
+    config_device: NotRequired[str]
+    calculation: NotRequired[
         Annotated[
             Calculation,
             Field(
@@ -72,7 +68,7 @@ class Projection(TypedDict):
             ),
         ]
     ]
-    value: Optional[
+    value: NotRequired[
         Annotated[
             Any,
             Field(
@@ -135,7 +131,7 @@ RUN_START_EXTRA_SCHEMA = {
 class Projections(TypedDict):
     """Describe how to interperet this run as the given projection"""
 
-    name: Optional[Annotated[str, Field(description="The name of the projection")]]
+    name: NotRequired[Annotated[str, Field(description="The name of the projection")]]
     version: Annotated[
         str,
         Field(
@@ -153,7 +149,7 @@ class Projections(TypedDict):
 class RunStart(TypedDict):
     """Document created at the start of run.  Provides a seach target and later documents link to it"""
 
-    data_session: Optional[
+    data_session: NotRequired[
         Annotated[
             str,
             Field(
@@ -163,7 +159,7 @@ class RunStart(TypedDict):
             ),
         ]
     ]
-    data_groups: Optional[
+    data_groups: NotRequired[
         Annotated[
             List[str],
             Field(
@@ -172,10 +168,10 @@ class RunStart(TypedDict):
             ),
         ]
     ]
-    project: Optional[
+    project: NotRequired[
         Annotated[str, Field(description="Name of project that this run is part of")]
     ]
-    sample: Optional[
+    sample: NotRequired[
         Annotated[
             Union[Dict[str, Any], str],
             Field(
@@ -183,18 +179,18 @@ class RunStart(TypedDict):
             ),
         ]
     ]
-    scan_id: Optional[
+    scan_id: NotRequired[
         Annotated[int, Field(description="Scan ID number, not globally unique")]
     ]
-    group: Optional[
+    group: NotRequired[
         Annotated[str, Field(description="Unix group to associate this data with")]
     ]
-    owner: Optional[
+    owner: NotRequired[
         Annotated[str, Field(description="Unix owner to associate this data with")]
     ]
-    projections: Optional[Annotated[List[Projections], Field(description="")]]
-    hints: Optional[Annotated[Hints, Field(description="Start-level hints")]]
-    data_type: Optional[Annotated[DataType, Field(description="")]]
+    projections: NotRequired[Annotated[List[Projections], Field(description="")]]
+    hints: NotRequired[Annotated[Hints, Field(description="Start-level hints")]]
+    data_type: NotRequired[Annotated[DataType, Field(description="")]]
 
     time: Annotated[float, Field(description="Time the run started.  Unix epoch time")]
     uid: Annotated[str, Field(description="Globally unique ID for this run")]

@@ -1,20 +1,28 @@
-from typing import Any, Dict, List, TypedDict, Literal
+from typing import Any, Dict, List, Literal, TypedDict
 
-from ._type_wrapper import Field, Annotated, Optional
+from typing_extensions import Annotated, NotRequired
+
+from ._type_wrapper import Field
 
 
 class StreamResource(TypedDict):
     """Document to reference a collection (e.g. file or group of files) of externally-stored data streams"""
-    path_semantics: Optional[Annotated[
-        Literal["posix", "windows"],
-        Field(description="Rules for joining paths"),
-    ]]
-    run_start: Optional[Annotated[
-        str,
-        Field(
-            description="Globally unique ID to the run_start document this Stream Resource is associated with.",
-        ),
-    ]]
+
+    path_semantics: NotRequired[
+        Annotated[
+            Literal["posix", "windows"],
+            Field(description="Rules for joining paths"),
+        ]
+    ]
+    run_start: NotRequired[
+        Annotated[
+            str,
+            Field(
+                description="Globally unique ID to the run_start document "
+                "this Stream Resource is associated with.",
+            ),
+        ]
+    ]
 
     spec: Annotated[
         str,

@@ -1,19 +1,20 @@
-from typing import Dict, List, Union
+from typing import Dict, List, TypedDict, Union
 
-from ._type_wrapper import Field, Annotated, Optional
-from typing import TypedDict
+from typing_extensions import Annotated, NotRequired
+
+from ._type_wrapper import Field
 
 
 class EventPage(TypedDict):
     """Page of documents to record a quanta of collected data"""
 
-    filled: Optional[
+    filled: NotRequired[
         Annotated[
             Dict[str, Union[bool, str, float, List]],
             Field(
-                description="Mapping each of the keys of externally-stored data to an array containing the boolean "
-                "False, indicating that the data has not been loaded, or to foreign keys (moved here from "
-                "'data' when the data was loaded)"
+                description="Mapping each of the keys of externally-stored data to an array containing "
+                "the boolean False, indicating that the data has not been loaded, or to foreign keys "
+                "(moved here from 'data' when the data was loaded)"
             ),
         ]
     ]

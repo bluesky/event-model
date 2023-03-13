@@ -1,7 +1,8 @@
-from typing import Any, Dict
+from typing import Any, Dict, TypedDict
 
-from ._type_wrapper import Field, Annotated
-from typing import TypedDict
+from typing_extensions import Annotated
+
+from ._type_wrapper import Field
 
 
 class Datum(TypedDict):

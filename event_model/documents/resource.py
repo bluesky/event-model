@@ -1,19 +1,20 @@
-from typing import Any, Dict
+from typing import Any, Dict, Literal, TypedDict
 
-from ._type_wrapper import Field, Annotated, Optional
-from typing import Literal, TypedDict
+from typing_extensions import Annotated, NotRequired
+
+from ._type_wrapper import Field
 
 
 class Resource(TypedDict):
     """Document to reference a collection (e.g. file or group of files) of externally-stored data"""
 
-    path_semantics: Optional[
+    path_semantics: NotRequired[
         Annotated[
             Literal["posix", "windows"],
             Field(description="Rules for joining paths"),
         ]
     ]
-    run_start: Optional[
+    run_start: NotRequired[
         Annotated[
             str,
             Field(

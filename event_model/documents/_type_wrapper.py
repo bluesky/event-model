@@ -25,23 +25,6 @@ except ModuleNotFoundError:
         ...
 
 
-if sys.version_info[:2] == (3, 8):
-    from typing_extensions import Annotated as Annotated
-
-    if typing.TYPE_CHECKING:
-        from typing_extensions import NotRequired as Optional
-    else:
-        from typing_extensions import Optional as Optional
-
-else:
-    from typing import Annotated as Annotated
-
-    if typing.TYPE_CHECKING:
-        from typing_extensions import NotRequired as Optional
-    else:
-        from typing import Optional as Optional
-
-
 extra_schema = {}
 
 

@@ -1,13 +1,14 @@
-from typing import Any, Dict, Union
+from typing import Any, Dict, TypedDict, Union
 
-from ._type_wrapper import Field, Annotated, Optional
-from typing import TypedDict
+from typing_extensions import Annotated, NotRequired
+
+from ._type_wrapper import Field
 
 
 class Event(TypedDict):
     """Document to record a quanta of collected data"""
 
-    filled: Optional[
+    filled: NotRequired[
         Annotated[
             Dict[str, Union[bool, str]],
             Field(

@@ -1,3 +1,4 @@
+# type: ignore
 # Typed dicts to test generation of
 from event_model.documents import DatumPage
 from event_model.documents import Datum

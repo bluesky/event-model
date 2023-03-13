@@ -175,6 +175,7 @@ class DocumentRouter:
                     output_event_page if output_event_page is not None else event_page
                 )
                 if output_event_page is not NotImplemented:
+                    assert isinstance(output_event_page, dict)
                     (output_doc,) = unpack_event_page(output_event_page)
             elif name == "datum":
                 datum_page = pack_datum_page(doc)
@@ -185,6 +186,7 @@ class DocumentRouter:
                     output_datum_page if output_datum_page is not None else datum_page
                 )
                 if output_datum_page is not NotImplemented:
+                    assert isinstance(datum_page, dict)
                     (output_doc,) = unpack_datum_page(output_datum_page)
             elif name == "event_page":
                 output_events = []
@@ -238,16 +240,16 @@ class DocumentRouter:
     def resource(self, doc: dict):
         return NotImplemented
 
-    def event(self, doc: dict):
+    def event(self, doc: Event):
         return NotImplemented
 
     def datum(self, doc: dict):
         return NotImplemented
 
-    def event_page(self, doc: dict) -> Union[type[NotImplemented], EventPage]:
+    def event_page(self, doc: EventPage) -> Union[type[NotImplemented], EventPage]:
         return NotImplemented
 
-    def datum_page(self, doc: dict):
+    def datum_page(self, doc: DatumPage):
         return NotImplemented
 
     def stream_datum(self, doc: dict):
@@ -971,7 +973,7 @@ class Filler(DocumentRouter):
         if inplace:
             doc["data"] = filled_doc["data"]
             doc["filled"] = filled_doc["filled"]
-            return EventPage(**doc)
+            return doc
         else:
             return filled_doc
 
@@ -2311,17 +2313,17 @@ def pack_event_page(*events: dict) -> EventPage:
     return event_page
 
 
-def unpack_event_page(event_page: dict) -> Generator:
+def unpack_event_page(event_page: EventPage) -> Generator:
     """
     Transform an EventPage document into individual Event documents.
 
     Parameters
     ----------
-    event_page : dict
+    event_page : EventPage
 
     Yields
     ------
-    event : dict
+    event : Event
     """
     descriptor = event_page["descriptor"]
     data_list = _transpose_dict_of_lists(event_page["data"])
@@ -2336,16 +2338,15 @@ def unpack_event_page(event_page: dict) -> Generator:
         filled_list,
         fillvalue={},
     ):
-        event = {
-            "descriptor": descriptor,
-            "uid": uid,
-            "time": time,
-            "seq_num": seq_num,
-            "data": data,
-            "timestamps": timestamps,
-            "filled": filled,
-        }
-        yield event
+        yield Event(
+            descriptor=descriptor,
+            uid=uid,
+            time=time,
+            seq_num=seq_num,
+            data=data,
+            timestamps=timestamps,
+            filled=filled,
+        )
 
 
 def pack_datum_page(*datum: dict) -> DatumPage:
@@ -2380,17 +2381,17 @@ def pack_datum_page(*datum: dict) -> DatumPage:
     return datum_page
 
 
-def unpack_datum_page(datum_page: dict) -> Generator:
+def unpack_datum_page(datum_page: DatumPage) -> Generator:
     """
     Transform a DatumPage document into individual Datum documents.
 
     Parameters
     ----------
-    datum_page : dict
+    datum_page : DatumPage
 
     Yields
     ------
-    datum : dict
+    datum : Datum
     """
     resource = datum_page["resource"]
     datum_kwarg_list = _transpose_dict_of_lists(datum_page["datum_kwargs"])
@@ -2399,12 +2400,7 @@ def unpack_datum_page(datum_page: dict) -> Generator:
     for datum_id, datum_kwargs in itertools.zip_longest(
         datum_page["datum_id"], datum_kwarg_list, fillvalue={}
     ):
-        datum = {
-            "datum_id": datum_id,
-            "datum_kwargs": datum_kwargs,
-            "resource": resource,
-        }
-        yield datum
+        yield Datum(datum_id=datum_id, datum_kwargs=datum_kwargs, resource=resource)
 
 
 def rechunk_event_pages(event_pages: Iterable, chunk_size: int) -> Generator:

@@ -1,24 +1,38 @@
-import typing
-from typing import Union
-from pathlib import Path
-import re
+# flake8: noqa
+
+# This file has been checked to be mypy compliant, other than the use of
+# _TypedDictMeta, and unpacking behaviour of types that work but mypy doesn't like.
+# type: ignore
+
 import json
-from pydantic import create_model, BaseModel, Extra, BaseConfig
-from typing import Type, Optional, Dict, Any
+import re
+from pathlib import Path
+from typing import (
+    Any,
+    Dict,
+    Optional,
+    Type,
+    _TypedDictMeta,
+    get_args,
+    get_origin,
+)
+
 from event_model import SCHEMA_PATH
-from event_model.documents._type_wrapper import extra_schema
 from event_model.documents import (
-    DatumPage,
     Datum,
+    DatumPage,
+    Event,
     EventDescriptor,
     EventPage,
-    Event,
     Resource,
     RunStart,
     RunStop,
     StreamDatum,
     StreamResource,
 )
+from event_model.documents._type_wrapper import extra_schema
+from pydantic import BaseConfig, BaseModel, Extra, Field, create_model
+from typing_extensions import NotRequired, Annotated
 
 SCHEMA_OUT_DIR = Path("event_model") / SCHEMA_PATH
 
@@ -69,32 +83,106 @@ def merge_dicts(dict1: dict, dict2: dict) -> dict:
     return return_dict
 
 
-# Config for generated BaseModel
-class Config(BaseConfig):
-    extra = Extra.forbid
+def is_notrequired(field):
+    """
+    Checks if a field is of type `NotRequired[x]`.
+    """
 
-    # Alias in snake case
-    def alias_generator(string_to_be_aliased):
-        return re.sub(r"(?<!^)(?=[A-Z])", "_", string_to_be_aliased).lower()
-
-
-def is_optional(field):
-    return typing.get_origin(field) is Union and type(None) in typing.get_args(field)
+    return get_origin(field) is NotRequired
 
 
 def is_annotated(field):
-    return typing.get_origin(typing.get_args(field)[0]) is typing.Annotated
+    """
+    Checks if a field is of type `T[Annotated[x, y]]`.
+    """
+
+    return get_origin(get_args(field)[0]) is Annotated
 
 
-def swap_annotation_and_optional(field):
-    assert typing.get_origin(field) == typing.Union
-    annotated = typing.get_args(field)[0]
+def change_type_to_pydantic_acceptable(field):
+    """
+    Converts a field from type `NotRequired[Annotated[x, y]]`
+    or `NotRequired[x]`, to `Annotated[Optional[x], y]`.
 
-    if typing.get_origin(annotated) != typing.Annotated:
-        return field
+    mypy requires NotRequired has to be outside the Annotated type:
+    `NotRequired[Annotated[...]]`, however pydantic requireds `Optional` instead
+    of `NotRequired`, and `Optional` has to be inside the `Annotated` block.
 
-    t, field = typing.get_args(annotated)
-    return typing.Annotated[Optional[t], field]
+    Additionally, pydantic will understand a field with type `Annotated[Optional[x], ...]` is
+    optional and take it out of the `required` list in the generated schema,
+    however a field with type `Optional[x]` will not be removed from `required`
+    in the schema, this function will add a blank `Annotated` if one is not
+    present on the `NotRequired` field.
+    """
+    assert get_origin(field) == NotRequired
+    if is_annotated(field):
+        annotated = get_args(field)[0]
+        t, field, *extra = get_args(annotated)
+    else:
+        t = get_args(field)
+        assert len(t) == 1
+        t, field = t[0], Field()
+
+    return Annotated[Optional[t], field]
+
+
+def swap_typeddict_inside_annotation(field: type):
+    origin = get_origin(field)
+    args = get_args(field)
+
+    # In the case we have a field with type TypedDict but no annotations
+    if not args and isinstance(origin, _TypedDictMeta):
+        return swap_all_annotations(origin)
+
+    for index, arg in enumerate(args):
+        if isinstance(arg, _TypedDictMeta):
+            arg = *args[:index], swap_all_annotations(arg), *args[(index + 1) :]
+            return origin[arg]
+        else:
+            sub_swap = swap_typeddict_inside_annotation(arg)
+            if sub_swap:
+                args = (
+                    *args[:index],
+                    sub_swap,
+                    *args[(index + 1) :],
+                )
+                return origin[args]
+
+    return None
+
+
+def swap_all_annotations(typed_dict: _TypedDictMeta):
+    """
+    Annotation[] and Optional[] need to be swapped around if type checking is
+    False. This function will take a TypedDictMeta and swap all instances of
+    Optional and Annotation, and will also do this with any typeddict referenced.
+    """
+    new_annotations = {}
+
+    for name, field in typed_dict.__annotations__.items():
+        if is_notrequired(field):
+            field = change_type_to_pydantic_acceptable(field)
+        new_annotations[name] = field
+        swapped_typeddict_annotation = swap_typeddict_inside_annotation(field)
+        if swapped_typeddict_annotation:
+            new_annotations[name] = swapped_typeddict_annotation
+    typed_dict.__annotations__ = new_annotations
+
+    return typed_dict
+
+
+class Config(BaseConfig):
+    """
+    Config for generated BaseModel.
+    """
+
+    extra = Extra.forbid
+
+    def alias_generator(string_to_be_aliased):
+        """
+        Alias in snake case
+        """
+        return re.sub(r"(?<!^)(?=[A-Z])", "_", string_to_be_aliased).lower()
 
 
 # From https://github.com/pydantic/pydantic/issues/760#issuecomment-589708485
@@ -104,30 +192,11 @@ def parse_typeddict_to_schema(
 ) -> Type[BaseModel]:
     annotations: Dict[str, Any] = {}
 
-    print(typed_dict)
+    typed_dict = swap_all_annotations(typed_dict)
 
-    # For storing optional fields to we can generate a TypedDict(total=False)
     for name, field in typed_dict.__annotations__.items():
-        if is_optional(field) and is_annotated(field):
-            field = swap_annotation_and_optional(field)
-
-        origin_list = [typing.get_origin(arg) for arg in typing.get_args(field)]
-        print("\n\n" + name)
-        print(typing.get_origin(field))
-        print(typing.get_args(field)[0])
-        print(typing.get_origin(typing.get_args(field)[0]))
-        if field == typing.TypedDict:
-            print("::::::::::::::::::::::::::::::::::: It's a dict!!!")
-        if typing.TypedDict in origin_list:
-            print("::::::::::::::::::::::::::::::::::: ISDICT")
-            annotations[name] = (
-                parse_typeddict_to_schema(field),
-                ...,
-            )
-
-        else:
-            default_value = getattr(typed_dict, name, ...)
-            annotations[name] = (field, default_value)
+        default_value = getattr(typed_dict, name, ...)
+        annotations[name] = (field, default_value)
 
     model = create_model(typed_dict.__name__, __config__=Config, **annotations)
 

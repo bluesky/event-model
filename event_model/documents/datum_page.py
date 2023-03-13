@@ -1,11 +1,14 @@
-from ._type_wrapper import Field, Annotated, Optional
-from typing import Dict, List, Union, TypedDict
+from typing import Dict, List, TypedDict, Union
+
+from typing_extensions import Annotated, NotRequired
+
+from ._type_wrapper import Field
 
 
 class DatumPage(TypedDict):
     """Page of documents to reference a quanta of externally-stored data"""
 
-    datum_kwargs: Optional[
+    datum_kwargs: NotRequired[
         Annotated[
             Dict[str, Union[bool, str, float, List]],
             Field(

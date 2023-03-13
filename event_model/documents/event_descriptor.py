@@ -1,17 +1,12 @@
-from typing import (
-    Any,
-    Dict,
-    List,
-    TYPE_CHECKING,
-)
+from typing import TYPE_CHECKING, Any, Dict, List, Literal, TypedDict
 
-from ._type_wrapper import Field, Annotated, Optional
-from typing import Literal
-from typing_extensions import TypedDict
+from typing_extensions import Annotated, NotRequired
+
+from ._type_wrapper import Field
 
 
 class DataKey(TypedDict):
-    external: Optional[
+    external: NotRequired[
         Annotated[
             str,
             Field(
@@ -20,7 +15,7 @@ class DataKey(TypedDict):
             ),
         ]
     ]
-    dims: Optional[
+    dims: NotRequired[
         Annotated[
             List[str],
             Field(
@@ -28,7 +23,7 @@ class DataKey(TypedDict):
             ),
         ]
     ]
-    object_name: Optional[
+    object_name: NotRequired[
         Annotated[
             str,
             Field(description="The name of the object this key was pulled from."),
@@ -58,7 +53,7 @@ else:
 
 
 class PerObjectHint(TypedDict):
-    fields: Optional[
+    fields: NotRequired[
         Annotated[
             List[str],
             Field(description="The 'interesting' data keys for this device."),
@@ -67,16 +62,16 @@ class PerObjectHint(TypedDict):
 
 
 class Configuration(TypedDict):
-    data: Optional[
+    data: NotRequired[
         Annotated[Dict[str, Any], Field(description="The actual measurement data")]
     ]
-    timestamps: Optional[
+    timestamps: NotRequired[
         Annotated[
             Dict[str, Any],
             Field(description="The timestamps of the individual measurement data"),
         ]
     ]
-    data_keys: Optional[
+    data_keys: NotRequired[
         Annotated[
             Dict[str, DataKey],
             Field(
@@ -89,8 +84,8 @@ class Configuration(TypedDict):
 class EventDescriptor(TypedDict):
     """Document to describe the data captured in the associated event documents"""
 
-    hints: Optional[ObjectHints]
-    object_keys: Optional[
+    hints: NotRequired[ObjectHints]
+    object_keys: NotRequired[
         Annotated[
             Dict[str, Any],
             Field(
@@ -98,7 +93,7 @@ class EventDescriptor(TypedDict):
             ),
         ]
     ]
-    name: Optional[
+    name: NotRequired[
         Annotated[
             str,
             Field(
@@ -106,7 +101,7 @@ class EventDescriptor(TypedDict):
             ),
         ]
     ]
-    configuration: Optional[
+    configuration: NotRequired[
         Annotated[
             Dict[str, Configuration],
             Field(
