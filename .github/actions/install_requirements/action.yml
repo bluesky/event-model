@@ -10,6 +10,9 @@ inputs:
   python_version:
     description: Python version to install
     default: "3.x"
+  jsonschema_version:
+    description: version of the jsonschema pip package to install
+    default: 3
 
 runs:
   using: composite
@@ -24,7 +27,9 @@ runs:
       run: |
         touch ${{ inputs.requirements_file }}
         # -c uses requirements.txt as constraints, see 'Validate requirements file'
-        pip install -c ${{ inputs.requirements_file }} ${{ inputs.install_options }}
+        pip install -c ${{ inputs.requirements_file }} ${{
+        inputs.install_options }}
+        pip install --upgrade "jsonschema==${{inputs.jsonschema_version}}.*"
       shell: bash
 
     - name: Create lockfile

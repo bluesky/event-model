@@ -33,12 +33,15 @@ jobs:
       matrix:
         os: ["ubuntu-latest"] # can add windows-latest, macos-latest
         python: ["3.9", "3.10", "3.11"]
+        jsonschema: [2, 3]
+
         install: ["-e .[dev]"]
         # Make one version be non-editable to test both paths of version code
         include:
           - os: "ubuntu-latest"
             python: "3.8"
             install: ".[dev]"
+            jsonschema: 3
 
     runs-on: ${{ matrix.os }}
     env:
@@ -56,7 +59,8 @@ jobs:
         uses: ./.github/actions/install_requirements
         with:
           python_version: ${{ matrix.python }}
-          requirements_file: requirements-test-${{ matrix.os }}-${{ matrix.python }}.txt
+          jsonschema_version: ${{matrix.jsonschema}}
+          requirements_file: requirements-test-${{ matrix.os }}-${{ matrix.python }}-${{matrix.jsonschema}}.txt
           install_options: ${{ matrix.install }}
 
       - name: List dependency tree
