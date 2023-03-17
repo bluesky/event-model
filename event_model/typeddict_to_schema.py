@@ -117,7 +117,7 @@ def change_type_to_pydantic_acceptable(field):
     assert get_origin(field) == NotRequired
     if is_annotated(field):
         annotated = get_args(field)[0]
-        t, field, *extra = get_args(annotated)
+        t, field = get_args(annotated)
     else:
         t = get_args(field)
         assert len(t) == 1

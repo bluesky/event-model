@@ -6,24 +6,11 @@
       "filled": {
          "title": "Filled",
          "description": "Mapping each of the keys of externally-stored data to an array containing the boolean False, indicating that the data has not been loaded, or to foreign keys (moved here from 'data' when the data was loaded)",
-         "type": "object",
-         "additionalProperties": {
-            "anyOf": [
-               {
-                  "type": "boolean"
-               },
-               {
-                  "type": "string"
-               },
-               {
-                  "type": "number"
-               },
-               {
-                  "type": "array",
-                  "items": {}
-               }
-            ]
-         }
+         "allOf": [
+            {
+               "$ref": "#/definitions/DataFrameForFilled"
+            }
+         ]
       },
       "descriptor": {
          "title": "Descriptor",
@@ -33,46 +20,20 @@
       "data": {
          "title": "Data",
          "description": "The actual measurement data",
-         "type": "object",
-         "additionalProperties": {
-            "anyOf": [
-               {
-                  "type": "boolean"
-               },
-               {
-                  "type": "string"
-               },
-               {
-                  "type": "number"
-               },
-               {
-                  "type": "array",
-                  "items": {}
-               }
-            ]
-         }
+         "allOf": [
+            {
+               "$ref": "#/definitions/DataFrame"
+            }
+         ]
       },
       "timestamps": {
          "title": "Timestamps",
          "description": "The timestamps of the individual measurement data",
-         "type": "object",
-         "additionalProperties": {
-            "anyOf": [
-               {
-                  "type": "boolean"
-               },
-               {
-                  "type": "string"
-               },
-               {
-                  "type": "number"
-               },
-               {
-                  "type": "array",
-                  "items": {}
-               }
-            ]
-         }
+         "allOf": [
+            {
+               "$ref": "#/definitions/DataFrame"
+            }
+         ]
       },
       "seq_num": {
          "title": "Seq Num",
@@ -107,5 +68,19 @@
       "time",
       "uid"
    ],
-   "additionalProperties": false
+   "additionalProperties": false,
+   "definitions": {
+      "DataFrameForFilled": {
+         "title": "DataFrameForFilled",
+         "description": "A DataFrame-like object with boolean or string entries",
+         "type": "object",
+         "additionalProperties": false
+      },
+      "DataFrame": {
+         "title": "DataFrame",
+         "description": "A DataFrame-like object",
+         "type": "object",
+         "additionalProperties": false
+      }
+   }
 }

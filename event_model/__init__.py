@@ -4,6 +4,7 @@ from dataclasses import dataclass
 
 from typing import (
     Optional,
+    cast,
     Literal,
     Callable,
     Tuple,
@@ -167,7 +168,7 @@ class DocumentRouter:
         # vice versa, use that. And the same for 'datum_page' / 'datum.
         if output_doc is NotImplemented:
             if name == "event":
-                event_page = pack_event_page(doc)
+                event_page = pack_event_page(cast(Event, doc))
                 # Subclass' implementation of event_page may return a valid
                 # EventPage or None or NotImplemented.
                 output_event_page = self.event_page(event_page)
@@ -175,7 +176,6 @@ class DocumentRouter:
                     output_event_page if output_event_page is not None else event_page
                 )
                 if output_event_page is not NotImplemented:
-                    assert isinstance(output_event_page, dict)
                     (output_doc,) = unpack_event_page(output_event_page)
             elif name == "datum":
                 datum_page = pack_datum_page(doc)
@@ -186,11 +186,10 @@ class DocumentRouter:
                     output_datum_page if output_datum_page is not None else datum_page
                 )
                 if output_datum_page is not NotImplemented:
-                    assert isinstance(datum_page, dict)
                     (output_doc,) = unpack_datum_page(output_datum_page)
             elif name == "event_page":
                 output_events = []
-                for event in unpack_event_page(doc):
+                for event in unpack_event_page(cast(EventPage, doc)):
                     # Subclass' implementation of event may return a valid
                     # Event or None or NotImplemented.
                     output_event = self.event(event)
@@ -202,7 +201,7 @@ class DocumentRouter:
                     output_doc = pack_event_page(*output_events)
             elif name == "datum_page":
                 output_datums = []
-                for datum in unpack_datum_page(doc):
+                for datum in unpack_datum_page(cast(DatumPage, doc)):
                     # Subclass' implementation of datum may return a valid
                     # Datum or None or NotImplemented.
                     output_datum = self.datum(datum)
@@ -246,7 +245,7 @@ class DocumentRouter:
     def datum(self, doc: dict):
         return NotImplemented
 
-    def event_page(self, doc: EventPage) -> Union[type[NotImplemented], EventPage]:
+    def event_page(self, doc: EventPage) -> EventPage:
         return NotImplemented
 
     def datum_page(self, doc: DatumPage):
@@ -922,7 +921,7 @@ class Filler(DocumentRouter):
     # Handlers operate document-wise, so we'll explode pages into individual
     # documents.
 
-    def datum_page(self, doc: dict) -> dict:
+    def datum_page(self, doc: DatumPage):
         datum = self.datum  # Avoid attribute lookup in hot loop.
         for datum_doc in unpack_datum_page(doc):
             datum(datum_doc)
@@ -939,7 +938,7 @@ class Filler(DocumentRouter):
     def stream_datum(self, doc: dict) -> None:
         self._stream_datum_cache[doc["uid"]] = doc
 
-    def event_page(self, doc: dict) -> EventPage:
+    def event_page(self, doc: EventPage) -> EventPage:
         # TODO We may be able to fill a page in place, and that may be more
         # efficient than unpacking the page in to Events, filling them, and the
         # re-packing a new page. But that seems tricky in general since the
@@ -949,13 +948,13 @@ class Filler(DocumentRouter):
         )
         return filled_doc
 
-    def event(self, doc: dict) -> dict:
+    def event(self, doc: Event) -> dict:
         filled_doc = self.fill_event(doc, include=self.include, exclude=self.exclude)
         return filled_doc
 
     def fill_event_page(
         self,
-        doc: dict,
+        doc: EventPage,
         include: Optional[Iterable] = None,
         exclude: Optional[Iterable] = None,
         inplace: Optional[bool] = None,
@@ -1261,7 +1260,7 @@ class NoFiller(Filler):
 
     def fill_event_page(
         self,
-        doc: dict,
+        doc: EventPage,
         include: Optional[Iterable] = None,
         exclude: Optional[Iterable] = None,
         *kwargs,
@@ -1278,11 +1277,11 @@ class NoFiller(Filler):
 
     def fill_event(
         self,
-        doc,
+        doc: Event,
         include: Optional[Iterable] = None,
         exclude: Optional[Iterable] = None,
         inplace: Optional[bool] = None,
-    ) -> dict:
+    ) -> Event:
         descriptor = self._descriptor_cache[doc["descriptor"]]
         from_datakeys = False
         try:
@@ -1583,7 +1582,7 @@ class RunRouter(DocumentRouter):
                     )
                     raise err
 
-    def event_page(self, doc: dict):
+    def event_page(self, doc: EventPage):
         descriptor_uid = doc["descriptor"]
         start_uid = self._descriptor_to_start[descriptor_uid]
         try:
@@ -1596,7 +1595,7 @@ class RunRouter(DocumentRouter):
         for callback in self._subfactory_cbs_by_descriptor[descriptor_uid]:
             callback("event_page", doc)
 
-    def datum_page(self, doc: dict) -> None:
+    def datum_page(self, doc: DatumPage) -> None:
         resource_uid = doc["resource"]
         try:
             start_uid = self._resources[resource_uid]
@@ -1902,10 +1901,11 @@ def compose_datum_page(
     return doc
 
 
-default_path_semantics: Literal["posix", "windows"] = {
+PATH_SEMANTICS: Dict[str, Literal["posix", "windows"]] = {
     "posix": "posix",
     "nt": "windows",
-}[os.name]
+}
+default_path_semantics: Literal["posix", "windows"] = PATH_SEMANTICS[os.name]
 
 
 def compose_resource(
@@ -1914,7 +1914,7 @@ def compose_resource(
     root: str,
     resource_path: str,
     resource_kwargs: Iterable,
-    path_semantics: Literal["posix", "windows", None] = default_path_semantics,
+    path_semantics: Optional[Literal["posix", "windows"]] = default_path_semantics,
     start: Optional[dict] = None,
     uid: Optional[str] = None,
     validate: bool = True,
@@ -2068,7 +2068,7 @@ def compose_event_page(
     data: dict,
     timestamps: dict,
     seq_num: List,
-    filled: Optional[dict] = None,
+    filled: Optional[Dict[str, Union[bool, str]]] = None,
     uid: Optional[List] = None,
     time: Optional[List] = None,
     validate: bool = True,
@@ -2244,7 +2244,7 @@ def compose_run(
         time = ttime.time()
     if metadata is None:
         metadata = {}
-    doc = RunStart(uid=uid, time=time, **metadata)
+    doc = dict(uid=uid, time=time, **metadata)
     # Define some mutable state to be shared internally by the closures composed
     # below.
     streams: dict = {}
@@ -2254,7 +2254,7 @@ def compose_run(
         schema_validators[DocumentNames.start].validate(doc)
 
     return ComposeRunBundle(
-        doc,
+        cast(RunStart, doc),
         partial(
             compose_descriptor, start=doc, streams=streams, event_counter=event_counter
         ),
@@ -2269,7 +2269,7 @@ def compose_run(
     )
 
 
-def pack_event_page(*events: dict) -> EventPage:
+def pack_event_page(*events: Event) -> EventPage:
     """
     Transform one or more Event documents into an EventPage document.
 
@@ -2482,14 +2482,13 @@ def merge_event_pages(event_pages: Iterable[EventPage]) -> EventPage:
     if len(pages) == 1:
         return pages[0]
 
-    array_keys = ["seq_num", "time", "uid"]
-
-    return EventPage(
+    doc = dict(
         descriptor=pages[0]["descriptor"],
-        **{
-            key: list(itertools.chain.from_iterable([page[key] for page in pages]))
-            for key in array_keys
-        },
+        seq_num=list(
+            itertools.chain.from_iterable([page["seq_num"] for page in pages])
+        ),
+        time=list(itertools.chain.from_iterable([page["time"] for page in pages])),
+        uid=list(itertools.chain.from_iterable([page["uid"] for page in pages])),
         data={
             key: list(
                 itertools.chain.from_iterable([page["data"][key] for page in pages])
@@ -2511,6 +2510,7 @@ def merge_event_pages(event_pages: Iterable[EventPage]) -> EventPage:
             for key in pages[0]["data"].keys()
         },
     )
+    return cast(EventPage, doc)
 
 
 def rechunk_datum_pages(datum_pages: Iterable, chunk_size: int) -> Generator:
@@ -2589,7 +2589,7 @@ def merge_datum_pages(datum_pages: Iterable) -> DatumPage:
 
     array_keys = ["datum_id"]
 
-    return DatumPage(
+    doc = dict(
         resource=pages[0]["resource"],
         **{
             key: list(itertools.chain.from_iterable([page[key] for page in pages]))
@@ -2604,6 +2604,7 @@ def merge_datum_pages(datum_pages: Iterable) -> DatumPage:
             for key in pages[0]["datum_kwargs"].keys()
         },
     )
+    return cast(DatumPage, doc)
 
 
 def bulk_events_to_event_pages(bulk_events: dict) -> list:
