@@ -1,6 +1,6 @@
-from typing import Any, Dict, Literal, TypedDict
+from typing import Any, Dict
 
-from typing_extensions import Annotated, NotRequired
+from typing_extensions import Annotated, NotRequired, Literal, TypedDict
 
 from ._type_wrapper import Field
 

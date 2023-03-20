@@ -1,7 +1,6 @@
-from typing import TYPE_CHECKING, Any, Dict, List, Literal, TypedDict, Union
-
+from typing import TYPE_CHECKING, Any, Dict, List, Union
 from event_model.documents._type_wrapper import Field, add_extra_schema
-from typing_extensions import Annotated, NotRequired
+from typing_extensions import Annotated, NotRequired, Literal, TypedDict
 
 
 class Hints(TypedDict):

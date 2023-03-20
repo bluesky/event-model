@@ -1,22 +1,11 @@
-from typing import Dict, List, TypedDict, TYPE_CHECKING, Union
+from typing import Dict, List, Union
 
-from typing_extensions import Annotated, NotRequired
+from typing_extensions import Annotated, NotRequired, TypedDict
 
 from ._type_wrapper import Field
 
-if TYPE_CHECKING:
-    DataFrame = Dict
-    DataFrameForFilled = Dict[str, Union[bool, str]]
-else:
-
-    class DataFrame(TypedDict):
-        __root__: Annotated[Dict, Field(description="A DataFrame-like object")]
-
-    class DataFrameForFilled(TypedDict):
-        __root__: Annotated[
-            Dict[str, Union[bool, str]],
-            Field(description="A DataFrame-like object with boolean or string entries"),
-        ]
+DataFrame = Dict[str, List]
+DataFrameForFilled = Dict[str, List[Union[bool, str]]]
 
 
 class EventPage(TypedDict):

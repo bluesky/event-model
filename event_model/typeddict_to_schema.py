@@ -1,17 +1,28 @@
+# The file is flake8 compliant with the exception of using a whitespace before `:` slice indexing
+# within [] brackets for types. Black forces this when the integer used is a
+# calculation in brackets.
 # flake8: noqa
+
 
 # This file has been checked to be mypy compliant, other than the use of
 # _TypedDictMeta, and unpacking behaviour of types that work but mypy doesn't like.
 # type: ignore
 
+import sys
+
+# The hacky indexing on types isn't possible with python < 3.9
+if sys.version_info[:2] < (3, 9):
+    raise EnvironmentError("schema generation requires python 3.8 or higher")
+
 import json
 import re
 from pathlib import Path
-from typing import (
-    Any,
-    Dict,
-    Optional,
-    Type,
+from typing import Any, Dict, Optional, Type
+
+from pydantic import BaseConfig, BaseModel, Extra, Field, create_model
+from typing_extensions import (
+    Annotated,
+    NotRequired,
     _TypedDictMeta,
     get_args,
     get_origin,
@@ -31,8 +42,6 @@ from event_model.documents import (
     StreamResource,
 )
 from event_model.documents._type_wrapper import extra_schema
-from pydantic import BaseConfig, BaseModel, Extra, Field, create_model
-from typing_extensions import NotRequired, Annotated
 
 SCHEMA_OUT_DIR = Path("event_model") / SCHEMA_PATH
 

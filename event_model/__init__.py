@@ -5,7 +5,6 @@ from dataclasses import dataclass
 from typing import (
     Optional,
     cast,
-    Literal,
     Callable,
     Tuple,
     Dict,
@@ -18,6 +17,7 @@ from typing import (
     List,
     no_type_check,
 )
+from typing_extensions import Literal
 
 import copy
 import json
@@ -51,6 +51,7 @@ from .documents.run_start import RunStart
 from .documents.run_stop import RunStop
 from .documents.stream_datum import StreamDatum
 from .documents.stream_resource import StreamResource
+from .documents.resource import Resource
 
 if sys.version_info < (3, 8):
     from importlib_metadata import metadata
@@ -178,7 +179,7 @@ class DocumentRouter:
                 if output_event_page is not NotImplemented:
                     (output_doc,) = unpack_event_page(output_event_page)
             elif name == "datum":
-                datum_page = pack_datum_page(doc)
+                datum_page = pack_datum_page(cast(Datum, doc))
                 # Subclass' implementation of datum_page may return a valid
                 # DatumPage or None or NotImplemented.
                 output_datum_page = self.datum_page(datum_page)
@@ -227,34 +228,34 @@ class DocumentRouter:
     # to how Python uses NotImplemented in arithmetic operations, as described
     # in the documentation.
 
-    def start(self, doc: dict):
+    def start(self, doc: RunStart) -> Optional[RunStart]:
         return NotImplemented
 
-    def stop(self, doc: dict):
+    def stop(self, doc: RunStop) -> Optional[RunStop]:
         return NotImplemented
 
-    def descriptor(self, doc: dict):
+    def descriptor(self, doc: EventDescriptor) -> Optional[EventDescriptor]:
         return NotImplemented
 
-    def resource(self, doc: dict):
+    def resource(self, doc: Resource) -> Optional[Resource]:
         return NotImplemented
 
-    def event(self, doc: Event):
+    def event(self, doc: Event) -> Event:
         return NotImplemented
 
-    def datum(self, doc: dict):
+    def datum(self, doc: Datum) -> Datum:
         return NotImplemented
 
     def event_page(self, doc: EventPage) -> EventPage:
         return NotImplemented
 
-    def datum_page(self, doc: DatumPage):
+    def datum_page(self, doc: DatumPage) -> Optional[DatumPage]:
         return NotImplemented
 
-    def stream_datum(self, doc: dict):
+    def stream_datum(self, doc: StreamDatum) -> Optional[StreamDatum]:
         return NotImplemented
 
-    def stream_resource(self, doc: dict):
+    def stream_resource(self, doc: StreamResource) -> Optional[StreamResource]:
         return NotImplemented
 
     def bulk_events(self, doc: dict) -> None:
@@ -354,7 +355,7 @@ class SingleRunDocumentRouter(DocumentRouter):
 
         Returns
         -------
-        descriptor document : dict
+        descriptor document : EventDescriptor
         """
         if "descriptor" not in doc:
             raise EventModelValueError(
@@ -912,7 +913,7 @@ class Filler(DocumentRouter):
                     del self._handler_cache[key]
         return handler
 
-    def resource(self, doc: dict) -> dict:
+    def resource(self, doc: Resource) -> Resource:
         # Defer creating the handler instance until we actually need it, when
         # we fill the first Event field that requires this Resource.
         self._resource_cache[doc["uid"]] = doc
@@ -921,22 +922,23 @@ class Filler(DocumentRouter):
     # Handlers operate document-wise, so we'll explode pages into individual
     # documents.
 
-    def datum_page(self, doc: DatumPage):
+    def datum_page(self, doc: DatumPage) -> DatumPage:
         datum = self.datum  # Avoid attribute lookup in hot loop.
         for datum_doc in unpack_datum_page(doc):
             datum(datum_doc)
         return doc
 
-    def datum(self, doc: dict) -> dict:
+    def datum(self, doc: Datum) -> Datum:
         self._datum_cache[doc["datum_id"]] = doc
         return doc
 
-    def stream_resource(self, doc: dict) -> dict:
+    def stream_resource(self, doc: StreamResource) -> StreamResource:
         self._stream_resource_cache[doc["uid"]] = doc
         return doc
 
-    def stream_datum(self, doc: dict) -> None:
+    def stream_datum(self, doc: StreamDatum) -> StreamDatum:
         self._stream_datum_cache[doc["uid"]] = doc
+        return doc
 
     def event_page(self, doc: EventPage) -> EventPage:
         # TODO We may be able to fill a page in place, and that may be more
@@ -948,7 +950,7 @@ class Filler(DocumentRouter):
         )
         return filled_doc
 
-    def event(self, doc: Event) -> dict:
+    def event(self, doc: Event) -> Event:
         filled_doc = self.fill_event(doc, include=self.include, exclude=self.exclude)
         return filled_doc
 
@@ -976,13 +978,13 @@ class Filler(DocumentRouter):
         else:
             return filled_doc
 
-    def get_handler(self, resource: dict) -> Any:
+    def get_handler(self, resource: Resource) -> Any:
         """
         Return a new Handler instance for this Resource.
 
         Parameters
         ----------
-        resource: dict
+        resource: Resource
 
         Returns
         -------
@@ -1032,7 +1034,7 @@ class Filler(DocumentRouter):
         )
         return handler
 
-    def _get_handler_maybe_cached(self, resource: dict) -> Any:
+    def _get_handler_maybe_cached(self, resource: Resource) -> Any:
         "Get a cached handler for this resource or make one and cache it."
         key = (resource["uid"], resource["spec"])
         try:
@@ -1142,7 +1144,7 @@ class Filler(DocumentRouter):
         self._current_state.datum = None
         return filled_doc
 
-    def descriptor(self, doc: dict) -> dict:
+    def descriptor(self, doc: EventDescriptor) -> EventDescriptor:
         self._descriptor_cache[doc["uid"]] = doc
         return doc
 
@@ -1500,7 +1502,7 @@ class RunRouter(DocumentRouter):
             + "])"
         )
 
-    def start(self, start_doc: dict) -> None:
+    def start(self, start_doc: RunStart) -> None:
         uid = start_doc["uid"]
         # If we get the same uid twice, weird things will happen, so check for
         # that and give a nice error message.
@@ -1539,7 +1541,7 @@ class RunRouter(DocumentRouter):
             self._factory_cbs_by_start[uid].extend(callbacks)
             self._subfactories[uid].extend(subfactories)
 
-    def descriptor(self, descriptor_doc: dict) -> None:
+    def descriptor(self, descriptor_doc: EventDescriptor) -> None:
         descriptor_uid = descriptor_doc["uid"]
         start_uid = descriptor_doc["run_start"]
 
@@ -1626,7 +1628,7 @@ class RunRouter(DocumentRouter):
             for callback in self._subfactory_cbs_by_start[start_uid]:
                 callback("datum_page", doc)
 
-    def stream_datum(self, doc: dict) -> None:
+    def stream_datum(self, doc: StreamDatum) -> None:
         resource_uid = doc["stream_resource"]
         start_uid = self._stream_resources[resource_uid]
         self._fillers[start_uid].stream_datum(doc)
@@ -1635,7 +1637,7 @@ class RunRouter(DocumentRouter):
         for callback in self._subfactory_cbs_by_start[start_uid]:
             callback("stream_datum", doc)
 
-    def resource(self, doc: dict) -> None:
+    def resource(self, doc: Resource) -> None:
         try:
             start_uid = doc["run_start"]
         except KeyError:
@@ -1660,7 +1662,7 @@ class RunRouter(DocumentRouter):
             for callback in self._subfactory_cbs_by_start[start_uid]:
                 callback("resource", doc)
 
-    def stream_resource(self, doc: dict) -> None:
+    def stream_resource(self, doc: StreamResource) -> None:
         start_uid = doc["run_start"]  # No need for Try
         self._fillers[start_uid].stream_resource(doc)
         self._stream_resources[doc["uid"]] = doc["run_start"]
@@ -1669,7 +1671,7 @@ class RunRouter(DocumentRouter):
         for callback in self._subfactory_cbs_by_start[start_uid]:
             callback("stream_resource", doc)
 
-    def stop(self, doc: dict) -> None:
+    def stop(self, doc: RunStop) -> None:
         start_uid = doc["run_start"]
         for callback in self._factory_cbs_by_start[start_uid]:
             callback("stop", doc)
@@ -2068,7 +2070,7 @@ def compose_event_page(
     data: dict,
     timestamps: dict,
     seq_num: List,
-    filled: Optional[Dict[str, Union[bool, str]]] = None,
+    filled: Optional[Dict[str, List[Union[bool, str]]]] = None,
     uid: Optional[List] = None,
     time: Optional[List] = None,
     validate: bool = True,
@@ -2116,7 +2118,7 @@ def compose_event(
     data: dict,
     timestamps: dict,
     seq_num: Optional[int] = None,
-    filled: Optional[dict] = None,
+    filled: Optional[Dict[str, Union[bool, str]]] = None,
     uid: Optional[str] = None,
     time: Optional[float] = None,
     validate: bool = True,
@@ -2349,7 +2351,7 @@ def unpack_event_page(event_page: EventPage) -> Generator:
         )
 
 
-def pack_datum_page(*datum: dict) -> DatumPage:
+def pack_datum_page(*datum: Datum) -> DatumPage:
     """
     Transform one or more Datum documents into a DatumPage document.
 

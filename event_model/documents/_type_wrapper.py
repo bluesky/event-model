@@ -9,9 +9,6 @@ This is intentional and due to a quirk of how generic types are handled on assig
 https://github.com/python/mypy/issues/10068#issuecomment-806256214
 """
 
-import sys
-import typing
-
 try:
     import pydantic
 
