@@ -49,6 +49,5 @@
       "resource_kwargs",
       "root",
       "uid"
-   ],
-   "additionalProperties": false
+   ]
 }

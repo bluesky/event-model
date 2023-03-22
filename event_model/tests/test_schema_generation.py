@@ -16,7 +16,9 @@ if sys.version_info[:2] >= (3, 9):
     from event_model.documents import StreamDatum
     from event_model.documents import StreamResource
 
-    from event_model.typeddict_to_schema import parse_typeddict_to_schema
+    from event_model.documents.generate.typeddict_to_schema import (
+        parse_typeddict_to_schema,
+    )
 
     from event_model import SCHEMA_PATH
     import json
@@ -61,6 +63,6 @@ else:
     # Test an error is thrown for pyton <= 3.8
     def test_schema_generation_import_throws_error():
         with pytest.raises(EnvironmentError):
-            from event_model import typeddict_to_schema
+            from event_model.documents.generate import typeddict_to_schema
 
             typeddict_to_schema

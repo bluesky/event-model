@@ -2,7 +2,7 @@ from typing import Any, Dict
 
 from typing_extensions import Annotated, NotRequired, Literal, TypedDict
 
-from ._type_wrapper import Field
+from .generate.type_wrapper import Field
 
 
 class Resource(TypedDict):

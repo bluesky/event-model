@@ -6,20 +6,11 @@
       "filled": {
          "title": "Filled",
          "description": "Mapping each of the keys of externally-stored data to an array containing the boolean False, indicating that the data has not been loaded, or to foreign keys (moved here from 'data' when the data was loaded)",
-         "type": "object",
-         "additionalProperties": {
-            "type": "array",
-            "items": {
-               "anyOf": [
-                  {
-                     "type": "boolean"
-                  },
-                  {
-                     "type": "string"
-                  }
-               ]
+         "allOf": [
+            {
+               "$ref": "#/definitions/DataframeForFilled"
             }
-         }
+         ]
       },
       "descriptor": {
          "title": "Descriptor",
@@ -29,20 +20,20 @@
       "data": {
          "title": "Data",
          "description": "The actual measurement data",
-         "type": "object",
-         "additionalProperties": {
-            "type": "array",
-            "items": {}
-         }
+         "allOf": [
+            {
+               "$ref": "#/definitions/Dataframe"
+            }
+         ]
       },
       "timestamps": {
          "title": "Timestamps",
          "description": "The timestamps of the individual measurement data",
-         "type": "object",
-         "additionalProperties": {
-            "type": "array",
-            "items": {}
-         }
+         "allOf": [
+            {
+               "$ref": "#/definitions/Dataframe"
+            }
+         ]
       },
       "seq_num": {
          "title": "Seq Num",
@@ -77,5 +68,31 @@
       "time",
       "uid"
    ],
-   "additionalProperties": false
+   "definitions": {
+      "DataframeForFilled": {
+         "title": "DataframeForFilled",
+         "type": "object",
+         "additionalProperties": {
+            "type": "array",
+            "items": {
+               "anyOf": [
+                  {
+                     "type": "boolean"
+                  },
+                  {
+                     "type": "string"
+                  }
+               ]
+            }
+         }
+      },
+      "Dataframe": {
+         "title": "Dataframe",
+         "type": "object",
+         "additionalProperties": {
+            "type": "array",
+            "items": {}
+         }
+      }
+   }
 }

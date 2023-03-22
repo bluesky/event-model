@@ -23,6 +23,5 @@
       "datum_kwargs",
       "resource",
       "datum_id"
-   ],
-   "additionalProperties": false
+   ]
 }

@@ -17,7 +17,13 @@
          }
       },
       "data_type": {
-         "$ref": "#/definitions/DataType"
+         "title": "Data Type",
+         "description": "data_type",
+         "allOf": [
+            {
+               "$ref": "#/definitions/DataType"
+            }
+         ]
       },
       "run_start": {
          "title": "Run Start",
@@ -51,13 +57,11 @@
       "exit_status",
       "uid"
    ],
-   "additionalProperties": false,
    "definitions": {
       "DataType": {
          "title": "DataType",
          "pattern": "^([^./]+)$",
-         "type": "string",
-         "additionalProperties": false
+         "type": "string"
       }
    }
 }

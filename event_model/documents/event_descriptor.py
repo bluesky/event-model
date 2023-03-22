@@ -1,8 +1,8 @@
-from typing import TYPE_CHECKING, Any, Dict, List
+from typing import Any, Dict, List
 
 from typing_extensions import Annotated, NotRequired, Literal, TypedDict
 
-from ._type_wrapper import Field
+from .generate.type_wrapper import Field, AsRef
 
 
 class DataKey(TypedDict):
@@ -44,14 +44,6 @@ class DataKey(TypedDict):
     ]
 
 
-if TYPE_CHECKING:
-    ObjectHints = Any
-else:
-
-    class ObjectHints(TypedDict):
-        __root__: Annotated[Any, Field(title="Object Hints")]
-
-
 class PerObjectHint(TypedDict):
     fields: NotRequired[
         Annotated[
@@ -84,7 +76,7 @@ class Configuration(TypedDict):
 class EventDescriptor(TypedDict):
     """Document to describe the data captured in the associated event documents"""
 
-    hints: NotRequired[ObjectHints]
+    hints: NotRequired[Annotated[Any, AsRef("ObjectHints")]]
     object_keys: NotRequired[
         Annotated[
             Dict[str, Any],

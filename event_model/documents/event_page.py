@@ -1,11 +1,8 @@
-from typing import Dict, List, Union
+from typing import Dict, List, Union, Any
 
 from typing_extensions import Annotated, NotRequired, TypedDict
 
-from ._type_wrapper import Field
-
-DataFrame = Dict[str, List]
-DataFrameForFilled = Dict[str, List[Union[bool, str]]]
+from .generate.type_wrapper import Field, AsRef
 
 
 class EventPage(TypedDict):
@@ -13,7 +10,8 @@ class EventPage(TypedDict):
 
     filled: NotRequired[
         Annotated[
-            DataFrameForFilled,
+            Dict[str, List[Union[bool, str]]],
+            AsRef("DataframeForFilled"),
             Field(
                 description="Mapping each of the keys of externally-stored data to an array containing "
                 "the boolean False, indicating that the data has not been loaded, or to foreign keys "
@@ -29,11 +27,13 @@ class EventPage(TypedDict):
         ),
     ]
     data: Annotated[
-        DataFrame,
+        Dict[str, List[Any]],
+        AsRef("Dataframe"),
         Field(description="The actual measurement data"),
     ]
     timestamps: Annotated[
-        DataFrame,
+        Dict[str, List[Any]],
+        AsRef("Dataframe"),
         Field(description="The timestamps of the individual measurement data"),
     ]
     seq_num: Annotated[

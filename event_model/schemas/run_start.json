@@ -82,7 +82,6 @@
       "time",
       "uid"
    ],
-   "additionalProperties": false,
    "definitions": {
       "Calculation": {
          "title": "Calculation",
@@ -95,7 +94,6 @@
             },
             "kwargs": {
                "title": "Kwargs",
-               "description": "kwargs for calcalation callable",
                "type": "object"
             },
             "callable": {
@@ -106,8 +104,7 @@
          },
          "required": [
             "callable"
-         ],
-         "additionalProperties": false
+         ]
       },
       "Projection": {
          "title": "Projection",
@@ -115,7 +112,6 @@
          "properties": {
             "type": {
                "title": "Type",
-               "description": "linked: a value linked from the data set, calculated: a value that requires calculation, static:  a value defined here in the projection ",
                "enum": [
                   "linked",
                   "calculated",
@@ -129,7 +125,6 @@
             },
             "location": {
                "title": "Location",
-               "description": "start comes from metadata fields in the start document, event comes from event, configuration comes from configuration fields in the event_descriptor document",
                "enum": [
                   "start",
                   "event",
@@ -150,20 +145,12 @@
                "type": "string"
             },
             "calculation": {
-               "title": "calculation properties",
-               "description": "required fields if type is calculated",
-               "allOf": [
-                  {
-                     "$ref": "#/definitions/Calculation"
-                  }
-               ]
+               "$ref": "#/definitions/Calculation"
             },
             "value": {
-               "title": "Value",
-               "description": "value explicitely defined in the projection when type==static."
+               "title": "Value"
             }
          },
-         "additionalProperties": false,
          "allOf": [
             {
                "if": {
@@ -274,7 +261,6 @@
          "properties": {
             "name": {
                "title": "Name",
-               "description": "The name of the projection",
                "type": "string"
             },
             "version": {
@@ -299,8 +285,7 @@
             "version",
             "configuration",
             "projection"
-         ],
-         "additionalProperties": false
+         ]
       },
       "Hints": {
          "title": "Hints",
@@ -327,12 +312,10 @@
                   }
                }
             }
-         },
-         "additionalProperties": false
+         }
       },
       "DataType": {
-         "title": "DataType",
-         "additionalProperties": false
+         "title": "DataType"
       }
    }
 }

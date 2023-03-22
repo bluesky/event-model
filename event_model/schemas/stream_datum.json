@@ -47,6 +47,5 @@
       "block_idx",
       "event_count",
       "event_offset"
-   ],
-   "additionalProperties": false
+   ]
 }

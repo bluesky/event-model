@@ -1,15 +1,8 @@
-from typing import TYPE_CHECKING, Any, Dict
+from typing import Dict
 
 from typing_extensions import Annotated, NotRequired, Literal, TypedDict
 
-from ._type_wrapper import Field
-
-if TYPE_CHECKING:
-    DataType = Any
-else:
-
-    class DataType(TypedDict):
-        __root__: Annotated[str, Field(title="data_type", regex="^([^./]+)$")]
+from .generate.type_wrapper import Field, AsRef
 
 
 class RunStop(TypedDict):
@@ -27,7 +20,11 @@ class RunStop(TypedDict):
             ),
         ]
     ]
-    data_type: NotRequired[Annotated[DataType, Field(description="")]]
+    data_type: NotRequired[
+        Annotated[
+            str, Field(description="data_type", regex="^([^./]+)$"), AsRef("DataType")
+        ]
+    ]
 
     run_start: Annotated[
         str,

@@ -60,6 +60,5 @@
       "root",
       "uid",
       "stream_names"
-   ],
-   "additionalProperties": false
+   ]
 }

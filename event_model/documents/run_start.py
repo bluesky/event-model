@@ -1,6 +1,7 @@
-from typing import TYPE_CHECKING, Any, Dict, List, Union
-from event_model.documents._type_wrapper import Field, add_extra_schema
+from typing import Any, Dict, List, Union
+from event_model.documents.generate.type_wrapper import Field, add_extra_schema
 from typing_extensions import Annotated, NotRequired, Literal, TypedDict
+from .generate.type_wrapper import AsRef
 
 
 class Hints(TypedDict):
@@ -12,14 +13,6 @@ class Hints(TypedDict):
             ),
         ]
     ]
-
-
-if TYPE_CHECKING:
-    DataType = Any
-else:
-
-    class DataType(TypedDict):
-        __root__: Annotated[Any, Field(title="data_type")]
 
 
 class Calculation(TypedDict):
@@ -189,7 +182,7 @@ class RunStart(TypedDict):
     ]
     projections: NotRequired[Annotated[List[Projections], Field(description="")]]
     hints: NotRequired[Annotated[Hints, Field(description="Start-level hints")]]
-    data_type: NotRequired[Annotated[DataType, Field(description="")]]
+    data_type: NotRequired[Annotated[Any, Field(description=""), AsRef("DataType")]]
 
     time: Annotated[float, Field(description="Time the run started.  Unix epoch time")]
     uid: Annotated[str, Field(description="Globally unique ID for this run")]

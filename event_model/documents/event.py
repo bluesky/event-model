@@ -2,7 +2,7 @@ from typing import Any, Dict, Union
 
 from typing_extensions import Annotated, NotRequired, TypedDict
 
-from ._type_wrapper import Field
+from .generate.type_wrapper import Field
 
 
 class Event(TypedDict):
