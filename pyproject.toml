@@ -12,7 +12,7 @@ classifiers = [
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
 ]
-description = "One line description of your module"
+description = "Data model used by the bluesky ecosystem"
 dependencies = [
     "importlib-metadata",
     "jsonschema",
@@ -37,7 +37,7 @@ dev = [
     "pydata-sphinx-theme>=0.12",
     "pytest",
     "pytest-cov",
-    "sphynx",
+    "sphinx",
     "sphinx-autobuild",
     "sphinx-copybutton",
     "sphinx-design",
@@ -48,7 +48,6 @@ dev = [
     "ipython",
     "matplotlib",
     "numpydoc",
-    "sphinx-copybutton",
 ]
 
 [project.scripts]
@@ -57,10 +56,11 @@ dev = [
 [project.urls]
 GitHub = "https://github.com/bluesky/event-model"
 
-#[[project.authors]] # Further authors may be added by duplicating this section
-# email = "email@email.com"
-# name = "Firstname Lastname"
+[[project.authors]] # Further authors may be added by duplicating this section
+email = "dallan@bnl.gov"
+name = "Brookhaven National Lab"
 
+[tool.setuptools_scm]
 
 [tool.mypy]
 # Ignore missing stubs in imported modules
@@ -80,7 +80,7 @@ extend-ignore = [
     # allow Annotated[typ, some_func("some string")]
     "F722",
 ]
-max-line-length = 115
+max-line-length = 88
 exclude = [".tox", ".venv", "venv"]
 
 
@@ -97,9 +97,6 @@ filterwarnings = [
 ]
 # Doctest python code in docs, python code in src docstrings, test functions in tests
 testpaths = "event_model/tests"
-
-[tool.coverage.run]
-data_file = "/tmp/event_model.coverage"
 
 [tool.coverage.paths]
 # Tests are run from installed location, map back to the src directory

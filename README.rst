@@ -10,15 +10,15 @@ Documentation  https://blueskyproject.io/event-model
 Releases       https://github.com/bluesky/event-model/releases
 ============== ==============================================================
 
-.. |code_ci| image:: https://github.com/bluesky/event-model/actions/workflows/code.yml/badge.svg?branch=main
+.. |code_ci| image:: https://github.com/bluesky/event-model/actions/workflows/code.yml/badge.svg?branch=master
     :target: https://github.com/bluesky/event-model/actions/workflows/code.yml
     :alt: Code CI
 
-.. |docs_ci| image:: https://github.com/bluesky/event-model/actions/workflows/docs.yml/badge.svg?branch=main
+.. |docs_ci| image:: https://github.com/bluesky/event-model/actions/workflows/docs.yml/badge.svg?branch=master
     :target: https://github.com/bluesky/event-model/actions/workflows/docs.yml
     :alt: Docs CI
 
-.. |coverage| image:: https://codecov.io/gh/bluesky/event-model/branch/main/graph/badge.svg
+.. |coverage| image:: https://codecov.io/gh/bluesky/event-model/branch/master/graph/badge.svg
     :target: https://codecov.io/gh/bluesky/event-model
     :alt: Test Coverage
 
@@ -26,9 +26,9 @@ Releases       https://github.com/bluesky/event-model/releases
     :target: https://pypi.org/project/event-model
     :alt: Latest PyPI version
 
-.. |license| image:: https://img.shields.io/badge/License-Apache%202.0-blue.svg
-    :target: https://opensource.org/licenses/Apache-2.0
-    :alt: Apache License
+.. |license| image:: https://img.shields.io/badge/License-BSD-blue.svg
+    :target: https://opensource.org/license/bsd-3-clause/
+    :alt: BSD License
 
 ..
     Anything below this line is used when viewing README.rst and will be replaced

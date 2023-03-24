@@ -23,7 +23,6 @@ var/
 *.egg-info/
 .installed.cfg
 *.egg
-=======
 *.egg-info/
 .installed.cfg
 *.egg
@@ -71,3 +70,17 @@ venv*
 # further build artifacts
 lockfiles/
 
+# Editor files
+#mac
+.DS_Store
+*~
+
+#vim
+*.swp
+*.swo
+
+#pycharm
+.idea/*
+
+#vscode
+.vscode/*

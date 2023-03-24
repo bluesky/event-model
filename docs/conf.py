@@ -39,7 +39,6 @@ else:
 # Usually you set "language" from the command line for these cases.
 language = "en"
 
-
 extensions = [
     # Use this for generating API docs
     "sphinx.ext.autodoc",
@@ -63,6 +62,9 @@ extensions = [
     "IPython.sphinxext.ipython_directive",
     "IPython.sphinxext.ipython_console_highlighting",
 ]
+
+napoleon_google_docstring = False
+napoleon_numpy_docstring = True
 
 # If true, Sphinx will warn about all references where the target cannot
 # be found.

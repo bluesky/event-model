@@ -2,15 +2,13 @@ name: Link Check
 
 on:
   schedule:
-    # Run every Monday at 8am to check URL links still resolve
+    # Run every Wednesday at 8am to check URL links still resolve
     - cron: "0 8 * * WED"
 
 jobs:
   docs:
     strategy:
       fail-fast: false
-      matrix:
-        python: ["3.10"]
 
     runs-on: ubuntu-latest
 
@@ -20,14 +18,11 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Install python version
-        uses: actions/setup-python@v4
+      - name: Install python packages
+        uses: ./.github/actions/install_requirements
         with:
-          python-version: ${{ matrix.python }}
-
-      - name: Install dependencies
-        run: pip install -e .[dev]
-          
+          requirements_file: requirements-dev-3.x.txt
+          install_options: -e .[dev]
 
       - name: Check links
         run: tox -e docs -- -b linkcheck

@@ -373,7 +373,8 @@ def test_handler_registry_access():
 
 
 def test_mismatched_data_keys():
-    "Test that we raise specifically when data keys do not match between event and descriptor."
+    "Test that we raise specifically when data keys do not match"
+    "between event and descriptor."
     with pytest.raises(event_model.MismatchedDataKeys):
         with event_model.NoFiller(reg) as filler:
             filler("start", run_bundle.start_doc)

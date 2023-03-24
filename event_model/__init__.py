@@ -280,7 +280,8 @@ class SingleRunDocumentRouter(DocumentRouter):
                 self._start_doc = doc
             else:
                 raise EventModelValueError(
-                    f'SingleRunDocumentRouter associated with start document {self._start_doc["uid"]} '
+                    "SingleRunDocumentRouter associated with start document "
+                    f'{self._start_doc["uid"]} '
                     f'received a second start document with uid {doc["uid"]}'
                 )
         elif name == "descriptor":
@@ -288,8 +289,10 @@ class SingleRunDocumentRouter(DocumentRouter):
                 self._descriptors[doc["uid"]] = doc
             else:
                 raise EventModelValueError(
-                    f'SingleRunDocumentRouter associated with start document {self._start_doc["uid"]} '
-                    f'received a descriptor {doc["uid"]} associated with start document {doc["run_start"]}'
+                    "SingleRunDocumentRouter associated with start document "
+                    f'{self._start_doc["uid"]} '
+                    f'received a descriptor {doc["uid"]} associated with '
+                    f'start document {doc["run_start"]}'
                 )
         # Defer to superclass for dispatch/processing.
         return super().__call__(name, doc, validate)
@@ -311,7 +314,8 @@ class SingleRunDocumentRouter(DocumentRouter):
         return self._start_doc
 
     def get_descriptor(self, doc):
-        """Convenience method returning the descriptor associated with the specified document.
+        """Convenience method returning the descriptor associated with the
+        specified document.
 
         Parameters
         ----------
@@ -328,13 +332,15 @@ class SingleRunDocumentRouter(DocumentRouter):
             )
         elif doc["descriptor"] not in self._descriptors:
             raise EventModelValueError(
-                f'SingleRunDocumentRouter has not processed a descriptor with uid {doc["descriptor"]}'
+                "SingleRunDocumentRouter has not processed a descriptor with "
+                f'uid {doc["descriptor"]}'
             )
 
         return self._descriptors[doc["descriptor"]]
 
     def get_stream_name(self, doc):
-        """Convenience method returning the name of the stream for the specified document.
+        """Convenience method returning the name of the stream for the
+        specified document.
 
         Parameters
         ----------
@@ -1760,9 +1766,11 @@ del get_versions
 
 @dataclass
 class ComposeRunBundle:
-    """Extensible compose run bundle. This maintains backward compatibility by unpacking into a basic
-    run bundle (start, compose_descriptor, compose_resource, stop). Further extensions are optional and
-    require keyword referencing (i.e. compose_stream_resource).
+    """Extensible compose run bundle. This maintains backward compatibility
+    by unpacking into a basic run bundle
+    (start, compose_descriptor, compose_resource, stop).
+    Further extensions are optional and require keyword referencing
+    (i.e. compose_stream_resource).
     """
 
     start_doc: dict
@@ -1910,7 +1918,8 @@ def compose_stream_resource(
         counters = [itertools.count() for _ in stream_names]
     elif len(counters) > len(stream_names):
         raise ValueError(
-            f"Insufficient number of counters {len(counters)} for stream names: {stream_names}"
+            f"Insufficient number of counters {len(counters)} for "
+            f"stream names: {stream_names}"
         )
 
     doc = dict(

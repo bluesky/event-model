@@ -13,7 +13,7 @@ docs that pull in docstrings from the code.
     `documentation_standards`
 
 The docs will be built into the ``build/html`` directory, and can be opened
-locally with a web browse::
+locally with a web browser::
 
     $ firefox build/html/index.html
 
@@ -33,6 +33,6 @@ You can view the pages at localhost::
 If you are making changes to source code too, you can tell it to watch
 changes in this directory too::
 
-    $ tox -e docs autobuild -- --watch event-model/tests
+    $ tox -e docs autobuild -- --watch event_model/
 
 .. _sphinx: https://www.sphinx-doc.org/
