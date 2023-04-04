@@ -1,7 +1,6 @@
 # type: ignore
 import sys
 
-
 # The hacky indexing on types isn't possible with python < 3.9
 if sys.version_info[:2] < (3, 9):
     raise EnvironmentError("schema generation requires python 3.8 or higher")
@@ -9,18 +8,11 @@ if sys.version_info[:2] < (3, 9):
 import json
 import re
 from pathlib import Path
-from typing import Any, Dict, Optional, Type, Tuple
+from typing import Annotated, Dict, Optional, Tuple, Type, Union
 
 from pydantic import BaseConfig, BaseModel, Field, create_model
 from pydantic.fields import FieldInfo
-from typing import Annotated
-from typing_extensions import (
-    NotRequired,
-    _TypedDictMeta,
-    get_args,
-    get_origin,
-)
-from event_model.documents.generate.type_wrapper import AsRef
+from typing_extensions import NotRequired, _TypedDictMeta, get_args, get_origin
 
 from event_model import SCHEMA_PATH
 from event_model.documents import (
@@ -36,8 +28,9 @@ from event_model.documents import (
     StreamResource,
 )
 from event_model.documents.generate.type_wrapper import (
-    extra_schema,
     ALLOWED_ANNOTATION_ELEMENTS,
+    AsRef,
+    extra_schema,
 )
 
 SCHEMA_OUT_DIR = Path("event_model") / SCHEMA_PATH
@@ -89,50 +82,115 @@ def merge_dicts(dict1: dict, dict2: dict) -> dict:
     return return_dict
 
 
-def format_all_annotations(typed_dict: _TypedDictMeta):
-    """
-    Goes through all fields type_annotations and formats them to be acceptable
-    to pydantic:
+def format_all_annotations(
+    typed_dict: _TypedDictMeta, new_basemodel_classes: Dict[str, BaseModel] = {}
+) -> _TypedDictMeta:
+    """Goes through all field type annotations and formats them to be acceptable
+    to pydantic.
 
+    It formats annotations in the following way:
     * NotRequired[Annotated[X, FieldInfo, ...] -> Annotated[Optional[X],
       FieldInfo, ...]
-    * Annotated[X, AsRef("ref_name"), FieldInfo] -> Annotated[ref_name_class_containing_X,
+    * Annotated[X, AsRef("ref_name"), FieldInfo] -> Annotated[ref_name_BaseModel_containing_X,
       FieldInfo]
-    * If X is also a typeddict then Annotated[X, FieldInfo] -> Annotated[format_all_annotations(X), FieldInfo]
+    * If X is also a typeddict then Annotated[X, FieldInfo] -> Annotated[parse_typeddict_to_schema(X), FieldInfo]
+
+    Parameters
+    -----------------
+    typed_dict : dict
+        TypedDict to change annotations of prior to being converted to BaseModel.
+
+    new_basemodel_classes : dict
+        Dict where keys are names of _TypedDictMeta classes referenced inside
+        the TypedDict being converted to a BaseModel, and values are BaseModel classes that
+        have already been generated from those TypedDicts - pydantic will throw
+        an error if we try to generate the same BaseModel twice so we just
+        reference the one already created if multiple annotations have the same
+        TypedDict.
+
+    Returns
+    -----------------
+    typed_dict : dict
+        The same dict with field annotations adjusted to be pydantic friendly.
 
     """
     new_annotations = {}
-    new_basemodel_classes = {}
 
-    for name, field in typed_dict.__annotations__.items():
-        new_annotations[name] = field_parser(name, field, new_basemodel_classes)
+    for field_name, field_type in typed_dict.__annotations__.items():
+        new_annotations[field_name] = field_parser(
+            field_name, field_type, new_basemodel_classes
+        )
 
     typed_dict.__annotations__ = new_annotations
 
     return typed_dict
 
 
-def field_is_annotated(field: type):
+def field_is_annotated(field: type) -> bool:
+    """Returns True if a field is of type Annotated[X]."""
     return get_origin(field) == Annotated
 
 
-def field_is_not_required(field: type, remove_origin_if_NotRequired=False):
-    is_not_required = get_origin(field) == NotRequired
+def field_is_not_required(
+    field_type: type, remove_origin_if_NotRequired: bool = False
+) -> Tuple[type, bool]:
+    """Checks if a field is of type is NotRequired[X].
+
+    Parameters
+    -----------------
+    field_type : dict
+        Field type taken from an annotation.
+    remove_origin_if_NotRequired : bool
+        If True returns the inputted field_type with NotRequired stripped off.
+
+    Returns:
+    --------------------------------------------
+    (field_type, is_not_required) : Tuple[type, bool]
+        is_not_required is True if the field is of type NotRequired[X].
+        field_type is the same as the inputted field_type however if
+        remove_origin_if_NotRequired is true it will strip NotRequired.
+    """
+    is_not_required = get_origin(field_type) == NotRequired
     if is_not_required and remove_origin_if_NotRequired:
-        args = get_args(field)
+        args = get_args(field_type)
         assert len(args) == 1
-        field = args[0]
-    return field, is_not_required
+        field_type = args[0]
+    return field_type, is_not_required
 
 
 def get_field_type(
-    name: str, field: type, is_not_required: bool, is_annotated: bool
+    field_name: str,
+    field_type: type,
+    new_basemodel_classes: Dict[str, BaseModel],
 ) -> type:
-    origin = get_origin(field)
-    args = get_args(field)
-    if not is_not_required and not is_annotated:
-        field_type = origin
-    else:
+    """Goes through an annotation and finds the type it represents without the
+    additional context - e.g int inside Annotated[int, Field(description=""),
+    AsRef("blah")].
+    It is assumed that either the field origin is Annotated, or the field has no
+    origin.
+
+    Parameters
+    ----------------
+    field_name : str
+        Name of the field being parsed.
+    field_type : type
+        Annotation to be parsed.
+    new_basemodel_classes : dict
+        Dict where keys are names of _TypedDictMeta classes referenced inside
+        the TypedDict being converted to a BaseModel, and values are BaseModel classes that
+        have already been generated from those TypedDicts - pydantic will throw
+        an error if we try to generate the same BaseModel twice so we just
+        reference the one already created if multiple annotations have the same
+        TypedDict.
+
+    Returns
+    -----------------
+    field_type : type
+        The data type inside the annotation seperate from the other context in
+        the annotation.
+    """
+    args = get_args(field_type)
+    if args:
         field_type = [
             x
             for x in args
@@ -140,18 +198,36 @@ def get_field_type(
         ]
         assert (
             len(field_type) == 1
-        ), f'Field "{name}") has multiple types: {" and ".join(field_type)}'
+        ), f'Field "{field_name}" has multiple types: {" and ".join([x.__class__.__name__ for x in field_type])}'
         field_type = field_type[0]
 
-    if isinstance(field_type, _TypedDictMeta):
-        field_type = format_all_annotations(field_type)
+    # If the TypedDict references another TypedDict then another BaseModel is recursively generated
+    # from that TypedDict, and the field annotation is swapped to that BaseModel.
+    field_type = change_sub_typed_dicts_to_basemodels(field_type, new_basemodel_classes)
 
     return field_type
 
 
-def get_annotation_contents(args: Tuple[type, ...]) -> Tuple[AsRef, FieldInfo]:
+def get_annotation_contents(field_type: type) -> Tuple[Optional[AsRef], FieldInfo]:
+    """Goes through the args of an Annotation and parses out any AsRef(), or
+    FieldInfo.
+
+    Parameters
+    -----------------
+    field_type : type
+        Annotation to be parsed.
+
+    Returns
+    ----------------------------------------------
+    (as_ref, field_info) : Tuple[AsRef, FieldInfo]
+        as_ref is the AsRef tag in the annotation, or None if
+        there is no AsRef tag. field_info is the FieldInfo class returned from
+        the Field() call in the Annotation, or an empty Field() call if none is found.
+    """
+
+    args = get_args(field_type)
     as_ref = None
-    field_info = None
+    field_info = Field()
     if args:
         for arg in args:
             if isinstance(arg, AsRef):
@@ -159,25 +235,50 @@ def get_annotation_contents(args: Tuple[type, ...]) -> Tuple[AsRef, FieldInfo]:
             elif isinstance(arg, FieldInfo):
                 field_info = arg
 
-    field_info = field_info or Field()
-
     return as_ref, field_info
 
 
-def parse_AsRef(field_type, field_info, as_ref, new_basemodel_classes):
+def parse_AsRef(
+    field_type: type,
+    field_info: FieldInfo,
+    as_ref: AsRef,
+    new_basemodel_classes: Dict[str, BaseModel],
+) -> type:
+    """Parses the AsRef tag and makes a new BaseModel class containing a
+    __root__ of the field with the AsRef.
+
+    Parameters
+    -----------------
+    field_type : type
+        Datatype to put in the __root__ field of the generated basemodel.
+    field_info : FieldInfo
+        Info included in the Field() of the annotation.
+    as_ref : AsRef
+        AsRef tag in the annotation.
+    new_basemodel_classes : dict
+        Dict where keys are names of a basemodel class generated by this
+        function, and values are the class itseldf. If another field has the
+        same AsRef the already generated baseclass in this dict is used as the
+        new field value.
+
+    Returns
+    -----------------
+    field_type : type
+        The generated basemodel.
+    """
     ref_field_info = Field()
+    # Regex is extracted from the field info and placed in the new field info
     if field_info.regex:
         ref_field_info.regex = field_info.regex
     ref_field_type = Annotated[field_type, ref_field_info]
 
     if as_ref.ref_name not in new_basemodel_classes:
-        new_field_type = create_model(
+        field_type = create_model(
             as_ref.ref_name,
             __config__=Config,
             __root__=(ref_field_type, None),
         )
-        new_basemodel_classes[as_ref.ref_name] = new_field_type
-        field_type = new_field_type
+        new_basemodel_classes[as_ref.ref_name] = field_type
     else:
         generated_basemodel_type = new_basemodel_classes[
             as_ref.ref_name
@@ -191,17 +292,90 @@ def parse_AsRef(field_type, field_info, as_ref, new_basemodel_classes):
     return field_type
 
 
-def field_parser(name: str, field: type, new_basemodel_classes: Dict[str, BaseModel]):
-    # Change the field from NotRequired[X] to X
-    field, is_not_required = field_is_not_required(
-        field, remove_origin_if_NotRequired=True
+def change_sub_typed_dicts_to_basemodels(
+    field_type: type, new_basemodel_classes: Dict[str, BaseModel]
+) -> dict:
+    """Checks for any TypedDicts in the field_type and converts them to
+    basemodels.
+
+    Parameters
+    -----------------
+    field_type : type
+        Annotation to be parsed.
+    new_basemodel_classes : dict
+        Dict where keys are names of _TypedDictMeta classes referenced inside
+        the TypedDict being converted to a BaseModel, and values are BaseModel classes that
+        have already been generated from those TypedDicts - pydantic will throw
+        an error if we try to generate the same BaseModel twice so we just
+        reference the one already created if multiple annotations have the same
+        TypedDict.
+
+    Returns:
+    -----------------
+    field_type : type
+        New field type with TypedDicts swapped to basemodels
+    """
+    if isinstance(field_type, _TypedDictMeta):
+        if field_type.__name__ not in new_basemodel_classes:
+            field_type = parse_typeddict_to_schema(
+                field_type,
+                return_basemodel=True,
+                new_basemodel_classes=new_basemodel_classes,
+            )
+            new_basemodel_classes[field_type.__name__] = field_type
+        else:
+            field_type = new_basemodel_classes[field_type.__name__]
+    # It's still possible there's a TypedDict in the args to be converted - e.g
+    # Dict[str, SomeTypedDict]
+    else:
+        origin = get_origin(field_type)
+        args = get_args(field_type)
+        if origin and args:
+            field_type = origin[
+                tuple(
+                    change_sub_typed_dicts_to_basemodels(arg, new_basemodel_classes)
+                    for arg in args
+                )
+            ]
+    return field_type
+
+
+def field_parser(
+    field_name: str, field_type: type, new_basemodel_classes: Dict[str, BaseModel]
+):
+    """Parses a field annotation and generates a pydantic friendly one by
+    extracting relevant information.
+
+    Parameters
+    ----------------
+    field_name : str
+        Name of the field being parsed.
+    field_type : type
+        Annotation to be parsed.
+    new_basemodel_classes : dict
+        Dict where keys are names of _TypedDictMeta classes referenced inside
+        the TypedDict being converted to a BaseModel, and values are BaseModel classes that
+        have already been generated from those TypedDicts - pydantic will throw
+        an error if we try to generate the same BaseModel twice so we just
+        reference the one already created if multiple annotations have the same
+        TypedDict.
+
+    Returns
+    -----------------
+    field_info : type
+        The field_type inputted, but parsed to be pydantic friendly
+    """
+    field_type, is_not_required = field_is_not_required(
+        field_type, remove_origin_if_NotRequired=True
     )
 
-    is_annotated = field_is_annotated(field)
+    as_ref, field_info = get_annotation_contents(field_type)
 
-    field_type = get_field_type(name, field, is_not_required, is_annotated)
-
-    as_ref, field_info = get_annotation_contents(get_args(field))
+    field_type = get_field_type(
+        field_name,
+        field_type,
+        new_basemodel_classes,
+    )
 
     if as_ref:
         field_type = parse_AsRef(field_type, field_info, as_ref, new_basemodel_classes)
@@ -214,27 +388,47 @@ def field_parser(name: str, field: type, new_basemodel_classes: Dict[str, BaseMo
 
 
 class Config(BaseConfig):
-    """
-    Config for generated BaseModel.
-    """
-
-    # extra = Extra.forbid
+    """Config for generated BaseModel."""
 
     def alias_generator(string_to_be_aliased):
-        """
-        Alias in snake case
-        """
+        """Alias in snake case"""
         return re.sub(r"(?<!^)(?=[A-Z])", "_", string_to_be_aliased).lower()
 
 
 # From https://github.com/pydantic/pydantic/issues/760#issuecomment-589708485
 def parse_typeddict_to_schema(
-    typed_dict: Any,
+    typed_dict: _TypedDictMeta,
     out_dir: Optional[Path] = None,
-) -> Type[BaseModel]:
-    annotations: Dict[str, Any] = {}
+    return_basemodel: bool = False,
+    new_basemodel_classes: Dict[str, BaseModel] = {},
+) -> Union[Type[BaseModel], Dict[str, type]]:
+    """Takes a TypedDict and generates a jsonschema from it.
 
-    typed_dict = format_all_annotations(typed_dict)
+    Parameters:
+    ---------------------------
+    typed_dict : _TypedDictMeta
+        The typeddict to be converted to a pydantic basemodel.
+    out_dir: Optional[Path]
+        Optionally provide a directory to store the generated json schema from the basemodel, if
+        None then the dictionary schema won't be saved to disk.
+    return_basemodel : bool
+        Optionally return the basemodel as soon as it's generated, rather than
+        converting it to a dictionary. Required for converting TypedDicts
+        within documents.
+    new_basemodel_classes : Dict[str, BaseModel]
+        Optionally provide basemodel classes already generated during a
+        conversion. Required for when the function is called recursively.
+
+    Returns:
+    --------------------------------------------------------------------------
+    Either the generated BaseModel or the schema dictionary generated from it,
+    depending on if return_basemodel is True.
+    """
+    annotations: Dict[str, type] = {}
+
+    typed_dict = format_all_annotations(
+        typed_dict, new_basemodel_classes=new_basemodel_classes
+    )
 
     for name, field in typed_dict.__annotations__.items():
         default_value = getattr(typed_dict, name, ...)
@@ -245,11 +439,13 @@ def parse_typeddict_to_schema(
     # Docstring is used as the description field.
     model.__doc__ = typed_dict.__doc__
 
+    if return_basemodel:
+        return model
+
     # title goes to snake_case
     model.__name__ = Config.alias_generator(typed_dict.__name__).lower()
-    model_schema = model.schema(by_alias=True)
 
-    model_schema["description"] = typed_dict.__doc__
+    model_schema = model.schema(by_alias=True)
 
     # Add the manually defined extra stuff
     if typed_dict in extra_schema:
@@ -263,6 +459,7 @@ def parse_typeddict_to_schema(
 
 
 def generate_all_schema(schema_out_dir: Path = SCHEMA_OUT_DIR) -> None:
+    """Generates all schema in the documents directory."""
     parse_typeddict_to_schema(DatumPage, out_dir=schema_out_dir)
     parse_typeddict_to_schema(Datum, out_dir=schema_out_dir)
     parse_typeddict_to_schema(EventDescriptor, out_dir=schema_out_dir)

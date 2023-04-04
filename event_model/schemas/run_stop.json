@@ -59,9 +59,7 @@
    ],
    "definitions": {
       "DataType": {
-         "title": "DataType",
-         "pattern": "^([^./]+)$",
-         "type": "string"
+         "title": "DataType"
       }
    }
 }

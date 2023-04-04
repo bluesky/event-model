@@ -6,11 +6,13 @@ from .generate.type_wrapper import Field, AsRef
 
 
 class DataKey(TypedDict):
+    """Describes the objects in the data property of Event documents"""
+
     external: NotRequired[
         Annotated[
             str,
             Field(
-                description="Where the data is stored if it is stored external to the events.",
+                description="Where the data is stored if it is stored external to the events",
                 regex=r"^[A-Z]+:?",
             ),
         ]
@@ -45,6 +47,8 @@ class DataKey(TypedDict):
 
 
 class PerObjectHint(TypedDict):
+    """The 'interesting' data keys for this device."""
+
     fields: NotRequired[
         Annotated[
             List[str],

@@ -5,11 +5,13 @@ from .generate.type_wrapper import AsRef
 
 
 class Hints(TypedDict):
+    """Start-level hints"""
+
     dimensions: NotRequired[
         Annotated[
             List[List[Union[List[str], str]]],
             Field(
-                description="The independent axes of the experiment.  Ordered slow to fast",
+                description="The independent axes of the experiment. Ordered slow to fast",
             ),
         ]
     ]
@@ -28,6 +30,8 @@ class Calculation(TypedDict):
 
 
 class Projection(TypedDict):
+    """Where to get the data from"""
+
     type: NotRequired[
         Annotated[
             Literal["linked", "calculated", "static"],
@@ -134,12 +138,12 @@ class Projections(TypedDict):
     configuration: Annotated[
         Dict[str, Any], Field(description="Static information about projection")
     ]
-    projection: Dict[str, Projection]
+    projection: Annotated[Dict[Any, Projection], Field(description="")]
 
 
 @add_extra_schema(RUN_START_EXTRA_SCHEMA)
 class RunStart(TypedDict):
-    """Document created at the start of run.  Provides a seach target and later documents link to it"""
+    """Document created at the start of run. Provides a seach target and later documents link to it"""
 
     data_session: NotRequired[
         Annotated[
