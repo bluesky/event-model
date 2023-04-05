@@ -10,36 +10,46 @@ def test_run_router(tmp_path):
     bundle = event_model.compose_run()
     docs = []
     start_doc, compose_descriptor, compose_resource, compose_stop = bundle
-    docs.append(('start', start_doc))
+    docs.append(("start", start_doc))
     bundle = compose_descriptor(
-        data_keys={'motor': {'shape': [], 'dtype': 'number', 'source': '...'},
-                   'image': {'shape': [512, 512], 'dtype': 'number',
-                             'source': '...', 'external': 'FILESTORE:'}},
-        name='primary')
+        data_keys={
+            "motor": {"shape": [], "dtype": "number", "source": "..."},
+            "image": {
+                "shape": [512, 512],
+                "dtype": "number",
+                "source": "...",
+                "external": "FILESTORE:",
+            },
+        },
+        name="primary",
+    )
     primary_descriptor_doc, compose_primary_event, compose_event_page = bundle
-    docs.append(('descriptor', primary_descriptor_doc))
+    docs.append(("descriptor", primary_descriptor_doc))
     bundle = compose_descriptor(
-        data_keys={'motor': {'shape': [], 'dtype': 'number', 'source': '...'}},
-        name='baseline')
+        data_keys={"motor": {"shape": [], "dtype": "number", "source": "..."}},
+        name="baseline",
+    )
     baseline_descriptor_doc, compose_baseline_event, compose_event_page = bundle
-    docs.append(('descriptor', baseline_descriptor_doc))
+    docs.append(("descriptor", baseline_descriptor_doc))
     bundle = compose_resource(
-        spec='TIFF', root=str(tmp_path), resource_path='stack.tiff',
-        resource_kwargs={})
+        spec="TIFF", root=str(tmp_path), resource_path="stack.tiff", resource_kwargs={}
+    )
     resource_doc, compose_datum, compose_datum_page = bundle
-    docs.append(('resource', resource_doc))
-    datum_doc = compose_datum(datum_kwargs={'slice': 5})
-    docs.append(('datum', datum_doc))
+    docs.append(("resource", resource_doc))
+    datum_doc = compose_datum(datum_kwargs={"slice": 5})
+    docs.append(("datum", datum_doc))
     primary_event_doc = compose_primary_event(
-        data={'motor': 0, 'image': datum_doc['datum_id']},
-        timestamps={'motor': 0, 'image': 0}, filled={'image': False})
-    docs.append(('event', primary_event_doc))
+        data={"motor": 0, "image": datum_doc["datum_id"]},
+        timestamps={"motor": 0, "image": 0},
+        filled={"image": False},
+    )
+    docs.append(("event", primary_event_doc))
     baseline_event_doc = compose_baseline_event(
-        data={'motor': 0},
-        timestamps={'motor': 0})
-    docs.append(('event', baseline_event_doc))
+        data={"motor": 0}, timestamps={"motor": 0}
+    )
+    docs.append(("event", baseline_event_doc))
     stop_doc = compose_stop()
-    docs.append(('stop', stop_doc))
+    docs.append(("stop", stop_doc))
 
     # Empty list of factories. Just make sure nothing blows up.
     rr = event_model.RunRouter([])
@@ -58,12 +68,12 @@ def test_run_router(tmp_path):
     collected = []
 
     def collector(name, doc):
-        if name == 'event_page':
-            name = 'event'
-            doc, = event_model.unpack_event_page(doc)
-        elif name == 'datum_page':
-            name = 'datum'
-            doc, = event_model.unpack_datum_page(doc)
+        if name == "event_page":
+            name = "event"
+            (doc,) = event_model.unpack_event_page(doc)
+        elif name == "datum_page":
+            name = "datum"
+            (doc,) = event_model.unpack_datum_page(doc)
         collected.append((name, doc))
 
     def all_factory(name, doc):
@@ -78,7 +88,7 @@ def test_run_router(tmp_path):
 
     # A factory that returns a subfactory interested in 'baseline' only.
     def subfactory(name, doc):
-        if doc.get('name') == 'baseline':
+        if doc.get("name") == "baseline":
             return [collector]
         return []
 
@@ -89,8 +99,8 @@ def test_run_router(tmp_path):
     for name, doc in docs:
         rr(name, doc)
 
-    expected_item = ('event', baseline_event_doc)
-    unexpected_item = ('event', primary_event_doc)
+    expected_item = ("event", baseline_event_doc)
+    unexpected_item = ("event", primary_event_doc)
     assert expected_item in collected
     assert unexpected_item not in collected
     collected.clear()
@@ -103,8 +113,8 @@ def test_run_router(tmp_path):
         ...
 
     def header_collector(name, doc):
-        if name in ('start', 'stop', 'descriptor'):
-            key = (name, doc['uid'])
+        if name in ("start", "stop", "descriptor"):
+            key = (name, doc["uid"])
             if key in collected_header_docs:
                 raise LocalException3
             collected_header_docs[key] = doc
@@ -114,7 +124,7 @@ def test_run_router(tmp_path):
         return [header_collector], []
 
     rr = event_model.RunRouter([all_factory])
-    with pytest.warns(UserWarning, match='1.14.0'), pytest.raises(LocalException3):
+    with pytest.warns(UserWarning, match="1.14.0"), pytest.raises(LocalException3):
         for name, doc in docs:
             rr(name, doc)
 
@@ -126,7 +136,7 @@ def test_run_router(tmp_path):
         header_collector(name, doc)
 
         def subfactory(name, doc):
-            if doc.get('name') == 'baseline':
+            if doc.get("name") == "baseline":
                 header_collector(name, doc)
                 return [header_collector]
             return []
@@ -134,7 +144,7 @@ def test_run_router(tmp_path):
         return [], [subfactory]
 
     rr = event_model.RunRouter([factory_with_subfactory_only])
-    with pytest.warns(UserWarning, match='1.14.0'), pytest.raises(LocalException3):
+    with pytest.warns(UserWarning, match="1.14.0"), pytest.raises(LocalException3):
         for name, doc in docs:
             rr(name, doc)
 
@@ -149,22 +159,22 @@ def test_run_router(tmp_path):
         def __call__(self, slice):
             return numpy.ones((5, 5))
 
-    reg = {'TIFF': FakeTiffHandler}
+    reg = {"TIFF": FakeTiffHandler}
 
     def check_filled(name, doc):
-        if name == 'event_page':
-            for is_filled in doc['filled'].values():
+        if name == "event_page":
+            for is_filled in doc["filled"].values():
                 assert all(is_filled)
-        elif name == 'event':
-            for is_filled in doc['filled'].values():
+        elif name == "event":
+            for is_filled in doc["filled"].values():
                 assert is_filled
 
     def check_not_filled(name, doc):
-        if name == 'event_page':
-            for is_filled in doc['filled'].values():
+        if name == "event_page":
+            for is_filled in doc["filled"].values():
                 assert not any(is_filled)
-        elif name == 'event':
-            for is_filled in doc['filled'].values():
+        elif name == "event":
+            for is_filled in doc["filled"].values():
                 assert not is_filled
 
     def check_filled_factory(name, doc):
@@ -199,16 +209,25 @@ def test_run_router(tmp_path):
 def test_run_router_streams(tmp_path):
     bundle = event_model.compose_run()
     docs = []
-    start_doc, compose_stream_resource, stop_doc = \
-        bundle.start_doc, bundle.compose_stream_resource, bundle.compose_stop()
+    start_doc, compose_stream_resource, stop_doc = (
+        bundle.start_doc,
+        bundle.compose_stream_resource,
+        bundle.compose_stop(),
+    )
     docs.append(("start", start_doc))
     stream_names = ["stream_1", "stream_2"]
-    stream_resource_doc, compose_stream_data = \
-        compose_stream_resource(spec="TIFF_STREAM", root=str(tmp_path), resource_path="test_streams",
-                                resource_kwargs={}, stream_names=stream_names)
+    stream_resource_doc, compose_stream_data = compose_stream_resource(
+        spec="TIFF_STREAM",
+        root=str(tmp_path),
+        resource_path="test_streams",
+        resource_kwargs={},
+        stream_names=stream_names,
+    )
     docs.append(("stream_resource", stream_resource_doc))
-    datum_doc_0, datum_doc_1 = (compose_stream_datum(datum_kwargs={})
-                                for compose_stream_datum in compose_stream_data)
+    datum_doc_0, datum_doc_1 = (
+        compose_stream_datum(datum_kwargs={})
+        for compose_stream_datum in compose_stream_data
+    )
     docs.append(("stream_datum", datum_doc_0))
     docs.append(("stream_datum", datum_doc_1))
     docs.append(("stop", stop_doc))
@@ -290,15 +309,15 @@ def test_subfactory():
 def test_same_start_doc_twice():
     "If the user sends us the same uid twice, raise helpfully."
     rr = event_model.RunRouter([])
-    doc = {'time': 0, 'uid': 'stuff'}
-    rr('start', doc)
+    doc = {"time": 0, "uid": "stuff"}
+    rr("start", doc)
     with pytest.raises(ValueError):
-        rr('start', doc)  # exact same object
+        rr("start", doc)  # exact same object
     with pytest.raises(ValueError):
-        rr('start', doc.copy())  # same content
-    doc2 = {'time': 1, 'uid': 'stuff'}
+        rr("start", doc.copy())  # same content
+    doc2 = {"time": 1, "uid": "stuff"}
     with pytest.raises(ValueError):
-        rr('start', doc2)  # same uid, different content
+        rr("start", doc2)  # same uid, different content
 
 
 def test_subfactory_callback_exception():
@@ -308,31 +327,28 @@ def test_subfactory_callback_exception():
     """
 
     def exception_callback(name, doc):
-        """ a callback that always raises Exception """
+        """a callback that always raises Exception"""
         raise Exception()
 
     def exception_callback_subfactory(descriptor_doc_name, descriptor_doc):
-        """ a subfactory that always returns one exception_callback """
+        """a subfactory that always returns one exception_callback"""
         return [exception_callback]
 
     def exception_callback_factory(start_doc_name, start_doc):
-        """ a factory that return 0 callbacks and one exception_callback_subfactory """
-        return (
-            [],
-            [exception_callback_subfactory]
-        )
+        """a factory that return 0 callbacks and one exception_callback_subfactory"""
+        return ([], [exception_callback_subfactory])
 
     rr = event_model.RunRouter([exception_callback_factory])
 
-    start_doc = {'time': 0, 'uid': 'abcdef'}
-    rr('start', start_doc)
+    start_doc = {"time": 0, "uid": "abcdef"}
+    rr("start", start_doc)
 
-    descriptor_doc = {'run_start': 'abcdef', 'uid': 'ghijkl'}
+    descriptor_doc = {"run_start": "abcdef", "uid": "ghijkl"}
     with pytest.raises(Exception):
-        rr('descriptor', descriptor_doc)
+        rr("descriptor", descriptor_doc)
 
-    assert rr._start_to_descriptors['abcdef'] == ['ghijkl']
-    assert rr._descriptor_to_start['ghijkl'] == 'abcdef'
+    assert rr._start_to_descriptors["abcdef"] == ["ghijkl"]
+    assert rr._descriptor_to_start["ghijkl"] == "abcdef"
 
-    event_document = {'descriptor': 'ghijkl', 'uid': 'mnopqr'}
+    event_document = {"descriptor": "ghijkl", "uid": "mnopqr"}
     rr.event(event_document)
