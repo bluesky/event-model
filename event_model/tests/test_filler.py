@@ -1,9 +1,10 @@
 import copy
 import pathlib
-import event_model
+
 import numpy
 import pytest
 
+import event_model
 
 path_root = pathlib.Path("/placeholder/path")
 run_bundle = event_model.compose_run()
@@ -372,7 +373,8 @@ def test_handler_registry_access():
 
 
 def test_mismatched_data_keys():
-    "Test that we raise specifically when data keys do not match between event and descriptor."
+    "Test that we raise specifically when data keys do not match"
+    "between event and descriptor."
     with pytest.raises(event_model.MismatchedDataKeys):
         with event_model.NoFiller(reg) as filler:
             filler("start", run_bundle.start_doc)

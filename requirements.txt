@@ -1,4 +1,0 @@
-importlib-metadata;python_version<'3.8'
-jsonschema
-numpy
-typing-extensions;python_version<'3.8'

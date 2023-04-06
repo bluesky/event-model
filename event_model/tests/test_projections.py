@@ -1,8 +1,10 @@
 from distutils.version import LooseVersion
-import event_model
+
+import jsonschema
 import pytest
 from jsonschema.exceptions import ValidationError
-import jsonschema
+
+import event_model
 
 skip_json_validations = LooseVersion(jsonschema.__version__) < LooseVersion("3.0.0")
 

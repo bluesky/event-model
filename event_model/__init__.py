@@ -1,4 +1,3 @@
-from collections import defaultdict, deque, namedtuple
 import collections.abc
 from dataclasses import dataclass
 
@@ -20,13 +19,10 @@ from typing import (
 from typing_extensions import Literal
 
 import copy
-import json
-from enum import Enum
-from functools import partial
-import itertools
 import inspect
+import itertools
+import json
 import os
-from pkg_resources import resource_filename as rs_fn
 import sys
 import threading
 import time as ttime
@@ -34,10 +30,16 @@ import types
 import uuid
 import warnings
 import weakref
-from packaging import version
+from collections import defaultdict, deque, namedtuple
+from dataclasses import dataclass
+from enum import Enum
+from functools import partial
+from typing import Optional
 
 import jsonschema
 import numpy
+from packaging import version
+from pkg_resources import resource_filename as rs_fn
 
 from ._version import get_versions
 
@@ -314,7 +316,8 @@ class SingleRunDocumentRouter(DocumentRouter):
                 self._start_doc = doc
             else:
                 raise EventModelValueError(
-                    f'SingleRunDocumentRouter associated with start document {self._start_doc["uid"]} '
+                    "SingleRunDocumentRouter associated with start document "
+                    f'{self._start_doc["uid"]} '
                     f'received a second start document with uid {doc["uid"]}'
                 )
         elif name == "descriptor":
@@ -323,8 +326,10 @@ class SingleRunDocumentRouter(DocumentRouter):
                 self._descriptors[doc["uid"]] = doc
             else:
                 raise EventModelValueError(
-                    f'SingleRunDocumentRouter associated with start document {self._start_doc["uid"]} '
-                    f'received a descriptor {doc["uid"]} associated with start document {doc["run_start"]}'
+                    "SingleRunDocumentRouter associated with start document "
+                    f'{self._start_doc["uid"]} '
+                    f'received a descriptor {doc["uid"]} associated with '
+                    f'start document {doc["run_start"]}'
                 )
         # Defer to superclass for dispatch/processing.
         return super().__call__(name, doc, validate=validate)
@@ -363,7 +368,8 @@ class SingleRunDocumentRouter(DocumentRouter):
             )
         elif doc["descriptor"] not in self._descriptors:
             raise EventModelValueError(
-                f'SingleRunDocumentRouter has not processed a descriptor with uid {doc["descriptor"]}'
+                "SingleRunDocumentRouter has not processed a descriptor with "
+                f'uid {doc["descriptor"]}'
             )
 
         return self._descriptors[doc["descriptor"]]
@@ -1832,9 +1838,11 @@ del get_versions
 
 @dataclass
 class ComposeRunBundle:
-    """Extensible compose run bundle. This maintains backward compatibility by unpacking into a basic
-    run bundle (start, compose_descriptor, compose_resource, stop). Further extensions are optional and
-    require keyword referencing (i.e. compose_stream_resource).
+    """Extensible compose run bundle. This maintains backward compatibility
+    by unpacking into a basic run bundle
+    (start, compose_descriptor, compose_resource, stop).
+    Further extensions are optional and require keyword referencing
+    (i.e. compose_stream_resource).
     """
 
     start_doc: RunStart

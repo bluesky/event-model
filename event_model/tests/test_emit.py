@@ -1,7 +1,8 @@
 import gc
 
-import event_model
 import pytest
+
+import event_model
 
 
 def test_emit():

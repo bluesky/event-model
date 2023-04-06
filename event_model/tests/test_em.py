@@ -1,12 +1,12 @@
-from distutils.version import LooseVersion
 import json
 import pickle
+from distutils.version import LooseVersion
 
-import event_model
 import jsonschema
 import numpy
 import pytest
 
+import event_model
 
 JSONSCHEMA_2 = LooseVersion(jsonschema.__version__) < LooseVersion("3.0.0")
 

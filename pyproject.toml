@@ -1,0 +1,127 @@
+[build-system]
+requires = ["setuptools>=64", "setuptools_scm[toml]>=6.2", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "event-model"
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "License :: OSI Approved :: BSD License",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+]
+description = "Data model used by the bluesky ecosystem"
+dependencies = [
+    "importlib-metadata",
+    "jsonschema",
+    "numpy",
+    "packaging"
+]
+dynamic = ["version"]
+license.file = "LICENSE"
+readme = "README.rst"
+requires-python = ">=3.8"
+
+[project.optional-dependencies]
+dev = [
+    "dask[array]",
+    "black",
+    "mypy",
+    "flake8",
+    "flake8-isort",
+    "Flake8-pyproject",
+    "pipdeptree",
+    "pre-commit",
+    "pydata-sphinx-theme>=0.12",
+    "pytest",
+    "pytest-cov",
+    "sphinx",
+    "sphinx-autobuild",
+    "sphinx-copybutton",
+    "sphinx-design",
+    "tox-direct",
+    "types-mock",
+
+    # These are dependencies of various sphinx extensions for documentation.
+    "ipython",
+    "matplotlib",
+    "numpydoc",
+]
+
+[project.scripts]
+# event_model = "event_model.__main__:main"
+
+[project.urls]
+GitHub = "https://github.com/bluesky/event-model"
+
+[[project.authors]] # Further authors may be added by duplicating this section
+email = "dallan@bnl.gov"
+name = "Brookhaven National Lab"
+
+[tool.setuptools_scm]
+
+[tool.mypy]
+# Ignore missing stubs in imported modules
+ignore_missing_imports = true
+
+
+[tool.isort]
+float_to_top = true
+profile = "black"
+
+[tool.flake8]
+extend-ignore = [
+    # See https://github.com/PyCQA/pycodestyle/issues/373
+    "E203",
+    # support typing.overload decorator
+    "F811",
+    # allow Annotated[typ, some_func("some string")]
+    "F722",
+]
+max-line-length = 88
+exclude = [".tox", ".venv", "venv"]
+
+
+[tool.pytest.ini_options]
+# Run pytest with all our checkers, and don't spam us with massive tracebacks on error
+addopts = """
+    --tb=native -vv
+    --cov=event_model --cov-report term --cov-report xml:cov.xml
+    """
+# https://iscinumpy.gitlab.io/post/bound-version-constraints/#watch-for-warnings
+filterwarnings = [
+    "error",
+    "ignore::DeprecationWarning"
+]
+# Doctest python code in docs, python code in src docstrings, test functions in tests
+testpaths = "event_model/tests"
+
+[tool.coverage.paths]
+# Tests are run from installed location, map back to the src directory
+source = ["event_model", "**/site-packages/"]
+
+# tox must currently be configured via an embedded ini string
+# See: https://github.com/tox-dev/tox/issues/999
+[tool.tox]
+legacy_tox_ini = """
+[tox]
+skipsdist=True
+
+[testenv:{pre-commit,mypy,pytest,docs}]
+# Don't create a virtualenv for the command, requires tox-direct plugin
+direct = True
+passenv = *
+allowlist_externals = 
+    pytest 
+    pre-commit
+    mypy
+    sphinx-build
+    sphinx-autobuild
+commands =
+    pytest: pytest {posargs}
+    mypy: mypy event_model {posargs}
+    pre-commit: pre-commit run --all-files {posargs}
+    docs: sphinx-{posargs:build -E --keep-going} -T docs build/html
+"""

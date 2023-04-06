@@ -1,6 +1,7 @@
-import event_model
 import pytest
 from jsonschema.exceptions import ValidationError
+
+import event_model
 
 
 def test_data_session():
