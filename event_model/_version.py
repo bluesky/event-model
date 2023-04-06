@@ -9,6 +9,7 @@
 
 """Git implementation of _version.py."""
 
+
 import errno
 import os
 import re
@@ -51,8 +52,8 @@ class NotThisMethod(Exception):
     """Exception raised if a method is not valid for the current scenario."""
 
 
-LONG_VERSION_PY = {}
-HANDLERS = {}
+LONG_VERSION_PY: dict = {}
+HANDLERS: dict = {}
 
 
 def register_vcs_handler(vcs, method):  # decorator

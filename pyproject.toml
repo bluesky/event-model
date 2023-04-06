@@ -17,7 +17,8 @@ dependencies = [
     "importlib-metadata",
     "jsonschema",
     "numpy",
-    "packaging"
+    "packaging",
+    "typing_extensions"
 ]
 dynamic = ["version"]
 license.file = "LICENSE"
@@ -51,7 +52,6 @@ dev = [
 
     # For schema generation.
     "pydantic",
-    "typing_extensions"
 ]
 
 [project.scripts]

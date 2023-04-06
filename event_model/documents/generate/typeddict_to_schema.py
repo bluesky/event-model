@@ -1,14 +1,20 @@
+# type: ignore
+
 import json
 import re
-
-# type: ignore
 import sys
 from pathlib import Path
-from typing import Annotated, Dict, Optional, Tuple, Type, Union
+from typing import Dict, Optional, Tuple, Type, Union
 
 from pydantic import BaseConfig, BaseModel, Field, create_model
 from pydantic.fields import FieldInfo
-from typing_extensions import NotRequired, _TypedDictMeta, get_args, get_origin
+from typing_extensions import (
+    Annotated,
+    NotRequired,
+    _TypedDictMeta,
+    get_args,
+    get_origin,
+)
 
 from event_model import SCHEMA_PATH
 from event_model.documents import (
