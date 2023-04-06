@@ -1,12 +1,15 @@
 from typing import Any, Dict
 
-from typing_extensions import Annotated, NotRequired, Literal, TypedDict
+from typing_extensions import Annotated, Literal, NotRequired, TypedDict
 
 from .generate.type_wrapper import Field
 
 
 class Resource(TypedDict):
-    """Document to reference a collection (e.g. file or group of files) of externally-stored data"""
+    """
+    Document to reference a collection (e.g. file or group of files) of
+    externally-stored data
+    """
 
     path_semantics: NotRequired[
         Annotated[
@@ -18,7 +21,8 @@ class Resource(TypedDict):
         Annotated[
             str,
             Field(
-                description="Globally unique ID to the run_start document this resource is associated with.",
+                description="Globally unique ID to the run_start document this "
+                "resource is associated with.",
             ),
         ]
     ]

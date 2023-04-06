@@ -1,28 +1,30 @@
 # type: ignore
 
 import sys
+
 import pytest
 
 if sys.version_info[:2] >= (3, 9):
     # Test schema generation
-    from event_model.documents import DatumPage
-    from event_model.documents import Datum
-    from event_model.documents import EventDescriptor
-    from event_model.documents import EventPage
-    from event_model.documents import Event
-    from event_model.documents import Resource
-    from event_model.documents import RunStart
-    from event_model.documents import RunStop
-    from event_model.documents import StreamDatum
-    from event_model.documents import StreamResource
+    import json
+    import os
 
+    from event_model import SCHEMA_PATH
+    from event_model.documents import (
+        Datum,
+        DatumPage,
+        Event,
+        EventDescriptor,
+        EventPage,
+        Resource,
+        RunStart,
+        RunStop,
+        StreamDatum,
+        StreamResource,
+    )
     from event_model.documents.generate.typeddict_to_schema import (
         parse_typeddict_to_schema,
     )
-
-    from event_model import SCHEMA_PATH
-    import json
-    import os
 
     typed_dict_class_list = [
         DatumPage,

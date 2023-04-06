@@ -48,6 +48,10 @@ dev = [
     "ipython",
     "matplotlib",
     "numpydoc",
+
+    # For schema generation.
+    "pydantic",
+    "typing_extensions"
 ]
 
 [project.scripts]

@@ -1,12 +1,15 @@
 from typing import Any, Dict, List
 
-from typing_extensions import Annotated, NotRequired, Literal, TypedDict
+from typing_extensions import Annotated, Literal, NotRequired, TypedDict
 
 from .generate.type_wrapper import Field
 
 
 class StreamResource(TypedDict):
-    """Document to reference a collection (e.g. file or group of files) of externally-stored data streams"""
+    """
+    Document to reference a collection (e.g. file or group of files) of
+    externally-stored data streams
+    """
 
     path_semantics: NotRequired[
         Annotated[
@@ -37,7 +40,8 @@ class StreamResource(TypedDict):
     resource_kwargs: Annotated[
         Dict[str, Any],
         Field(
-            description="Additional argument to pass to the Handler to read a Stream Resource",
+            description="Additional argument to pass to the Handler to read a "
+            "Stream Resource",
         ),
     ]
     root: Annotated[

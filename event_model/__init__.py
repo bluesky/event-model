@@ -1,23 +1,4 @@
 import collections.abc
-from dataclasses import dataclass
-
-from typing import (
-    Optional,
-    cast,
-    Callable,
-    Tuple,
-    Dict,
-    Type,
-    Iterable,
-    Any,
-    Iterator,
-    Generator,
-    Union,
-    List,
-    no_type_check,
-)
-from typing_extensions import Literal
-
 import copy
 import inspect
 import itertools
@@ -34,26 +15,39 @@ from collections import defaultdict, deque, namedtuple
 from dataclasses import dataclass
 from enum import Enum
 from functools import partial
-from typing import Optional
+from typing import (
+    Any,
+    Callable,
+    Dict,
+    Generator,
+    Iterable,
+    Iterator,
+    List,
+    Optional,
+    Tuple,
+    Type,
+    Union,
+    cast,
+    no_type_check,
+)
 
 import jsonschema
 import numpy
 from packaging import version
 from pkg_resources import resource_filename as rs_fn
+from typing_extensions import Literal
 
 from ._version import get_versions
-
-
-from .documents.datum_page import DatumPage
 from .documents.datum import Datum
-from .documents.event_descriptor import EventDescriptor, DataKey
-from .documents.event_page import EventPage
+from .documents.datum_page import DatumPage
 from .documents.event import Event
+from .documents.event_descriptor import DataKey, EventDescriptor
+from .documents.event_page import EventPage
+from .documents.resource import Resource
 from .documents.run_start import RunStart
 from .documents.run_stop import RunStop
 from .documents.stream_datum import StreamDatum
 from .documents.stream_resource import StreamResource
-from .documents.resource import Resource
 
 if sys.version_info < (3, 8):
     from importlib_metadata import metadata
@@ -351,7 +345,8 @@ class SingleRunDocumentRouter(DocumentRouter):
         return self._start_doc
 
     def get_descriptor(self, doc: dict) -> EventDescriptor:
-        """Convenience method returning the descriptor associated with the specified document.
+        """Convenience method returning the descriptor associated with the
+        specified document.
 
         Parameters
         ----------
@@ -375,7 +370,8 @@ class SingleRunDocumentRouter(DocumentRouter):
         return self._descriptors[doc["descriptor"]]
 
     def get_stream_name(self, doc: dict) -> str:
-        """Convenience method returning the name of the stream for the specified document.
+        """Convenience method returning the name of the stream for the
+        specified document.
 
         Parameters
         ----------
@@ -2006,7 +2002,8 @@ def compose_stream_resource(
         counters = [itertools.count() for _ in stream_names]
     elif len(counters) > len(stream_names):
         raise ValueError(
-            f"Insufficient number of counters {len(counters)} for stream names: {stream_names}"
+            "Insufficient number of counters "
+            f"{len(counters)} for stream names: {stream_names}"
         )
 
     doc = StreamResource(

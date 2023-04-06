@@ -12,7 +12,8 @@ class DatumPage(TypedDict):
         Annotated[
             Dict[str, Union[bool, str, float, List]],
             Field(
-                description="Array of arguments to pass to the Handler to retrieve one quanta of data"
+                description="Array of arguments to pass to the Handler to "
+                "retrieve one quanta of data"
             ),
         ]
     ]
@@ -26,7 +27,7 @@ class DatumPage(TypedDict):
     datum_id: Annotated[
         List[str],
         Field(
-            description="Array unique identifiers for each Datum (akin to 'uid' for other Document types), "
-            "typically formatted as '<resource>/<integer>'"
+            description="Array unique identifiers for each Datum (akin to 'uid' for "
+            "other Document types), typically formatted as '<resource>/<integer>'"
         ),
     ]

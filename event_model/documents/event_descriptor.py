@@ -1,8 +1,8 @@
 from typing import Any, Dict, List
 
-from typing_extensions import Annotated, NotRequired, Literal, TypedDict
+from typing_extensions import Annotated, Literal, NotRequired, TypedDict
 
-from .generate.type_wrapper import Field, AsRef
+from .generate.type_wrapper import AsRef, Field
 
 
 class DataKey(TypedDict):
@@ -12,7 +12,8 @@ class DataKey(TypedDict):
         Annotated[
             str,
             Field(
-                description="Where the data is stored if it is stored external to the events",
+                description="Where the data is stored if it is stored external "
+                "to the events",
                 regex=r"^[A-Z]+:?",
             ),
         ]
@@ -21,7 +22,8 @@ class DataKey(TypedDict):
         Annotated[
             List[str],
             Field(
-                description="The names for dimensions of the data. Null or empty list if scalar data",
+                description="The names for dimensions of the data. Null or empty list "
+                "if scalar data",
             ),
         ]
     ]
@@ -71,7 +73,8 @@ class Configuration(TypedDict):
         Annotated[
             Dict[str, DataKey],
             Field(
-                description="This describes the data stored alongside it in this configuration object."
+                description="This describes the data stored alongside it in this "
+                "configuration object."
             ),
         ]
     ]
@@ -85,7 +88,8 @@ class EventDescriptor(TypedDict):
         Annotated[
             Dict[str, Any],
             Field(
-                description="Maps a Device/Signal name to the names of the entries it produces in data_keys.",
+                description="Maps a Device/Signal name to the names of the entries "
+                "it produces in data_keys.",
             ),
         ]
     ]
@@ -93,7 +97,8 @@ class EventDescriptor(TypedDict):
         Annotated[
             str,
             Field(
-                description="A human-friendly name for this data stream, such as 'primary' or 'baseline'.",
+                description="A human-friendly name for this data stream, such as "
+                "'primary' or 'baseline'.",
             ),
         ]
     ]
@@ -101,7 +106,8 @@ class EventDescriptor(TypedDict):
         Annotated[
             Dict[str, Configuration],
             Field(
-                description="Readings of configurational fields necessary for interpreting data in the Events.",
+                description="Readings of configurational fields necessary for "
+                "interpreting data in the Events.",
             ),
         ]
     ]

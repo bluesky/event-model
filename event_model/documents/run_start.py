@@ -1,6 +1,9 @@
 from typing import Any, Dict, List, Union
+
+from typing_extensions import Annotated, Literal, NotRequired, TypedDict
+
 from event_model.documents.generate.type_wrapper import Field, add_extra_schema
-from typing_extensions import Annotated, NotRequired, Literal, TypedDict
+
 from .generate.type_wrapper import AsRef
 
 
@@ -11,7 +14,8 @@ class Hints(TypedDict):
         Annotated[
             List[List[Union[List[str], str]]],
             Field(
-                description="The independent axes of the experiment. Ordered slow to fast",
+                description="The independent axes of the experiment. "
+                "Ordered slow to fast",
             ),
         ]
     ]
@@ -47,8 +51,9 @@ class Projection(TypedDict):
         Annotated[
             Literal["start", "event", "configuration"],
             Field(
-                description="start comes from metadata fields in the start document, event comes from event, "
-                "configuration comes from configuration fields in the event_descriptor document"
+                description="start comes from metadata fields in the start document, "
+                "event comes from event, configuration comes from configuration "
+                "fields in the event_descriptor document"
             ),
         ]
     ]
@@ -68,7 +73,8 @@ class Projection(TypedDict):
         Annotated[
             Any,
             Field(
-                description="value explicitely defined in the projection when type==static."
+                description="value explicitely defined in the projection "
+                "when type==static."
             ),
         ]
     ]
@@ -131,8 +137,8 @@ class Projections(TypedDict):
     version: Annotated[
         str,
         Field(
-            description="The version of the projection spec. Can specify the version of "
-            "an external specification.",
+            description="The version of the projection spec. Can specify the version "
+            "of an external specification.",
         ),
     ]
     configuration: Annotated[
@@ -143,15 +149,19 @@ class Projections(TypedDict):
 
 @add_extra_schema(RUN_START_EXTRA_SCHEMA)
 class RunStart(TypedDict):
-    """Document created at the start of run. Provides a seach target and later documents link to it"""
+    """
+    Document created at the start of run. Provides a seach target and
+    later documents link to it
+    """
 
     data_session: NotRequired[
         Annotated[
             str,
             Field(
-                description="An optional field for grouping runs. The meaning is not mandated, but "
-                "this is a data management grouping and not a scientific grouping. It is intended to group "
-                "runs in a visit or set of trials.",
+                description="An optional field for grouping runs. The meaning is "
+                "not mandated, but this is a data management grouping and not a "
+                "scientific grouping. It is intended to group runs in a visit or "
+                "set of trials.",
             ),
         ]
     ]
@@ -159,8 +169,9 @@ class RunStart(TypedDict):
         Annotated[
             List[str],
             Field(
-                description="An optional list of data access groups that have meaning to some external system. "
-                "Examples might include facility, beamline, end stations, proposal, safety form.",
+                description="An optional list of data access groups that have meaning "
+                "to some external system. Examples might include facility, beamline, "
+                "end stations, proposal, safety form.",
             ),
         ]
     ]
@@ -171,7 +182,8 @@ class RunStart(TypedDict):
         Annotated[
             Union[Dict[str, Any], str],
             Field(
-                description="Information about the sample, may be a UID to another collection"
+                description="Information about the sample, may be a UID to "
+                "another collection"
             ),
         ]
     ]

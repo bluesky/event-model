@@ -35,6 +35,6 @@ class AsRef:
     ref_name: str
 
 
-# We need to check that only one element in an annotation is the type of the field, the others have to be
-# instances of classes in this tuple
+# We need to check that only one element in an annotation is the type of
+# the field, the others have to be instances of classes in this tuple
 ALLOWED_ANNOTATION_ELEMENTS = (AsRef, FieldInfo)

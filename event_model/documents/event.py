@@ -12,9 +12,9 @@ class Event(TypedDict):
         Annotated[
             Dict[str, Union[bool, str]],
             Field(
-                description="Mapping each of the keys of externally-stored data to the boolean False, "
-                "indicating that the data has not been loaded, or to foreign keys (moved here from 'data' "
-                "when the data was loaded)"
+                description="Mapping each of the keys of externally-stored data to the "
+                "boolean False, indicating that the data has not been loaded, or to "
+                "foreign keys (moved here from 'data' when the data was loaded)"
             ),
         ]
     ]
@@ -30,13 +30,15 @@ class Event(TypedDict):
     seq_num: Annotated[
         int,
         Field(
-            description="Sequence number to identify the location of this Event in the Event stream",
+            description="Sequence number to identify the location of this Event in the "
+            "Event stream",
         ),
     ]
     time: Annotated[
         float,
         Field(
-            description="The event time. This maybe different than the timestamps on each of the data entries.",
+            description="The event time. This maybe different than the timestamps on "
+            "each of the data entries.",
         ),
     ]
     uid: Annotated[str, Field(description="Globally unique identifier for this Event")]

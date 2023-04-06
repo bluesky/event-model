@@ -1,12 +1,15 @@
-from typing import Dict, Any
+from typing import Any, Dict
 
-from typing_extensions import Annotated, NotRequired, Literal, TypedDict
+from typing_extensions import Annotated, Literal, NotRequired, TypedDict
 
-from .generate.type_wrapper import Field, AsRef
+from .generate.type_wrapper import AsRef, Field
 
 
 class RunStop(TypedDict):
-    """Document for the end of a run indicating the success/fail state of the run and the end time"""
+    """
+    Document for the end of a run indicating the success/fail state of the
+    run and the end time
+    """
 
     reason: NotRequired[
         Annotated[str, Field(description="Long-form description of why the run ended")]
@@ -29,7 +32,8 @@ class RunStop(TypedDict):
     run_start: Annotated[
         str,
         Field(
-            description="Reference back to the run_start document that this document is paired with.",
+            description="Reference back to the run_start document that this document "
+            "is paired with.",
         ),
     ]
     time: Annotated[float, Field(description="The time the run ended. Unix epoch")]

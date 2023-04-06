@@ -1,8 +1,8 @@
-from typing import Dict, List, Union, Any
+from typing import Any, Dict, List, Union
 
 from typing_extensions import Annotated, NotRequired, TypedDict
 
-from .generate.type_wrapper import Field, AsRef
+from .generate.type_wrapper import AsRef, Field
 
 
 class EventPage(TypedDict):
@@ -13,9 +13,10 @@ class EventPage(TypedDict):
             Dict[str, List[Union[bool, str]]],
             AsRef("DataframeForFilled"),
             Field(
-                description="Mapping each of the keys of externally-stored data to an array containing "
-                "the boolean False, indicating that the data has not been loaded, or to foreign keys "
-                "(moved here from 'data' when the data was loaded)"
+                description="Mapping each of the keys of externally-stored data to an "
+                "array containing the boolean False, indicating that the data has not "
+                "been loaded, or to foreign keys (moved here from 'data' when the data "
+                "was loaded)"
             ),
         ]
     ]
@@ -23,7 +24,8 @@ class EventPage(TypedDict):
     descriptor: Annotated[
         str,
         Field(
-            description="The UID of the EventDescriptor to which all of the Events in this page belong",
+            description="The UID of the EventDescriptor to which all of the Events in "
+            "this page belong",
         ),
     ]
     data: Annotated[
@@ -39,14 +41,15 @@ class EventPage(TypedDict):
     seq_num: Annotated[
         List[int],
         Field(
-            description="Array of sequence numbers to identify the location of each Event in the Event stream",
+            description="Array of sequence numbers to identify the location of each "
+            "Event in the Event stream",
         ),
     ]
     time: Annotated[
         List[float],
         Field(
-            description="Array of Event times. This maybe different than the timestamps "
-            "on each of the data entries"
+            description="Array of Event times. This maybe different than the "
+            "timestamps on each of the data entries"
         ),
     ]
     uid: Annotated[

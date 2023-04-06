@@ -11,7 +11,8 @@ class Datum(TypedDict):
     datum_kwargs: Annotated[
         Dict[str, Any],
         Field(
-            description="Arguments to pass to the Handler to retrieve one quanta of data",
+            description="Arguments to pass to the Handler to "
+            "retrieve one quanta of data",
         ),
     ]
     resource: Annotated[
@@ -20,7 +21,7 @@ class Datum(TypedDict):
     datum_id: Annotated[
         str,
         Field(
-            description="Globally unique identifier for this Datum (akin to 'uid' for other "
-            "Document types), typically formatted as '<resource>/<integer>'"
+            description="Globally unique identifier for this Datum (akin to 'uid' "
+            "for other Document types), typically formatted as '<resource>/<integer>'"
         ),
     ]
