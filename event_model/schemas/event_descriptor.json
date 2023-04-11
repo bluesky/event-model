@@ -82,6 +82,16 @@
                "description": "The name of the object this key was pulled from.",
                "type": "string"
             },
+            "precision": {
+               "title": "Precision",
+               "description": "Number of digits after decimal place if a floating point number",
+               "type": "integer"
+            },
+            "units": {
+               "title": "Units",
+               "description": "Engineering units of the value",
+               "type": "string"
+            },
             "dtype": {
                "title": "Dtype",
                "description": "The type of the data in the event.",

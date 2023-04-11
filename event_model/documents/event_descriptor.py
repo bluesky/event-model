@@ -33,6 +33,18 @@ class DataKey(TypedDict):
             Field(description="The name of the object this key was pulled from."),
         ]
     ]
+    precision: NotRequired[
+        Annotated[
+            int,
+            Field(
+                description="Number of digits after decimal place if "
+                "a floating point number"
+            ),
+        ]
+    ]
+    units: NotRequired[
+        Annotated[str, Field(description="Engineering units of the value")]
+    ]
 
     dtype: Annotated[
         Literal["string", "number", "array", "boolean", "integer"],
