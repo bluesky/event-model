@@ -58,18 +58,18 @@ __all__ = ["DocumentNames", "schemas", "schema_validators", "compose_run"]
 
 
 class DocumentNames(Enum):
-    stop: str = "stop"
-    start: str = "start"
-    descriptor: str = "descriptor"
-    event: str = "event"
-    datum: str = "datum"
-    resource: str = "resource"
-    event_page: str = "event_page"
-    datum_page: str = "datum_page"
-    stream_resource: str = "stream_resource"
-    stream_datum: str = "stream_datum"
-    bulk_datum: str = "bulk_datum"  # deprecated
-    bulk_events: str = "bulk_events"  # deprecated
+    stop = "stop"
+    start = "start"
+    descriptor = "descriptor"
+    event = "event"
+    datum = "datum"
+    resource = "resource"
+    event_page = "event_page"
+    datum_page = "datum_page"
+    stream_resource = "stream_resource"
+    stream_datum = "stream_datum"
+    bulk_datum = "bulk_datum"  # deprecated
+    bulk_events = "bulk_events"  # deprecated
 
 
 class DocumentRouter:

@@ -24,8 +24,8 @@ jobs:
           install_options: -e .[dev]
 
       - name: Lint
-        run: tox -e pre-commit #, mypy
-
+        run: tox -e pre-commit,mypy
+      
   test:
     if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name != github.repository
     strategy:
