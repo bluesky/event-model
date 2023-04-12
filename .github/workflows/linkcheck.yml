@@ -1,22 +1,18 @@
 name: Link Check
 
 on:
+  workflow_dispatch:
   schedule:
-    # Run every Wednesday at 8am to check URL links still resolve
+    # Run weekly to check URL links still resolve
     - cron: "0 8 * * WED"
 
 jobs:
   docs:
-    strategy:
-      fail-fast: false
-
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
 
       - name: Install python packages
         uses: ./.github/actions/install_requirements
@@ -25,7 +21,7 @@ jobs:
           install_options: -e .[dev]
 
       - name: Check links
-        run: tox -e docs -- -b linkcheck
+        run: tox -e docs build -- -b linkcheck
 
       - name: Keepalive Workflow
         uses: gautamkrishnar/keepalive-workflow@v1
