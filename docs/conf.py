@@ -15,7 +15,7 @@ import event_model
 # -- General configuration ------------------------------------------------
 
 # General information about the project.
-project = "Bluesky Event Model"
+project = "event-model"
 copyright = "2019, Brookhaven National Lab"
 author = "Brookhaven National Lab"
 
@@ -209,22 +209,6 @@ if not switcher_exists:
         file=sys.stderr,
     )
 
-
-# Output file base name for HTML help builder.
-htmlhelp_basename = "event-model"
-
-# Custom sidebar templates, must be a dictionary that maps document names
-# to template names.
-#
-# This is required for the alabaster theme
-# refs: http://alabaster.readthedocs.io/en/latest/installation.html#sidebars
-html_sidebars = {
-    "**": [
-        "relations.html",  # needs 'show_related': True theme option to display
-        "searchbox.html",
-    ]
-}
-
 # Theme options for pydata_sphinx_theme
 # We don't check switcher because there are 3 possible states for a repo:
 # 1. New project, docs are not published so there is no switcher
@@ -253,12 +237,6 @@ html_theme_options = dict(
     ),
     check_switcher=False,
     navbar_end=["theme-switcher", "icon-links", "version-switcher"],
-    external_links=[
-        dict(
-            name="Release Notes",
-            url=f"https://github.com/{github_user}/{github_repo}/releases",
-        )
-    ],
 )
 
 # A dictionary of values to pass into the template engine’s context for all pages
