@@ -1,1 +1,10 @@
-[]
+[
+  {
+    "version": "master",
+    "url": "https://bluesky.github.io/event-model/master/"
+  },
+  {
+    "version": "main",
+    "url": "https://bluesky.github.io/event-model/main/"
+  }
+]
