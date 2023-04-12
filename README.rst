@@ -10,15 +10,15 @@ Documentation  https://blueskyproject.io/event-model
 Releases       https://github.com/bluesky/event-model/releases
 ============== ==============================================================
 
-.. |code_ci| image:: https://github.com/bluesky/event-model/actions/workflows/code.yml/badge.svg?branch=master
+.. |code_ci| image:: https://github.com/bluesky/event-model/actions/workflows/code.yml/badge.svg?branch=main
     :target: https://github.com/bluesky/event-model/actions/workflows/code.yml
     :alt: Code CI
 
-.. |docs_ci| image:: https://github.com/bluesky/event-model/actions/workflows/docs.yml/badge.svg?branch=master
+.. |docs_ci| image:: https://github.com/bluesky/event-model/actions/workflows/docs.yml/badge.svg?branch=main
     :target: https://github.com/bluesky/event-model/actions/workflows/docs.yml
     :alt: Docs CI
 
-.. |coverage| image:: https://codecov.io/gh/bluesky/event-model/branch/master/graph/badge.svg
+.. |coverage| image:: https://codecov.io/gh/bluesky/event-model/branch/main/graph/badge.svg
     :target: https://codecov.io/gh/bluesky/event-model
     :alt: Test Coverage
 
