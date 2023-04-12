@@ -1,0 +1,1806 @@
+
+
+<!DOCTYPE html>
+
+
+<html lang="en" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>Data Model &#8212; Bluesky Event Model 1.19.2.post64+ge8bb903 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../../_static/styles/bootstrap.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+
+  
+  <link href="../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=e353d410970836974a52" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/plot_directive.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" />
+
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/sphinx_highlight.js"></script>
+    <script src="../../_static/clipboard.min.js"></script>
+    <script src="../../_static/copybutton.js"></script>
+    <script src="../../_static/design-tabs.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'user/explanations/data-model';</script>
+    <script>
+        DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://bluesky.github.io/Bluesky Event Model/switcher.json';
+        DOCUMENTATION_OPTIONS.theme_switcher_version_match = 'master';
+        </script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Event Descriptors" href="event-descriptors.html" />
+    <link rel="prev" title="About The Documentation" href="docs-structure.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+<div class="bd-header__inner bd-page-width">
+  <label class="sidebar-toggle primary-toggle" for="__primary">
+    <span class="fa-solid fa-bars"></span>
+  </label>
+  
+  <div class="navbar-header-items__start">
+    
+      <div class="navbar-item">
+  
+
+<a class="navbar-brand logo" href="../../index.html">
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../../_static/bluesky-logo-dark.svg" class="logo__image only-light" alt="Logo image"/>
+    <script>document.write(`<img src="../../_static/bluesky-logo-dark.svg" class="logo__image only-dark" alt="Logo image"/>`);</script>
+  
+  
+    <p class="title logo__title">Bluesky Event Model</p>
+  
+</a></div>
+    
+  </div>
+  
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item"><nav class="navbar-nav">
+  <p class="sidebar-header-items__title"
+     role="heading"
+     aria-level="1"
+     aria-label="Site Navigation">
+    Site Navigation
+  </p>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+                    <li class="nav-item current active">
+                      <a class="nav-link nav-internal" href="../index.html">
+                        User Guide
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../developer/index.html">
+                        Developer Guide
+                      </a>
+                    </li>
+                
+
+                <li class="nav-item">
+                  <a class="nav-link nav-external" href="https://github.com/bluesky/Bluesky Event Model/releases">
+                    Release Notes
+                  </a>
+                </li>
+                
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+  </button>
+`);
+</script>
+        </div>
+      
+      
+        <div class="navbar-item">
+<script>
+document.write(`
+  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+  </button>
+`);
+</script></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links navbar-nav"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/bluesky/Bluesky Event Model" title="GitHub" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-brands fa-square-github"></i></span>
+            <label class="sr-only">GitHub</label></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://pypi.org/project/Bluesky Event Model" title="PyPI" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fas fa-cube"></i></span>
+            <label class="sr-only">PyPI</label></a>
+        </li>
+</ul></div>
+      
+        <div class="navbar-item">
+<script>
+document.write(`
+  <div class="version-switcher__container dropdown">
+    <button type="button" class="version-switcher__button btn btn-sm navbar-btn dropdown-toggle" data-bs-toggle="dropdown">
+      master  <!-- this text may get changed later by javascript -->
+      <span class="caret"></span>
+    </button>
+    <div class="version-switcher__menu dropdown-menu list-group-flush py-0">
+    <!-- dropdown will be populated by javascript on page load -->
+    </div>
+  </div>
+`);
+</script></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+  </button>
+`);
+</script>
+    </div>
+  
+
+  
+    <label class="sidebar-toggle secondary-toggle" for="__secondary">
+      <span class="fa-solid fa-outdent"></span>
+    </label>
+  
+</div>
+
+    </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          <div class="navbar-item"><nav class="navbar-nav">
+  <p class="sidebar-header-items__title"
+     role="heading"
+     aria-level="1"
+     aria-label="Site Navigation">
+    Site Navigation
+  </p>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+                    <li class="nav-item current active">
+                      <a class="nav-link nav-internal" href="../index.html">
+                        User Guide
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../developer/index.html">
+                        Developer Guide
+                      </a>
+                    </li>
+                
+
+                <li class="nav-item">
+                  <a class="nav-link nav-external" href="https://github.com/bluesky/Bluesky Event Model/releases">
+                    Release Notes
+                  </a>
+                </li>
+                
+  </ul>
+</nav></div>
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+<script>
+document.write(`
+  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+  </button>
+`);
+</script></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links navbar-nav"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/bluesky/Bluesky Event Model" title="GitHub" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-brands fa-square-github"></i></span>
+            <label class="sr-only">GitHub</label></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://pypi.org/project/Bluesky Event Model" title="PyPI" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fas fa-cube"></i></span>
+            <label class="sr-only">PyPI</label></a>
+        </li>
+</ul></div>
+        
+          <div class="navbar-item">
+<script>
+document.write(`
+  <div class="version-switcher__container dropdown">
+    <button type="button" class="version-switcher__button btn btn-sm navbar-btn dropdown-toggle" data-bs-toggle="dropdown">
+      master  <!-- this text may get changed later by javascript -->
+      <span class="caret"></span>
+    </button>
+    <div class="version-switcher__menu dropdown-menu list-group-flush py-0">
+    <!-- dropdown will be populated by javascript on page load -->
+    </div>
+  </div>
+`);
+</script></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="docs-structure.html"
+                          title="previous chapter">About The Documentation</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="event-descriptors.html"
+                          title="next chapter">Event Descriptors</a></p>
+  </div></div>
+        <div class="sidebar-primary-item">
+<div id="searchbox"></div></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+
+
+<nav aria-label="Breadcrumbs">
+  <ul class="bd-breadcrumbs" role="navigation" aria-label="Breadcrumb">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../index.html" class="nav-link">User Guide</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page">Data Model</li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
+  <section id="data-model">
+<span id="id1"></span><h1>Data Model<a class="headerlink" href="#data-model" title="Permalink to this heading">#</a></h1>
+<p>A primary design goal of bluesky is to enable better research by recording
+rich metadata alongside measured data for use in later analysis. Documents are
+how we do this.</p>
+<p>A <em>document</em> is our term for a Python dictionary with a schema. The bluesky
+RunEngine emits documents during plan execution.  All of the metadata and data
+generated by executing the plan is organized into documents. Bluesky’s document-based
+data model supports complex, asynchronous data collection and enables sophisticated
+live, prompt, streaming, and <em>post-facto</em> data analysis.</p>
+<p>The <a class="reference external" href="https://blueskyproject.io/bluesky/">bluesky documentation</a> describes
+how outside functions can “subscribe” to a stream of these documents,
+visualizing, processing, or saving them. This section provides an outline of
+documents themselves, aiming to give a sense of the structure and familiarity
+with useful components.</p>
+<section id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Permalink to this heading">#</a></h2>
+<p>The data model is composed of eight types of Documents, which in Python are
+represented as dictionaries but could be represented as nested mappings (e.g.
+JSON) in any language. Each document class has a defined, but flexible, schema.</p>
+<ul class="simple">
+<li><p>Run Start Document — Everything we know about an experiment or simulation
+before any data acquisition begins: the who / why / what and metadata such as
+sample information.</p></li>
+<li><p>Event — A “row” of measurements with associated timestamps.</p></li>
+<li><p>Event Descriptor — Metadata about a series of Events. Envision
+richly-detail column headings in a table, encompassing physical units,
+hardware configuration information, etc.</p></li>
+<li><p>Resource — A pointer to an external file (or resource in general) that has
+predictable and fixed dimensionality.</p></li>
+<li><p>Datum — A pointer to a specific slice of data within a Resource.</p></li>
+<li><p>Stream Resource (Experimental) — A pointer to an external resource that contains a stream
+of data without restriction on the length of the stream. This resources with
+know ‘column’ dimension without a known number of rows (e.g., time series, point detectors).</p></li>
+<li><p>Stream Datum (Experimental) — A pointer to a specific slice of data within a Stream Resource.</p></li>
+<li><p>Run Stop Document —  Everything that we can only know at the very end, such
+as the time it ended and the exit status (succeeded, aborted, failed due to
+error).</p></li>
+</ul>
+<p>Every document contains a unique identifier. The Event documents also have
+a <code class="docutils literal notranslate"><span class="pre">descriptor</span></code> field linking them to the Event Descriptor with their metadata.
+And the Event Descriptor and Run Stop documents have a <code class="docutils literal notranslate"><span class="pre">run_start</span></code> field linking
+them to their Run Start. Thus, all the documents in a run are linked back to the
+Run Start.</p>
+<p>Event documents may contain the literal values or <em>pointers</em> to values that
+are stored in some external file or networked resource, yet to be loaded. The
+Resource and Datum document types manage references to externally-stored data.</p>
+</section>
+<section id="example-runs">
+<h2>Example Runs<a class="headerlink" href="#example-runs" title="Permalink to this heading">#</a></h2>
+<a class="reference internal image-reference" href="../../_images/document-generation-timeline.svg"><img alt="../../_images/document-generation-timeline.svg" class="align-center" src="../../_images/document-generation-timeline.svg" width="100%" /></a>
+<p>Finally, Event and Datum can be represented in “paged” form, where multiple
+rows are contained in one structure for efficient transport and vectorized
+computation. The representations contain equivalent information: an EventPage
+can always be transformed, without loss, into an Event and vice versa.</p>
+<p>The scope of a “run” is left to the instrument team or individual scientist. It is
+quite generic: a set of Documents generated by following a given sequence of
+instructions. This might encompass a single short measurement (say, “a count”)
+or a multi-step procedure such as a raster scan. A run should represent a set
+of individual measurements that will be collected or processed together.</p>
+</section>
+<section id="document-types-in-detail">
+<h2>Document Types in Detail<a class="headerlink" href="#document-types-in-detail" title="Permalink to this heading">#</a></h2>
+<p>For each type, we will show:</p>
+<ul class="simple">
+<li><p>the minimal nontrivial example that satisfies the schema</p></li>
+<li><p>one or more “typical” examples generated by bluesky’s RunEngine during an
+experiment</p></li>
+<li><p>the formal schema, encoded using
+<a class="reference external" href="https://json-schema.org/understanding-json-schema/">JSON schema</a></p></li>
+</ul>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="event-descriptors.html">Event Descriptors</a></li>
+</ul>
+</div>
+<section id="run-start-document">
+<span id="start"></span><h3>Run Start Document<a class="headerlink" href="#run-start-document" title="Permalink to this heading">#</a></h3>
+<p>Again, a ‘run start’ document marks the beginning of the run. It comprises
+everything we know before we start taking data, including all metadata provided
+by the user and the plan.</p>
+<p>Minimal nontrivial valid example:</p>
+<blockquote>
+<div><p>Documentation note: It might seem more natural to use json code-blocks here
+than python ones, but using python allows us to include comments in line.</p>
+</div></blockquote>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># &#39;run start&#39; document</span>
+<span class="p">{</span><span class="s1">&#39;time&#39;</span><span class="p">:</span> <span class="mf">1550069716.5092213</span><span class="p">,</span>  <span class="c1"># UNIX epoch (seconds since 1 Jan 1970)</span>
+ <span class="s1">&#39;uid&#39;</span><span class="p">:</span> <span class="s1">&#39;10bf6945-4afd-43ca-af36-6ad8f3540bcd&#39;</span><span class="p">}</span>  <span class="c1"># globally unique ID</span>
+</pre></div>
+</div>
+<p>A typical example</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># &#39;run start&#39; document</span>
+<span class="p">{</span><span class="s1">&#39;data_session&#39;</span><span class="p">:</span> <span class="s1">&#39;vist54321&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;data_groups&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;bl42&#39;</span><span class="p">,</span> <span class="s1">&#39;proposal12345&#39;</span><span class="p">],</span>
+ <span class="s1">&#39;detectors&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;random_walk:x&#39;</span><span class="p">],</span>
+ <span class="s1">&#39;hints&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;dimensions&#39;</span><span class="p">:</span> <span class="p">[([</span><span class="s1">&#39;random_walk:dt&#39;</span><span class="p">],</span> <span class="s1">&#39;primary&#39;</span><span class="p">)]},</span>
+ <span class="s1">&#39;motors&#39;</span><span class="p">:</span> <span class="p">(</span><span class="s1">&#39;random_walk:dt&#39;</span><span class="p">,),</span>
+ <span class="s1">&#39;num_intervals&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
+ <span class="s1">&#39;num_points&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span>
+ <span class="s1">&#39;plan_args&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;args&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;EpicsSignal(read_pv=&#39;random_walk:dt&#39;, &quot;</span> <span class="s2">&quot;name=&#39;random_walk:dt&#39;, &quot;</span> <span class="s1">&#39;value=1.0, &#39;</span> <span class="s1">&#39;timestamp=1550070001.828528, &#39;</span> <span class="s1">&#39;auto_monitor=False, &#39;</span> <span class="s1">&#39;string=False, &#39;</span> <span class="s2">&quot;write_pv=&#39;random_walk:dt&#39;, &quot;</span> <span class="s1">&#39;limits=False, &#39;</span> <span class="s1">&#39;put_complete=False)&#39;</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
+               <span class="s1">&#39;detectors&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;EpicsSignal(read_pv=&#39;random_walk:x&#39;, &quot;</span> <span class="s2">&quot;name=&#39;random_walk:x&#39;, &quot;</span> <span class="s1">&#39;value=1.61472277847348, &#39;</span> <span class="s1">&#39;timestamp=1550070000.807677, &#39;</span> <span class="s1">&#39;auto_monitor=False, &#39;</span> <span class="s1">&#39;string=False, &#39;</span> <span class="s2">&quot;write_pv=&#39;random_walk:x&#39;, &quot;</span> <span class="s1">&#39;limits=False, &#39;</span> <span class="s1">&#39;put_complete=False)&#39;</span><span class="p">],</span>
+               <span class="s1">&#39;num&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span>
+               <span class="s1">&#39;per_step&#39;</span><span class="p">:</span> <span class="s1">&#39;None&#39;</span><span class="p">},</span>
+ <span class="s1">&#39;plan_name&#39;</span><span class="p">:</span> <span class="s1">&#39;scan&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;plan_pattern&#39;</span><span class="p">:</span> <span class="s1">&#39;inner_product&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;plan_pattern_args&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;args&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;EpicsSignal(read_pv=&#39;random_walk:dt&#39;, &quot;</span> <span class="s2">&quot;name=&#39;random_walk:dt&#39;, &quot;</span> <span class="s1">&#39;value=1.0, &#39;</span> <span class="s1">&#39;timestamp=1550070001.828528, &#39;</span> <span class="s1">&#39;auto_monitor=False, &#39;</span> <span class="s1">&#39;string=False, &#39;</span> <span class="s2">&quot;write_pv=&#39;random_walk:dt&#39;, &quot;</span> <span class="s1">&#39;limits=False, &#39;</span> <span class="s1">&#39;put_complete=False)&#39;</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
+                       <span class="s1">&#39;num&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">},</span>
+ <span class="s1">&#39;plan_pattern_module&#39;</span><span class="p">:</span> <span class="s1">&#39;bluesky.plan_patterns&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;plan_type&#39;</span><span class="p">:</span> <span class="s1">&#39;generator&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;scan_id&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
+ <span class="s1">&#39;time&#39;</span><span class="p">:</span> <span class="mf">1550070004.9850419</span><span class="p">,</span>
+ <span class="s1">&#39;uid&#39;</span><span class="p">:</span> <span class="s1">&#39;ba1f9076-7925-4af8-916e-0e1eaa1b3c47&#39;</span><span class="p">}</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Time is given in UNIX time (seconds since 1970). Software for looking at
+the data would, of course, translate that into a more human-readable form.</p>
+</div>
+<section id="projections-experimental">
+<span id="projections"></span><h4>Projections (Experimental)<a class="headerlink" href="#projections-experimental" title="Permalink to this heading">#</a></h4>
+<p>The Run Start document may include a <code class="docutils literal notranslate"><span class="pre">projections</span></code> field. It is intended
+that a projection is an aid to interacting with external systems using
+standardized vocabularies. Projections might be used in a variety of use cases
+such as providing run data to analysis tools or suitcases. Each projection
+represents multiple ways to represent data from the run. Each field in the
+projection dictionary is an unique and externally-identifiable string and each
+value is an instruction for accessing data from the run. This feature is
+experimetal and subject to backward-incompatible changes in future releases.</p>
+<p>The run start document formal schema:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="s2">&quot;definitions&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;data_type&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;title&quot;</span> <span class="p">:</span> <span class="s2">&quot;data_type&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;patternProperties&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;^([^./]+)$&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;$ref&quot;</span><span class="p">:</span> <span class="s2">&quot;#/definitions/data_type&quot;</span><span class="p">}},</span>
+            <span class="s2">&quot;additionalProperties&quot;</span><span class="p">:</span> <span class="n">false</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;projection&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Where to get the data from&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;properties&quot;</span> <span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;enum&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;linked&quot;</span><span class="p">,</span> <span class="s2">&quot;calculated&quot;</span><span class="p">,</span> <span class="s2">&quot;static&quot;</span><span class="p">],</span> <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;linked: a value linked from the data set, calculated: a value that requires calculation, static:  a value defined here in the projection &quot;</span><span class="p">},</span>
+                <span class="s2">&quot;stream&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">},</span>
+                <span class="s2">&quot;location&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;enum&quot;</span> <span class="p">:</span> <span class="p">[</span><span class="s2">&quot;start&quot;</span><span class="p">,</span> <span class="s2">&quot;event&quot;</span><span class="p">,</span> <span class="s2">&quot;configuration&quot;</span><span class="p">],</span> <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;start comes from metadata fields in the start document, event comes from event, configuration comes from configuration fields in the event_descriptor document&quot;</span><span class="p">},</span>
+                <span class="s2">&quot;field&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">},</span>
+                <span class="s2">&quot;config_index&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;integer&quot;</span><span class="p">},</span>
+                <span class="s2">&quot;config_device&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">},</span>
+                <span class="s2">&quot;calculation&quot;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s2">&quot;title&quot;</span> <span class="p">:</span> <span class="s2">&quot;calculation properties&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;required fields if type is calculated&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span>
+                        <span class="s2">&quot;callable&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span> <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;callable function to perform calculation&quot;</span><span class="p">},</span>
+                        <span class="s2">&quot;args&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;array&quot;</span><span class="p">,</span> <span class="s2">&quot;decription&quot;</span><span class="p">:</span> <span class="s2">&quot;args for calculation callable&quot;</span><span class="p">},</span>
+                        <span class="s2">&quot;kwargs&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span> <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;kwargs for calcalation callable&quot;</span><span class="p">}</span>
+                    <span class="p">},</span>
+                    <span class="s2">&quot;required&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;callable&quot;</span><span class="p">]</span>
+                <span class="p">},</span>
+                <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;value explicitely defined in the projection when type==static.&quot;</span><span class="p">}</span>
+            <span class="p">},</span>
+            <span class="s2">&quot;allOf&quot;</span><span class="p">:</span> <span class="p">[</span>
+                <span class="p">{</span>
+                    <span class="s2">&quot;if&quot;</span><span class="p">:</span> <span class="p">{</span>
+                        <span class="s2">&quot;allOf&quot;</span><span class="p">:</span> <span class="p">[</span>
+                            <span class="p">{</span><span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;location&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;enum&quot;</span><span class="p">:</span> <span class="s2">&quot;configuration&quot;</span><span class="p">}}},</span>
+                            <span class="p">{</span><span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;enum&quot;</span><span class="p">:</span> <span class="s2">&quot;linked&quot;</span><span class="p">}}}</span>
+                        <span class="p">]},</span>
+                    <span class="s2">&quot;then&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;required&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">,</span> <span class="s2">&quot;location&quot;</span><span class="p">,</span> <span class="s2">&quot;config_index&quot;</span><span class="p">,</span> <span class="s2">&quot;config_device&quot;</span><span class="p">,</span> <span class="s2">&quot;field&quot;</span><span class="p">,</span> <span class="s2">&quot;stream&quot;</span><span class="p">]}</span>
+                <span class="p">},</span>
+                <span class="p">{</span>
+                    <span class="s2">&quot;if&quot;</span><span class="p">:</span> <span class="p">{</span>
+                        <span class="s2">&quot;allOf&quot;</span><span class="p">:</span> <span class="p">[</span>
+                            <span class="p">{</span><span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;location&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;enum&quot;</span><span class="p">:</span> <span class="s2">&quot;event&quot;</span><span class="p">}}},</span>
+                            <span class="p">{</span><span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;enum&quot;</span><span class="p">:</span> <span class="s2">&quot;linked&quot;</span><span class="p">}}}</span>
+                        <span class="p">]},</span>
+                    <span class="s2">&quot;then&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;required&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">,</span> <span class="s2">&quot;location&quot;</span><span class="p">,</span> <span class="s2">&quot;field&quot;</span><span class="p">,</span> <span class="s2">&quot;stream&quot;</span><span class="p">]}</span>
+                <span class="p">},</span>
+                <span class="p">{</span>
+                    <span class="s2">&quot;if&quot;</span><span class="p">:</span> <span class="p">{</span>
+                        <span class="s2">&quot;allOf&quot;</span><span class="p">:</span> <span class="p">[</span>
+                            <span class="p">{</span><span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;location&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;enum&quot;</span><span class="p">:</span> <span class="s2">&quot;event&quot;</span><span class="p">}}},</span>
+                            <span class="p">{</span><span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;enum&quot;</span><span class="p">:</span> <span class="s2">&quot;calculated&quot;</span><span class="p">}}}</span>
+                        <span class="p">]},</span>
+                    <span class="s2">&quot;then&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;required&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">,</span> <span class="s2">&quot;field&quot;</span><span class="p">,</span> <span class="s2">&quot;stream&quot;</span><span class="p">,</span>  <span class="s2">&quot;calculation&quot;</span><span class="p">]}</span>
+                <span class="p">},</span>
+                <span class="p">{</span>
+                    <span class="s2">&quot;if&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;enum&quot;</span><span class="p">:</span> <span class="s2">&quot;static&quot;</span><span class="p">}}},</span>
+                    <span class="s2">&quot;then&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;required&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">,</span> <span class="s2">&quot;value&quot;</span><span class="p">]}</span>
+                <span class="p">}</span>
+            <span class="p">],</span>      
+            <span class="s2">&quot;additionalProperties&quot;</span><span class="p">:</span> <span class="n">false</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;projections&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;title&quot;</span> <span class="p">:</span> <span class="s2">&quot;Describe how to interperet this run as the given projection&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;properties&quot;</span><span class="p">:{</span>
+                <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span> <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;The name of the projection&quot;</span><span class="p">},</span>
+                <span class="s2">&quot;version&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span> <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;The version of the projection spec. Can specify the version of an external specification.&quot;</span><span class="p">},</span>
+                <span class="s2">&quot;configuration&quot;</span> <span class="p">:</span> <span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span> <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Static information about projection&quot;</span><span class="p">},</span>
+                <span class="s2">&quot;projection&quot;</span> <span class="p">:</span> <span class="p">{</span>
+                    <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;patternProperties&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;.&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;$ref&quot;</span><span class="p">:</span> <span class="s2">&quot;#/definitions/projection&quot;</span><span class="p">}},</span>
+                    <span class="s2">&quot;additionalProperties&quot;</span><span class="p">:</span> <span class="n">false</span>
+                <span class="p">}</span>
+            <span class="p">},</span>
+            <span class="s2">&quot;additionalProperties&quot;</span><span class="p">:</span>  <span class="n">false</span><span class="p">,</span>
+            <span class="s2">&quot;required&quot;</span> <span class="p">:</span> <span class="p">[</span><span class="s2">&quot;projection&quot;</span><span class="p">,</span> <span class="s2">&quot;version&quot;</span><span class="p">,</span> <span class="s2">&quot;configuration&quot;</span><span class="p">]</span>
+        <span class="p">}</span>
+    <span class="p">},</span>
+    <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;data_session&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>              
+            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;An optional field for grouping runs. The meaning is not mandated, but this is a data management grouping and not a scientific grouping. It is intended to group runs in a visit or set of trials.&quot;</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;data_groups&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;array&quot;</span><span class="p">,</span> <span class="s2">&quot;items&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">},</span>              
+            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;An optional list of data access groups that have meaning to some external system. Examples might include facility, beamline, end stations, proposal, safety form.&quot;</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;project&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Name of project that this run is part of&quot;</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;sample&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;object&quot;</span><span class="p">,</span> <span class="s2">&quot;string&quot;</span><span class="p">],</span>
+            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Information about the sample, may be a UID to another collection&quot;</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;scan_id&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;integer&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Scan ID number, not globally unique&quot;</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;time&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;number&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Time the run started.  Unix epoch time&quot;</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;uid&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Globally unique ID for this run&quot;</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;group&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Unix group to associate this data with&quot;</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;owner&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Unix owner to associate this data with&quot;</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;projections&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;array&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;items&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;$ref&quot;</span><span class="p">:</span> <span class="s2">&quot;#/definitions/projections&quot;</span><span class="p">}</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;hints&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Start-level hints&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;dimensions&quot;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;array&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;The independent axes of the experiment.  Ordered slow to fast&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;items&quot;</span><span class="p">:</span> <span class="p">{</span>
+                        <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;array&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Each entry in this list is of the from ([&lt;FIELD&gt;, ...], &lt;STREAM&gt;).  A 1d scan will have 1 such entry, a scan with 3 independent entries would have 3&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;items&quot;</span><span class="p">:</span> <span class="p">[</span>
+                            <span class="p">{</span>
+                                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;array&quot;</span><span class="p">,</span>
+                                <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;The data key(s) for the given dimension.&quot;</span><span class="p">,</span>
+                                <span class="s2">&quot;items&quot;</span><span class="p">:</span>
+                                <span class="p">{</span>
+                                    <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
+                                <span class="p">}</span>
+                            <span class="p">},</span>
+                            <span class="p">{</span>
+                                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+                                <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;The stream to find the datakeys in.&quot;</span>
+
+                            <span class="p">}</span>
+                        <span class="p">],</span>
+                        <span class="s2">&quot;additionalItems&quot;</span><span class="p">:</span> <span class="n">false</span><span class="p">,</span>
+                        <span class="s2">&quot;minItems&quot;</span><span class="p">:</span> <span class="mi">2</span>
+
+                    <span class="p">}</span>
+                <span class="p">}</span>
+            <span class="p">},</span>
+            <span class="s2">&quot;patternProperties&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;^([^.]+)$&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;$ref&quot;</span><span class="p">:</span> <span class="s2">&quot;#/definitions/data_type&quot;</span><span class="p">}},</span>
+            <span class="s2">&quot;additionalProperties&quot;</span><span class="p">:</span> <span class="n">false</span>
+        <span class="p">}</span>
+    <span class="p">},</span>
+    <span class="s2">&quot;patternProperties&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;^([^./]+)$&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;$ref&quot;</span><span class="p">:</span> <span class="s2">&quot;#/definitions/data_type&quot;</span><span class="p">}},</span>
+    <span class="s2">&quot;additionalProperties&quot;</span><span class="p">:</span> <span class="n">false</span><span class="p">,</span>
+    <span class="s2">&quot;required&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="s2">&quot;uid&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;time&quot;</span>
+     <span class="p">],</span>
+    <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Document created at the start of run.  Provides a seach target and later documents link to it&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="event-descriptor">
+<span id="descriptor"></span><h3>Event Descriptor<a class="headerlink" href="#event-descriptor" title="Permalink to this heading">#</a></h3>
+<p>As stated above, an ‘event descriptor’ document provides a schema for the data
+in the Event documents. It provides useful information about each key in the
+data and about the configuration of the hardware. The layout of a descriptor
+is detailed and takes some time to cover, so we defer it to a
+<a class="reference internal" href="event-descriptors.html"><span class="doc">another page</span></a>.</p>
+<p>Minimal nontrivial valid example:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># &#39;event descriptor&#39; document</span>
+<span class="p">{</span><span class="s1">&#39;configuration&#39;</span><span class="p">:</span> <span class="p">{},</span>
+ <span class="s1">&#39;data_keys&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;camera_image&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;dtype&#39;</span><span class="p">:</span> <span class="s1">&#39;number&#39;</span><span class="p">,</span>
+                                <span class="s1">&#39;shape&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">512</span><span class="p">,</span> <span class="mi">512</span><span class="p">],</span>
+                                <span class="s1">&#39;source&#39;</span><span class="p">:</span> <span class="s1">&#39;PV:...&#39;</span><span class="p">}},</span>
+ <span class="s1">&#39;hints&#39;</span><span class="p">:</span> <span class="p">{},</span>
+ <span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="s1">&#39;primary&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;object_keys&#39;</span><span class="p">:</span> <span class="p">{},</span>
+ <span class="s1">&#39;run_start&#39;</span><span class="p">:</span> <span class="s1">&#39;10bf6945-4afd-43ca-af36-6ad8f3540bcd&#39;</span><span class="p">,</span>  <span class="c1"># foreign key</span>
+ <span class="s1">&#39;time&#39;</span><span class="p">:</span> <span class="mf">1550070954.276659</span><span class="p">,</span>
+ <span class="s1">&#39;uid&#39;</span><span class="p">:</span> <span class="s1">&#39;d08d2ada-5f4e-495b-8e73-ff36186e7183&#39;</span><span class="p">}</span>
+</pre></div>
+</div>
+<p>Typical example:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># &#39;event descriptor&#39; document</span>
+<span class="p">{</span><span class="s1">&#39;configuration&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;random_walk:dt&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;data&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;random_walk:dt&#39;</span><span class="p">:</span> <span class="o">-</span><span class="mf">1.0</span><span class="p">},</span>
+                                      <span class="s1">&#39;data_keys&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;random_walk:dt&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;dtype&#39;</span><span class="p">:</span> <span class="s1">&#39;number&#39;</span><span class="p">,</span>
+                                                                       <span class="s1">&#39;lower_ctrl_limit&#39;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span>
+                                                                       <span class="s1">&#39;precision&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+                                                                       <span class="s1">&#39;shape&#39;</span><span class="p">:</span> <span class="p">[],</span>
+                                                                       <span class="s1">&#39;source&#39;</span><span class="p">:</span> <span class="s1">&#39;PV:random_walk:dt&#39;</span><span class="p">,</span>
+                                                                       <span class="s1">&#39;units&#39;</span><span class="p">:</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
+                                                                       <span class="s1">&#39;upper_ctrl_limit&#39;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">}},</span>
+                                      <span class="s1">&#39;timestamps&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;random_walk:dt&#39;</span><span class="p">:</span> <span class="mf">1550070004.994477</span><span class="p">}},</span>
+                   <span class="s1">&#39;random_walk:x&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;data&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;random_walk:x&#39;</span><span class="p">:</span> <span class="mf">1.9221013521832928</span><span class="p">},</span>
+                                     <span class="s1">&#39;data_keys&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;random_walk:x&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;dtype&#39;</span><span class="p">:</span> <span class="s1">&#39;number&#39;</span><span class="p">,</span>
+                                                                     <span class="s1">&#39;lower_ctrl_limit&#39;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span>
+                                                                     <span class="s1">&#39;precision&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+                                                                     <span class="s1">&#39;shape&#39;</span><span class="p">:</span> <span class="p">[],</span>
+                                                                     <span class="s1">&#39;source&#39;</span><span class="p">:</span> <span class="s1">&#39;PV:random_walk:x&#39;</span><span class="p">,</span>
+                                                                     <span class="s1">&#39;units&#39;</span><span class="p">:</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
+                                                                     <span class="s1">&#39;upper_ctrl_limit&#39;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">}},</span>
+                                     <span class="s1">&#39;timestamps&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;random_walk:x&#39;</span><span class="p">:</span> <span class="mf">1550070004.812525</span><span class="p">}}},</span>
+ <span class="s1">&#39;data_keys&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;random_walk:dt&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;dtype&#39;</span><span class="p">:</span> <span class="s1">&#39;number&#39;</span><span class="p">,</span>
+                                  <span class="s1">&#39;lower_ctrl_limit&#39;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span>
+                                  <span class="s1">&#39;object_name&#39;</span><span class="p">:</span> <span class="s1">&#39;random_walk:dt&#39;</span><span class="p">,</span>
+                                  <span class="s1">&#39;precision&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+                                  <span class="s1">&#39;shape&#39;</span><span class="p">:</span> <span class="p">[],</span>
+                                  <span class="s1">&#39;source&#39;</span><span class="p">:</span> <span class="s1">&#39;PV:random_walk:dt&#39;</span><span class="p">,</span>
+                                  <span class="s1">&#39;units&#39;</span><span class="p">:</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
+                                  <span class="s1">&#39;upper_ctrl_limit&#39;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">},</span>
+               <span class="s1">&#39;random_walk:x&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;dtype&#39;</span><span class="p">:</span> <span class="s1">&#39;number&#39;</span><span class="p">,</span>
+                                 <span class="s1">&#39;lower_ctrl_limit&#39;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span>
+                                 <span class="s1">&#39;object_name&#39;</span><span class="p">:</span> <span class="s1">&#39;random_walk:x&#39;</span><span class="p">,</span>
+                                 <span class="s1">&#39;precision&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+                                 <span class="s1">&#39;shape&#39;</span><span class="p">:</span> <span class="p">[],</span>
+                                 <span class="s1">&#39;source&#39;</span><span class="p">:</span> <span class="s1">&#39;PV:random_walk:x&#39;</span><span class="p">,</span>
+                                 <span class="s1">&#39;units&#39;</span><span class="p">:</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
+                                 <span class="s1">&#39;upper_ctrl_limit&#39;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">}},</span>
+ <span class="s1">&#39;hints&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;random_walk:dt&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;fields&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;random_walk:dt&#39;</span><span class="p">]},</span>
+           <span class="s1">&#39;random_walk:x&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;fields&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;random_walk:x&#39;</span><span class="p">]}},</span>
+ <span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="s1">&#39;primary&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;object_keys&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;random_walk:dt&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;random_walk:dt&#39;</span><span class="p">],</span>
+                 <span class="s1">&#39;random_walk:x&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;random_walk:x&#39;</span><span class="p">]},</span>
+ <span class="s1">&#39;run_start&#39;</span><span class="p">:</span> <span class="s1">&#39;ba1f9076-7925-4af8-916e-0e1eaa1b3c47&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;time&#39;</span><span class="p">:</span> <span class="mf">1550070005.0109222</span><span class="p">,</span>
+ <span class="s1">&#39;uid&#39;</span><span class="p">:</span> <span class="s1">&#39;0ad55d9e-1b31-4af2-865c-7ab7c8171303&#39;</span><span class="p">}</span>
+</pre></div>
+</div>
+<p>Formal schema:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>    <span class="p">{</span>
+        <span class="s2">&quot;definitions&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;data_key&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;data_key&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Describes the objects in the data property of Event documents&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s2">&quot;dtype&quot;</span><span class="p">:</span> <span class="p">{</span>
+                        <span class="s2">&quot;enum&quot;</span><span class="p">:</span> <span class="p">[</span>
+                            <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+                            <span class="s2">&quot;number&quot;</span><span class="p">,</span>
+                            <span class="s2">&quot;array&quot;</span><span class="p">,</span>
+                            <span class="s2">&quot;boolean&quot;</span><span class="p">,</span>
+                            <span class="s2">&quot;integer&quot;</span>
+                        <span class="p">],</span>
+                        <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;The type of the data in the event.&quot;</span>
+                    <span class="p">},</span>
+                    <span class="s2">&quot;external&quot;</span><span class="p">:</span> <span class="p">{</span>
+                        <span class="s2">&quot;pattern&quot;</span><span class="p">:</span> <span class="s2">&quot;^[A-Z]+:?&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Where the data is stored if it is stored external to the events.&quot;</span>
+                    <span class="p">},</span>
+                    <span class="s2">&quot;shape&quot;</span><span class="p">:</span> <span class="p">{</span>
+                        <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;array&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;items&quot;</span><span class="p">:</span> <span class="p">{</span>
+                            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;integer&quot;</span>
+                        <span class="p">},</span>
+                        <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;The shape of the data.  Empty list indicates scalar data.&quot;</span>
+                    <span class="p">},</span>
+                    <span class="s2">&quot;dims&quot;</span><span class="p">:</span> <span class="p">{</span>
+                        <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;array&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;items&quot;</span><span class="p">:</span> <span class="p">{</span>
+                            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
+                        <span class="p">},</span>
+                        <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;The names for dimensions of the data. Null or empty list if scalar data&quot;</span>
+                    <span class="p">},</span>
+                    <span class="s2">&quot;source&quot;</span><span class="p">:</span> <span class="p">{</span>
+                        <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;The source (ex piece of hardware) of the data.&quot;</span>
+                    <span class="p">},</span>
+                    <span class="s2">&quot;object_name&quot;</span><span class="p">:</span> <span class="p">{</span>
+                        <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;The name of the object this key was pulled from.&quot;</span>
+                    <span class="p">}</span>
+                <span class="p">},</span>
+                <span class="s2">&quot;required&quot;</span><span class="p">:</span> <span class="p">[</span>
+                    <span class="s2">&quot;source&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;dtype&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;shape&quot;</span>
+                <span class="p">],</span>
+                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span>
+            <span class="p">},</span>
+            <span class="s2">&quot;data_type&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;title&quot;</span> <span class="p">:</span> <span class="s2">&quot;data_type&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;patternProperties&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;^([^./]+)$&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;$ref&quot;</span><span class="p">:</span> <span class="s2">&quot;#/definitions/data_type&quot;</span><span class="p">}},</span>
+                <span class="s2">&quot;additionalProperties&quot;</span><span class="p">:</span> <span class="n">false</span>
+            <span class="p">},</span>
+            <span class="s2">&quot;object_hints&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Object Hints&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;patternProperties&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;^([^./]+)$&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;$ref&quot;</span><span class="p">:</span> <span class="s2">&quot;#/definitions/per_object_hint&quot;</span><span class="p">}},</span>
+                <span class="s2">&quot;additionalProperties&quot;</span><span class="p">:</span> <span class="n">false</span>
+            <span class="p">},</span>
+            <span class="s2">&quot;per_object_hint&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s2">&quot;fields&quot;</span><span class="p">:</span>
+                    <span class="p">{</span>
+                        <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;The &#39;interesting&#39; data keys for this device.&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;array&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;items&quot;</span><span class="p">:{</span>
+                            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
+                        <span class="p">}</span>
+                    <span class="p">}</span>
+                <span class="p">}</span>
+            <span class="p">},</span>
+            <span class="s2">&quot;configuration&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s2">&quot;data&quot;</span><span class="p">:</span> <span class="p">{</span>
+                        <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;The actual measurement data&quot;</span>
+                    <span class="p">},</span>
+                    <span class="s2">&quot;timestamps&quot;</span><span class="p">:</span> <span class="p">{</span>
+                        <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;The timestamps of the individual measurement data&quot;</span>
+                    <span class="p">},</span>
+                    <span class="s2">&quot;data_keys&quot;</span><span class="p">:</span> <span class="p">{</span>
+                        <span class="s2">&quot;additionalProperties&quot;</span><span class="p">:</span> <span class="p">{</span>
+                            <span class="s2">&quot;$ref&quot;</span><span class="p">:</span> <span class="s2">&quot;#/definitions/data_key&quot;</span>
+                        <span class="p">},</span>
+                        <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;This describes the data stored alongside it in this configuration object.&quot;</span>
+                    <span class="p">}</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;data_keys&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;additionalProperties&quot;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s2">&quot;$ref&quot;</span><span class="p">:</span> <span class="s2">&quot;#/definitions/data_key&quot;</span>
+                <span class="p">},</span>
+                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;This describes the data in the Event Documents.&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;data_keys&quot;</span>
+            <span class="p">},</span>
+            <span class="s2">&quot;uid&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Globally unique ID for this event descriptor.&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;uid&quot;</span>
+            <span class="p">},</span>
+            <span class="s2">&quot;run_start&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Globally unique ID of this run&#39;s &#39;start&#39; document.&quot;</span>
+            <span class="p">},</span>
+            <span class="s2">&quot;time&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;number&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Creation time of the document as unix epoch time.&quot;</span>
+            <span class="p">},</span>
+            <span class="s2">&quot;hints&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;$ref&quot;</span><span class="p">:</span> <span class="s2">&quot;#/definitions/object_hints&quot;</span>
+            <span class="p">},</span>
+            <span class="s2">&quot;object_keys&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Maps a Device/Signal name to the names of the entries it produces in data_keys.&quot;</span>
+            <span class="p">},</span>
+            <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;A human-friendly name for this data stream, such as &#39;primary&#39; or &#39;baseline&#39;.&quot;</span>
+            <span class="p">},</span>
+            <span class="s2">&quot;configuration&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;additionalProperties&quot;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s2">&quot;$ref&quot;</span><span class="p">:</span> <span class="s2">&quot;#/definitions/configuration&quot;</span>
+                <span class="p">},</span>
+                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Readings of configurational fields necessary for interpreting data in the Events.&quot;</span>
+            <span class="p">}</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;patternProperties&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;^([^./]+)$&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;$ref&quot;</span><span class="p">:</span> <span class="s2">&quot;#/definitions/data_type&quot;</span><span class="p">}},</span>
+        <span class="s2">&quot;additionalProperties&quot;</span><span class="p">:</span> <span class="n">false</span><span class="p">,</span>
+        <span class="s2">&quot;required&quot;</span><span class="p">:</span> <span class="p">[</span>
+            <span class="s2">&quot;uid&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;data_keys&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;run_start&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;time&quot;</span>
+        <span class="p">],</span>
+        <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;event_descriptor&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Document to describe the data captured in the associated event documents&quot;</span>
+    <span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="event-document">
+<span id="event"></span><h3>Event Document<a class="headerlink" href="#event-document" title="Permalink to this heading">#</a></h3>
+<p>The Event document may contain data directly:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># &#39;event&#39; document</span>
+<span class="p">{</span><span class="s1">&#39;data&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;camera_image&#39;</span><span class="p">:</span> <span class="p">[[</span><span class="o">..</span><span class="mf">.512</span><span class="n">x512</span> <span class="n">array</span><span class="o">...</span><span class="p">]]},</span>
+ <span class="s1">&#39;descriptor&#39;</span><span class="p">:</span> <span class="s1">&#39;d08d2ada-5f4e-495b-8e73-ff36186e7183&#39;</span><span class="p">,</span>  <span class="c1"># foreign key</span>
+ <span class="s1">&#39;filled&#39;</span><span class="p">:</span> <span class="p">{},</span>
+ <span class="s1">&#39;seq_num&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+ <span class="s1">&#39;time&#39;</span><span class="p">:</span> <span class="mf">1550072091.2793343</span><span class="p">,</span>
+ <span class="s1">&#39;timestamps&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;camera_image&#39;</span><span class="p">:</span> <span class="mf">1550072091.2793014</span><span class="p">},</span>
+ <span class="s1">&#39;uid&#39;</span><span class="p">:</span> <span class="s1">&#39;8eac2f83-2b3e-4d67-ae2c-1d3aaff29ff5&#39;</span><span class="p">}</span>
+</pre></div>
+</div>
+<p>or it may reference it via a <code class="docutils literal notranslate"><span class="pre">datum_id</span></code> from a Datum document.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># &#39;event&#39; document</span>
+<span class="p">{</span><span class="s1">&#39;data&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;camera_image&#39;</span><span class="p">:</span> <span class="s1">&#39;272132cf-564f-428f-bf6b-149ee4287024/1&#39;</span><span class="p">},</span>  <span class="c1"># foreign key</span>
+ <span class="s1">&#39;descriptor&#39;</span><span class="p">:</span> <span class="s1">&#39;d08d2ada-5f4e-495b-8e73-ff36186e7183&#39;</span><span class="p">,</span>  <span class="c1"># foreign key</span>
+ <span class="s1">&#39;filled&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;camera_image&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">},</span>
+ <span class="s1">&#39;seq_num&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+ <span class="s1">&#39;time&#39;</span><span class="p">:</span> <span class="mf">1550072091.2793343</span><span class="p">,</span>
+ <span class="s1">&#39;timestamps&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;camera_image&#39;</span><span class="p">:</span> <span class="mf">1550072091.2793014</span><span class="p">},</span>
+ <span class="s1">&#39;uid&#39;</span><span class="p">:</span> <span class="s1">&#39;8eac2f83-2b3e-4d67-ae2c-1d3aaff29ff5&#39;</span><span class="p">}</span>
+</pre></div>
+</div>
+<p>See <a class="reference internal" href="external.html"><span class="doc">External Assets</span></a> for details on how external assets are handled.</p>
+<p>Typical example:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># &#39;event&#39; document</span>
+<span class="p">{</span><span class="s1">&#39;data&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;random_walk:dt&#39;</span><span class="p">:</span> <span class="o">-</span><span class="mf">1.0</span><span class="p">,</span>
+          <span class="s1">&#39;random_walk:x&#39;</span><span class="p">:</span> <span class="mf">1.9221013521832928</span><span class="p">},</span>
+ <span class="s1">&#39;descriptor&#39;</span><span class="p">:</span> <span class="s1">&#39;0ad55d9e-1b31-4af2-865c-7ab7c8171303&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;filled&#39;</span><span class="p">:</span> <span class="p">{},</span>
+ <span class="s1">&#39;seq_num&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+ <span class="s1">&#39;time&#39;</span><span class="p">:</span> <span class="mf">1550070005.0189056</span><span class="p">,</span>
+ <span class="s1">&#39;timestamps&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;random_walk:dt&#39;</span><span class="p">:</span> <span class="mf">1550070004.994477</span><span class="p">,</span>
+                <span class="s1">&#39;random_walk:x&#39;</span><span class="p">:</span> <span class="mf">1550070004.812525</span><span class="p">},</span>
+ <span class="s1">&#39;uid&#39;</span><span class="p">:</span> <span class="s1">&#39;7b5343fe-dfd7-4884-bc18-a0b571ff60b7&#39;</span><span class="p">}</span>
+</pre></div>
+</div>
+<p>From a data analysis perspective, these readings were simultaneous, but in
+actuality the occurred at separate times.  The separate times of the individual
+readings are not thrown away (they are recorded in ‘timestamps’) but the
+overall event ‘time’ is often more useful.</p>
+<p>Formal schema:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;data&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;The actual measurement data&quot;</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;timestamps&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;The timestamps of the individual measurement data&quot;</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;filled&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;additionalProperties&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;boolean&quot;</span><span class="p">,</span> <span class="s2">&quot;string&quot;</span><span class="p">]},</span>
+            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Mapping each of the keys of externally-stored data to the boolean False, indicating that the data has not been loaded, or to foreign keys (moved here from &#39;data&#39; when the data was loaded)&quot;</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;descriptor&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;UID of the EventDescriptor to which this Event belongs&quot;</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;seq_num&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;integer&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Sequence number to identify the location of this Event in the Event stream&quot;</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;time&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;number&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;The event time. This maybe different than the timestamps on each of the data entries.&quot;</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;uid&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Globally unique identifier for this Event&quot;</span>
+        <span class="p">}</span>
+    <span class="p">},</span>
+    <span class="s2">&quot;required&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="s2">&quot;uid&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;data&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;timestamps&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;time&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;descriptor&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;seq_num&quot;</span>
+    <span class="p">],</span>
+    <span class="s2">&quot;additionalProperties&quot;</span><span class="p">:</span> <span class="n">false</span><span class="p">,</span>
+    <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;event&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Document to record a quanta of collected data&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="event-page">
+<span id="id2"></span><h3>Event Page<a class="headerlink" href="#event-page" title="Permalink to this heading">#</a></h3>
+<p>Event contents can also be represented in “paged” form, where multiple
+rows are contained in one structure for efficient transport and vectorized
+computation. The representations contain equivalent information: an EventPage
+can always be transformed, without loss, into an Event and vice versa. Here is
+the example Event above structured as an Event Page with a single row:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># &#39;event_page&#39; document</span>
+<span class="p">{</span><span class="s1">&#39;data&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;random_walk:dt&#39;</span><span class="p">:</span> <span class="p">[</span><span class="o">-</span><span class="mf">1.0</span><span class="p">],</span>
+          <span class="s1">&#39;random_walk:x&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mf">1.9221013521832928</span><span class="p">]},</span>
+ <span class="s1">&#39;descriptor&#39;</span><span class="p">:</span> <span class="s1">&#39;0ad55d9e-1b31-4af2-865c-7ab7c8171303&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;filled&#39;</span><span class="p">:</span> <span class="p">{},</span>
+ <span class="s1">&#39;seq_num&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+ <span class="s1">&#39;time&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mf">1550070005.0189056</span><span class="p">],</span>
+ <span class="s1">&#39;timestamps&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;random_walk:dt&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mf">1550070004.994477</span><span class="p">],</span>
+                <span class="s1">&#39;random_walk:x&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mf">1550070004.812525</span><span class="p">]},</span>
+ <span class="s1">&#39;uid&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;7b5343fe-dfd7-4884-bc18-a0b571ff60b7&#39;</span><span class="p">]}</span>
+</pre></div>
+</div>
+<p>Formal Event Page schema:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="s2">&quot;definitions&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;dataframe&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;dataframe&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;A DataFrame-like object&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;additionalProperties&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;array&quot;</span>
+            <span class="p">}</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;dataframe_for_filled&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;dataframe_for_filled&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;A DataFrame-like object with boolean or string entries&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;additionalProperties&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;array&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;items&quot;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="p">[</span>
+                        <span class="s2">&quot;boolean&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;string&quot;</span>
+                    <span class="p">]</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">},</span>
+    <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;descriptor&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;The UID of the EventDescriptor to which all of the Events in this page belong&quot;</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;data&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;$ref&quot;</span><span class="p">:</span> <span class="s2">&quot;#/definitions/dataframe&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;The actual measurement data&quot;</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;timestamps&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;$ref&quot;</span><span class="p">:</span> <span class="s2">&quot;#/definitions/dataframe&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;The timestamps of the individual measurement data&quot;</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;filled&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;$ref&quot;</span><span class="p">:</span> <span class="s2">&quot;#/definitions/dataframe_for_filled&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Mapping each of the keys of externally-stored data to an array containing the boolean False, indicating that the data has not been loaded, or to foreign keys (moved here from &#39;data&#39; when the data was loaded)&quot;</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;seq_num&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;array&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;items&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;integer&quot;</span>
+            <span class="p">},</span>
+            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Array of sequence numbers to identify the location of each Event in the Event stream&quot;</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;time&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;array&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;items&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;number&quot;</span>
+            <span class="p">},</span>
+            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Array of Event times. This maybe different than the timestamps on each of the data entries&quot;</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;uid&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;array&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;items&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
+            <span class="p">},</span>
+            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Array of globally unique identifiers for each Event&quot;</span>
+        <span class="p">}</span>
+    <span class="p">},</span>
+    <span class="s2">&quot;required&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="s2">&quot;descriptor&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;uid&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;data&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;timestamps&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;time&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;seq_num&quot;</span>
+    <span class="p">],</span>
+    <span class="s2">&quot;additionalProperties&quot;</span><span class="p">:</span> <span class="n">false</span><span class="p">,</span>
+    <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;event_page&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Page of documents to record a quanta of collected data&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>It is intentional that the values in the “data” and “timestamps” dictionaries
+do not have structure. The values may be numeric, bool, null (<code class="docutils literal notranslate"><span class="pre">None</span></code>), or a
+homogeneous N-dimensional array of any of these. The values are never objects
+or dictionaries (to use the JSON and Python terminology respectively). This
+requirement allows document-consumers to make useful simplifying assumptions.
+As another justification for this design, consider that if we allowed one level
+of nesting in “data”, then it could lead to wanting <em>those</em> values to
+allow nesting and so on, which would lead us to accepting arbitrarily nested
+structured data. This in turn would makes the Event Descriptors significantly
+more complex. Thus, we require that the values in “data” never be structured.</p>
+</section>
+<section id="run-stop-document">
+<span id="stop"></span><h3>Run Stop Document<a class="headerlink" href="#run-stop-document" title="Permalink to this heading">#</a></h3>
+<p>A ‘run stop’ document marks the end of the run. It contains metadata that is not
+known until the run completes.</p>
+<p>The most commonly useful fields here are ‘time’ and ‘exit_status’.</p>
+<p>Minimal nontrivial valid example:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># &#39;run stop&#39; document</span>
+<span class="p">{</span><span class="s1">&#39;uid&#39;</span><span class="p">:</span> <span class="s1">&#39;546cc556-5f69-46b5-bf36-587d8cfe67a9&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;time&#39;</span><span class="p">:</span> <span class="mf">1550072737.175858</span><span class="p">,</span>
+ <span class="s1">&#39;run_start&#39;</span><span class="p">:</span> <span class="s1">&#39;61bb1db8-c95c-4144-845b-e248c06d80e1&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;exit_status&#39;</span><span class="p">:</span> <span class="s1">&#39;success&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;reason&#39;</span><span class="p">:</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;num_events&#39;</span><span class="p">:</span> <span class="p">{}}</span>
+</pre></div>
+</div>
+<p>Typical example:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># &#39;stop&#39; document</span>
+<span class="p">{</span><span class="s1">&#39;run_start&#39;</span><span class="p">:</span> <span class="s1">&#39;ba1f9076-7925-4af8-916e-0e1eaa1b3c47&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;time&#39;</span><span class="p">:</span> <span class="mf">1580172029.3419003</span><span class="p">,</span>
+ <span class="s1">&#39;uid&#39;</span><span class="p">:</span> <span class="s1">&#39;78c70c2c-2508-479e-9857-05553748022e&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;exit_status&#39;</span><span class="p">:</span> <span class="s1">&#39;success&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;reason&#39;</span><span class="p">:</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;num_events&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;primary&#39;</span><span class="p">:</span> <span class="mi">10</span><span class="p">}</span>
+</pre></div>
+</div>
+<p>Formal schema:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="s2">&quot;definitions&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;data_type&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;title&quot;</span> <span class="p">:</span> <span class="s2">&quot;data_type&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;patternProperties&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;^([^./]+)$&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;$ref&quot;</span><span class="p">:</span> <span class="s2">&quot;#/definitions/data_type&quot;</span><span class="p">}},</span>
+            <span class="s2">&quot;additionalProperties&quot;</span><span class="p">:</span> <span class="n">false</span>
+        <span class="p">}</span>
+    <span class="p">},</span>
+    <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;run_start&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Reference back to the run_start document that this document is paired with.&quot;</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;reason&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Long-form description of why the run ended&quot;</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;time&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;number&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;The time the run ended. Unix epoch&quot;</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;exit_status&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;enum&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;success&quot;</span><span class="p">,</span> <span class="s2">&quot;abort&quot;</span><span class="p">,</span> <span class="s2">&quot;fail&quot;</span><span class="p">],</span>
+            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;State of the run when it ended&quot;</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;uid&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Globally unique ID for this document&quot;</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;num_events&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{},</span>
+            <span class="s2">&quot;additionalProperties&quot;</span><span class="p">:</span> <span class="p">{</span> <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;integer&quot;</span> <span class="p">},</span>
+            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Number of Events per named stream&quot;</span>
+        <span class="p">}</span>
+    <span class="p">},</span>
+    <span class="s2">&quot;patternProperties&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;^([^./]+)$&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;$ref&quot;</span><span class="p">:</span> <span class="s2">&quot;#/definitions/data_type&quot;</span><span class="p">}},</span>
+    <span class="s2">&quot;additionalProperties&quot;</span><span class="p">:</span> <span class="n">false</span><span class="p">,</span>
+    <span class="s2">&quot;required&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="s2">&quot;uid&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;run_start&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;time&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;exit_status&quot;</span>
+    <span class="p">],</span>
+    <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Document for the end of a run indicating the success/fail state of the run and the end time&quot;</span>
+
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="resource-document">
+<span id="resource"></span><h3>Resource Document<a class="headerlink" href="#resource-document" title="Permalink to this heading">#</a></h3>
+<p>See <a class="reference internal" href="external.html"><span class="doc">External Assets</span></a> for details on the role Resource documents play in
+referencing external assets, such as large array data written by detectors.</p>
+<p>Minimal nontrivial valid example:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># &#39;resource&#39; document</span>
+<span class="p">{</span><span class="s1">&#39;path_semantics&#39;</span><span class="p">:</span> <span class="s1">&#39;posix&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;resource_kwargs&#39;</span><span class="p">:</span> <span class="p">{},</span>
+ <span class="s1">&#39;resource_path&#39;</span><span class="p">:</span> <span class="s1">&#39;/local/path/subdirectory/data_file&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;root&#39;</span><span class="p">:</span> <span class="s1">&#39;/local/path/&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;run_start&#39;</span><span class="p">:</span> <span class="s1">&#39;10bf6945-4afd-43ca-af36-6ad8f3540bcd&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;spec&#39;</span><span class="p">:</span> <span class="s1">&#39;SOME_SPEC&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;uid&#39;</span><span class="p">:</span> <span class="s1">&#39;272132cf-564f-428f-bf6b-149ee4287024&#39;</span><span class="p">}</span>
+</pre></div>
+</div>
+<p>Typical example:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># resource</span>
+<span class="p">{</span><span class="s1">&#39;spec&#39;</span><span class="p">:</span> <span class="s1">&#39;AD_HDF5&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;root&#39;</span><span class="p">:</span> <span class="s1">&#39;/GPFS/DATA/Andor/&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;resource_path&#39;</span><span class="p">:</span> <span class="s1">&#39;2020/01/03/8ff08ff9-a2bf-48c3-8ff3-dcac0f309d7d.h5&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;resource_kwargs&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;frame_per_point&#39;</span><span class="p">:</span> <span class="mi">10</span><span class="p">},</span>
+ <span class="s1">&#39;path_semantics&#39;</span><span class="p">:</span> <span class="s1">&#39;posix&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;uid&#39;</span><span class="p">:</span> <span class="s1">&#39;3b300e6f-b431-4750-a635-5630d15c81a8&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;run_start&#39;</span><span class="p">:</span> <span class="s1">&#39;10bf6945-4afd-43ca-af36-6ad8f3540bcd&#39;</span><span class="p">}</span>
+</pre></div>
+</div>
+<p>Formal schema:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;spec&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;String identifying the format/type of this Resource, used to identify a compatible Handler&quot;</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;resource_path&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Filepath or URI for locating this resource&quot;</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;resource_kwargs&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Additional argument to pass to the Handler to read a Resource&quot;</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;root&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Subset of resource_path that is a local detail, not semantic.&quot;</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;path_semantics&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Rules for joining paths&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;enum&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;posix&quot;</span><span class="p">,</span> <span class="s2">&quot;windows&quot;</span><span class="p">]</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;uid&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Globally unique identifier for this Resource&quot;</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;run_start&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Globally unique ID to the run_start document this resource is associated with.&quot;</span>
+        <span class="p">}</span>
+    <span class="p">},</span>
+    <span class="s2">&quot;required&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="s2">&quot;spec&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;resource_path&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;resource_kwargs&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;root&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;uid&quot;</span>
+    <span class="p">],</span>
+    <span class="s2">&quot;additionalProperties&quot;</span><span class="p">:</span> <span class="n">false</span><span class="p">,</span>
+    <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;resource&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Document to reference a collection (e.g. file or group of files) of externally-stored data&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="datum-document">
+<span id="datum"></span><h3>Datum Document<a class="headerlink" href="#datum-document" title="Permalink to this heading">#</a></h3>
+<p>See <a class="reference internal" href="external.html"><span class="doc">External Assets</span></a> for details on the role Datum documents play in referencing
+external assets, such as large array data written by detectors.</p>
+<p>Minimal nontrivial valid example:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># &#39;datum&#39; document</span>
+<span class="p">{</span><span class="s1">&#39;resource&#39;</span><span class="p">:</span> <span class="s1">&#39;272132cf-564f-428f-bf6b-149ee4287024&#39;</span><span class="p">,</span>  <span class="c1"># foreign key</span>
+ <span class="s1">&#39;datum_kwargs&#39;</span><span class="p">:</span> <span class="p">{},</span>  <span class="c1"># format-specific parameters</span>
+ <span class="s1">&#39;datum_id&#39;</span><span class="p">:</span> <span class="s1">&#39;272132cf-564f-428f-bf6b-149ee4287024/1&#39;</span><span class="p">}</span>
+</pre></div>
+</div>
+<p>Typical example:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># datum</span>
+<span class="p">{</span><span class="s1">&#39;resource&#39;</span><span class="p">:</span> <span class="s1">&#39;3b300e6f-b431-4750-a635-5630d15c81a8&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;datum_kwargs&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;index&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">},</span>
+ <span class="s1">&#39;datum_id&#39;</span><span class="p">:</span> <span class="s1">&#39;3b300e6f-b431-4750-a635-5630d15c81a8/0&#39;</span><span class="p">}</span>
+</pre></div>
+</div>
+<p>It is an implementation detail that <code class="docutils literal notranslate"><span class="pre">datum_id</span></code> is often formatted as
+<code class="docutils literal notranslate"><span class="pre">{resource}/{counter}</span></code> but this should not be considered part of the schema.</p>
+<p>Formal schema:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;datum_kwargs&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Arguments to pass to the Handler to retrieve one quanta of data&quot;</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;resource&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;The UID of the Resource to which this Datum belongs&quot;</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;datum_id&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Globally unique identifier for this Datum (akin to &#39;uid&#39; for other Document types), typically formatted as &#39;&lt;resource&gt;/&lt;integer&gt;&#39;&quot;</span>
+        <span class="p">}</span>
+    <span class="p">},</span>
+    <span class="s2">&quot;required&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="s2">&quot;datum_kwargs&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;resource&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;datum_id&quot;</span>
+    <span class="p">],</span>
+    <span class="s2">&quot;additionalProperties&quot;</span><span class="p">:</span> <span class="n">false</span><span class="p">,</span>
+    <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;datum&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Document to reference a quanta of externally-stored data&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="datum-page">
+<span id="id3"></span><h3>Datum Page<a class="headerlink" href="#datum-page" title="Permalink to this heading">#</a></h3>
+<p>Like Events, Datum contents can also be represented in “paged” form, and the
+representations contain equivalent information. This is the Datum example above
+strucuted as a Datum Page with one row:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># datum</span>
+<span class="p">{</span><span class="s1">&#39;resource&#39;</span><span class="p">:</span> <span class="s1">&#39;3b300e6f-b431-4750-a635-5630d15c81a8&#39;</span><span class="p">,</span>
+<span class="s1">&#39;datum_kwargs&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;index&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">0</span><span class="p">]},</span>
+<span class="s1">&#39;datum_id&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;3b300e6f-b431-4750-a635-5630d15c81a8/0&#39;</span><span class="p">]}</span>
+</pre></div>
+</div>
+<p>Formal Datum Page schema:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="s2">&quot;definitions&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;dataframe&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;dataframe&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;A DataFrame-like object&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;additionalProperties&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;array&quot;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">},</span>
+    <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;resource&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;The UID of the Resource to which all Datums in the page belong&quot;</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;datum_kwargs&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;$ref&quot;</span><span class="p">:</span> <span class="s2">&quot;#/definitions/dataframe&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Array of arguments to pass to the Handler to retrieve one quanta of data&quot;</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;datum_id&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;array&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;items&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
+            <span class="p">},</span>
+            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Array unique identifiers for each Datum (akin to &#39;uid&#39; for other Document types), typically formatted as &#39;&lt;resource&gt;/&lt;integer&gt;&#39;&quot;</span>
+        <span class="p">}</span>
+    <span class="p">},</span>
+    <span class="s2">&quot;required&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="s2">&quot;resource&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;datum_kwargs&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;datum_id&quot;</span>
+    <span class="p">],</span>
+    <span class="s2">&quot;additionalProperties&quot;</span><span class="p">:</span> <span class="n">false</span><span class="p">,</span>
+    <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;datum&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Page of documents to reference a quanta of externally-stored data&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="stream-resource-document-experimental">
+<span id="stream-resource"></span><h3>Stream Resource Document (Experimental)<a class="headerlink" href="#stream-resource-document-experimental" title="Permalink to this heading">#</a></h3>
+<p>See <a class="reference internal" href="external.html"><span class="doc">External Assets</span></a> for details on the role Stream Resource documents play in
+referencing external assets that are natively ragged, such as single-photon detectors,
+or assets where there are many relatively small data sets (e.g. scanned fluorescence data).</p>
+<p>Minimal nontrivial valid example:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># &#39;Stream Resource&#39; document</span>
+<span class="p">{</span><span class="s1">&#39;path_semantics&#39;</span><span class="p">:</span> <span class="s1">&#39;posix&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;resource_kwargs&#39;</span><span class="p">:</span> <span class="p">{},</span>
+ <span class="s1">&#39;resource_path&#39;</span><span class="p">:</span> <span class="s1">&#39;/local/path/subdirectory/data_file&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;root&#39;</span><span class="p">:</span> <span class="s1">&#39;/local/path/&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;run_start&#39;</span><span class="p">:</span> <span class="s1">&#39;10bf6945-4afd-43ca-af36-6ad8f3540bcd&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;spec&#39;</span><span class="p">:</span> <span class="s1">&#39;SOME_SPEC&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;stream_names&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;point_det&#39;</span><span class="p">],</span>
+ <span class="s1">&#39;uid&#39;</span><span class="p">:</span> <span class="s1">&#39;272132cf-564f-428f-bf6b-149ee4287024&#39;</span><span class="p">}</span>
+</pre></div>
+</div>
+<p>Typical example:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># resource</span>
+<span class="p">{</span><span class="s1">&#39;spec&#39;</span><span class="p">:</span> <span class="s1">&#39;AD_HDF5&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;root&#39;</span><span class="p">:</span> <span class="s1">&#39;/GPFS/DATA/Andor/&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;resource_path&#39;</span><span class="p">:</span> <span class="s1">&#39;2020/01/03/8ff08ff9-a2bf-48c3-8ff3-dcac0f309d7d.h5&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;resource_kwargs&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;frame_per_point&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">},</span>
+ <span class="s1">&#39;path_semantics&#39;</span><span class="p">:</span> <span class="s1">&#39;posix&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;stream_names&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;point_det&#39;</span><span class="p">],</span>
+ <span class="s1">&#39;uid&#39;</span><span class="p">:</span> <span class="s1">&#39;3b300e6f-b431-4750-a635-5630d15c81a8&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;run_start&#39;</span><span class="p">:</span> <span class="s1">&#39;10bf6945-4afd-43ca-af36-6ad8f3540bcd&#39;</span><span class="p">}</span>
+</pre></div>
+</div>
+<p>Formal schema:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;spec&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;String identifying the format/type of this Stream Resource, used to identify a compatible Handler&quot;</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;resource_path&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Filepath or URI for locating this resource&quot;</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;resource_kwargs&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Additional argument to pass to the Handler to read a Stream Resource&quot;</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;root&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Subset of resource_path that is a local detail, not semantic.&quot;</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;path_semantics&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Rules for joining paths&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;enum&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;posix&quot;</span><span class="p">,</span> <span class="s2">&quot;windows&quot;</span><span class="p">]</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;uid&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Globally unique identifier for this Stream Resource&quot;</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;run_start&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Globally unique ID to the run_start document this Stream Resource is associated with.&quot;</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;stream_names&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;array&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;items&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
+            <span class="p">},</span>
+            <span class="s2">&quot;minItems&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+            <span class="s2">&quot;uniqueItems&quot;</span><span class="p">:</span> <span class="n">true</span><span class="p">,</span>
+            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;List of the stream names this resource provides&quot;</span>
+
+        <span class="p">}</span>
+    <span class="p">},</span>
+    <span class="s2">&quot;required&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="s2">&quot;spec&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;resource_path&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;resource_kwargs&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;root&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;uid&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;stream_names&quot;</span>
+    <span class="p">],</span>
+    <span class="s2">&quot;additionalProperties&quot;</span><span class="p">:</span> <span class="n">false</span><span class="p">,</span>
+    <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;stream_resource&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Document to reference a collection (e.g. file or group of files) of externally-stored data streams&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="stream-datum-document">
+<span id="stream-datum"></span><h3>Stream Datum Document<a class="headerlink" href="#stream-datum-document" title="Permalink to this heading">#</a></h3>
+<p>See <a class="reference internal" href="external.html"><span class="doc">External Assets</span></a> for details on the role Stream Datum documents play in referencing
+external assets that are natively ragged, such as single-photon detectors,
+or assets where there are many relatively small data sets (e.g. scanned fluorescence data).</p>
+<p>Minimal nontrivial valid example:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># &#39;datum&#39; document</span>
+<span class="p">{</span><span class="s1">&#39;resource&#39;</span><span class="p">:</span> <span class="s1">&#39;272132cf-564f-428f-bf6b-149ee4287024&#39;</span><span class="p">,</span>  <span class="c1"># foreign key</span>
+ <span class="s1">&#39;datum_kwargs&#39;</span><span class="p">:</span> <span class="p">{},</span>  <span class="c1"># format-specific parameters</span>
+ <span class="s1">&#39;datum_id&#39;</span><span class="p">:</span> <span class="s1">&#39;272132cf-564f-428f-bf6b-149ee4287024/1&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;block_idx&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+ <span class="s1">&#39;event_count&#39;</span><span class="p">:</span> <span class="mi">1</span>
+ <span class="p">}</span>
+</pre></div>
+</div>
+<p>Typical example:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># datum</span>
+<span class="p">{</span><span class="s1">&#39;resource&#39;</span><span class="p">:</span> <span class="s1">&#39;3b300e6f-b431-4750-a635-5630d15c81a8&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;datum_kwargs&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;index&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">},</span>
+ <span class="s1">&#39;datum_id&#39;</span><span class="p">:</span> <span class="s1">&#39;3b300e6f-b431-4750-a635-5630d15c81a8/3&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;block_idx&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+ <span class="s1">&#39;event_count&#39;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span>
+ <span class="s1">&#39;event_offset&#39;</span><span class="p">:</span> <span class="mi">14</span><span class="p">}</span>
+</pre></div>
+</div>
+<p>It is an implementation detail that <code class="docutils literal notranslate"><span class="pre">datum_id</span></code> is often formatted as
+<code class="docutils literal notranslate"><span class="pre">{resource}/{counter}</span></code> but this should not be considered part of the schema.</p>
+<p>Formal schema:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;datum_kwargs&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Arguments to pass to the Handler to retrieve one quanta of data&quot;</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;stream_resource&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;The UID of the Stream Resource to which this Datum belongs&quot;</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;uid&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Globally unique identifier for this Datum. A suggested formatting being &#39;&lt;stream_resource&gt;/&lt;stream_name&gt;/&lt;block_id&gt;&quot;</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;stream_name&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;The name of the stream that this Datum is providing a block of.&quot;</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;block_idx&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;integer&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;The order in the stream of this block of data. This must be contiguous for a given stream.&quot;</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;event_count&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;integer&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;The number of events in this datum.&quot;</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;event_offset&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;integer&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;The sequence number of the first event in this block. This increasing value allows the presence of gaps.&quot;</span>
+        <span class="p">}</span>
+
+    <span class="p">},</span>
+    <span class="s2">&quot;required&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="s2">&quot;datum_kwargs&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;stream_resource&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;uid&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;stream_name&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;block_idx&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;event_count&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;event_offset&quot;</span>
+    <span class="p">],</span>
+    <span class="s2">&quot;additionalProperties&quot;</span><span class="p">:</span> <span class="n">false</span><span class="p">,</span>
+    <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;stream_datum&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Document to reference a quanta of an externally-stored stream of data.&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="bulk-events-document-deprecated">
+<span id="bulk-events"></span><h3>“Bulk Events” Document (DEPRECATED)<a class="headerlink" href="#bulk-events-document-deprecated" title="Permalink to this heading">#</a></h3>
+<p>This is another representation of Events. This representation is deprecated.
+Use EventPage instead.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="s2">&quot;patternProperties&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;^.*$&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;array&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;items&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s2">&quot;data&quot;</span><span class="p">:</span> <span class="p">{</span>
+                        <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;The actual measument data&quot;</span>
+                    <span class="p">},</span>
+                    <span class="s2">&quot;timestamps&quot;</span><span class="p">:</span> <span class="p">{</span>
+                        <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;The timestamps of the individual measument data&quot;</span>
+                    <span class="p">},</span>
+                    <span class="s2">&quot;filled&quot;</span><span class="p">:</span> <span class="p">{</span>
+                        <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Mapping the keys of externally-stored data to a boolean indicating whether that data has yet been loaded&quot;</span>
+                    <span class="p">},</span>
+                    <span class="s2">&quot;descriptor&quot;</span><span class="p">:</span> <span class="p">{</span>
+                        <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;UID to point back to Descriptor for this event stream&quot;</span>
+                    <span class="p">},</span>
+                    <span class="s2">&quot;seq_num&quot;</span><span class="p">:</span> <span class="p">{</span>
+                        <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;integer&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Sequence number to identify the location of this Event in the Event stream&quot;</span>
+                    <span class="p">},</span>
+                    <span class="s2">&quot;time&quot;</span><span class="p">:</span> <span class="p">{</span>
+                        <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;number&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;The event time.  This maybe different than the timestamps on each of the data entries&quot;</span>
+                    <span class="p">},</span>
+                    <span class="s2">&quot;uid&quot;</span><span class="p">:</span> <span class="p">{</span>
+                        <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Globally unique identifier for this Event&quot;</span>
+                    <span class="p">}</span>
+                <span class="p">},</span>
+                <span class="s2">&quot;required&quot;</span><span class="p">:</span> <span class="p">[</span>
+                    <span class="s2">&quot;uid&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;data&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;timestamps&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;time&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;descriptor&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;seq_num&quot;</span>
+                <span class="p">],</span>
+                <span class="s2">&quot;additionalProperties&quot;</span><span class="p">:</span> <span class="n">false</span><span class="p">,</span>
+                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;bulk_events&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Document to record a quanta of collected data&quot;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="bulk-datum-document-deprecated">
+<span id="bulk-datum"></span><h3>“Bulk Datum” Document (DEPRECATED)<a class="headerlink" href="#bulk-datum-document-deprecated" title="Permalink to this heading">#</a></h3>
+<p>This is another representation of Datum. This representation is deprecated. Use
+DatumPage instead.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;datum_kwarg_list&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;array&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;items&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">},</span>
+            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Array of arguments to pass to the Handler to retrieve one quanta of data&quot;</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;resource&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;UID of the Resource to which all these Datum documents belong&quot;</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;datum_ids&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;array&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;items&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">},</span>
+            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Globally unique identifiers for each Datum (akin to &#39;uid&#39; for other Document types), typically formatted as &#39;&lt;resource&gt;/&lt;integer&gt;&#39;&quot;</span>
+        <span class="p">}</span>
+    <span class="p">},</span>
+    <span class="s2">&quot;required&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="s2">&quot;datum_kwarg_list&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;resource&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;datum_ids&quot;</span>
+    <span class="p">],</span>
+    <span class="s2">&quot;additionalProperties&quot;</span><span class="p">:</span> <span class="n">false</span><span class="p">,</span>
+    <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;bulk_datum&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Document to reference a quanta of externally-stored data&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+</section>
+</section>
+
+
+                </article>
+              
+              
+              
+                <footer class="bd-footer-article">
+                  
+<div class="footer-article-items footer-article__inner">
+  
+    <div class="footer-article-item"><!-- Previous / next buttons -->
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="docs-structure.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">About The Documentation</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="event-descriptors.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Event Descriptors</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div></div>
+  
+</div>
+
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#overview">Overview</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#example-runs">Example Runs</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#document-types-in-detail">Document Types in Detail</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#run-start-document">Run Start Document</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#projections-experimental">Projections (Experimental)</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#event-descriptor">Event Descriptor</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#event-document">Event Document</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#event-page">Event Page</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#run-stop-document">Run Stop Document</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#resource-document">Resource Document</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#datum-document">Datum Document</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#datum-page">Datum Page</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#stream-resource-document-experimental">Stream Resource Document (Experimental)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#stream-datum-document">Stream Datum Document</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bulk-events-document-deprecated">“Bulk Events” Document (DEPRECATED)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bulk-datum-document-deprecated">“Bulk Datum” Document (DEPRECATED)</a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+  <div class="sidebar-secondary-item">
+  
+  <div class="tocsection editthispage">
+    <a href="https://github.com/bluesky/Bluesky Event Model/edit/master/docs/user/explanations/data-model.rst">
+      <i class="fa-solid fa-pencil"></i>
+      
+      
+        
+          Edit on GitHub
+        
+      
+    </a>
+  </div>
+</div>
+
+  <div class="sidebar-secondary-item">
+  <div class="tocsection sourcelink">
+    <a href="../../_sources/user/explanations/data-model.rst.txt">
+      <i class="fa-solid fa-file-lines"></i> Show Source
+    </a>
+  </div>
+</div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../_static/scripts/bootstrap.js?digest=e353d410970836974a52"></script>
+<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item"><p class="theme-version">
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.13.3.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>
