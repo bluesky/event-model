@@ -215,7 +215,7 @@ Fixed
 
 * Let :func:`~event_model.register_coersion` tolerate duplicate registration of
   the same coersion as the long the duplicate is identical with the original
-  (i.e. `func is original_func`). This is now consistent with how handler
+  (i.e. ``func is original_func``). This is now consistent with how handler
   registration works.
 * Fix a critical typo in an error message codepath in
   :func:`~event_model.register_coersion`.

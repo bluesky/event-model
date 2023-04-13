@@ -1365,7 +1365,7 @@ class RunRouter(DocumentRouter):
     fill_or_fail: boolean, optional
         By default (False), if a document with a spec not in
         ``handler_registry`` is encountered, let it pass through unfilled. But
-        if set to True, fill everything and `raise
+        if set to True, fill everything and raise
         ``UndefinedAssetSpecification`` if some unknown spec is encountered.
     """
 

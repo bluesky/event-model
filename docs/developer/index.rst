@@ -57,7 +57,6 @@ side-bar.
             :maxdepth: 1
 
             reference/standards
-            reference/release-history
 
         +++
 
