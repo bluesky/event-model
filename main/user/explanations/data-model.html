@@ -9,7 +9,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
-    <title>Data Model &#8212; event-model 1.19.2.post69+g38b50a2 documentation</title>
+    <title>Data Model &#8212; event-model 1.19.2.post71+gbe33d8d documentation</title>
   
   
   
@@ -648,45 +648,17 @@ experimetal and subject to backward-incompatible changes in future releases.</p>
         <span class="p">}</span>
     <span class="p">},</span>
     <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span>
-        <span class="s2">&quot;data_session&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>              
-            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;An optional field for grouping runs. The meaning is not mandated, but this is a data management grouping and not a scientific grouping. It is intended to group runs in a visit or set of trials.&quot;</span>
-        <span class="p">},</span>
         <span class="s2">&quot;data_groups&quot;</span><span class="p">:</span> <span class="p">{</span>
             <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;array&quot;</span><span class="p">,</span> <span class="s2">&quot;items&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">},</span>              
             <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;An optional list of data access groups that have meaning to some external system. Examples might include facility, beamline, end stations, proposal, safety form.&quot;</span>
         <span class="p">},</span>
-        <span class="s2">&quot;project&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Name of project that this run is part of&quot;</span>
-        <span class="p">},</span>
-        <span class="s2">&quot;sample&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;object&quot;</span><span class="p">,</span> <span class="s2">&quot;string&quot;</span><span class="p">],</span>
-            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Information about the sample, may be a UID to another collection&quot;</span>
-        <span class="p">},</span>
-        <span class="s2">&quot;scan_id&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;integer&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Scan ID number, not globally unique&quot;</span>
-        <span class="p">},</span>
-        <span class="s2">&quot;time&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;number&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Time the run started.  Unix epoch time&quot;</span>
-        <span class="p">},</span>
-        <span class="s2">&quot;uid&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Globally unique ID for this run&quot;</span>
+        <span class="s2">&quot;data_session&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>              
+            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;An optional field for grouping runs. The meaning is not mandated, but this is a data management grouping and not a scientific grouping. It is intended to group runs in a visit or set of trials.&quot;</span>
         <span class="p">},</span>
         <span class="s2">&quot;group&quot;</span><span class="p">:</span> <span class="p">{</span>
             <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
             <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Unix group to associate this data with&quot;</span>
-        <span class="p">},</span>
-        <span class="s2">&quot;owner&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Unix owner to associate this data with&quot;</span>
-        <span class="p">},</span>
-        <span class="s2">&quot;projections&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;array&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;items&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;$ref&quot;</span><span class="p">:</span> <span class="s2">&quot;#/definitions/projections&quot;</span><span class="p">}</span>
         <span class="p">},</span>
         <span class="s2">&quot;hints&quot;</span><span class="p">:</span> <span class="p">{</span>
             <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span>
@@ -722,6 +694,34 @@ experimetal and subject to backward-incompatible changes in future releases.</p>
             <span class="s2">&quot;patternProperties&quot;</span><span class="p">:</span> <span class="p">{</span>
                 <span class="s2">&quot;^([^.]+)$&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;$ref&quot;</span><span class="p">:</span> <span class="s2">&quot;#/definitions/data_type&quot;</span><span class="p">}},</span>
             <span class="s2">&quot;additionalProperties&quot;</span><span class="p">:</span> <span class="n">false</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;owner&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Unix owner to associate this data with&quot;</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;project&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Name of project that this run is part of&quot;</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;projections&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;array&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;items&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;$ref&quot;</span><span class="p">:</span> <span class="s2">&quot;#/definitions/projections&quot;</span><span class="p">}</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;sample&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;object&quot;</span><span class="p">,</span> <span class="s2">&quot;string&quot;</span><span class="p">],</span>
+            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Information about the sample, may be a UID to another collection&quot;</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;scan_id&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;integer&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Scan ID number, not globally unique&quot;</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;time&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;number&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Time the run started.  Unix epoch time&quot;</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;uid&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Globally unique ID for this run&quot;</span>
         <span class="p">}</span>
     <span class="p">},</span>
     <span class="s2">&quot;patternProperties&quot;</span><span class="p">:</span> <span class="p">{</span>
@@ -808,10 +808,37 @@ is detailed and takes some time to cover, so we defer it to a
 <p>Formal schema:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>    <span class="p">{</span>
         <span class="s2">&quot;definitions&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;configuration&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s2">&quot;data&quot;</span><span class="p">:</span> <span class="p">{</span>
+                        <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;The actual measurement data&quot;</span>
+                    <span class="p">},</span>
+                    <span class="s2">&quot;timestamps&quot;</span><span class="p">:</span> <span class="p">{</span>
+                        <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;The timestamps of the individual measurement data&quot;</span>
+                    <span class="p">},</span>
+                    <span class="s2">&quot;data_keys&quot;</span><span class="p">:</span> <span class="p">{</span>
+                        <span class="s2">&quot;additionalProperties&quot;</span><span class="p">:</span> <span class="p">{</span>
+                            <span class="s2">&quot;$ref&quot;</span><span class="p">:</span> <span class="s2">&quot;#/definitions/data_key&quot;</span>
+                        <span class="p">},</span>
+                        <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;This describes the data stored alongside it in this configuration object.&quot;</span>
+                    <span class="p">}</span>
+                <span class="p">}</span>
+            <span class="p">},</span>
             <span class="s2">&quot;data_key&quot;</span><span class="p">:</span> <span class="p">{</span>
                 <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;data_key&quot;</span><span class="p">,</span>
                 <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Describes the objects in the data property of Event documents&quot;</span><span class="p">,</span>
                 <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s2">&quot;dims&quot;</span><span class="p">:</span> <span class="p">{</span>
+                        <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;array&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;items&quot;</span><span class="p">:</span> <span class="p">{</span>
+                            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
+                        <span class="p">},</span>
+                        <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;The names for dimensions of the data. Null or empty list if scalar data&quot;</span>
+                    <span class="p">},</span>
                     <span class="s2">&quot;dtype&quot;</span><span class="p">:</span> <span class="p">{</span>
                         <span class="s2">&quot;enum&quot;</span><span class="p">:</span> <span class="p">[</span>
                             <span class="s2">&quot;string&quot;</span><span class="p">,</span>
@@ -828,6 +855,10 @@ is detailed and takes some time to cover, so we defer it to a
                         <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
                         <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Where the data is stored if it is stored external to the events.&quot;</span>
                     <span class="p">},</span>
+                    <span class="s2">&quot;object_name&quot;</span><span class="p">:</span> <span class="p">{</span>
+                        <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;The name of the object this key was pulled from.&quot;</span>
+                    <span class="p">},</span>
                     <span class="s2">&quot;shape&quot;</span><span class="p">:</span> <span class="p">{</span>
                         <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;array&quot;</span><span class="p">,</span>
                         <span class="s2">&quot;items&quot;</span><span class="p">:</span> <span class="p">{</span>
@@ -835,20 +866,9 @@ is detailed and takes some time to cover, so we defer it to a
                         <span class="p">},</span>
                         <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;The shape of the data.  Empty list indicates scalar data.&quot;</span>
                     <span class="p">},</span>
-                    <span class="s2">&quot;dims&quot;</span><span class="p">:</span> <span class="p">{</span>
-                        <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;array&quot;</span><span class="p">,</span>
-                        <span class="s2">&quot;items&quot;</span><span class="p">:</span> <span class="p">{</span>
-                            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
-                        <span class="p">},</span>
-                        <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;The names for dimensions of the data. Null or empty list if scalar data&quot;</span>
-                    <span class="p">},</span>
                     <span class="s2">&quot;source&quot;</span><span class="p">:</span> <span class="p">{</span>
                         <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
                         <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;The source (ex piece of hardware) of the data.&quot;</span>
-                    <span class="p">},</span>
-                    <span class="s2">&quot;object_name&quot;</span><span class="p">:</span> <span class="p">{</span>
-                        <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
-                        <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;The name of the object this key was pulled from.&quot;</span>
                     <span class="p">}</span>
                 <span class="p">},</span>
                 <span class="s2">&quot;required&quot;</span><span class="p">:</span> <span class="p">[</span>
@@ -880,27 +900,8 @@ is detailed and takes some time to cover, so we defer it to a
                         <span class="p">}</span>
                     <span class="p">}</span>
                 <span class="p">}</span>
-            <span class="p">},</span>
-            <span class="s2">&quot;configuration&quot;</span><span class="p">:</span> <span class="p">{</span>
-                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span>
-                    <span class="s2">&quot;data&quot;</span><span class="p">:</span> <span class="p">{</span>
-                        <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span>
-                        <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;The actual measurement data&quot;</span>
-                    <span class="p">},</span>
-                    <span class="s2">&quot;timestamps&quot;</span><span class="p">:</span> <span class="p">{</span>
-                        <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span>
-                        <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;The timestamps of the individual measurement data&quot;</span>
-                    <span class="p">},</span>
-                    <span class="s2">&quot;data_keys&quot;</span><span class="p">:</span> <span class="p">{</span>
-                        <span class="s2">&quot;additionalProperties&quot;</span><span class="p">:</span> <span class="p">{</span>
-                            <span class="s2">&quot;$ref&quot;</span><span class="p">:</span> <span class="s2">&quot;#/definitions/data_key&quot;</span>
-                        <span class="p">},</span>
-                        <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span>
-                        <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;This describes the data stored alongside it in this configuration object.&quot;</span>
-                    <span class="p">}</span>
-                <span class="p">}</span>
             <span class="p">}</span>
+            
         <span class="p">},</span>
         <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span>
             <span class="s2">&quot;data_keys&quot;</span><span class="p">:</span> <span class="p">{</span>
@@ -1008,18 +1009,14 @@ overall event ‘time’ is often more useful.</p>
             <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span>
             <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;The actual measurement data&quot;</span>
         <span class="p">},</span>
-        <span class="s2">&quot;timestamps&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;The timestamps of the individual measurement data&quot;</span>
+        <span class="s2">&quot;descriptor&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;UID of the EventDescriptor to which this Event belongs&quot;</span>
         <span class="p">},</span>
         <span class="s2">&quot;filled&quot;</span><span class="p">:</span> <span class="p">{</span>
             <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span>
             <span class="s2">&quot;additionalProperties&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;boolean&quot;</span><span class="p">,</span> <span class="s2">&quot;string&quot;</span><span class="p">]},</span>
             <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Mapping each of the keys of externally-stored data to the boolean False, indicating that the data has not been loaded, or to foreign keys (moved here from &#39;data&#39; when the data was loaded)&quot;</span>
-        <span class="p">},</span>
-        <span class="s2">&quot;descriptor&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;UID of the EventDescriptor to which this Event belongs&quot;</span>
         <span class="p">},</span>
         <span class="s2">&quot;seq_num&quot;</span><span class="p">:</span> <span class="p">{</span>
             <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;integer&quot;</span><span class="p">,</span>
@@ -1028,6 +1025,10 @@ overall event ‘time’ is often more useful.</p>
         <span class="s2">&quot;time&quot;</span><span class="p">:</span> <span class="p">{</span>
             <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;number&quot;</span><span class="p">,</span>
             <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;The event time. This maybe different than the timestamps on each of the data entries.&quot;</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;timestamps&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;The timestamps of the individual measurement data&quot;</span>
         <span class="p">},</span>
         <span class="s2">&quot;uid&quot;</span><span class="p">:</span> <span class="p">{</span>
             <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
@@ -1096,22 +1097,19 @@ the example Event above structured as an Event Page with a single row:</p>
         <span class="p">}</span>
     <span class="p">},</span>
     <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span>
-        <span class="s2">&quot;descriptor&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;The UID of the EventDescriptor to which all of the Events in this page belong&quot;</span>
-        <span class="p">},</span>
         <span class="s2">&quot;data&quot;</span><span class="p">:</span> <span class="p">{</span>
             <span class="s2">&quot;$ref&quot;</span><span class="p">:</span> <span class="s2">&quot;#/definitions/dataframe&quot;</span><span class="p">,</span>
             <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;The actual measurement data&quot;</span>
         <span class="p">},</span>
-        <span class="s2">&quot;timestamps&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s2">&quot;$ref&quot;</span><span class="p">:</span> <span class="s2">&quot;#/definitions/dataframe&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;The timestamps of the individual measurement data&quot;</span>
+        <span class="s2">&quot;descriptor&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;The UID of the EventDescriptor to which all of the Events in this page belong&quot;</span>
         <span class="p">},</span>
         <span class="s2">&quot;filled&quot;</span><span class="p">:</span> <span class="p">{</span>
             <span class="s2">&quot;$ref&quot;</span><span class="p">:</span> <span class="s2">&quot;#/definitions/dataframe_for_filled&quot;</span><span class="p">,</span>
             <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Mapping each of the keys of externally-stored data to an array containing the boolean False, indicating that the data has not been loaded, or to foreign keys (moved here from &#39;data&#39; when the data was loaded)&quot;</span>
         <span class="p">},</span>
+        
         <span class="s2">&quot;seq_num&quot;</span><span class="p">:</span> <span class="p">{</span>
             <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;array&quot;</span><span class="p">,</span>
             <span class="s2">&quot;items&quot;</span><span class="p">:</span> <span class="p">{</span>
@@ -1125,6 +1123,10 @@ the example Event above structured as an Event Page with a single row:</p>
                 <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;number&quot;</span>
             <span class="p">},</span>
             <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Array of Event times. This maybe different than the timestamps on each of the data entries&quot;</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;timestamps&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;$ref&quot;</span><span class="p">:</span> <span class="s2">&quot;#/definitions/dataframe&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;The timestamps of the individual measurement data&quot;</span>
         <span class="p">},</span>
         <span class="s2">&quot;uid&quot;</span><span class="p">:</span> <span class="p">{</span>
             <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;array&quot;</span><span class="p">,</span>
@@ -1195,33 +1197,34 @@ known until the run completes.</p>
         <span class="p">}</span>
     <span class="p">},</span>
     <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span>
-        <span class="s2">&quot;run_start&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Reference back to the run_start document that this document is paired with.&quot;</span>
-        <span class="p">},</span>
-        <span class="s2">&quot;reason&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Long-form description of why the run ended&quot;</span>
-        <span class="p">},</span>
-        <span class="s2">&quot;time&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;number&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;The time the run ended. Unix epoch&quot;</span>
-        <span class="p">},</span>
         <span class="s2">&quot;exit_status&quot;</span><span class="p">:</span> <span class="p">{</span>
             <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
             <span class="s2">&quot;enum&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;success&quot;</span><span class="p">,</span> <span class="s2">&quot;abort&quot;</span><span class="p">,</span> <span class="s2">&quot;fail&quot;</span><span class="p">],</span>
             <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;State of the run when it ended&quot;</span>
-        <span class="p">},</span>
-        <span class="s2">&quot;uid&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Globally unique ID for this document&quot;</span>
         <span class="p">},</span>
         <span class="s2">&quot;num_events&quot;</span><span class="p">:</span> <span class="p">{</span>
             <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span>
             <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{},</span>
             <span class="s2">&quot;additionalProperties&quot;</span><span class="p">:</span> <span class="p">{</span> <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;integer&quot;</span> <span class="p">},</span>
             <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Number of Events per named stream&quot;</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;reason&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Long-form description of why the run ended&quot;</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;run_start&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Reference back to the run_start document that this document is paired with.&quot;</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;time&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;number&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;The time the run ended. Unix epoch&quot;</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;uid&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Globally unique ID for this document&quot;</span>
         <span class="p">}</span>
+        
     <span class="p">},</span>
     <span class="s2">&quot;patternProperties&quot;</span><span class="p">:</span> <span class="p">{</span>
         <span class="s2">&quot;^([^./]+)$&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;$ref&quot;</span><span class="p">:</span> <span class="s2">&quot;#/definitions/data_type&quot;</span><span class="p">}},</span>
@@ -1268,34 +1271,34 @@ referencing external assets, such as large array data written by detectors.</p>
 <p>Formal schema:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
     <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span>
-        <span class="s2">&quot;spec&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;String identifying the format/type of this Resource, used to identify a compatible Handler&quot;</span>
-        <span class="p">},</span>
-        <span class="s2">&quot;resource_path&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Filepath or URI for locating this resource&quot;</span>
-        <span class="p">},</span>
-        <span class="s2">&quot;resource_kwargs&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Additional argument to pass to the Handler to read a Resource&quot;</span>
-        <span class="p">},</span>
-        <span class="s2">&quot;root&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Subset of resource_path that is a local detail, not semantic.&quot;</span>
-        <span class="p">},</span>
         <span class="s2">&quot;path_semantics&quot;</span><span class="p">:</span> <span class="p">{</span>
             <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
             <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Rules for joining paths&quot;</span><span class="p">,</span>
             <span class="s2">&quot;enum&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;posix&quot;</span><span class="p">,</span> <span class="s2">&quot;windows&quot;</span><span class="p">]</span>
         <span class="p">},</span>
-        <span class="s2">&quot;uid&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;resource_kwargs&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Additional argument to pass to the Handler to read a Resource&quot;</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;resource_path&quot;</span><span class="p">:</span> <span class="p">{</span>
             <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Globally unique identifier for this Resource&quot;</span>
+            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Filepath or URI for locating this resource&quot;</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;root&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Subset of resource_path that is a local detail, not semantic.&quot;</span>
         <span class="p">},</span>
         <span class="s2">&quot;run_start&quot;</span><span class="p">:</span> <span class="p">{</span>
             <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
             <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Globally unique ID to the run_start document this resource is associated with.&quot;</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;spec&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;String identifying the format/type of this Resource, used to identify a compatible Handler&quot;</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;uid&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Globally unique identifier for this Resource&quot;</span>
         <span class="p">}</span>
     <span class="p">},</span>
     <span class="s2">&quot;required&quot;</span><span class="p">:</span> <span class="p">[</span>
@@ -1336,6 +1339,10 @@ external assets, such as large array data written by detectors.</p>
 <p>Formal schema:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
     <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;datum_id&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Globally unique identifier for this Datum (akin to &#39;uid&#39; for other Document types), typically formatted as &#39;&lt;resource&gt;/&lt;integer&gt;&#39;&quot;</span>
+        <span class="p">},</span>
         <span class="s2">&quot;datum_kwargs&quot;</span><span class="p">:</span> <span class="p">{</span>
             <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span>
             <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Arguments to pass to the Handler to retrieve one quanta of data&quot;</span>
@@ -1343,10 +1350,6 @@ external assets, such as large array data written by detectors.</p>
         <span class="s2">&quot;resource&quot;</span><span class="p">:</span> <span class="p">{</span>
             <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
             <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;The UID of the Resource to which this Datum belongs&quot;</span>
-        <span class="p">},</span>
-        <span class="s2">&quot;datum_id&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Globally unique identifier for this Datum (akin to &#39;uid&#39; for other Document types), typically formatted as &#39;&lt;resource&gt;/&lt;integer&gt;&#39;&quot;</span>
         <span class="p">}</span>
     <span class="p">},</span>
     <span class="s2">&quot;required&quot;</span><span class="p">:</span> <span class="p">[</span>
@@ -1386,21 +1389,22 @@ strucuted as a Datum Page with one row:</p>
         <span class="p">}</span>
     <span class="p">},</span>
     <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span>
-        <span class="s2">&quot;resource&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;The UID of the Resource to which all Datums in the page belong&quot;</span>
-        <span class="p">},</span>
-        <span class="s2">&quot;datum_kwargs&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s2">&quot;$ref&quot;</span><span class="p">:</span> <span class="s2">&quot;#/definitions/dataframe&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Array of arguments to pass to the Handler to retrieve one quanta of data&quot;</span>
-        <span class="p">},</span>
         <span class="s2">&quot;datum_id&quot;</span><span class="p">:</span> <span class="p">{</span>
             <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;array&quot;</span><span class="p">,</span>
             <span class="s2">&quot;items&quot;</span><span class="p">:</span> <span class="p">{</span>
                 <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
             <span class="p">},</span>
             <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Array unique identifiers for each Datum (akin to &#39;uid&#39; for other Document types), typically formatted as &#39;&lt;resource&gt;/&lt;integer&gt;&#39;&quot;</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;datum_kwargs&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;$ref&quot;</span><span class="p">:</span> <span class="s2">&quot;#/definitions/dataframe&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Array of arguments to pass to the Handler to retrieve one quanta of data&quot;</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;resource&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;The UID of the Resource to which all Datums in the page belong&quot;</span>
         <span class="p">}</span>
+        
     <span class="p">},</span>
     <span class="s2">&quot;required&quot;</span><span class="p">:</span> <span class="p">[</span>
         <span class="s2">&quot;resource&quot;</span><span class="p">,</span>
@@ -1447,34 +1451,30 @@ or assets where there are many relatively small data sets (e.g. scanned fluoresc
 <p>Formal schema:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
     <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span>
-        <span class="s2">&quot;spec&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;String identifying the format/type of this Stream Resource, used to identify a compatible Handler&quot;</span>
-        <span class="p">},</span>
-        <span class="s2">&quot;resource_path&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Filepath or URI for locating this resource&quot;</span>
-        <span class="p">},</span>
-        <span class="s2">&quot;resource_kwargs&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Additional argument to pass to the Handler to read a Stream Resource&quot;</span>
-        <span class="p">},</span>
-        <span class="s2">&quot;root&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Subset of resource_path that is a local detail, not semantic.&quot;</span>
-        <span class="p">},</span>
         <span class="s2">&quot;path_semantics&quot;</span><span class="p">:</span> <span class="p">{</span>
             <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
             <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Rules for joining paths&quot;</span><span class="p">,</span>
             <span class="s2">&quot;enum&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;posix&quot;</span><span class="p">,</span> <span class="s2">&quot;windows&quot;</span><span class="p">]</span>
         <span class="p">},</span>
-        <span class="s2">&quot;uid&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;resource_kwargs&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Additional argument to pass to the Handler to read a Stream Resource&quot;</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;resource_path&quot;</span><span class="p">:</span> <span class="p">{</span>
             <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Globally unique identifier for this Stream Resource&quot;</span>
+            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Filepath or URI for locating this resource&quot;</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;root&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Subset of resource_path that is a local detail, not semantic.&quot;</span>
         <span class="p">},</span>
         <span class="s2">&quot;run_start&quot;</span><span class="p">:</span> <span class="p">{</span>
             <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
             <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Globally unique ID to the run_start document this Stream Resource is associated with.&quot;</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;spec&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;String identifying the format/type of this Stream Resource, used to identify a compatible Handler&quot;</span>
         <span class="p">},</span>
         <span class="s2">&quot;stream_names&quot;</span><span class="p">:</span> <span class="p">{</span>
             <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;array&quot;</span><span class="p">,</span>
@@ -1485,6 +1485,10 @@ or assets where there are many relatively small data sets (e.g. scanned fluoresc
             <span class="s2">&quot;uniqueItems&quot;</span><span class="p">:</span> <span class="n">true</span><span class="p">,</span>
             <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;List of the stream names this resource provides&quot;</span>
 
+        <span class="p">},</span>
+        <span class="s2">&quot;uid&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Globally unique identifier for this Stream Resource&quot;</span>
         <span class="p">}</span>
     <span class="p">},</span>
     <span class="s2">&quot;required&quot;</span><span class="p">:</span> <span class="p">[</span>
@@ -1533,25 +1537,13 @@ or assets where there are many relatively small data sets (e.g. scanned fluoresc
 <p>Formal schema:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
     <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span>
-        <span class="s2">&quot;datum_kwargs&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Arguments to pass to the Handler to retrieve one quanta of data&quot;</span>
-        <span class="p">},</span>
-        <span class="s2">&quot;stream_resource&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;The UID of the Stream Resource to which this Datum belongs&quot;</span>
-        <span class="p">},</span>
-        <span class="s2">&quot;uid&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Globally unique identifier for this Datum. A suggested formatting being &#39;&lt;stream_resource&gt;/&lt;stream_name&gt;/&lt;block_id&gt;&quot;</span>
-        <span class="p">},</span>
-        <span class="s2">&quot;stream_name&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;The name of the stream that this Datum is providing a block of.&quot;</span>
-        <span class="p">},</span>
         <span class="s2">&quot;block_idx&quot;</span><span class="p">:</span> <span class="p">{</span>
             <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;integer&quot;</span><span class="p">,</span>
             <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;The order in the stream of this block of data. This must be contiguous for a given stream.&quot;</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;datum_kwargs&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Arguments to pass to the Handler to retrieve one quanta of data&quot;</span>
         <span class="p">},</span>
         <span class="s2">&quot;event_count&quot;</span><span class="p">:</span> <span class="p">{</span>
             <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;integer&quot;</span><span class="p">,</span>
@@ -1560,8 +1552,19 @@ or assets where there are many relatively small data sets (e.g. scanned fluoresc
         <span class="s2">&quot;event_offset&quot;</span><span class="p">:</span> <span class="p">{</span>
             <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;integer&quot;</span><span class="p">,</span>
             <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;The sequence number of the first event in this block. This increasing value allows the presence of gaps.&quot;</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;stream_name&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;The name of the stream that this Datum is providing a block of.&quot;</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;stream_resource&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;The UID of the Stream Resource to which this Datum belongs&quot;</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;uid&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Globally unique identifier for this Datum. A suggested formatting being &#39;&lt;stream_resource&gt;/&lt;stream_name&gt;/&lt;block_id&gt;&quot;</span>
         <span class="p">}</span>
-
     <span class="p">},</span>
     <span class="s2">&quot;required&quot;</span><span class="p">:</span> <span class="p">[</span>
         <span class="s2">&quot;datum_kwargs&quot;</span><span class="p">,</span>
