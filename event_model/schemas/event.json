@@ -3,6 +3,16 @@
    "description": "Document to record a quanta of collected data",
    "type": "object",
    "properties": {
+      "data": {
+         "title": "Data",
+         "description": "The actual measurement data",
+         "type": "object"
+      },
+      "descriptor": {
+         "title": "Descriptor",
+         "description": "UID of the EventDescriptor to which this Event belongs",
+         "type": "string"
+      },
       "filled": {
          "title": "Filled",
          "description": "Mapping each of the keys of externally-stored data to the boolean False, indicating that the data has not been loaded, or to foreign keys (moved here from 'data' when the data was loaded)",
@@ -18,21 +28,6 @@
             ]
          }
       },
-      "data": {
-         "title": "Data",
-         "description": "The actual measurement data",
-         "type": "object"
-      },
-      "timestamps": {
-         "title": "Timestamps",
-         "description": "The timestamps of the individual measurement data",
-         "type": "object"
-      },
-      "descriptor": {
-         "title": "Descriptor",
-         "description": "UID of the EventDescriptor to which this Event belongs",
-         "type": "string"
-      },
       "seq_num": {
          "title": "Seq Num",
          "description": "Sequence number to identify the location of this Event in the Event stream",
@@ -43,6 +38,11 @@
          "description": "The event time. This maybe different than the timestamps on each of the data entries.",
          "type": "number"
       },
+      "timestamps": {
+         "title": "Timestamps",
+         "description": "The timestamps of the individual measurement data",
+         "type": "object"
+      },
       "uid": {
          "title": "Uid",
          "description": "Globally unique identifier for this Event",
@@ -51,10 +51,10 @@
    },
    "required": [
       "data",
-      "timestamps",
       "descriptor",
       "seq_num",
       "time",
+      "timestamps",
       "uid"
    ]
 }

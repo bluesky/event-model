@@ -8,6 +8,13 @@ from .generate.type_wrapper import Field
 class DatumPage(TypedDict):
     """Page of documents to reference a quanta of externally-stored data"""
 
+    datum_id: Annotated[
+        List[str],
+        Field(
+            description="Array unique identifiers for each Datum (akin to 'uid' for "
+            "other Document types), typically formatted as '<resource>/<integer>'"
+        ),
+    ]
     datum_kwargs: NotRequired[
         Annotated[
             Dict[str, Union[bool, str, float, List]],
@@ -17,17 +24,9 @@ class DatumPage(TypedDict):
             ),
         ]
     ]
-
     resource: Annotated[
         str,
         Field(
             description="The UID of the Resource to which all Datums in the page belong"
-        ),
-    ]
-    datum_id: Annotated[
-        List[str],
-        Field(
-            description="Array unique identifiers for each Datum (akin to 'uid' for "
-            "other Document types), typically formatted as '<resource>/<integer>'"
         ),
     ]

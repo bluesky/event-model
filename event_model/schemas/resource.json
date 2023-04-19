@@ -12,6 +12,21 @@
          ],
          "type": "string"
       },
+      "resource_kwargs": {
+         "title": "Resource Kwargs",
+         "description": "Additional argument to pass to the Handler to read a Resource",
+         "type": "object"
+      },
+      "resource_path": {
+         "title": "Resource Path",
+         "description": "Filepath or URI for locating this resource",
+         "type": "string"
+      },
+      "root": {
+         "title": "Root",
+         "description": "Subset of resource_path that is a local detail, not semantic.",
+         "type": "string"
+      },
       "run_start": {
          "title": "Run Start",
          "description": "Globally unique ID to the run_start document this resource is associated with.",
@@ -22,21 +37,6 @@
          "description": "String identifying the format/type of this Resource, used to identify a compatible Handler",
          "type": "string"
       },
-      "resource_path": {
-         "title": "Resource Path",
-         "description": "Filepath or URI for locating this resource",
-         "type": "string"
-      },
-      "resource_kwargs": {
-         "title": "Resource Kwargs",
-         "description": "Additional argument to pass to the Handler to read a Resource",
-         "type": "object"
-      },
-      "root": {
-         "title": "Root",
-         "description": "Subset of resource_path that is a local detail, not semantic.",
-         "type": "string"
-      },
       "uid": {
          "title": "Uid",
          "description": "Globally unique identifier for this Resource",
@@ -44,10 +44,10 @@
       }
    },
    "required": [
-      "spec",
-      "resource_path",
       "resource_kwargs",
+      "resource_path",
       "root",
+      "spec",
       "uid"
    ]
 }

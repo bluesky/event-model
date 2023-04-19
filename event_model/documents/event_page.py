@@ -8,6 +8,18 @@ from .generate.type_wrapper import AsRef, Field
 class EventPage(TypedDict):
     """Page of documents to record a quanta of collected data"""
 
+    data: Annotated[
+        Dict[str, List[Any]],
+        AsRef("Dataframe"),
+        Field(description="The actual measurement data"),
+    ]
+    descriptor: Annotated[
+        str,
+        Field(
+            description="The UID of the EventDescriptor to which all of the Events in "
+            "this page belong",
+        ),
+    ]
     filled: NotRequired[
         Annotated[
             Dict[str, List[Union[bool, str]]],
@@ -19,24 +31,6 @@ class EventPage(TypedDict):
                 "was loaded)"
             ),
         ]
-    ]
-
-    descriptor: Annotated[
-        str,
-        Field(
-            description="The UID of the EventDescriptor to which all of the Events in "
-            "this page belong",
-        ),
-    ]
-    data: Annotated[
-        Dict[str, List[Any]],
-        AsRef("Dataframe"),
-        Field(description="The actual measurement data"),
-    ]
-    timestamps: Annotated[
-        Dict[str, List[Any]],
-        AsRef("Dataframe"),
-        Field(description="The timestamps of the individual measurement data"),
     ]
     seq_num: Annotated[
         List[int],
@@ -51,6 +45,11 @@ class EventPage(TypedDict):
             description="Array of Event times. This maybe different than the "
             "timestamps on each of the data entries"
         ),
+    ]
+    timestamps: Annotated[
+        Dict[str, List[Any]],
+        AsRef("Dataframe"),
+        Field(description="The timestamps of the individual measurement data"),
     ]
     uid: Annotated[
         List[str],

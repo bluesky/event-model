@@ -8,6 +8,10 @@ from .generate.type_wrapper import Field
 class Event(TypedDict):
     """Document to record a quanta of collected data"""
 
+    data: Annotated[Dict[str, Any], Field(description="The actual measurement data")]
+    descriptor: Annotated[
+        str, Field(description="UID of the EventDescriptor to which this Event belongs")
+    ]
     filled: NotRequired[
         Annotated[
             Dict[str, Union[bool, str]],
@@ -17,15 +21,6 @@ class Event(TypedDict):
                 "foreign keys (moved here from 'data' when the data was loaded)"
             ),
         ]
-    ]
-
-    data: Annotated[Dict[str, Any], Field(description="The actual measurement data")]
-    timestamps: Annotated[
-        Dict[str, Any],
-        Field(description="The timestamps of the individual measurement data"),
-    ]
-    descriptor: Annotated[
-        str, Field(description="UID of the EventDescriptor to which this Event belongs")
     ]
     seq_num: Annotated[
         int,
@@ -40,5 +35,9 @@ class Event(TypedDict):
             description="The event time. This maybe different than the timestamps on "
             "each of the data entries.",
         ),
+    ]
+    timestamps: Annotated[
+        Dict[str, Any],
+        Field(description="The timestamps of the individual measurement data"),
     ]
     uid: Annotated[str, Field(description="Globally unique identifier for this Event")]

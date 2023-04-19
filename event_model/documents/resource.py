@@ -17,6 +17,21 @@ class Resource(TypedDict):
             Field(description="Rules for joining paths"),
         ]
     ]
+    resource_kwargs: Annotated[
+        Dict[str, Any],
+        Field(
+            description="Additional argument to pass to the Handler to read a Resource"
+        ),
+    ]
+    resource_path: Annotated[
+        str, Field(description="Filepath or URI for locating this resource")
+    ]
+    root: Annotated[
+        str,
+        Field(
+            description="Subset of resource_path that is a local detail, not semantic."
+        ),
+    ]
     run_start: NotRequired[
         Annotated[
             str,
@@ -26,27 +41,11 @@ class Resource(TypedDict):
             ),
         ]
     ]
-
     spec: Annotated[
         str,
         Field(
             description="String identifying the format/type of this Resource, used to "
             "identify a compatible Handler",
-        ),
-    ]
-    resource_path: Annotated[
-        str, Field(description="Filepath or URI for locating this resource")
-    ]
-    resource_kwargs: Annotated[
-        Dict[str, Any],
-        Field(
-            description="Additional argument to pass to the Handler to read a Resource"
-        ),
-    ]
-    root: Annotated[
-        str,
-        Field(
-            description="Subset of resource_path that is a local detail, not semantic."
         ),
     ]
     uid: Annotated[

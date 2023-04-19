@@ -3,11 +3,6 @@
    "description": "Document created at the start of run. Provides a seach target and later documents link to it",
    "type": "object",
    "properties": {
-      "data_session": {
-         "title": "Data Session",
-         "description": "An optional field for grouping runs. The meaning is not mandated, but this is a data management grouping and not a scientific grouping. It is intended to group runs in a visit or set of trials.",
-         "type": "string"
-      },
       "data_groups": {
          "title": "Data Groups",
          "description": "An optional list of data access groups that have meaning to some external system. Examples might include facility, beamline, end stations, proposal, safety form.",
@@ -16,10 +11,44 @@
             "type": "string"
          }
       },
+      "data_session": {
+         "title": "Data Session",
+         "description": "An optional field for grouping runs. The meaning is not mandated, but this is a data management grouping and not a scientific grouping. It is intended to group runs in a visit or set of trials.",
+         "type": "string"
+      },
+      "data_type": {
+         "$ref": "#/definitions/DataType"
+      },
+      "group": {
+         "title": "Group",
+         "description": "Unix group to associate this data with",
+         "type": "string"
+      },
+      "hints": {
+         "title": "Hints",
+         "description": "Start-level hints",
+         "allOf": [
+            {
+               "$ref": "#/definitions/Hints"
+            }
+         ]
+      },
+      "owner": {
+         "title": "Owner",
+         "description": "Unix owner to associate this data with",
+         "type": "string"
+      },
       "project": {
          "title": "Project",
          "description": "Name of project that this run is part of",
          "type": "string"
+      },
+      "projections": {
+         "title": "Projections",
+         "type": "array",
+         "items": {
+            "$ref": "#/definitions/Projections"
+         }
       },
       "sample": {
          "title": "Sample",
@@ -38,35 +67,6 @@
          "description": "Scan ID number, not globally unique",
          "type": "integer"
       },
-      "group": {
-         "title": "Group",
-         "description": "Unix group to associate this data with",
-         "type": "string"
-      },
-      "owner": {
-         "title": "Owner",
-         "description": "Unix owner to associate this data with",
-         "type": "string"
-      },
-      "projections": {
-         "title": "Projections",
-         "type": "array",
-         "items": {
-            "$ref": "#/definitions/Projections"
-         }
-      },
-      "hints": {
-         "title": "Hints",
-         "description": "Start-level hints",
-         "allOf": [
-            {
-               "$ref": "#/definitions/Hints"
-            }
-         ]
-      },
-      "data_type": {
-         "$ref": "#/definitions/DataType"
-      },
       "time": {
          "title": "Time",
          "description": "Time the run started.  Unix epoch time",
@@ -83,6 +83,37 @@
       "uid"
    ],
    "definitions": {
+      "DataType": {
+         "title": "DataType"
+      },
+      "Hints": {
+         "title": "Hints",
+         "description": "Start-level hints",
+         "type": "object",
+         "properties": {
+            "dimensions": {
+               "title": "Dimensions",
+               "description": "The independent axes of the experiment. Ordered slow to fast",
+               "type": "array",
+               "items": {
+                  "type": "array",
+                  "items": {
+                     "anyOf": [
+                        {
+                           "type": "array",
+                           "items": {
+                              "type": "string"
+                           }
+                        },
+                        {
+                           "type": "string"
+                        }
+                     ]
+                  }
+               }
+            }
+         }
+      },
       "Calculation": {
          "title": "Calculation",
          "type": "object",
@@ -92,15 +123,15 @@
                "type": "array",
                "items": {}
             },
-            "kwargs": {
-               "title": "Kwargs",
-               "description": "kwargs for calcalation callable",
-               "type": "object"
-            },
             "callable": {
                "title": "Callable",
                "description": "callable function to perform calculation",
                "type": "string"
+            },
+            "kwargs": {
+               "title": "Kwargs",
+               "description": "kwargs for calcalation callable",
+               "type": "object"
             }
          },
          "required": [
@@ -112,18 +143,25 @@
          "description": "Where to get the data from",
          "type": "object",
          "properties": {
-            "type": {
-               "title": "Type",
-               "description": "linked: a value linked from the data set, calculated: a value that requires calculation, static:  a value defined here in the projection ",
-               "enum": [
-                  "linked",
-                  "calculated",
-                  "static"
-               ],
+            "calculation": {
+               "title": "calculation properties",
+               "description": "required fields if type is calculated",
+               "allOf": [
+                  {
+                     "$ref": "#/definitions/Calculation"
+                  }
+               ]
+            },
+            "config_device": {
+               "title": "Config Device",
                "type": "string"
             },
-            "stream": {
-               "title": "Stream",
+            "config_index": {
+               "title": "Config Index",
+               "type": "integer"
+            },
+            "field": {
+               "title": "Field",
                "type": "string"
             },
             "location": {
@@ -136,26 +174,19 @@
                ],
                "type": "string"
             },
-            "field": {
-               "title": "Field",
+            "stream": {
+               "title": "Stream",
                "type": "string"
             },
-            "config_index": {
-               "title": "Config Index",
-               "type": "integer"
-            },
-            "config_device": {
-               "title": "Config Device",
+            "type": {
+               "title": "Type",
+               "description": "linked: a value linked from the data set, calculated: a value that requires calculation, static:  a value defined here in the projection ",
+               "enum": [
+                  "linked",
+                  "calculated",
+                  "static"
+               ],
                "type": "string"
-            },
-            "calculation": {
-               "title": "calculation properties",
-               "description": "required fields if type is calculated",
-               "allOf": [
-                  {
-                     "$ref": "#/definitions/Calculation"
-                  }
-               ]
             },
             "value": {
                "title": "Value",
@@ -271,20 +302,15 @@
          "description": "Describe how to interperet this run as the given projection",
          "type": "object",
          "properties": {
-            "name": {
-               "title": "Name",
-               "description": "The name of the projection",
-               "type": "string"
-            },
-            "version": {
-               "title": "Version",
-               "description": "The version of the projection spec. Can specify the version of an external specification.",
-               "type": "string"
-            },
             "configuration": {
                "title": "Configuration",
                "description": "Static information about projection",
                "type": "object"
+            },
+            "name": {
+               "title": "Name",
+               "description": "The name of the projection",
+               "type": "string"
             },
             "projection": {
                "title": "Projection",
@@ -292,44 +318,18 @@
                "additionalProperties": {
                   "$ref": "#/definitions/Projection"
                }
+            },
+            "version": {
+               "title": "Version",
+               "description": "The version of the projection spec. Can specify the version of an external specification.",
+               "type": "string"
             }
          },
          "required": [
-            "version",
             "configuration",
-            "projection"
+            "projection",
+            "version"
          ]
-      },
-      "Hints": {
-         "title": "Hints",
-         "description": "Start-level hints",
-         "type": "object",
-         "properties": {
-            "dimensions": {
-               "title": "Dimensions",
-               "description": "The independent axes of the experiment. Ordered slow to fast",
-               "type": "array",
-               "items": {
-                  "type": "array",
-                  "items": {
-                     "anyOf": [
-                        {
-                           "type": "array",
-                           "items": {
-                              "type": "string"
-                           }
-                        },
-                        {
-                           "type": "string"
-                        }
-                     ]
-                  }
-               }
-            }
-         }
-      },
-      "DataType": {
-         "title": "DataType"
       }
    }
 }

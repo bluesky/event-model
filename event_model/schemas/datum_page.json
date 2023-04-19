@@ -3,6 +3,14 @@
    "description": "Page of documents to reference a quanta of externally-stored data",
    "type": "object",
    "properties": {
+      "datum_id": {
+         "title": "Datum Id",
+         "description": "Array unique identifiers for each Datum (akin to 'uid' for other Document types), typically formatted as '<resource>/<integer>'",
+         "type": "array",
+         "items": {
+            "type": "string"
+         }
+      },
       "datum_kwargs": {
          "title": "Datum Kwargs",
          "description": "Array of arguments to pass to the Handler to retrieve one quanta of data",
@@ -29,18 +37,10 @@
          "title": "Resource",
          "description": "The UID of the Resource to which all Datums in the page belong",
          "type": "string"
-      },
-      "datum_id": {
-         "title": "Datum Id",
-         "description": "Array unique identifiers for each Datum (akin to 'uid' for other Document types), typically formatted as '<resource>/<integer>'",
-         "type": "array",
-         "items": {
-            "type": "string"
-         }
       }
    },
    "required": [
-      "resource",
-      "datum_id"
+      "datum_id",
+      "resource"
    ]
 }

@@ -3,19 +3,6 @@
    "description": "Document for the end of a run indicating the success/fail state of the run and the end time",
    "type": "object",
    "properties": {
-      "reason": {
-         "title": "Reason",
-         "description": "Long-form description of why the run ended",
-         "type": "string"
-      },
-      "num_events": {
-         "title": "Num Events",
-         "description": "Number of Events per named stream",
-         "type": "object",
-         "additionalProperties": {
-            "type": "integer"
-         }
-      },
       "data_type": {
          "title": "Data Type",
          "description": "data_type",
@@ -24,16 +11,6 @@
                "$ref": "#/definitions/DataType"
             }
          ]
-      },
-      "run_start": {
-         "title": "Run Start",
-         "description": "Reference back to the run_start document that this document is paired with.",
-         "type": "string"
-      },
-      "time": {
-         "title": "Time",
-         "description": "The time the run ended. Unix epoch",
-         "type": "number"
       },
       "exit_status": {
          "title": "Exit Status",
@@ -45,6 +22,29 @@
          ],
          "type": "string"
       },
+      "num_events": {
+         "title": "Num Events",
+         "description": "Number of Events per named stream",
+         "type": "object",
+         "additionalProperties": {
+            "type": "integer"
+         }
+      },
+      "reason": {
+         "title": "Reason",
+         "description": "Long-form description of why the run ended",
+         "type": "string"
+      },
+      "run_start": {
+         "title": "Run Start",
+         "description": "Reference back to the run_start document that this document is paired with.",
+         "type": "string"
+      },
+      "time": {
+         "title": "Time",
+         "description": "The time the run ended. Unix epoch",
+         "type": "number"
+      },
       "uid": {
          "title": "Uid",
          "description": "Globally unique ID for this document",
@@ -52,9 +52,9 @@
       }
    },
    "required": [
+      "exit_status",
       "run_start",
       "time",
-      "exit_status",
       "uid"
    ],
    "definitions": {

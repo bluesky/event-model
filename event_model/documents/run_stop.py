@@ -11,10 +11,15 @@ class RunStop(TypedDict):
     run and the end time
     """
 
-    reason: NotRequired[
-        Annotated[str, Field(description="Long-form description of why the run ended")]
+    data_type: NotRequired[
+        Annotated[
+            Any, Field(description="data_type", regex="^([^./]+)$"), AsRef("DataType")
+        ]
     ]
-
+    exit_status: Annotated[
+        Literal["success", "abort", "fail"],
+        Field(description="State of the run when it ended"),
+    ]
     num_events: NotRequired[
         Annotated[
             Dict[str, int],
@@ -23,12 +28,9 @@ class RunStop(TypedDict):
             ),
         ]
     ]
-    data_type: NotRequired[
-        Annotated[
-            Any, Field(description="data_type", regex="^([^./]+)$"), AsRef("DataType")
-        ]
+    reason: NotRequired[
+        Annotated[str, Field(description="Long-form description of why the run ended")]
     ]
-
     run_start: Annotated[
         str,
         Field(
@@ -37,8 +39,4 @@ class RunStop(TypedDict):
         ),
     ]
     time: Annotated[float, Field(description="The time the run ended. Unix epoch")]
-    exit_status: Annotated[
-        Literal["success", "abort", "fail"],
-        Field(description="State of the run when it ended"),
-    ]
     uid: Annotated[str, Field(description="Globally unique ID for this document")]

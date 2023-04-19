@@ -3,20 +3,6 @@
    "description": "Page of documents to record a quanta of collected data",
    "type": "object",
    "properties": {
-      "filled": {
-         "title": "Filled",
-         "description": "Mapping each of the keys of externally-stored data to an array containing the boolean False, indicating that the data has not been loaded, or to foreign keys (moved here from 'data' when the data was loaded)",
-         "allOf": [
-            {
-               "$ref": "#/definitions/DataframeForFilled"
-            }
-         ]
-      },
-      "descriptor": {
-         "title": "Descriptor",
-         "description": "The UID of the EventDescriptor to which all of the Events in this page belong",
-         "type": "string"
-      },
       "data": {
          "title": "Data",
          "description": "The actual measurement data",
@@ -26,12 +12,17 @@
             }
          ]
       },
-      "timestamps": {
-         "title": "Timestamps",
-         "description": "The timestamps of the individual measurement data",
+      "descriptor": {
+         "title": "Descriptor",
+         "description": "The UID of the EventDescriptor to which all of the Events in this page belong",
+         "type": "string"
+      },
+      "filled": {
+         "title": "Filled",
+         "description": "Mapping each of the keys of externally-stored data to an array containing the boolean False, indicating that the data has not been loaded, or to foreign keys (moved here from 'data' when the data was loaded)",
          "allOf": [
             {
-               "$ref": "#/definitions/Dataframe"
+               "$ref": "#/definitions/DataframeForFilled"
             }
          ]
       },
@@ -51,6 +42,15 @@
             "type": "number"
          }
       },
+      "timestamps": {
+         "title": "Timestamps",
+         "description": "The timestamps of the individual measurement data",
+         "allOf": [
+            {
+               "$ref": "#/definitions/Dataframe"
+            }
+         ]
+      },
       "uid": {
          "title": "Uid",
          "description": "Array of globally unique identifiers for each Event",
@@ -61,14 +61,22 @@
       }
    },
    "required": [
-      "descriptor",
       "data",
-      "timestamps",
+      "descriptor",
       "seq_num",
       "time",
+      "timestamps",
       "uid"
    ],
    "definitions": {
+      "Dataframe": {
+         "title": "Dataframe",
+         "type": "object",
+         "additionalProperties": {
+            "type": "array",
+            "items": {}
+         }
+      },
       "DataframeForFilled": {
          "title": "DataframeForFilled",
          "type": "object",
@@ -84,14 +92,6 @@
                   }
                ]
             }
-         }
-      },
-      "Dataframe": {
-         "title": "Dataframe",
-         "type": "object",
-         "additionalProperties": {
-            "type": "array",
-            "items": {}
          }
       }
    }

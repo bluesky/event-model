@@ -8,6 +8,7 @@ from typing import Dict, Optional, Tuple, Type, Union
 
 from pydantic import BaseConfig, BaseModel, Field, create_model
 from pydantic.fields import FieldInfo
+from collections import OrderedDict
 from typing_extensions import (
     Annotated,
     NotRequired,
@@ -152,8 +153,8 @@ def field_is_not_required(
     remove_origin_if_NotRequired : bool
         If True returns the inputted field_type with NotRequired stripped off.
 
-    Returns:
-    --------------------------------------------
+    Returns
+    -----------------
     (field_type, is_not_required) : Tuple[type, bool]
         is_not_required is True if the field is of type NotRequired[X].
         field_type is the same as the inputted field_type however if
@@ -203,7 +204,9 @@ def get_field_type(
         field_type = [
             x
             for x in args
-            if True not in [isinstance(x, y) for y in ALLOWED_ANNOTATION_ELEMENTS]
+            if True not in [
+                isinstance(x, y) for y in ALLOWED_ANNOTATION_ELEMENTS
+            ]
         ]
         assert len(field_type) == 1, (
             f'Field "{field_name}" has multiple types: '
@@ -214,7 +217,9 @@ def get_field_type(
     # If the TypedDict references another TypedDict then another
     # BaseModel is recursively generated from that TypedDict,
     # and the field annotation is swapped to that BaseModel.
-    field_type = change_sub_typed_dicts_to_basemodels(field_type, new_basemodel_classes)
+    field_type = change_sub_typed_dicts_to_basemodels(
+        field_type, new_basemodel_classes
+    )
 
     return field_type
 
@@ -229,7 +234,7 @@ def get_annotation_contents(field_type: type) -> Tuple[Optional[AsRef], FieldInf
         Annotation to be parsed.
 
     Returns
-    ----------------------------------------------
+    -----------------
     (as_ref, field_info) : Tuple[AsRef, FieldInfo]
         as_ref is the AsRef tag in the annotation, or None if
         there is no AsRef tag. field_info is the FieldInfo class returned from
@@ -321,7 +326,7 @@ def change_sub_typed_dicts_to_basemodels(
         twice so we just reference the one already created if multiple
         annotations have the same TypedDict.
 
-    Returns:
+    Returns
     -----------------
     field_type : type
         New field type with TypedDicts swapped to basemodels
@@ -420,12 +425,26 @@ def strip_newline_literal(schema: dict):
     return schema
 
 
+def sort_jsonschema(schema: dict) -> dict:
+    """Sorts the schema properties keys alphabetically by key name, exchanging the
+    properties dicts for OrderedDicts"""
+    for key in schema:
+        if key == "properties":
+            schema[key] = OrderedDict(
+                sorted(list(schema[key].items()), key=lambda x: x[0])
+            )
+        elif isinstance(schema[key], dict):
+            schema[key] = sort_jsonschema(schema[key])
+    return schema
+        
+
 # From https://github.com/pydantic/pydantic/issues/760#issuecomment-589708485
 def parse_typeddict_to_schema(
     typed_dict: _TypedDictMeta,
     out_dir: Optional[Path] = None,
     return_basemodel: bool = False,
     new_basemodel_classes: Dict[str, BaseModel] = {},
+    sort: bool = True
 ) -> Union[Type[BaseModel], Dict[str, type]]:
     """Takes a TypedDict and generates a jsonschema from it.
 
@@ -435,7 +454,8 @@ def parse_typeddict_to_schema(
         The typeddict to be converted to a pydantic basemodel.
     out_dir: Optional[Path]
         Optionally provide a directory to store the generated json schema from
-        the basemodel, if None then the dictionary schema won't be saved to disk.
+        the basemodel, if None then the dictionary schema won't be saved
+        to disk.
     return_basemodel : bool
         Optionally return the basemodel as soon as it's generated, rather than
         converting it to a dictionary. Required for converting TypedDicts
@@ -443,8 +463,10 @@ def parse_typeddict_to_schema(
     new_basemodel_classes : Dict[str, BaseModel]
         Optionally provide basemodel classes already generated during a
         conversion. Required for when the function is called recursively.
+    sort : bool
+        If true, sort the properties keys in the outputted schema.
 
-    Returns:
+    Returns
     --------------------------------------------------------------------------
     Either the generated BaseModel or the schema dictionary generated from it,
     depending on if return_basemodel is True.
@@ -476,6 +498,9 @@ def parse_typeddict_to_schema(
     # Add the manually defined extra stuff
     if typed_dict in extra_schema:
         model_schema = merge_dicts(extra_schema[typed_dict], model_schema)
+
+    if sort:
+        model_schema = sort_jsonschema(model_schema)
 
     if out_dir:
         with open(out_dir / f'{model_schema["title"]}.json', "w+") as f:

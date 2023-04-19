@@ -8,6 +8,19 @@ from .generate.type_wrapper import AsRef, Field
 class DataKey(TypedDict):
     """Describes the objects in the data property of Event documents"""
 
+    dims: NotRequired[
+        Annotated[
+            List[str],
+            Field(
+                description="The names for dimensions of the data. Null or empty list "
+                "if scalar data",
+            ),
+        ]
+    ]
+    dtype: Annotated[
+        Literal["string", "number", "array", "boolean", "integer"],
+        Field(description="The type of the data in the event."),
+    ]
     external: NotRequired[
         Annotated[
             str,
@@ -15,15 +28,6 @@ class DataKey(TypedDict):
                 description="Where the data is stored if it is stored external "
                 "to the events",
                 regex=r"^[A-Z]+:?",
-            ),
-        ]
-    ]
-    dims: NotRequired[
-        Annotated[
-            List[str],
-            Field(
-                description="The names for dimensions of the data. Null or empty list "
-                "if scalar data",
             ),
         ]
     ]
@@ -42,21 +46,15 @@ class DataKey(TypedDict):
             ),
         ]
     ]
-    units: NotRequired[
-        Annotated[str, Field(description="Engineering units of the value")]
-    ]
-
-    dtype: Annotated[
-        Literal["string", "number", "array", "boolean", "integer"],
-        Field(description="The type of the data in the event."),
-    ]
-
     shape: Annotated[
         List[int],
         Field(description="The shape of the data.  Empty list indicates scalar data."),
     ]
     source: Annotated[
         str, Field(description="The source (ex piece of hardware) of the data.")
+    ]
+    units: NotRequired[
+        Annotated[str, Field(description="Engineering units of the value")]
     ]
 
 
@@ -75,12 +73,6 @@ class Configuration(TypedDict):
     data: NotRequired[
         Annotated[Dict[str, Any], Field(description="The actual measurement data")]
     ]
-    timestamps: NotRequired[
-        Annotated[
-            Dict[str, Any],
-            Field(description="The timestamps of the individual measurement data"),
-        ]
-    ]
     data_keys: NotRequired[
         Annotated[
             Dict[str, DataKey],
@@ -90,30 +82,18 @@ class Configuration(TypedDict):
             ),
         ]
     ]
+    timestamps: NotRequired[
+        Annotated[
+            Dict[str, Any],
+            Field(description="The timestamps of the individual measurement data"),
+        ]
+    ]
 
 
 class EventDescriptor(TypedDict):
-    """Document to describe the data captured in the associated event documents"""
+    """Document to describe the data captured in the associated event
+    documents"""
 
-    hints: NotRequired[Annotated[Any, AsRef("ObjectHints")]]
-    object_keys: NotRequired[
-        Annotated[
-            Dict[str, Any],
-            Field(
-                description="Maps a Device/Signal name to the names of the entries "
-                "it produces in data_keys.",
-            ),
-        ]
-    ]
-    name: NotRequired[
-        Annotated[
-            str,
-            Field(
-                description="A human-friendly name for this data stream, such as "
-                "'primary' or 'baseline'.",
-            ),
-        ]
-    ]
     configuration: NotRequired[
         Annotated[
             Dict[str, Configuration],
@@ -123,7 +103,6 @@ class EventDescriptor(TypedDict):
             ),
         ]
     ]
-
     data_keys: Annotated[
         Dict[str, DataKey],
         Field(
@@ -131,13 +110,33 @@ class EventDescriptor(TypedDict):
             title="data_keys",
         ),
     ]
-    uid: Annotated[
-        str,
-        Field(description="Globally unique ID for this event descriptor.", title="uid"),
+
+    hints: NotRequired[Annotated[Any, AsRef("ObjectHints")]]
+    name: NotRequired[
+        Annotated[
+            str,
+            Field(
+                description="A human-friendly name for this data stream, such as "
+                "'primary' or 'baseline'.",
+            ),
+        ]
+    ]
+    object_keys: NotRequired[
+        Annotated[
+            Dict[str, Any],
+            Field(
+                description="Maps a Device/Signal name to the names of the entries "
+                "it produces in data_keys.",
+            ),
+        ]
     ]
     run_start: Annotated[
         str, Field(description="Globally unique ID of this run's 'start' document.")
     ]
     time: Annotated[
         float, Field(description="Creation time of the document as unix epoch time.")
+    ]
+    uid: Annotated[
+        str,
+        Field(description="Globally unique ID for this event descriptor.", title="uid"),
     ]

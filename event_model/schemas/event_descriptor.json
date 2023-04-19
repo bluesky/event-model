@@ -3,19 +3,6 @@
    "description": "Document to describe the data captured in the associated event documents",
    "type": "object",
    "properties": {
-      "hints": {
-         "$ref": "#/definitions/ObjectHints"
-      },
-      "object_keys": {
-         "title": "Object Keys",
-         "description": "Maps a Device/Signal name to the names of the entries it produces in data_keys.",
-         "type": "object"
-      },
-      "name": {
-         "title": "Name",
-         "description": "A human-friendly name for this data stream, such as 'primary' or 'baseline'.",
-         "type": "string"
-      },
       "configuration": {
          "title": "Configuration",
          "description": "Readings of configurational fields necessary for interpreting data in the Events.",
@@ -32,10 +19,18 @@
             "$ref": "#/definitions/DataKey"
          }
       },
-      "uid": {
-         "title": "uid",
-         "description": "Globally unique ID for this event descriptor.",
+      "hints": {
+         "$ref": "#/definitions/ObjectHints"
+      },
+      "name": {
+         "title": "Name",
+         "description": "A human-friendly name for this data stream, such as 'primary' or 'baseline'.",
          "type": "string"
+      },
+      "object_keys": {
+         "title": "Object Keys",
+         "description": "Maps a Device/Signal name to the names of the entries it produces in data_keys.",
+         "type": "object"
       },
       "run_start": {
          "title": "Run Start",
@@ -46,29 +41,25 @@
          "title": "Time",
          "description": "Creation time of the document as unix epoch time.",
          "type": "number"
+      },
+      "uid": {
+         "title": "uid",
+         "description": "Globally unique ID for this event descriptor.",
+         "type": "string"
       }
    },
    "required": [
       "data_keys",
-      "uid",
       "run_start",
-      "time"
+      "time",
+      "uid"
    ],
    "definitions": {
-      "ObjectHints": {
-         "title": "ObjectHints"
-      },
       "DataKey": {
          "title": "DataKey",
          "description": "Describes the objects in the data property of Event documents",
          "type": "object",
          "properties": {
-            "external": {
-               "title": "External",
-               "description": "Where the data is stored if it is stored external to the events",
-               "pattern": "^[A-Z]+:?",
-               "type": "string"
-            },
             "dims": {
                "title": "Dims",
                "description": "The names for dimensions of the data. Null or empty list if scalar data",
@@ -76,21 +67,6 @@
                "items": {
                   "type": "string"
                }
-            },
-            "object_name": {
-               "title": "Object Name",
-               "description": "The name of the object this key was pulled from.",
-               "type": "string"
-            },
-            "precision": {
-               "title": "Precision",
-               "description": "Number of digits after decimal place if a floating point number",
-               "type": "integer"
-            },
-            "units": {
-               "title": "Units",
-               "description": "Engineering units of the value",
-               "type": "string"
             },
             "dtype": {
                "title": "Dtype",
@@ -104,6 +80,22 @@
                ],
                "type": "string"
             },
+            "external": {
+               "title": "External",
+               "description": "Where the data is stored if it is stored external to the events",
+               "pattern": "^[A-Z]+:?",
+               "type": "string"
+            },
+            "object_name": {
+               "title": "Object Name",
+               "description": "The name of the object this key was pulled from.",
+               "type": "string"
+            },
+            "precision": {
+               "title": "Precision",
+               "description": "Number of digits after decimal place if a floating point number",
+               "type": "integer"
+            },
             "shape": {
                "title": "Shape",
                "description": "The shape of the data.  Empty list indicates scalar data.",
@@ -115,6 +107,11 @@
             "source": {
                "title": "Source",
                "description": "The source (ex piece of hardware) of the data.",
+               "type": "string"
+            },
+            "units": {
+               "title": "Units",
+               "description": "Engineering units of the value",
                "type": "string"
             }
          },
@@ -133,11 +130,6 @@
                "description": "The actual measurement data",
                "type": "object"
             },
-            "timestamps": {
-               "title": "Timestamps",
-               "description": "The timestamps of the individual measurement data",
-               "type": "object"
-            },
             "data_keys": {
                "title": "Data Keys",
                "description": "This describes the data stored alongside it in this configuration object.",
@@ -145,8 +137,16 @@
                "additionalProperties": {
                   "$ref": "#/definitions/DataKey"
                }
+            },
+            "timestamps": {
+               "title": "Timestamps",
+               "description": "The timestamps of the individual measurement data",
+               "type": "object"
             }
          }
+      },
+      "ObjectHints": {
+         "title": "ObjectHints"
       }
    }
 }

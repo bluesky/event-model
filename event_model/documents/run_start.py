@@ -23,30 +23,29 @@ class Hints(TypedDict):
 
 class Calculation(TypedDict):
     args: NotRequired[List]
-
-    kwargs: NotRequired[
-        Annotated[Dict[str, Any], Field(description="kwargs for calcalation callable")]
-    ]
-
     callable: Annotated[
         str, Field(description="callable function to perform calculation")
+    ]
+    kwargs: NotRequired[
+        Annotated[Dict[str, Any], Field(description="kwargs for calcalation callable")]
     ]
 
 
 class Projection(TypedDict):
     """Where to get the data from"""
 
-    type: NotRequired[
+    calculation: NotRequired[
         Annotated[
-            Literal["linked", "calculated", "static"],
+            Calculation,
             Field(
-                description="linked: a value linked from the data set, "
-                "calculated: a value that requires calculation, "
-                "static:  a value defined here in the projection ",
+                description="required fields if type is calculated",
+                title="calculation properties",
             ),
         ]
     ]
-    stream: NotRequired[str]
+    config_index: NotRequired[int]
+    config_device: NotRequired[str]
+    field: NotRequired[str]
     location: NotRequired[
         Annotated[
             Literal["start", "event", "configuration"],
@@ -57,15 +56,14 @@ class Projection(TypedDict):
             ),
         ]
     ]
-    field: NotRequired[str]
-    config_index: NotRequired[int]
-    config_device: NotRequired[str]
-    calculation: NotRequired[
+    stream: NotRequired[str]
+    type: NotRequired[
         Annotated[
-            Calculation,
+            Literal["linked", "calculated", "static"],
             Field(
-                description="required fields if type is calculated",
-                title="calculation properties",
+                description="linked: a value linked from the data set, "
+                "calculated: a value that requires calculation, "
+                "static:  a value defined here in the projection ",
             ),
         ]
     ]
@@ -133,7 +131,11 @@ RUN_START_EXTRA_SCHEMA = {
 class Projections(TypedDict):
     """Describe how to interperet this run as the given projection"""
 
+    configuration: Annotated[
+        Dict[str, Any], Field(description="Static information about projection")
+    ]
     name: NotRequired[Annotated[str, Field(description="The name of the projection")]]
+    projection: Annotated[Dict[Any, Projection], Field(description="")]
     version: Annotated[
         str,
         Field(
@@ -141,10 +143,6 @@ class Projections(TypedDict):
             "of an external specification.",
         ),
     ]
-    configuration: Annotated[
-        Dict[str, Any], Field(description="Static information about projection")
-    ]
-    projection: Annotated[Dict[Any, Projection], Field(description="")]
 
 
 @add_extra_schema(RUN_START_EXTRA_SCHEMA)
@@ -154,6 +152,16 @@ class RunStart(TypedDict):
     later documents link to it
     """
 
+    data_groups: NotRequired[
+        Annotated[
+            List[str],
+            Field(
+                description="An optional list of data access groups that have meaning "
+                "to some external system. Examples might include facility, beamline, "
+                "end stations, proposal, safety form.",
+            ),
+        ]
+    ]
     data_session: NotRequired[
         Annotated[
             str,
@@ -165,19 +173,18 @@ class RunStart(TypedDict):
             ),
         ]
     ]
-    data_groups: NotRequired[
-        Annotated[
-            List[str],
-            Field(
-                description="An optional list of data access groups that have meaning "
-                "to some external system. Examples might include facility, beamline, "
-                "end stations, proposal, safety form.",
-            ),
-        ]
+    data_type: NotRequired[Annotated[Any, Field(description=""), AsRef("DataType")]]
+    group: NotRequired[
+        Annotated[str, Field(description="Unix group to associate this data with")]
+    ]
+    hints: NotRequired[Annotated[Hints, Field(description="Start-level hints")]]
+    owner: NotRequired[
+        Annotated[str, Field(description="Unix owner to associate this data with")]
     ]
     project: NotRequired[
         Annotated[str, Field(description="Name of project that this run is part of")]
     ]
+    projections: NotRequired[Annotated[List[Projections], Field(description="")]]
     sample: NotRequired[
         Annotated[
             Union[Dict[str, Any], str],
@@ -190,15 +197,5 @@ class RunStart(TypedDict):
     scan_id: NotRequired[
         Annotated[int, Field(description="Scan ID number, not globally unique")]
     ]
-    group: NotRequired[
-        Annotated[str, Field(description="Unix group to associate this data with")]
-    ]
-    owner: NotRequired[
-        Annotated[str, Field(description="Unix owner to associate this data with")]
-    ]
-    projections: NotRequired[Annotated[List[Projections], Field(description="")]]
-    hints: NotRequired[Annotated[Hints, Field(description="Start-level hints")]]
-    data_type: NotRequired[Annotated[Any, Field(description=""), AsRef("DataType")]]
-
     time: Annotated[float, Field(description="Time the run started.  Unix epoch time")]
     uid: Annotated[str, Field(description="Globally unique ID for this run")]
