@@ -24,22 +24,19 @@
         }
     },
     "properties": {
-        "descriptor": {
-            "type": "string",
-            "description": "The UID of the EventDescriptor to which all of the Events in this page belong"
-        },
         "data": {
             "$ref": "#/definitions/dataframe",
             "description": "The actual measurement data"
         },
-        "timestamps": {
-            "$ref": "#/definitions/dataframe",
-            "description": "The timestamps of the individual measurement data"
+        "descriptor": {
+            "type": "string",
+            "description": "The UID of the EventDescriptor to which all of the Events in this page belong"
         },
         "filled": {
             "$ref": "#/definitions/dataframe_for_filled",
             "description": "Mapping each of the keys of externally-stored data to an array containing the boolean False, indicating that the data has not been loaded, or to foreign keys (moved here from 'data' when the data was loaded)"
         },
+        
         "seq_num": {
             "type": "array",
             "items": {
@@ -53,6 +50,10 @@
                 "type": "number"
             },
             "description": "Array of Event times. This maybe different than the timestamps on each of the data entries"
+        },
+        "timestamps": {
+            "$ref": "#/definitions/dataframe",
+            "description": "The timestamps of the individual measurement data"
         },
         "uid": {
             "type": "array",

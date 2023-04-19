@@ -7,33 +7,34 @@
         }
     },
     "properties": {
-        "run_start": {
-            "type": "string",
-            "description": "Reference back to the run_start document that this document is paired with."
-        },
-        "reason": {
-            "type": "string",
-            "description": "Long-form description of why the run ended"
-        },
-        "time": {
-            "type": "number",
-            "description": "The time the run ended. Unix epoch"
-        },
         "exit_status": {
             "type": "string",
             "enum": ["success", "abort", "fail"],
             "description": "State of the run when it ended"
-        },
-        "uid": {
-            "type": "string",
-            "description": "Globally unique ID for this document"
         },
         "num_events": {
             "type": "object",
             "properties": {},
             "additionalProperties": { "type": "integer" },
             "description": "Number of Events per named stream"
+        },
+        "reason": {
+            "type": "string",
+            "description": "Long-form description of why the run ended"
+        },
+        "run_start": {
+            "type": "string",
+            "description": "Reference back to the run_start document that this document is paired with."
+        },
+        "time": {
+            "type": "number",
+            "description": "The time the run ended. Unix epoch"
+        },
+        "uid": {
+            "type": "string",
+            "description": "Globally unique ID for this document"
         }
+        
     },
     "patternProperties": {
         "^([^./]+)$": {"$ref": "#/definitions/data_type"}},
