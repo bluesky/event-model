@@ -2,9 +2,14 @@ from typing import Any, Dict
 
 from typing_extensions import Annotated, Literal, NotRequired, TypedDict
 
-from .generate.type_wrapper import AsRef, Field
+from .generate.type_wrapper import AsRef, Field, add_extra_schema
+
+RUN_STOP_EXTRA_SCHEMA = {
+    "patternProperties": {"^([^./]+)$": {"$ref": "#/definitions/DataType"}}
+}
 
 
+@add_extra_schema(RUN_STOP_EXTRA_SCHEMA)
 class RunStop(TypedDict):
     """
     Document for the end of a run indicating the success/fail state of the

@@ -147,6 +147,20 @@
       },
       "ObjectHints": {
          "title": "ObjectHints"
+      },
+      "DataType": {
+         "title": "DataType",
+         "patternProperties": {
+            "^([^./]+)$": {
+               "$ref": "#/definitions/DataType"
+            }
+         },
+         "additionalProperties": false
+      }
+   },
+   "patternProperties": {
+      "^([^./]+)$": {
+         "$ref": "#/definitions/DataType"
       }
    }
 }

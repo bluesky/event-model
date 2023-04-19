@@ -331,5 +331,10 @@
             "version"
          ]
       }
+   },
+   "patternProperties": {
+      "^([^./]+)$": {
+         "$ref": "#/definitions/DataType"
+      }
    }
 }

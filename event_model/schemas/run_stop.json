@@ -61,5 +61,10 @@
       "DataType": {
          "title": "DataType"
       }
+   },
+   "patternProperties": {
+      "^([^./]+)$": {
+         "$ref": "#/definitions/DataType"
+      }
    }
 }

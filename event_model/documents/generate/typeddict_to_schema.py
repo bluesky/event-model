@@ -3,12 +3,12 @@
 import json
 import re
 import sys
+from collections import OrderedDict
 from pathlib import Path
 from typing import Dict, Optional, Tuple, Type, Union
 
 from pydantic import BaseConfig, BaseModel, Field, create_model
 from pydantic.fields import FieldInfo
-from collections import OrderedDict
 from typing_extensions import (
     Annotated,
     NotRequired,
@@ -204,9 +204,7 @@ def get_field_type(
         field_type = [
             x
             for x in args
-            if True not in [
-                isinstance(x, y) for y in ALLOWED_ANNOTATION_ELEMENTS
-            ]
+            if True not in [isinstance(x, y) for y in ALLOWED_ANNOTATION_ELEMENTS]
         ]
         assert len(field_type) == 1, (
             f'Field "{field_name}" has multiple types: '
@@ -217,9 +215,7 @@ def get_field_type(
     # If the TypedDict references another TypedDict then another
     # BaseModel is recursively generated from that TypedDict,
     # and the field annotation is swapped to that BaseModel.
-    field_type = change_sub_typed_dicts_to_basemodels(
-        field_type, new_basemodel_classes
-    )
+    field_type = change_sub_typed_dicts_to_basemodels(field_type, new_basemodel_classes)
 
     return field_type
 
@@ -433,10 +429,12 @@ def sort_jsonschema(schema: dict) -> dict:
             schema[key] = OrderedDict(
                 sorted(list(schema[key].items()), key=lambda x: x[0])
             )
+
+        # We need to sort the properties in the definitions too.
         elif isinstance(schema[key], dict):
             schema[key] = sort_jsonschema(schema[key])
     return schema
-        
+
 
 # From https://github.com/pydantic/pydantic/issues/760#issuecomment-589708485
 def parse_typeddict_to_schema(
@@ -444,7 +442,7 @@ def parse_typeddict_to_schema(
     out_dir: Optional[Path] = None,
     return_basemodel: bool = False,
     new_basemodel_classes: Dict[str, BaseModel] = {},
-    sort: bool = True
+    sort: bool = True,
 ) -> Union[Type[BaseModel], Dict[str, type]]:
     """Takes a TypedDict and generates a jsonschema from it.
 

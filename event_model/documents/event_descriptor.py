@@ -2,7 +2,7 @@ from typing import Any, Dict, List
 
 from typing_extensions import Annotated, Literal, NotRequired, TypedDict
 
-from .generate.type_wrapper import AsRef, Field
+from .generate.type_wrapper import AsRef, Field, add_extra_schema
 
 
 class DataKey(TypedDict):
@@ -90,6 +90,19 @@ class Configuration(TypedDict):
     ]
 
 
+EVENT_DESCRIPTOR_EXTRA_SCHEMA = {
+    "patternProperties": {"^([^./]+)$": {"$ref": "#/definitions/DataType"}},
+    "definitions": {
+        "DataType": {
+            "title": "DataType",
+            "patternProperties": {"^([^./]+)$": {"$ref": "#/definitions/DataType"}},
+            "additionalProperties": False,
+        }
+    },
+}
+
+
+@add_extra_schema(EVENT_DESCRIPTOR_EXTRA_SCHEMA)
 class EventDescriptor(TypedDict):
     """Document to describe the data captured in the associated event
     documents"""
