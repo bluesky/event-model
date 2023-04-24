@@ -31,29 +31,29 @@
                 {
                     "if": {
                         "allOf": [
-                            {"properties": {"location": {"enum": "configuration"}}},
-                            {"properties": {"type": {"enum": "linked"}}}
+                            {"properties": {"location": {"enum": ["configuration"]}}},
+                            {"properties": {"type": {"enum": ["linked"]}}}
                         ]},
                     "then": {"required": ["type", "location", "config_index", "config_device", "field", "stream"]}
                 },
                 {
                     "if": {
                         "allOf": [
-                            {"properties": {"location": {"enum": "event"}}},
-                            {"properties": {"type": {"enum": "linked"}}}
+                            {"properties": {"location": {"enum": ["event"]}}},
+                            {"properties": {"type": {"enum": ["linked"]}}}
                         ]},
                     "then": {"required": ["type", "location", "field", "stream"]}
                 },
                 {
                     "if": {
                         "allOf": [
-                            {"properties": {"location": {"enum": "event"}}},
-                            {"properties": {"type": {"enum": "calculated"}}}
+                            {"properties": {"location": {"enum": ["event"]}}},
+                            {"properties": {"type": {"enum": ["calculated"]}}}
                         ]},
                     "then": {"required": ["type", "field", "stream",  "calculation"]}
                 },
                 {
-                    "if": {"properties": {"type": {"enum": "static"}}},
+                    "if": {"properties": {"type": {"enum": ["static"]}}},
                     "then": {"required": ["type", "value"]}
                 }
             ],      
