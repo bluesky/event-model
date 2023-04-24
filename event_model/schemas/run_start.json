@@ -20,12 +20,12 @@
                     "description": "required fields if type is calculated",
                     "properties": {
                         "callable": {"type": "string", "description": "callable function to perform calculation"},
-                        "args": {"type": "array", "decription": "args for calculation callable"},
-                        "kwargs": {"type": "object", "description": "kwargs for calcalation callable"}
+                        "args": {"type": "array", "description": "args for calculation callable"},
+                        "kwargs": {"type": "object", "description": "kwargs for calculation callable"}
                     },
                     "required": ["callable"]
                 },
-                "value": {"description": "value explicitely defined in the projection when type==static."}
+                "value": {"description": "value explicitly defined in the projection when type==static."}
             },
             "allOf": [
                 {
@@ -60,7 +60,7 @@
             "additionalProperties": false
         },
         "projections": {
-            "title" : "Describe how to interperet this run as the given projection",
+            "title" : "Describe how to interpret this run as the given projection",
             "properties":{
                 "name": {"type": "string", "description": "The name of the projection"},
                 "version": {"type": "string", "description": "The version of the projection spec. Can specify the version of an external specification."},
@@ -160,5 +160,5 @@
         "time"
      ],
     "type": "object",
-    "description": "Document created at the start of run.  Provides a seach target and later documents link to it"
+    "description": "Document created at the start of run.  Provides a search target and later documents link to it"
 }
