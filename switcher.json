@@ -2,5 +2,9 @@
   {
     "version": "main",
     "url": "https://bluesky.github.io/event-model/main/"
+  },
+  {
+    "version": "start-model-fix",
+    "url": "https://bluesky.github.io/event-model/start-model-fix/"
   }
 ]
