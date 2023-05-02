@@ -8,7 +8,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>event_model &#8212; event-model 1.19.2.post76+g50db581 documentation</title>
+    <title>event_model &#8212; event-model 1.19.2.post78+g86474f0 documentation</title>
   
   
   
@@ -2358,7 +2358,7 @@ document.write(`
 <div class="viewcode-block" id="compose_stop"><a class="viewcode-back" href="../user/reference/api.html#event_model.compose_stop">[docs]</a><span class="k">def</span> <span class="nf">compose_stop</span><span class="p">(</span>
     <span class="o">*</span><span class="p">,</span>
     <span class="n">start</span><span class="p">,</span>
-    <span class="n">event_counter</span><span class="p">,</span>
+    <span class="n">event_counters</span><span class="p">,</span>
     <span class="n">poison_pill</span><span class="p">,</span>
     <span class="n">exit_status</span><span class="o">=</span><span class="s2">&quot;success&quot;</span><span class="p">,</span>
     <span class="n">reason</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
@@ -2381,7 +2381,7 @@ document.write(`
         <span class="s2">&quot;run_start&quot;</span><span class="p">:</span> <span class="n">start</span><span class="p">[</span><span class="s2">&quot;uid&quot;</span><span class="p">],</span>
         <span class="s2">&quot;exit_status&quot;</span><span class="p">:</span> <span class="n">exit_status</span><span class="p">,</span>
         <span class="s2">&quot;reason&quot;</span><span class="p">:</span> <span class="n">reason</span><span class="p">,</span>
-        <span class="s2">&quot;num_events&quot;</span><span class="p">:</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">v</span> <span class="o">-</span> <span class="mi">1</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">event_counter</span><span class="o">.</span><span class="n">items</span><span class="p">()},</span>
+        <span class="s2">&quot;num_events&quot;</span><span class="p">:</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">v</span> <span class="o">-</span> <span class="mi">1</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">event_counters</span><span class="o">.</span><span class="n">items</span><span class="p">()},</span>
     <span class="p">}</span>
     <span class="k">if</span> <span class="n">validate</span><span class="p">:</span>
         <span class="n">schema_validators</span><span class="p">[</span><span class="n">DocumentNames</span><span class="o">.</span><span class="n">stop</span><span class="p">]</span><span class="o">.</span><span class="n">validate</span><span class="p">(</span><span class="n">doc</span><span class="p">)</span>
@@ -2391,7 +2391,7 @@ document.write(`
 <div class="viewcode-block" id="compose_event_page"><a class="viewcode-back" href="../user/reference/api.html#event_model.compose_event_page">[docs]</a><span class="k">def</span> <span class="nf">compose_event_page</span><span class="p">(</span>
     <span class="o">*</span><span class="p">,</span>
     <span class="n">descriptor</span><span class="p">,</span>
-    <span class="n">event_counter</span><span class="p">,</span>
+    <span class="n">event_counters</span><span class="p">,</span>
     <span class="n">data</span><span class="p">,</span>
     <span class="n">timestamps</span><span class="p">,</span>
     <span class="n">seq_num</span><span class="p">,</span>
@@ -2432,14 +2432,14 @@ document.write(`
                 <span class="s2">&quot;Keys in event[&#39;filled&#39;] </span><span class="si">{}</span><span class="s2"> must be a subset of those in &quot;</span>
                 <span class="s2">&quot;event[&#39;data&#39;] </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">filled</span><span class="o">.</span><span class="n">keys</span><span class="p">(),</span> <span class="n">data</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
             <span class="p">)</span>
-    <span class="n">event_counter</span><span class="p">[</span><span class="n">descriptor</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]]</span> <span class="o">+=</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+    <span class="n">event_counters</span><span class="p">[</span><span class="n">descriptor</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]]</span> <span class="o">+=</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">doc</span></div>
 
 
 <div class="viewcode-block" id="compose_event"><a class="viewcode-back" href="../user/reference/api.html#event_model.compose_event">[docs]</a><span class="k">def</span> <span class="nf">compose_event</span><span class="p">(</span>
     <span class="o">*</span><span class="p">,</span>
     <span class="n">descriptor</span><span class="p">,</span>
-    <span class="n">event_counter</span><span class="p">,</span>
+    <span class="n">event_counters</span><span class="p">,</span>
     <span class="n">data</span><span class="p">,</span>
     <span class="n">timestamps</span><span class="p">,</span>
     <span class="n">seq_num</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
@@ -2449,7 +2449,7 @@ document.write(`
     <span class="n">validate</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
 <span class="p">):</span>
     <span class="k">if</span> <span class="n">seq_num</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">seq_num</span> <span class="o">=</span> <span class="n">event_counter</span><span class="p">[</span><span class="n">descriptor</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]]</span>
+        <span class="n">seq_num</span> <span class="o">=</span> <span class="n">event_counters</span><span class="p">[</span><span class="n">descriptor</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]]</span>
     <span class="k">if</span> <span class="n">uid</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">uid</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">uuid</span><span class="o">.</span><span class="n">uuid4</span><span class="p">())</span>
     <span class="k">if</span> <span class="n">time</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -2481,7 +2481,7 @@ document.write(`
                 <span class="s2">&quot;Keys in event[&#39;filled&#39;] </span><span class="si">{}</span><span class="s2"> must be a subset of those in &quot;</span>
                 <span class="s2">&quot;event[&#39;data&#39;] </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">filled</span><span class="o">.</span><span class="n">keys</span><span class="p">(),</span> <span class="n">data</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
             <span class="p">)</span>
-    <span class="n">event_counter</span><span class="p">[</span><span class="n">descriptor</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]]</span> <span class="o">+=</span> <span class="mi">1</span>
+    <span class="n">event_counters</span><span class="p">[</span><span class="n">descriptor</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]]</span> <span class="o">+=</span> <span class="mi">1</span>
     <span class="k">return</span> <span class="n">doc</span></div>
 
 
@@ -2489,7 +2489,7 @@ document.write(`
     <span class="o">*</span><span class="p">,</span>
     <span class="n">start</span><span class="p">,</span>
     <span class="n">streams</span><span class="p">,</span>
-    <span class="n">event_counter</span><span class="p">,</span>
+    <span class="n">event_counters</span><span class="p">,</span>
     <span class="n">name</span><span class="p">,</span>
     <span class="n">data_keys</span><span class="p">,</span>
     <span class="n">uid</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
@@ -2530,15 +2530,17 @@ document.write(`
         <span class="n">schema_validators</span><span class="p">[</span><span class="n">DocumentNames</span><span class="o">.</span><span class="n">descriptor</span><span class="p">]</span><span class="o">.</span><span class="n">validate</span><span class="p">(</span><span class="n">doc</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">streams</span><span class="p">:</span>
         <span class="n">streams</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">data_keys</span><span class="p">)</span>
-        <span class="n">event_counter</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="n">event_counters</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
     <span class="k">return</span> <span class="n">ComposeDescriptorBundle</span><span class="p">(</span>
         <span class="n">doc</span><span class="p">,</span>
-        <span class="n">partial</span><span class="p">(</span><span class="n">compose_event</span><span class="p">,</span> <span class="n">descriptor</span><span class="o">=</span><span class="n">doc</span><span class="p">,</span> <span class="n">event_counter</span><span class="o">=</span><span class="n">event_counter</span><span class="p">),</span>
-        <span class="n">partial</span><span class="p">(</span><span class="n">compose_event_page</span><span class="p">,</span> <span class="n">descriptor</span><span class="o">=</span><span class="n">doc</span><span class="p">,</span> <span class="n">event_counter</span><span class="o">=</span><span class="n">event_counter</span><span class="p">),</span>
+        <span class="n">partial</span><span class="p">(</span><span class="n">compose_event</span><span class="p">,</span> <span class="n">descriptor</span><span class="o">=</span><span class="n">doc</span><span class="p">,</span> <span class="n">event_counters</span><span class="o">=</span><span class="n">event_counters</span><span class="p">),</span>
+        <span class="n">partial</span><span class="p">(</span><span class="n">compose_event_page</span><span class="p">,</span> <span class="n">descriptor</span><span class="o">=</span><span class="n">doc</span><span class="p">,</span> <span class="n">event_counters</span><span class="o">=</span><span class="n">event_counters</span><span class="p">),</span>
     <span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="compose_run"><a class="viewcode-back" href="../user/reference/api.html#event_model.compose_run">[docs]</a><span class="k">def</span> <span class="nf">compose_run</span><span class="p">(</span><span class="o">*</span><span class="p">,</span> <span class="n">uid</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">time</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">metadata</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">validate</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<div class="viewcode-block" id="compose_run"><a class="viewcode-back" href="../user/reference/api.html#event_model.compose_run">[docs]</a><span class="k">def</span> <span class="nf">compose_run</span><span class="p">(</span>
+    <span class="o">*</span><span class="p">,</span> <span class="n">uid</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">time</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">metadata</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">validate</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">event_counters</span><span class="o">=</span><span class="kc">None</span>
+<span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Compose a RunStart document and factory functions for related documents.</span>
 
@@ -2554,6 +2556,10 @@ document.write(`
 <span class="sd">        Additional metadata include the document</span>
 <span class="sd">    validate : boolean, optional</span>
 <span class="sd">        Validate this document conforms to the schema.</span>
+<span class="sd">    event_counters : dict, optional</span>
+<span class="sd">        A dict for counting events, when an event is composed by any of the</span>
+<span class="sd">        descriptors composed by this run, the element in this dict with the key of the</span>
+<span class="sd">        descriptor name will be increased by 1.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
@@ -2569,7 +2575,8 @@ document.write(`
     <span class="c1"># Define some mutable state to be shared internally by the closures composed</span>
     <span class="c1"># below.</span>
     <span class="n">streams</span> <span class="o">=</span> <span class="p">{}</span>
-    <span class="n">event_counter</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">if</span> <span class="n">event_counters</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">event_counters</span> <span class="o">=</span> <span class="p">{}</span>
     <span class="n">poison_pill</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="k">if</span> <span class="n">validate</span><span class="p">:</span>
         <span class="n">schema_validators</span><span class="p">[</span><span class="n">DocumentNames</span><span class="o">.</span><span class="n">start</span><span class="p">]</span><span class="o">.</span><span class="n">validate</span><span class="p">(</span><span class="n">doc</span><span class="p">)</span>
@@ -2577,13 +2584,16 @@ document.write(`
     <span class="k">return</span> <span class="n">ComposeRunBundle</span><span class="p">(</span>
         <span class="n">doc</span><span class="p">,</span>
         <span class="n">partial</span><span class="p">(</span>
-            <span class="n">compose_descriptor</span><span class="p">,</span> <span class="n">start</span><span class="o">=</span><span class="n">doc</span><span class="p">,</span> <span class="n">streams</span><span class="o">=</span><span class="n">streams</span><span class="p">,</span> <span class="n">event_counter</span><span class="o">=</span><span class="n">event_counter</span>
+            <span class="n">compose_descriptor</span><span class="p">,</span>
+            <span class="n">start</span><span class="o">=</span><span class="n">doc</span><span class="p">,</span>
+            <span class="n">streams</span><span class="o">=</span><span class="n">streams</span><span class="p">,</span>
+            <span class="n">event_counters</span><span class="o">=</span><span class="n">event_counters</span><span class="p">,</span>
         <span class="p">),</span>
         <span class="n">partial</span><span class="p">(</span><span class="n">compose_resource</span><span class="p">,</span> <span class="n">start</span><span class="o">=</span><span class="n">doc</span><span class="p">),</span>
         <span class="n">partial</span><span class="p">(</span>
             <span class="n">compose_stop</span><span class="p">,</span>
             <span class="n">start</span><span class="o">=</span><span class="n">doc</span><span class="p">,</span>
-            <span class="n">event_counter</span><span class="o">=</span><span class="n">event_counter</span><span class="p">,</span>
+            <span class="n">event_counters</span><span class="o">=</span><span class="n">event_counters</span><span class="p">,</span>
             <span class="n">poison_pill</span><span class="o">=</span><span class="n">poison_pill</span><span class="p">,</span>
         <span class="p">),</span>
         <span class="n">compose_stream_resource</span><span class="o">=</span><span class="n">partial</span><span class="p">(</span><span class="n">compose_stream_resource</span><span class="p">,</span> <span class="n">start</span><span class="o">=</span><span class="n">doc</span><span class="p">),</span>
