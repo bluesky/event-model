@@ -9,7 +9,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
-    <title>Data Model &#8212; event-model 1.19.2.post71+gbe33d8d documentation</title>
+    <title>Data Model &#8212; event-model 1.19.2.post74+g5af17a6 documentation</title>
   
   
   
@@ -592,47 +592,47 @@ experimetal and subject to backward-incompatible changes in future releases.</p>
                     <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;required fields if type is calculated&quot;</span><span class="p">,</span>
                     <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span>
                         <span class="s2">&quot;callable&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span> <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;callable function to perform calculation&quot;</span><span class="p">},</span>
-                        <span class="s2">&quot;args&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;array&quot;</span><span class="p">,</span> <span class="s2">&quot;decription&quot;</span><span class="p">:</span> <span class="s2">&quot;args for calculation callable&quot;</span><span class="p">},</span>
-                        <span class="s2">&quot;kwargs&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span> <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;kwargs for calcalation callable&quot;</span><span class="p">}</span>
+                        <span class="s2">&quot;args&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;array&quot;</span><span class="p">,</span> <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;args for calculation callable&quot;</span><span class="p">},</span>
+                        <span class="s2">&quot;kwargs&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span> <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;kwargs for calculation callable&quot;</span><span class="p">}</span>
                     <span class="p">},</span>
                     <span class="s2">&quot;required&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;callable&quot;</span><span class="p">]</span>
                 <span class="p">},</span>
-                <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;value explicitely defined in the projection when type==static.&quot;</span><span class="p">}</span>
+                <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;value explicitly defined in the projection when type==static.&quot;</span><span class="p">}</span>
             <span class="p">},</span>
             <span class="s2">&quot;allOf&quot;</span><span class="p">:</span> <span class="p">[</span>
                 <span class="p">{</span>
                     <span class="s2">&quot;if&quot;</span><span class="p">:</span> <span class="p">{</span>
                         <span class="s2">&quot;allOf&quot;</span><span class="p">:</span> <span class="p">[</span>
-                            <span class="p">{</span><span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;location&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;enum&quot;</span><span class="p">:</span> <span class="s2">&quot;configuration&quot;</span><span class="p">}}},</span>
-                            <span class="p">{</span><span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;enum&quot;</span><span class="p">:</span> <span class="s2">&quot;linked&quot;</span><span class="p">}}}</span>
+                            <span class="p">{</span><span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;location&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;enum&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;configuration&quot;</span><span class="p">]}}},</span>
+                            <span class="p">{</span><span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;enum&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;linked&quot;</span><span class="p">]}}}</span>
                         <span class="p">]},</span>
                     <span class="s2">&quot;then&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;required&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">,</span> <span class="s2">&quot;location&quot;</span><span class="p">,</span> <span class="s2">&quot;config_index&quot;</span><span class="p">,</span> <span class="s2">&quot;config_device&quot;</span><span class="p">,</span> <span class="s2">&quot;field&quot;</span><span class="p">,</span> <span class="s2">&quot;stream&quot;</span><span class="p">]}</span>
                 <span class="p">},</span>
                 <span class="p">{</span>
                     <span class="s2">&quot;if&quot;</span><span class="p">:</span> <span class="p">{</span>
                         <span class="s2">&quot;allOf&quot;</span><span class="p">:</span> <span class="p">[</span>
-                            <span class="p">{</span><span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;location&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;enum&quot;</span><span class="p">:</span> <span class="s2">&quot;event&quot;</span><span class="p">}}},</span>
-                            <span class="p">{</span><span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;enum&quot;</span><span class="p">:</span> <span class="s2">&quot;linked&quot;</span><span class="p">}}}</span>
+                            <span class="p">{</span><span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;location&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;enum&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;event&quot;</span><span class="p">]}}},</span>
+                            <span class="p">{</span><span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;enum&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;linked&quot;</span><span class="p">]}}}</span>
                         <span class="p">]},</span>
                     <span class="s2">&quot;then&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;required&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">,</span> <span class="s2">&quot;location&quot;</span><span class="p">,</span> <span class="s2">&quot;field&quot;</span><span class="p">,</span> <span class="s2">&quot;stream&quot;</span><span class="p">]}</span>
                 <span class="p">},</span>
                 <span class="p">{</span>
                     <span class="s2">&quot;if&quot;</span><span class="p">:</span> <span class="p">{</span>
                         <span class="s2">&quot;allOf&quot;</span><span class="p">:</span> <span class="p">[</span>
-                            <span class="p">{</span><span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;location&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;enum&quot;</span><span class="p">:</span> <span class="s2">&quot;event&quot;</span><span class="p">}}},</span>
-                            <span class="p">{</span><span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;enum&quot;</span><span class="p">:</span> <span class="s2">&quot;calculated&quot;</span><span class="p">}}}</span>
+                            <span class="p">{</span><span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;location&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;enum&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;event&quot;</span><span class="p">]}}},</span>
+                            <span class="p">{</span><span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;enum&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;calculated&quot;</span><span class="p">]}}}</span>
                         <span class="p">]},</span>
                     <span class="s2">&quot;then&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;required&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">,</span> <span class="s2">&quot;field&quot;</span><span class="p">,</span> <span class="s2">&quot;stream&quot;</span><span class="p">,</span>  <span class="s2">&quot;calculation&quot;</span><span class="p">]}</span>
                 <span class="p">},</span>
                 <span class="p">{</span>
-                    <span class="s2">&quot;if&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;enum&quot;</span><span class="p">:</span> <span class="s2">&quot;static&quot;</span><span class="p">}}},</span>
+                    <span class="s2">&quot;if&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;enum&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;static&quot;</span><span class="p">]}}},</span>
                     <span class="s2">&quot;then&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;required&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">,</span> <span class="s2">&quot;value&quot;</span><span class="p">]}</span>
                 <span class="p">}</span>
             <span class="p">],</span>      
             <span class="s2">&quot;additionalProperties&quot;</span><span class="p">:</span> <span class="n">false</span>
         <span class="p">},</span>
         <span class="s2">&quot;projections&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s2">&quot;title&quot;</span> <span class="p">:</span> <span class="s2">&quot;Describe how to interperet this run as the given projection&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;title&quot;</span> <span class="p">:</span> <span class="s2">&quot;Describe how to interpret this run as the given projection&quot;</span><span class="p">,</span>
             <span class="s2">&quot;properties&quot;</span><span class="p">:{</span>
                 <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span> <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;The name of the projection&quot;</span><span class="p">},</span>
                 <span class="s2">&quot;version&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span> <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;The version of the projection spec. Can specify the version of an external specification.&quot;</span><span class="p">},</span>
@@ -732,7 +732,7 @@ experimetal and subject to backward-incompatible changes in future releases.</p>
         <span class="s2">&quot;time&quot;</span>
      <span class="p">],</span>
     <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Document created at the start of run.  Provides a seach target and later documents link to it&quot;</span>
+    <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Document created at the start of run.  Provides a search target and later documents link to it&quot;</span>
 <span class="p">}</span>
 </pre></div>
 </div>
@@ -1596,11 +1596,11 @@ Use EventPage instead.</p>
                 <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span>
                     <span class="s2">&quot;data&quot;</span><span class="p">:</span> <span class="p">{</span>
                         <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span>
-                        <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;The actual measument data&quot;</span>
+                        <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;The actual measurement data&quot;</span>
                     <span class="p">},</span>
                     <span class="s2">&quot;timestamps&quot;</span><span class="p">:</span> <span class="p">{</span>
                         <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span>
-                        <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;The timestamps of the individual measument data&quot;</span>
+                        <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;The timestamps of the individual measurement data&quot;</span>
                     <span class="p">},</span>
                     <span class="s2">&quot;filled&quot;</span><span class="p">:</span> <span class="p">{</span>
                         <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span>
