@@ -1977,7 +1977,9 @@ def compose_stop(
         "run_start": start["uid"],
         "exit_status": exit_status,
         "reason": reason,
-        "num_events": {k: v - 1 for k, v in event_counters.items()},
+        "num_events": {
+            k: v - 1 for k, v in event_counters.items() if k is not None and v != 1
+        },
     }
     if validate:
         schema_validators[DocumentNames.stop].validate(doc)
@@ -2127,6 +2129,7 @@ def compose_descriptor(
     if name not in streams:
         streams[name] = set(data_keys)
         event_counters[name] = 1
+
     return ComposeDescriptorBundle(
         doc,
         partial(compose_event, descriptor=doc, event_counters=event_counters),
