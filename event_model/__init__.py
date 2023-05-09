@@ -40,12 +40,7 @@ from typing_extensions import Literal
 from .documents.datum import Datum
 from .documents.datum_page import DatumPage
 from .documents.event import Event
-from .documents.event_descriptor import (
-    Configuration,
-    DataKey,
-    EventDescriptor,
-    PerObjectHint,
-)
+from .documents.event_descriptor import DataKey, Configuration, EventDescriptor
 from .documents.event_page import EventPage
 from .documents.resource import Resource
 from .documents.run_start import RunStart
@@ -1904,25 +1899,22 @@ class ComposeStreamResourceBundle:
         )
 
 
-@dataclass
-class ComposeDatum:
-    resource: Resource
-    counter: Iterator
-    validate: bool = True
-
-    def __call__(
-        self,
-        datum_kwargs: Dict[str, Any],
-    ) -> Datum:
-        resource_uid = self.resource["uid"]
-        doc = Datum(
-            resource=resource_uid,
-            datum_kwargs=datum_kwargs,
-            datum_id="{}/{}".format(resource_uid, next(self.counter)),
-        )
-        if self.validate:
-            schema_validators[DocumentNames.datum].validate(doc)
-        return doc
+def compose_datum(
+    *,
+    resource: Resource,
+    counter: Iterator,
+    datum_kwargs: Dict[str, Any],
+    validate: bool = True,
+) -> Datum:
+    resource_uid = resource["uid"]
+    doc = Datum(
+        resource=resource_uid,
+        datum_kwargs=datum_kwargs,
+        datum_id="{}/{}".format(resource_uid, next(counter)),
+    )
+    if validate:
+        schema_validators[DocumentNames.datum].validate(doc)
+    return doc
 
 
 def compose_datum(
@@ -1983,22 +1975,30 @@ PATH_SEMANTICS: Dict[str, Literal["posix", "windows"]] = {
 default_path_semantics: Literal["posix", "windows"] = PATH_SEMANTICS[os.name]
 
 
-@dataclass
-class ComposeResource:
-    start: Optional[RunStart]
-    validate: bool = True
-
-    def __call__(
-        self,
-        spec: str,
-        root: str,
-        resource_path: str,
-        resource_kwargs: Dict[str, Any],
-        path_semantics: Literal["posix", "windows"] = default_path_semantics,
-        uid: Optional[str] = None,
-    ) -> ComposeResourceBundle:
-        if uid is None:
-            uid = str(uuid.uuid4())
+def compose_resource(
+    *,
+    spec: str,
+    root: str,
+    resource_path: str,
+    resource_kwargs: Iterable,
+    path_semantics: Optional[Literal["posix", "windows"]] = default_path_semantics,
+    start: Optional[RunStart] = None,
+    uid: Optional[str] = None,
+    validate: bool = True,
+) -> ComposeResourceBundle:
+    if uid is None:
+        uid = str(uuid.uuid4())
+    counter = itertools.count()
+    doc = {
+        "uid": uid,
+        "spec": spec,
+        "root": root,
+        "resource_path": resource_path,
+        "resource_kwargs": resource_kwargs,
+        "path_semantics": path_semantics,
+    }
+    if start:
+        doc["run_start"] = start["uid"]
 
         doc = Resource(
             path_semantics=path_semantics,
@@ -2083,51 +2083,30 @@ class ComposeStreamDatum:
 
 def compose_stream_datum(
     *,
-    stream_resource: StreamResource,
-    stream_name: str,
-    counter: Iterator,
-    datum_kwargs: Dict[str, Any],
-    event_count: int = 1,
-    event_offset: int = 0,
+    spec: str,
+    root: str,
+    resource_path: str,
+    resource_kwargs: Dict[str, Any],
+    stream_names: Union[List, str],
+    counters: List = [],
+    path_semantics: Literal["posix", "windows"] = default_path_semantics,
+    start: Optional[RunStart] = None,
+    uid: Optional[str] = None,
     validate: bool = True,
-) -> StreamDatum:
-    """
-    Here for backwards compatibility, the Compose class is prefered.
-    """
-    return ComposeStreamDatum(stream_resource, stream_name, counter, validate=validate)(
-        datum_kwargs, event_count=event_count, event_offset=event_offset
-    )
-
-
-@dataclass
-class ComposeStreamResource:
-    validate: bool = True
-    start: Optional[RunStart] = None
-
-    def __call__(
-        self,
-        spec: str,
-        root: str,
-        resource_path: str,
-        resource_kwargs: Dict[str, Any],
-        stream_names: Union[List, str],
-        counters: List = [],
-        path_semantics: Literal["posix", "windows"] = default_path_semantics,
-        uid: Optional[str] = None,
-    ) -> ComposeStreamResourceBundle:
-        if uid is None:
-            uid = str(uuid.uuid4())
-        if isinstance(stream_names, str):
-            stream_names = [
-                stream_names,
-            ]
-        if len(counters) == 0:
-            counters = [itertools.count() for _ in stream_names]
-        elif len(counters) > len(stream_names):
-            raise ValueError(
-                "Insufficient number of counters "
-                f"{len(counters)} for stream names: {stream_names}"
-            )
+) -> ComposeStreamResourceBundle:
+    if uid is None:
+        uid = str(uuid.uuid4())
+    if isinstance(stream_names, str):
+        stream_names = [
+            stream_names,
+        ]
+    if len(counters) == 0:
+        counters = [itertools.count() for _ in stream_names]
+    elif len(counters) > len(stream_names):
+        raise ValueError(
+            "Insufficient number of counters "
+            f"{len(counters)} for stream names: {stream_names}"
+        )
 
         doc = StreamResource(
             uid=uid,
@@ -2159,73 +2138,8 @@ class ComposeStreamResource:
 
 def compose_stream_resource(
     *,
-    spec: str,
-    root: str,
-    resource_path: str,
-    resource_kwargs: Dict[str, Any],
-    stream_names: Union[List, str],
-    counters: List = [],
-    path_semantics: Literal["posix", "windows"] = default_path_semantics,
-    start: Optional[RunStart] = None,
-    uid: Optional[str] = None,
-    validate: bool = True,
-) -> ComposeStreamResourceBundle:
-    """
-    Here for backwards compatibility, the Compose class is prefered.
-    """
-    return ComposeStreamResource(start=start, validate=validate)(
-        spec,
-        root,
-        resource_path,
-        resource_kwargs,
-        stream_names,
-        counters=counters,
-        path_semantics=path_semantics,
-        uid=uid,
-    )
-
-
-@dataclass
-class ComposeStop:
-    start: RunStart
-    event_counters: dict
-    poison_pill: List
-    validate: bool = True
-
-    def __call__(
-        self,
-        exit_status: Literal["success", "abort", "fail"] = "success",
-        reason: str = "",
-        uid: Optional[str] = None,
-        time: Optional[float] = None,
-    ) -> RunStop:
-        if self.poison_pill:
-            raise EventModelError(
-                "Already composed a RunStop document for run "
-                "{!r}.".format(self.start["uid"])
-            )
-        self.poison_pill.append(object())
-        if uid is None:
-            uid = str(uuid.uuid4())
-        if time is None:
-            time = ttime.time()
-        doc = RunStop(
-            uid=uid,
-            time=time,
-            run_start=self.start["uid"],
-            exit_status=exit_status,
-            reason=reason,
-            num_events={k: v - 1 for k, v in self.event_counters.items()},
-        )
-        if self.validate:
-            schema_validators[DocumentNames.stop].validate(doc)
-        return doc
-
-
-def compose_stop(
-    *,
     start: RunStart,
-    event_counters: dict,
+    event_counters: Dict[str, int],
     poison_pill: List,
     exit_status: Literal["success", "abort", "fail"] = "success",
     reason: str = "",
@@ -2233,158 +2147,137 @@ def compose_stop(
     time: Optional[float] = None,
     validate: bool = True,
 ) -> RunStop:
-    """
-    Here for backwards compatibility, the Compose class is prefered.
-    """
-    return ComposeStop(
-        start=start,
-        event_counters=event_counters,
-        poison_pill=poison_pill,
-        validate=validate,
-    )(exit_status=exit_status, reason=reason, uid=uid, time=time)
-
-
-@dataclass
-class ComposeEventPage:
-    descriptor: EventDescriptor
-    event_counters: dict
-    validate: bool = True
-
-    def __call__(
-        self,
-        data: dict,
-        timestamps: dict,
-        seq_num: List,
-        filled: Optional[Dict[str, List[Union[bool, str]]]] = None,
-        uid: Optional[List] = None,
-        time: Optional[List] = None,
-    ) -> EventPage:
-        N = len(seq_num)
-        if uid is None:
-            uid = [str(uuid.uuid4()) for _ in range(N)]
-        if time is None:
-            time = [ttime.time()] * N
-        if filled is None:
-            filled = {}
-        doc = EventPage(
-            uid=uid,
-            time=time,
-            data=data,
-            timestamps=timestamps,
-            seq_num=seq_num,
-            filled=filled,
-            descriptor=self.descriptor["uid"],
+    if poison_pill:
+        raise EventModelError(
+            "Already composed a RunStop document for run " "{!r}.".format(start["uid"])
         )
-        if self.validate:
-            schema_validators[DocumentNames.event_page].validate(doc)
-            if not (
-                self.descriptor["data_keys"].keys() == data.keys() == timestamps.keys()
-            ):
-                raise EventModelValidationError(
-                    "These sets of keys must match:\n"
-                    "event['data'].keys(): {}\n"
-                    "event['timestamps'].keys(): {}\n"
-                    "descriptor['data_keys'].keys(): {}\n".format(
-                        data.keys(),
-                        timestamps.keys(),
-                        self.descriptor["data_keys"].keys(),
-                    )
-                )
-            if set(filled) - set(data):
-                raise EventModelValidationError(
-                    "Keys in event['filled'] {} must be a subset of those in "
-                    "event['data'] {}".format(filled.keys(), data.keys())
-                )
-        self.event_counters[self.descriptor["name"]] += len(data)
-        return doc
+    poison_pill.append(object())
+    if uid is None:
+        uid = str(uuid.uuid4())
+    if time is None:
+        time = ttime.time()
+    doc = RunStop(
+        uid=uid,
+        time=time,
+        run_start=start["uid"],
+        exit_status=exit_status,
+        reason=reason,
+        num_events={k: v - 1 for k, v in event_counters.items()},
+    )
+    if validate:
+        schema_validators[DocumentNames.stop].validate(doc)
+    return doc
 
 
-def compose_event_page(
+def compose_stop(
     *,
     descriptor: EventDescriptor,
-    event_counters: dict,
-    data: dict,
-    timestamps: dict,
-    seq_num: List,
+    event_counters: Dict[str, int],
+    data: Dict[str, List],
+    timestamps: Dict[str, List],
+    seq_num: List[int],
     filled: Optional[Dict[str, List[Union[bool, str]]]] = None,
     uid: Optional[List] = None,
     time: Optional[List] = None,
     validate: bool = True,
 ) -> EventPage:
-    """
-    Here for backwards compatibility, the Compose class is prefered.
-    """
-    return ComposeEventPage(descriptor, event_counters, validate=validate)(
-        data, timestamps, seq_num, filled, uid=uid, time=time
+    N = len(seq_num)
+    if uid is None:
+        uid = [str(uuid.uuid4()) for _ in range(N)]
+    if time is None:
+        time = [ttime.time()] * N
+    if filled is None:
+        filled = {}
+    doc = EventPage(
+        uid=uid,
+        time=time,
+        data=data,
+        timestamps=timestamps,
+        seq_num=seq_num,
+        filled=filled,
+        descriptor=descriptor["uid"],
     )
-
-
-@dataclass
-class ComposeEvent:
-    descriptor: EventDescriptor
-    event_counters: Dict[str, int]
-    validate: bool = True
-
-    def __call__(
-        self,
-        data: dict,
-        timestamps: dict,
-        seq_num: Optional[int] = None,
-        filled: Optional[Dict[str, Union[bool, str]]] = None,
-        uid: Optional[str] = None,
-        time: Optional[float] = None,
-    ) -> Event:
-        if seq_num is None:
-            seq_num = self.event_counters[self.descriptor["name"]]
-        if uid is None:
-            uid = str(uuid.uuid4())
-        if time is None:
-            time = ttime.time()
-        if filled is None:
-            filled = {}
-        doc = Event(
-            uid=uid,
-            time=time,
-            data=data,
-            timestamps=timestamps,
-            seq_num=seq_num,
-            filled=filled,
-            descriptor=self.descriptor["uid"],
-        )
-        if self.validate:
-            schema_validators[DocumentNames.event].validate(doc)
-            if not (
-                self.descriptor["data_keys"].keys() == data.keys() == timestamps.keys()
-            ):
-                raise EventModelValidationError(
-                    "These sets of keys must match:\n"
-                    "event['data'].keys(): {}\n"
-                    "event['timestamps'].keys(): {}\n"
-                    "descriptor['data_keys'].keys(): {}\n".format(
-                        data.keys(),
-                        timestamps.keys(),
-                        self.descriptor["data_keys"].keys(),
-                    )
+    if validate:
+        schema_validators[DocumentNames.event_page].validate(doc)
+        if not (descriptor["data_keys"].keys() == data.keys() == timestamps.keys()):
+            raise EventModelValidationError(
+                "These sets of keys must match:\n"
+                "event['data'].keys(): {}\n"
+                "event['timestamps'].keys(): {}\n"
+                "descriptor['data_keys'].keys(): {}\n".format(
+                    data.keys(), timestamps.keys(), descriptor["data_keys"].keys()
                 )
-            if set(filled) - set(data):
-                raise EventModelValidationError(
-                    "Keys in event['filled'] {} must be a subset of those in "
-                    "event['data'] {}".format(filled.keys(), data.keys())
+            )
+        if set(filled) - set(data):
+            raise EventModelValidationError(
+                "Keys in event['filled'] {} must be a subset of those in "
+                "event['data'] {}".format(filled.keys(), data.keys())
+            )
+    event_counters[descriptor["name"]] += len(data)
+    return doc
+
+
+def compose_event_page(
+    *,
+    descriptor: EventDescriptor,
+    event_counters: Dict[str, int],
+    data: Dict[str, List],
+    timestamps: Dict[str, List],
+    seq_num: Optional[int] = None,
+    filled: Optional[Dict[str, Union[bool, str]]] = None,
+    uid: Optional[str] = None,
+    time: Optional[float] = None,
+    validate: bool = True,
+) -> Event:
+    if seq_num is None:
+        seq_num = event_counters[descriptor["name"]]
+    if uid is None:
+        uid = str(uuid.uuid4())
+    if time is None:
+        time = ttime.time()
+    if filled is None:
+        filled = {}
+    doc = Event(
+        uid=uid,
+        time=time,
+        data=data,
+        timestamps=timestamps,
+        seq_num=seq_num,
+        filled=filled,
+        descriptor=descriptor["uid"],
+    )
+    if validate:
+        schema_validators[DocumentNames.event].validate(doc)
+        if not (descriptor["data_keys"].keys() == data.keys() == timestamps.keys()):
+            raise EventModelValidationError(
+                "These sets of keys must match:\n"
+                "event['data'].keys(): {}\n"
+                "event['timestamps'].keys(): {}\n"
+                "descriptor['data_keys'].keys(): {}\n".format(
+                    data.keys(), timestamps.keys(), descriptor["data_keys"].keys()
                 )
-        self.event_counters[self.descriptor["name"]] += 1
-        return doc
+            )
+        if set(filled) - set(data):
+            raise EventModelValidationError(
+                "Keys in event['filled'] {} must be a subset of those in "
+                "event['data'] {}".format(filled.keys(), data.keys())
+            )
+    event_counters[descriptor["name"]] += 1
+    return doc
 
 
 def compose_event(
     *,
-    descriptor: EventDescriptor,
-    event_counters: dict,
-    data: Dict[str, Any],
-    timestamps: Dict[str, Any],
-    seq_num: int,
-    filled: Optional[dict] = None,
+    start: RunStart,
+    streams: Dict[str, Iterable],
+    event_counters: Dict[str, int],
+    name: str,
+    data_keys: Dict[str, DataKey],
     uid: Optional[str] = None,
     time: Optional[float] = None,
+    object_keys: Optional[Dict[str, Any]] = None,
+    configuration: Optional[Dict[str, Configuration]] = None,
+    hints: Optional[Any] = None,
     validate: bool = True,
 ) -> Event:
     """
@@ -2547,12 +2440,6 @@ def compose_run(
     if event_counters is None:
         event_counters = {}
     poison_pill: list = []
-
-    doc = dict(
-        **metadata,
-        uid=uid,
-        time=time,
-    )
     if validate:
         schema_validators[DocumentNames.start].validate(doc)
 
