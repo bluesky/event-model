@@ -2259,10 +2259,10 @@ def compose_run(
     doc = dict(uid=uid, time=time, **metadata)
     # Define some mutable state to be shared internally by the closures composed
     # below.
-    streams = {}
+    streams: dict = {}
     if event_counters is None:
         event_counters = {}
-    poison_pill = []
+    poison_pill: list = []
     if validate:
         schema_validators[DocumentNames.start].validate(doc)
 
