@@ -1977,9 +1977,7 @@ def compose_stop(
         "run_start": start["uid"],
         "exit_status": exit_status,
         "reason": reason,
-        "num_events": {
-            k: v - 1 for k, v in event_counters.items() if k is not None and v != 1
-        },
+        "num_events": {k: v - 1 for k, v in event_counters.items() if k is not None},
     }
     if validate:
         schema_validators[DocumentNames.stop].validate(doc)
