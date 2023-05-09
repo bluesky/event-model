@@ -41,7 +41,7 @@ from ._version import get_versions
 from .documents.datum import Datum
 from .documents.datum_page import DatumPage
 from .documents.event import Event
-from .documents.event_descriptor import DataKey, EventDescriptor
+from .documents.event_descriptor import Configuration, DataKey, EventDescriptor
 from .documents.event_page import EventPage
 from .documents.resource import Resource
 from .documents.run_start import RunStart
@@ -1871,7 +1871,7 @@ ComposeStreamResourceBundle = namedtuple(
 
 def compose_datum(
     *,
-    resource: dict,
+    resource: Resource,
     counter: Iterator,
     datum_kwargs: Dict[str, Any],
     validate: bool = True,
@@ -1889,7 +1889,7 @@ def compose_datum(
 
 def compose_datum_page(
     *,
-    resource: dict,
+    resource: Resource,
     counter: Iterator,
     datum_kwargs: dict,
     validate: bool = True,
@@ -1921,7 +1921,7 @@ def compose_resource(
     resource_path: str,
     resource_kwargs: Iterable,
     path_semantics: Optional[Literal["posix", "windows"]] = default_path_semantics,
-    start: Optional[dict] = None,
+    start: Optional[RunStart] = None,
     uid: Optional[str] = None,
     validate: bool = True,
 ) -> ComposeResourceBundle:
@@ -1988,7 +1988,7 @@ def compose_stream_resource(
     stream_names: Union[List, str],
     counters: List = [],
     path_semantics: Literal["posix", "windows"] = default_path_semantics,
-    start: Optional[dict] = None,
+    start: Optional[RunStart] = None,
     uid: Optional[str] = None,
     validate: bool = True,
 ) -> ComposeStreamResourceBundle:
@@ -2037,8 +2037,8 @@ def compose_stream_resource(
 
 def compose_stop(
     *,
-    start: dict,
-    event_counters: dict,
+    start: RunStart,
+    event_counters: Dict[str, int],
     poison_pill: List,
     exit_status: Literal["success", "abort", "fail"] = "success",
     reason: str = "",
@@ -2070,11 +2070,11 @@ def compose_stop(
 
 def compose_event_page(
     *,
-    descriptor: dict,
-    event_counters: dict,
-    data: dict,
-    timestamps: dict,
-    seq_num: List,
+    descriptor: EventDescriptor,
+    event_counters: Dict[str, int],
+    data: Dict[str, List],
+    timestamps: Dict[str, List],
+    seq_num: List[int],
     filled: Optional[Dict[str, List[Union[bool, str]]]] = None,
     uid: Optional[List] = None,
     time: Optional[List] = None,
@@ -2118,10 +2118,10 @@ def compose_event_page(
 
 def compose_event(
     *,
-    descriptor: dict,
-    event_counters: dict,
-    data: dict,
-    timestamps: dict,
+    descriptor: EventDescriptor,
+    event_counters: Dict[str, int],
+    data: Dict[str, List],
+    timestamps: Dict[str, List],
     seq_num: Optional[int] = None,
     filled: Optional[Dict[str, Union[bool, str]]] = None,
     uid: Optional[str] = None,
@@ -2167,16 +2167,16 @@ def compose_event(
 
 def compose_descriptor(
     *,
-    start: dict,
-    streams: dict,
-    event_counters: dict,
+    start: RunStart,
+    streams: Dict[str, Iterable],
+    event_counters: Dict[str, int],
     name: str,
     data_keys: Dict[str, DataKey],
     uid: Optional[str] = None,
     time: Optional[float] = None,
-    object_keys: Optional[dict] = None,
-    configuration: Optional[dict] = None,
-    hints: Optional[dict] = None,
+    object_keys: Optional[Dict[str, Any]] = None,
+    configuration: Optional[Dict[str, Configuration]] = None,
+    hints: Optional[Any] = None,
     validate: bool = True,
 ) -> ComposeDescriptorBundle:
     if uid is None:
@@ -2222,9 +2222,9 @@ def compose_run(
     *,
     uid: Optional[str] = None,
     time: Optional[float] = None,
-    metadata: Optional[dict] = None,
+    metadata: Optional[Dict] = None,
     validate: bool = True,
-    event_counters: Optional[dict] = None,
+    event_counters: Optional[Dict[str, int]] = None,
 ) -> ComposeRunBundle:
     """
     Compose a RunStart document and factory functions for related documents.
@@ -2259,10 +2259,10 @@ def compose_run(
     doc = dict(uid=uid, time=time, **metadata)
     # Define some mutable state to be shared internally by the closures composed
     # below.
-    streams = {}
+    streams: dict = {}
     if event_counters is None:
         event_counters = {}
-    poison_pill = []
+    poison_pill: list = []
     if validate:
         schema_validators[DocumentNames.start].validate(doc)
 
