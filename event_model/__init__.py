@@ -2038,7 +2038,7 @@ def compose_stream_resource(
 def compose_stop(
     *,
     start: dict,
-    event_counter: dict,
+    event_counters: dict,
     poison_pill: List,
     exit_status: Literal["success", "abort", "fail"] = "success",
     reason: str = "",
@@ -2061,7 +2061,7 @@ def compose_stop(
         run_start=start["uid"],
         exit_status=exit_status,
         reason=reason,
-        num_events={k: v - 1 for k, v in event_counter.items()},
+        num_events={k: v - 1 for k, v in event_counters.items()},
     )
     if validate:
         schema_validators[DocumentNames.stop].validate(doc)
@@ -2071,7 +2071,7 @@ def compose_stop(
 def compose_event_page(
     *,
     descriptor: dict,
-    event_counter: dict,
+    event_counters: dict,
     data: dict,
     timestamps: dict,
     seq_num: List,
@@ -2112,14 +2112,14 @@ def compose_event_page(
                 "Keys in event['filled'] {} must be a subset of those in "
                 "event['data'] {}".format(filled.keys(), data.keys())
             )
-    event_counter[descriptor["name"]] += len(data)
+    event_counters[descriptor["name"]] += len(data)
     return doc
 
 
 def compose_event(
     *,
     descriptor: dict,
-    event_counter: dict,
+    event_counters: dict,
     data: dict,
     timestamps: dict,
     seq_num: Optional[int] = None,
@@ -2129,7 +2129,7 @@ def compose_event(
     validate: bool = True,
 ) -> Event:
     if seq_num is None:
-        seq_num = event_counter[descriptor["name"]]
+        seq_num = event_counters[descriptor["name"]]
     if uid is None:
         uid = str(uuid.uuid4())
     if time is None:
@@ -2161,7 +2161,7 @@ def compose_event(
                 "Keys in event['filled'] {} must be a subset of those in "
                 "event['data'] {}".format(filled.keys(), data.keys())
             )
-    event_counter[descriptor["name"]] += 1
+    event_counters[descriptor["name"]] += 1
     return doc
 
 
@@ -2169,7 +2169,7 @@ def compose_descriptor(
     *,
     start: dict,
     streams: dict,
-    event_counter: dict,
+    event_counters: dict,
     name: str,
     data_keys: Dict[str, DataKey],
     uid: Optional[str] = None,
@@ -2210,11 +2210,11 @@ def compose_descriptor(
         schema_validators[DocumentNames.descriptor].validate(doc)
     if name not in streams:
         streams[name] = set(data_keys)
-        event_counter[name] = 1
+        event_counters[name] = 1
     return ComposeDescriptorBundle(
         doc,
-        partial(compose_event, descriptor=doc, event_counter=event_counter),
-        partial(compose_event_page, descriptor=doc, event_counter=event_counter),
+        partial(compose_event, descriptor=doc, event_counters=event_counters),
+        partial(compose_event_page, descriptor=doc, event_counters=event_counters),
     )
 
 
@@ -2224,6 +2224,7 @@ def compose_run(
     time: Optional[float] = None,
     metadata: Optional[dict] = None,
     validate: bool = True,
+    event_counters: Optional[dict] = None,
 ) -> ComposeRunBundle:
     """
     Compose a RunStart document and factory functions for related documents.
@@ -2240,6 +2241,10 @@ def compose_run(
         Additional metadata include the document
     validate : boolean, optional
         Validate this document conforms to the schema.
+    event_counters : dict, optional
+        A dict for counting events, when an event is composed by any of the
+        descriptors composed by this run, the element in this dict with the key of the
+        descriptor name will be increased by 1.
 
     Returns
     -------
@@ -2254,22 +2259,26 @@ def compose_run(
     doc = dict(uid=uid, time=time, **metadata)
     # Define some mutable state to be shared internally by the closures composed
     # below.
-    streams: dict = {}
-    event_counter: dict = {}
-    poison_pill: List = []
+    streams = {}
+    if event_counters is None:
+        event_counters = {}
+    poison_pill = []
     if validate:
         schema_validators[DocumentNames.start].validate(doc)
 
     return ComposeRunBundle(
         cast(RunStart, doc),
         partial(
-            compose_descriptor, start=doc, streams=streams, event_counter=event_counter
+            compose_descriptor,
+            start=doc,
+            streams=streams,
+            event_counters=event_counters,
         ),
         partial(compose_resource, start=doc),
         partial(
             compose_stop,
             start=doc,
-            event_counter=event_counter,
+            event_counters=event_counters,
             poison_pill=poison_pill,
         ),
         compose_stream_resource=partial(compose_stream_resource, start=doc),
