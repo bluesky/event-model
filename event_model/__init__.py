@@ -11,8 +11,8 @@ import types
 import uuid
 import warnings
 import weakref
-from collections import defaultdict, deque, namedtuple
-from dataclasses import dataclass, fields, _MISSING_TYPE
+from collections import defaultdict, deque
+from dataclasses import dataclass
 from enum import Enum
 from functools import partial
 from typing import (
@@ -29,7 +29,6 @@ from typing import (
     Union,
     cast,
     no_type_check,
-    get_type_hints,
 )
 
 import jsonschema
@@ -1874,84 +1873,57 @@ class ComposeRunBundle:
 
 @dataclass
 class ComposeDescriptorBundle:
-    descriptor_doc: dict
-    compose_event: callable
-    compose_event_page: callable
+    descriptor_doc: EventDescriptor
+    compose_event: Callable
+    compose_event_page: Callable
     stream_name: Optional[str] = None
     objs_read: Optional[Any] = None
+
+    def __iter__(self) -> Iterator:
+        return iter(
+            (
+                self.descriptor_doc,
+                self.compose_event,
+                self.compose_event_page,
+                self.stream_name,
+                self.objs_read,
+            )
+        )
 
 
 @dataclass
 class ComposeResourceBundle:
     resource_doc: Resource
-    compose_datum: callable
-    compose_datum_page: callable
+    compose_datum: Callable
+    compose_datum_page: Callable
+
+    def __iter__(self) -> Iterator:
+        return iter(
+            (
+                self.resource_doc,
+                self.compose_datum,
+                self.compose_datum_page,
+            )
+        )
 
 
 @dataclass
 class ComposeStreamResourceBundle:
     stream_resource_doc: StreamResource
-    compose_stream_data: List[callable]
+    compose_stream_data: List[Callable]
 
-
-from inspect import Parameter, signature
-
-
-def get_method_args(function: callable) -> Dict[str, Tuple[type, Any]]:
-    args = signature(function).parameters
-    types = get_type_hints(function)
-    new_args = {}
-    for name, para in args.items():
-        default = None if para.default is Parameter.empty else para.default
-        arg_type = types.get(name, Parameter.empty)
-        if arg_type is not Parameter.empty:
-            new_args[name] = (arg_type, default)
-    return new_args
-
-
-def backwards_compatible_wrapper(obj: object) -> callable:
-    """Convert a Compose dataclass to an ordinary compose function.
-
-    For typing, we use dataclasses with __call__ methods instead of partials
-    throughout event_model. For backwards compatibility, all of these
-    Compose[SomeTypedDict] are given ordinary compose_some_typed_dict()
-    functions.
-
-    Parameters
-    ----------
-    obj: object
-        dataclass with __call__ method to return a compose function for.
-
-    Returns
-    -------
-    A compose function of the obj parameter.
-    """
-
-    init_args = get_method_args(obj.__init__)
-    call_args = get_method_args(obj.__call__)
-    print("init_args")
-    print(init_args)
-    print("call_args")
-    print(call_args)
-    print("\n")
-
-    def meta_compose_doc(*args, **kwargs):
-        for arg in kwargs:
-            if arg in init_args:
-                init_args[arg][1] = kwargs[arg]
-            elif arg in call_args:
-                call_args[arg][1] = kwargs[arg]
-
-        for arg in kwargs:
-            if arg in init_args:
-                ...
-
-    return meta_compose_doc
+    def __iter__(self) -> Iterator:
+        return iter(
+            (
+                self.stream_resource_doc,
+                self.compose_stream_data,
+            )
+        )
 
 
 @dataclass
 class ComposeDatum:
-    resource: dict
+    resource: Resource
     counter: Iterator
     validate: bool = True
 
@@ -1970,14 +1942,24 @@ class ComposeDatum:
         return doc
 
 
-compose_datum = backwards_compatible_wrapper(ComposeDatum)
+def compose_datum(
+    *,
+    resource: Resource,
+    counter: Iterator,
+    datum_kwargs: Dict[str, Any],
+    validate: bool = True,
+) -> Datum:
+    """
+    Here for backwards compatibility, the Compose class is prefered.
+    """
+    return ComposeDatum(resource, counter, validate=validate)(datum_kwargs)
 
 
 @dataclass
 class ComposeDatumPage:
-    resource: dict
+    resource: Resource
     counter: Iterator
-    validate: bool = (True,)
+    validate: bool = True
 
     def __call__(
         self,
@@ -1998,7 +1980,17 @@ class ComposeDatumPage:
         return doc
 
 
-compose_datum_page = backwards_compatible_wrapper(ComposeDatumPage)
+def compose_datum_page(
+    *,
+    resource: Resource,
+    counter: Iterator,
+    datum_kwargs: dict,
+    validate: bool = True,
+) -> DatumPage:
+    """
+    Here for backwards compatibility, the Compose class is prefered.
+    """
+    return ComposeDatumPage(resource, counter, validate=validate)(datum_kwargs)
 
 
 PATH_SEMANTICS: Dict[str, Literal["posix", "windows"]] = {
@@ -2010,7 +2002,7 @@ default_path_semantics: Literal["posix", "windows"] = PATH_SEMANTICS[os.name]
 
 @dataclass
 class ComposeResource:
-    start: dict
+    start: Optional[RunStart]
     validate: bool = True
 
     def __call__(
@@ -2018,8 +2010,8 @@ class ComposeResource:
         spec: str,
         root: str,
         resource_path: str,
-        resource_kwargs: Iterable,
-        path_semantics: Optional[Literal["posix", "windows"]] = default_path_semantics,
+        resource_kwargs: Dict[str, Any],
+        path_semantics: Literal["posix", "windows"] = default_path_semantics,
         uid: Optional[str] = None,
     ) -> ComposeResourceBundle:
         if uid is None:
@@ -2047,7 +2039,28 @@ class ComposeResource:
         )
 
 
-compose_resource = backwards_compatible_wrapper(ComposeResource)
+def compose_resource(
+    *,
+    spec: str,
+    root: str,
+    resource_path: str,
+    resource_kwargs: Dict[str, Any],
+    path_semantics: Literal["posix", "windows"] = default_path_semantics,
+    start: Optional[RunStart] = None,
+    uid: Optional[str] = None,
+    validate: bool = True,
+) -> ComposeResourceBundle:
+    """
+    Here for backwards compatibility, the Compose class is prefered.
+    """
+    return ComposeResource(start, validate=validate)(
+        spec,
+        root,
+        resource_path,
+        resource_kwargs,
+        path_semantics=path_semantics,
+        uid=uid,
+    )
 
 
 @dataclass
@@ -2066,7 +2079,8 @@ class ComposeStreamDatum:
         resource_uid = self.stream_resource["uid"]
         if self.stream_name not in self.stream_resource["stream_names"]:
             raise EventModelKeyError(
-                "Attempt to create stream_datum with name not included in stream_resource"
+                "Attempt to create stream_datum with name not included"
+                "in stream_resource"
             )
         block_idx = next(self.counter)
         doc = StreamDatum(
@@ -2080,16 +2094,32 @@ class ComposeStreamDatum:
         )
         if self.validate:
             schema_validators[DocumentNames.stream_datum].validate(doc)
+
         return doc
 
 
-compose_stream_datum = backwards_compatible_wrapper(ComposeStreamDatum)
+def compose_stream_datum(
+    *,
+    stream_resource: StreamResource,
+    stream_name: str,
+    counter: Iterator,
+    datum_kwargs: Dict[str, Any],
+    event_count: int = 1,
+    event_offset: int = 0,
+    validate: bool = True,
+) -> StreamDatum:
+    """
+    Here for backwards compatibility, the Compose class is prefered.
+    """
+    return ComposeStreamDatum(stream_resource, stream_name, counter, validate=validate)(
+        datum_kwargs, event_count=event_count, event_offset=event_offset
+    )
 
 
 @dataclass
 class ComposeStreamResource:
-    start: RunStart
-    validate: bool = (True,)
+    validate: bool = True
+    start: Optional[RunStart] = None
 
     def __call__(
         self,
@@ -2100,7 +2130,6 @@ class ComposeStreamResource:
         stream_names: Union[List, str],
         counters: List = [],
         path_semantics: Literal["posix", "windows"] = default_path_semantics,
-        start: Optional[dict] = None,
         uid: Optional[str] = None,
     ) -> ComposeStreamResourceBundle:
         if uid is None:
@@ -2126,8 +2155,8 @@ class ComposeStreamResource:
             stream_names=stream_names,
             path_semantics=path_semantics,
         )
-        if start:
-            doc["run_start"] = start["uid"]
+        if self.start:
+            doc["run_start"] = self.start["uid"]
 
         if self.validate:
             schema_validators[DocumentNames.stream_resource].validate(doc)
@@ -2145,7 +2174,32 @@ class ComposeStreamResource:
         )
 
 
-compose_stream_resource = backwards_compatible_wrapper(ComposeStreamResource)
+def compose_stream_resource(
+    *,
+    spec: str,
+    root: str,
+    resource_path: str,
+    resource_kwargs: Dict[str, Any],
+    stream_names: Union[List, str],
+    counters: List = [],
+    path_semantics: Literal["posix", "windows"] = default_path_semantics,
+    start: Optional[RunStart] = None,
+    uid: Optional[str] = None,
+    validate: bool = True,
+) -> ComposeStreamResourceBundle:
+    """
+    Here for backwards compatibility, the Compose class is prefered.
+    """
+    return ComposeStreamResource(start=start, validate=validate)(
+        spec,
+        root,
+        resource_path,
+        resource_kwargs,
+        stream_names,
+        counters=counters,
+        path_semantics=path_semantics,
+        uid=uid,
+    )
 
 
 @dataclass
@@ -2153,7 +2207,7 @@ class ComposeStop:
     start: RunStart
     event_counters: dict
     poison_pill: List
-    validate: bool = (True,)
+    validate: bool = True
 
     def __call__(
         self,
@@ -2185,14 +2239,33 @@ class ComposeStop:
         return doc
 
 
-compose_stop = backwards_compatible_wrapper(ComposeStop)
+def compose_stop(
+    *,
+    start: RunStart,
+    event_counters: dict,
+    poison_pill: List,
+    exit_status: Literal["success", "abort", "fail"] = "success",
+    reason: str = "",
+    uid: Optional[str] = None,
+    time: Optional[float] = None,
+    validate: bool = True,
+) -> RunStop:
+    """
+    Here for backwards compatibility, the Compose class is prefered.
+    """
+    return ComposeStop(
+        start=start,
+        event_counters=event_counters,
+        poison_pill=poison_pill,
+        validate=validate,
+    )(exit_status=exit_status, reason=reason, uid=uid, time=time)
 
 
 @dataclass
 class ComposeEventPage:
     descriptor: EventDescriptor
     event_counters: dict
-    validate: bool = (True,)
+    validate: bool = True
 
     def __call__(
         self,
@@ -2243,14 +2316,31 @@ class ComposeEventPage:
         return doc
 
 
-compose_event_page = backwards_compatible_wrapper(ComposeEventPage)
+def compose_event_page(
+    *,
+    descriptor: EventDescriptor,
+    event_counters: dict,
+    data: dict,
+    timestamps: dict,
+    seq_num: List,
+    filled: Optional[Dict[str, List[Union[bool, str]]]] = None,
+    uid: Optional[List] = None,
+    time: Optional[List] = None,
+    validate: bool = True,
+) -> EventPage:
+    """
+    Here for backwards compatibility, the Compose class is prefered.
+    """
+    return ComposeEventPage(descriptor, event_counters, validate=validate)(
+        data, timestamps, seq_num, filled, uid=uid, time=time
+    )
 
 
 @dataclass
 class ComposeEvent:
     descriptor: EventDescriptor
     event_counters: dict
-    validate: bool = (True,)
+    validate: bool = True
 
     def __call__(
         self,
@@ -2302,7 +2392,24 @@ class ComposeEvent:
         return doc
 
 
-compose_event = backwards_compatible_wrapper(ComposeEvent)
+def compose_event(
+    *,
+    descriptor: EventDescriptor,
+    event_counters: dict,
+    data: Dict[str, Any],
+    timestamps: Dict[str, Any],
+    seq_num: int,
+    filled: Optional[dict] = None,
+    uid: Optional[str] = None,
+    time: Optional[float] = None,
+    validate: bool = True,
+) -> Event:
+    """
+    Here for backwards compatibility, the Compose class is prefered.
+    """
+    return ComposeEvent(descriptor, event_counters, validate=validate)(
+        data, timestamps, seq_num=seq_num, filled=filled, uid=uid, time=time
+    )
 
 
 @dataclass
@@ -2314,6 +2421,7 @@ class ComposeDescriptor:
 
     def __call__(
         self,
+        name,
         data_keys,
         hints=None,
         configuration=None,
@@ -2324,7 +2432,7 @@ class ComposeDescriptor:
         if time is None:
             time = ttime.time()
         if uid is None:
-            uid = (str(uuid.uuid4()),)
+            uid = str(uuid.uuid4())
         if hints is None:
             hints = {}
         if configuration is None:
@@ -2335,7 +2443,7 @@ class ComposeDescriptor:
         doc = EventDescriptor(
             configuration=configuration,
             data_keys=data_keys,
-            name=self.name,
+            name=name,
             object_keys=object_keys,
             run_start=self.start["uid"],
             time=time,
@@ -2367,7 +2475,32 @@ class ComposeDescriptor:
         )
 
 
-compose_descriptor = backwards_compatible_wrapper(ComposeDescriptor)
+def compose_descriptor(
+    *,
+    start: RunStart,
+    streams: dict,
+    event_counters: dict,
+    name: str,
+    data_keys: Dict[str, DataKey],
+    uid: Optional[str] = None,
+    time: Optional[float] = None,
+    object_keys: Optional[dict] = None,
+    configuration: Optional[dict] = None,
+    hints: Optional[dict] = None,
+    validate: bool = True,
+) -> ComposeDescriptorBundle:
+    """
+    Here for backwards compatibility, the Compose class is prefered.
+    """
+    return ComposeDescriptor(start, streams, event_counters, validate=validate)(
+        name,
+        data_keys,
+        hints=hints,
+        configuration=configuration,
+        object_keys=object_keys,
+        time=time,
+        uid=uid,
+    )
 
 
 def compose_run(
@@ -2408,26 +2541,34 @@ def compose_run(
         time = ttime.time()
     if metadata is None:
         metadata = {}
-    doc = dict(uid=uid, time=time, **metadata)
+
     # Define some mutable state to be shared internally by the closures composed
     # below.
     streams: dict = {}
     if event_counters is None:
         event_counters = {}
     poison_pill: list = []
+
+    doc = dict(
+        **metadata,
+        uid=uid,
+        time=time,
+    )
     if validate:
         schema_validators[DocumentNames.start].validate(doc)
 
     return ComposeRunBundle(
         cast(RunStart, doc),
-        ComposeDescriptor(start=doc, streams=streams, event_counters=event_counters),
-        ComposeResource(start=doc),
+        ComposeDescriptor(
+            start=cast(RunStart, doc), streams=streams, event_counters=event_counters
+        ),
+        ComposeResource(start=cast(RunStart, doc)),
         ComposeStop(
-            start=doc,
+            start=cast(RunStart, doc),
             event_counters=event_counters,
             poison_pill=poison_pill,
         ),
-        compose_stream_resource=ComposeStreamResource(start=doc),
+        compose_stream_resource=ComposeStreamResource(start=cast(RunStart, doc)),
     )
 
 
