@@ -23,13 +23,13 @@ def test_run_router(tmp_path):
         },
         name="primary",
     )
-    primary_descriptor_doc, compose_primary_event, compose_event_page = bundle
+    primary_descriptor_doc, compose_primary_event, compose_event_page, _, _ = bundle
     docs.append(("descriptor", primary_descriptor_doc))
     bundle = compose_descriptor(
         data_keys={"motor": {"shape": [], "dtype": "number", "source": "..."}},
         name="baseline",
     )
-    baseline_descriptor_doc, compose_baseline_event, compose_event_page = bundle
+    baseline_descriptor_doc, compose_baseline_event, compose_event_page, _, _ = bundle
     docs.append(("descriptor", baseline_descriptor_doc))
     bundle = compose_resource(
         spec="TIFF", root=str(tmp_path), resource_path="stack.tiff", resource_kwargs={}
