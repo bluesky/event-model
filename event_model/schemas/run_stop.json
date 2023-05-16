@@ -2,6 +2,11 @@
    "title": "run_stop",
    "description": "Document for the end of a run indicating the success/fail state of the run and the end time",
    "type": "object",
+   "definitions": {
+      "DataType": {
+         "title": "DataType"
+      }
+   },
    "properties": {
       "data_type": {
          "title": "Data Type",
@@ -15,12 +20,12 @@
       "exit_status": {
          "title": "Exit Status",
          "description": "State of the run when it ended",
+         "type": "string",
          "enum": [
             "success",
             "abort",
             "fail"
-         ],
-         "type": "string"
+         ]
       },
       "num_events": {
          "title": "Num Events",
@@ -57,11 +62,6 @@
       "time",
       "uid"
    ],
-   "definitions": {
-      "DataType": {
-         "title": "DataType"
-      }
-   },
    "patternProperties": {
       "^([^./]+)$": {
          "$ref": "#/definitions/DataType"

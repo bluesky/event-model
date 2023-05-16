@@ -2,6 +2,33 @@
    "title": "event_page",
    "description": "Page of documents to record a quanta of collected data",
    "type": "object",
+   "definitions": {
+      "Dataframe": {
+         "title": "Dataframe",
+         "type": "object",
+         "additionalProperties": {
+            "type": "array",
+            "items": {}
+         }
+      },
+      "DataframeForFilled": {
+         "title": "DataframeForFilled",
+         "type": "object",
+         "additionalProperties": {
+            "type": "array",
+            "items": {
+               "anyOf": [
+                  {
+                     "type": "boolean"
+                  },
+                  {
+                     "type": "string"
+                  }
+               ]
+            }
+         }
+      }
+   },
    "properties": {
       "data": {
          "title": "Data",
@@ -67,32 +94,5 @@
       "time",
       "timestamps",
       "uid"
-   ],
-   "definitions": {
-      "Dataframe": {
-         "title": "Dataframe",
-         "type": "object",
-         "additionalProperties": {
-            "type": "array",
-            "items": {}
-         }
-      },
-      "DataframeForFilled": {
-         "title": "DataframeForFilled",
-         "type": "object",
-         "additionalProperties": {
-            "type": "array",
-            "items": {
-               "anyOf": [
-                  {
-                     "type": "boolean"
-                  },
-                  {
-                     "type": "string"
-                  }
-               ]
-            }
-         }
-      }
-   }
+   ]
 }
