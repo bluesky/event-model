@@ -1,39 +1,38 @@
 {
-    "definitions": {
-        "dataframe": {
-            "type": "object",
-            "title": "dataframe",
-            "description": "A DataFrame-like object",
-            "additionalProperties": {
-                "type": "array"
-            }
-        }
-    },
-    "properties": {
-        "datum_id": {
-            "type": "array",
-            "items": {
-                "type": "string"
-            },
-            "description": "Array unique identifiers for each Datum (akin to 'uid' for other Document types), typically formatted as '<resource>/<integer>'"
-        },
-        "datum_kwargs": {
-            "$ref": "#/definitions/dataframe",
-            "description": "Array of arguments to pass to the Handler to retrieve one quanta of data"
-        },
-        "resource": {
-            "type": "string",
-            "description": "The UID of the Resource to which all Datums in the page belong"
-        }
-        
-    },
-    "required": [
-        "resource",
-        "datum_kwargs",
-        "datum_id"
-    ],
-    "additionalProperties": false,
-    "type": "object",
-    "title": "datum",
-    "description": "Page of documents to reference a quanta of externally-stored data"
+   "title": "datum",
+   "description": "Page of documents to reference a quanta of externally-stored data",
+   "type": "object",
+   "definitions": {
+      "dataframe": {
+         "title": "dataframe",
+         "description": "A DataFrame-like object",
+         "type": "object",
+         "additionalProperties": {
+            "type": "array"
+         }
+      }
+   },
+   "properties": {
+      "datum_id": {
+         "description": "Array unique identifiers for each Datum (akin to 'uid' for other Document types), typically formatted as '<resource>/<integer>'",
+         "type": "array",
+         "items": {
+            "type": "string"
+         }
+      },
+      "datum_kwargs": {
+         "description": "Array of arguments to pass to the Handler to retrieve one quanta of data",
+         "$ref": "#/definitions/dataframe"
+      },
+      "resource": {
+         "description": "The UID of the Resource to which all Datums in the page belong",
+         "type": "string"
+      }
+   },
+   "required": [
+      "resource",
+      "datum_kwargs",
+      "datum_id"
+   ],
+   "additionalProperties": false
 }

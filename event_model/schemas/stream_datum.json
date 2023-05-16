@@ -1,45 +1,45 @@
 {
-    "properties": {
-        "block_idx": {
-            "type": "integer",
-            "description": "The order in the stream of this block of data. This must be contiguous for a given stream."
-        },
-        "datum_kwargs": {
-            "type": "object",
-            "description": "Arguments to pass to the Handler to retrieve one quanta of data"
-        },
-        "event_count": {
-            "type": "integer",
-            "description": "The number of events in this datum."
-        },
-        "event_offset": {
-            "type": "integer",
-            "description": "The sequence number of the first event in this block. This increasing value allows the presence of gaps."
-        },
-        "stream_name": {
-            "type": "string",
-            "description": "The name of the stream that this Datum is providing a block of."
-        },
-        "stream_resource": {
-            "type": "string",
-            "description": "The UID of the Stream Resource to which this Datum belongs"
-        },
-        "uid": {
-            "type": "string",
-            "description": "Globally unique identifier for this Datum. A suggested formatting being '<stream_resource>/<stream_name>/<block_id>"
-        }
-    },
-    "required": [
-        "datum_kwargs",
-        "stream_resource",
-        "uid",
-        "stream_name",
-        "block_idx",
-        "event_count",
-        "event_offset"
-    ],
-    "additionalProperties": false,
-    "type": "object",
-    "title": "stream_datum",
-    "description": "Document to reference a quanta of an externally-stored stream of data."
+   "title": "stream_datum",
+   "description": "Document to reference a quanta of an externally-stored stream of data.",
+   "type": "object",
+   "properties": {
+      "block_idx": {
+         "description": "The order in the stream of this block of data. This must be contiguous for a given stream.",
+         "type": "integer"
+      },
+      "datum_kwargs": {
+         "description": "Arguments to pass to the Handler to retrieve one quanta of data",
+         "type": "object"
+      },
+      "event_count": {
+         "description": "The number of events in this datum.",
+         "type": "integer"
+      },
+      "event_offset": {
+         "description": "The sequence number of the first event in this block. This increasing value allows the presence of gaps.",
+         "type": "integer"
+      },
+      "stream_name": {
+         "description": "The name of the stream that this Datum is providing a block of.",
+         "type": "string"
+      },
+      "stream_resource": {
+         "description": "The UID of the Stream Resource to which this Datum belongs",
+         "type": "string"
+      },
+      "uid": {
+         "description": "Globally unique identifier for this Datum. A suggested formatting being '<stream_resource>/<stream_name>/<block_id>",
+         "type": "string"
+      }
+   },
+   "required": [
+      "datum_kwargs",
+      "stream_resource",
+      "uid",
+      "stream_name",
+      "block_idx",
+      "event_count",
+      "event_offset"
+   ],
+   "additionalProperties": false
 }

@@ -1,51 +1,62 @@
 {
-    "definitions": {
-        "data_type": {
-            "title" : "data_type",
-            "patternProperties": {"^([^./]+)$": {"$ref": "#/definitions/data_type"}},
-            "additionalProperties": false
-        }
-    },
-    "properties": {
-        "exit_status": {
-            "type": "string",
-            "enum": ["success", "abort", "fail"],
-            "description": "State of the run when it ended"
-        },
-        "num_events": {
-            "type": "object",
-            "properties": {},
-            "additionalProperties": { "type": "integer" },
-            "description": "Number of Events per named stream"
-        },
-        "reason": {
-            "type": "string",
-            "description": "Long-form description of why the run ended"
-        },
-        "run_start": {
-            "type": "string",
-            "description": "Reference back to the run_start document that this document is paired with."
-        },
-        "time": {
-            "type": "number",
-            "description": "The time the run ended. Unix epoch"
-        },
-        "uid": {
-            "type": "string",
-            "description": "Globally unique ID for this document"
-        }
-        
-    },
-    "patternProperties": {
-        "^([^./]+)$": {"$ref": "#/definitions/data_type"}},
-    "additionalProperties": false,
-    "required": [
-        "uid",
-        "run_start",
-        "time",
-        "exit_status"
-    ],
-    "type": "object",
-    "description": "Document for the end of a run indicating the success/fail state of the run and the end time"
-
+   "description": "Document for the end of a run indicating the success/fail state of the run and the end time",
+   "type": "object",
+   "definitions": {
+      "data_type": {
+         "title": "data_type",
+         "additionalProperties": false,
+         "patternProperties": {
+            "^([^./]+)$": {
+               "$ref": "#/definitions/data_type"
+            }
+         }
+      }
+   },
+   "properties": {
+      "exit_status": {
+         "description": "State of the run when it ended",
+         "type": "string",
+         "enum": [
+            "success",
+            "abort",
+            "fail"
+         ]
+      },
+      "num_events": {
+         "description": "Number of Events per named stream",
+         "type": "object",
+         "properties": {},
+         "additionalProperties": {
+            "type": "integer"
+         }
+      },
+      "reason": {
+         "description": "Long-form description of why the run ended",
+         "type": "string"
+      },
+      "run_start": {
+         "description": "Reference back to the run_start document that this document is paired with.",
+         "type": "string"
+      },
+      "time": {
+         "description": "The time the run ended. Unix epoch",
+         "type": "number"
+      },
+      "uid": {
+         "description": "Globally unique ID for this document",
+         "type": "string"
+      }
+   },
+   "required": [
+      "uid",
+      "run_start",
+      "time",
+      "exit_status"
+   ],
+   "additionalProperties": false,
+   "patternProperties": {
+      "^([^./]+)$": {
+         "$ref": "#/definitions/data_type"
+      }
+   }
 }
