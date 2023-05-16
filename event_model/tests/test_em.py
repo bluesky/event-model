@@ -69,7 +69,7 @@ def test_compose_run():
         },
         name="primary",
     )
-    descriptor_doc, compose_event, compose_event_page, _, _ = bundle
+    descriptor_doc, compose_event, compose_event_page = bundle
     assert bundle.descriptor_doc is descriptor_doc
     assert bundle.compose_event is compose_event
     assert bundle.compose_event_page is compose_event_page

@@ -41,7 +41,7 @@ from ._version import get_versions
 from .documents.datum import Datum
 from .documents.datum_page import DatumPage
 from .documents.event import Event
-from .documents.event_descriptor import DataKey, EventDescriptor
+from .documents.event_descriptor import DataKey, Configuration, EventDescriptor
 from .documents.event_page import EventPage
 from .documents.resource import Resource
 from .documents.run_start import RunStart
@@ -1895,19 +1895,15 @@ class ComposeStreamResourceBundle:
 class ComposeDatum:
     resource: Resource
     counter: Iterator
-    validate: bool = True
 
-    def __call__(
-        self,
-        datum_kwargs: Dict[str, Any],
-    ) -> Datum:
+    def __call__(self, datum_kwargs: Dict[str, Any], validate: bool = True) -> Datum:
         resource_uid = self.resource["uid"]
         doc = Datum(
             resource=resource_uid,
             datum_kwargs=datum_kwargs,
             datum_id="{}/{}".format(resource_uid, next(self.counter)),
         )
-        if self.validate:
+        if validate:
             schema_validators[DocumentNames.datum].validate(doc)
         return doc
 
@@ -1922,19 +1918,15 @@ def compose_datum(
     """
     Here for backwards compatibility, the Compose class is prefered.
     """
-    return ComposeDatum(resource, counter, validate=validate)(datum_kwargs)
+    return ComposeDatum(resource, counter)(datum_kwargs, validate=validate)
 
 
 @dataclass
 class ComposeDatumPage:
     resource: Resource
     counter: Iterator
-    validate: bool = True
 
-    def __call__(
-        self,
-        datum_kwargs: dict,
-    ) -> DatumPage:
+    def __call__(self, datum_kwargs: dict, validate: bool = True) -> DatumPage:
         resource_uid = self.resource["uid"]
         any_column, *_ = datum_kwargs.values()
         N = len(any_column)
@@ -1945,7 +1937,7 @@ class ComposeDatumPage:
                 "{}/{}".format(resource_uid, next(self.counter)) for _ in range(N)
             ],
         )
-        if self.validate:
+        if validate:
             schema_validators[DocumentNames.datum_page].validate(doc)
         return doc
 
@@ -1960,7 +1952,7 @@ def compose_datum_page(
     """
     Here for backwards compatibility, the Compose class is prefered.
     """
-    return ComposeDatumPage(resource, counter, validate=validate)(datum_kwargs)
+    return ComposeDatumPage(resource, counter)(datum_kwargs, validate=validate)
 
 
 PATH_SEMANTICS: Dict[str, Literal["posix", "windows"]] = {
@@ -1973,7 +1965,6 @@ default_path_semantics: Literal["posix", "windows"] = PATH_SEMANTICS[os.name]
 @dataclass
 class ComposeResource:
     start: Optional[RunStart]
-    validate: bool = True
 
     def __call__(
         self,
@@ -1983,6 +1974,7 @@ class ComposeResource:
         resource_kwargs: Dict[str, Any],
         path_semantics: Literal["posix", "windows"] = default_path_semantics,
         uid: Optional[str] = None,
+        validate: bool = True,
     ) -> ComposeResourceBundle:
         if uid is None:
             uid = str(uuid.uuid4())
@@ -1995,7 +1987,7 @@ class ComposeResource:
             resource_kwargs=resource_kwargs,
             resource_path=resource_path,
         )
-        if self.validate:
+        if validate:
             schema_validators[DocumentNames.resource].validate(doc)
 
         if self.start:
@@ -2023,13 +2015,14 @@ def compose_resource(
     """
     Here for backwards compatibility, the Compose class is prefered.
     """
-    return ComposeResource(start, validate=validate)(
+    return ComposeResource(start)(
         spec,
         root,
         resource_path,
         resource_kwargs,
         path_semantics=path_semantics,
         uid=uid,
+        validate=validate,
     )
 
 
@@ -2038,13 +2031,13 @@ class ComposeStreamDatum:
     stream_resource: StreamResource
     stream_name: str
     counter: Iterator
-    validate: bool = True
 
     def __call__(
         self,
         datum_kwargs: Dict[str, Any],
         event_count: int = 1,
         event_offset: int = 0,
+        validate: bool = True,
     ) -> StreamDatum:
         resource_uid = self.stream_resource["uid"]
         if self.stream_name not in self.stream_resource["stream_names"]:
@@ -2062,7 +2055,7 @@ class ComposeStreamDatum:
             event_count=event_count,
             event_offset=event_offset,
         )
-        if self.validate:
+        if validate:
             schema_validators[DocumentNames.stream_datum].validate(doc)
 
         return doc
@@ -2081,14 +2074,16 @@ def compose_stream_datum(
     """
     Here for backwards compatibility, the Compose class is prefered.
     """
-    return ComposeStreamDatum(stream_resource, stream_name, counter, validate=validate)(
-        datum_kwargs, event_count=event_count, event_offset=event_offset
+    return ComposeStreamDatum(stream_resource, stream_name, counter)(
+        datum_kwargs,
+        event_count=event_count,
+        event_offset=event_offset,
+        validate=validate,
     )
 
 
 @dataclass
 class ComposeStreamResource:
-    validate: bool = True
     start: Optional[RunStart] = None
 
     def __call__(
@@ -2101,6 +2096,7 @@ class ComposeStreamResource:
         counters: List = [],
         path_semantics: Literal["posix", "windows"] = default_path_semantics,
         uid: Optional[str] = None,
+        validate: bool = True,
     ) -> ComposeStreamResourceBundle:
         if uid is None:
             uid = str(uuid.uuid4())
@@ -2128,7 +2124,7 @@ class ComposeStreamResource:
         if self.start:
             doc["run_start"] = self.start["uid"]
 
-        if self.validate:
+        if validate:
             schema_validators[DocumentNames.stream_resource].validate(doc)
 
         return ComposeStreamResourceBundle(
@@ -2160,7 +2156,7 @@ def compose_stream_resource(
     """
     Here for backwards compatibility, the Compose class is prefered.
     """
-    return ComposeStreamResource(start=start, validate=validate)(
+    return ComposeStreamResource(start=start)(
         spec,
         root,
         resource_path,
@@ -2169,6 +2165,7 @@ def compose_stream_resource(
         counters=counters,
         path_semantics=path_semantics,
         uid=uid,
+        validate=validate
     )
 
 
@@ -2177,7 +2174,6 @@ class ComposeStop:
     start: RunStart
     event_counters: dict
     poison_pill: List
-    validate: bool = True
 
     def __call__(
         self,
@@ -2185,6 +2181,7 @@ class ComposeStop:
         reason: str = "",
         uid: Optional[str] = None,
         time: Optional[float] = None,
+        validate: bool = True,
     ) -> RunStop:
         if self.poison_pill:
             raise EventModelError(
@@ -2204,7 +2201,7 @@ class ComposeStop:
             reason=reason,
             num_events={k: v - 1 for k, v in self.event_counters.items()},
         )
-        if self.validate:
+        if validate:
             schema_validators[DocumentNames.stop].validate(doc)
         return doc
 
@@ -2227,15 +2224,13 @@ def compose_stop(
         start=start,
         event_counters=event_counters,
         poison_pill=poison_pill,
-        validate=validate,
-    )(exit_status=exit_status, reason=reason, uid=uid, time=time)
+    )(exit_status=exit_status, reason=reason, uid=uid, time=time, validate=validate)
 
 
 @dataclass
 class ComposeEventPage:
     descriptor: EventDescriptor
     event_counters: dict
-    validate: bool = True
 
     def __call__(
         self,
@@ -2245,6 +2240,7 @@ class ComposeEventPage:
         filled: Optional[Dict[str, List[Union[bool, str]]]] = None,
         uid: Optional[List] = None,
         time: Optional[List] = None,
+        validate: bool = True,
     ) -> EventPage:
         N = len(seq_num)
         if uid is None:
@@ -2262,7 +2258,7 @@ class ComposeEventPage:
             filled=filled,
             descriptor=self.descriptor["uid"],
         )
-        if self.validate:
+        if validate:
             schema_validators[DocumentNames.event_page].validate(doc)
             if not (
                 self.descriptor["data_keys"].keys() == data.keys() == timestamps.keys()
@@ -2301,8 +2297,8 @@ def compose_event_page(
     """
     Here for backwards compatibility, the Compose class is prefered.
     """
-    return ComposeEventPage(descriptor, event_counters, validate=validate)(
-        data, timestamps, seq_num, filled, uid=uid, time=time
+    return ComposeEventPage(descriptor, event_counters)(
+        data, timestamps, seq_num, filled, uid=uid, time=time, validate=validate
     )
 
 
@@ -2310,7 +2306,6 @@ def compose_event_page(
 class ComposeEvent:
     descriptor: EventDescriptor
     event_counters: Dict[str, int]
-    validate: bool = True
 
     def __call__(
         self,
@@ -2320,6 +2315,7 @@ class ComposeEvent:
         filled: Optional[Dict[str, Union[bool, str]]] = None,
         uid: Optional[str] = None,
         time: Optional[float] = None,
+        validate: bool = True,
     ) -> Event:
         if seq_num is None:
             seq_num = self.event_counters[self.descriptor["name"]]
@@ -2338,7 +2334,7 @@ class ComposeEvent:
             filled=filled,
             descriptor=self.descriptor["uid"],
         )
-        if self.validate:
+        if validate:
             schema_validators[DocumentNames.event].validate(doc)
             if not (
                 self.descriptor["data_keys"].keys() == data.keys() == timestamps.keys()
@@ -2377,8 +2373,14 @@ def compose_event(
     """
     Here for backwards compatibility, the Compose class is prefered.
     """
-    return ComposeEvent(descriptor, event_counters, validate=validate)(
-        data, timestamps, seq_num=seq_num, filled=filled, uid=uid, time=time
+    return ComposeEvent(descriptor, event_counters)(
+        data,
+        timestamps,
+        seq_num=seq_num,
+        filled=filled,
+        uid=uid,
+        time=time,
+        validate=validate,
     )
 
 
@@ -2403,7 +2405,6 @@ class ComposeDescriptor:
     start: RunStart
     streams: dict
     event_counters: dict
-    validate: bool = True
 
     def __call__(
         self,
@@ -2414,6 +2415,7 @@ class ComposeDescriptor:
         object_keys=None,
         time=None,
         uid=None,
+        validate: bool = True,
     ) -> ComposeDescriptorBundle:
         if time is None:
             time = ttime.time()
@@ -2436,7 +2438,7 @@ class ComposeDescriptor:
             uid=uid,
             hints=hints,
         )
-        if self.validate:
+        if validate:
             if name in self.streams and self.streams[name] != set(data_keys):
                 raise EventModelValidationError(
                     "A descriptor with the name {} has already been composed with "
@@ -2470,15 +2472,15 @@ def compose_descriptor(
     data_keys: Dict[str, DataKey],
     uid: Optional[str] = None,
     time: Optional[float] = None,
-    object_keys: Optional[dict] = None,
-    configuration: Optional[dict] = None,
-    hints: Optional[dict] = None,
+    object_keys: Optional[Dict[str, Any]] = None,
+    configuration: Optional[Dict[str, Configuration]] = None,
+    hints: Optional[Any] = None,
     validate: bool = True,
 ) -> ComposeDescriptorBundle:
     """
     Here for backwards compatibility, the Compose class is prefered.
     """
-    return ComposeDescriptor(start, streams, event_counters, validate=validate)(
+    return ComposeDescriptor(start, streams, event_counters)(
         name,
         data_keys,
         hints=hints,
@@ -2486,6 +2488,7 @@ def compose_descriptor(
         object_keys=object_keys,
         time=time,
         uid=uid,
+        validate=validate,
     )
 
 
@@ -2493,9 +2496,9 @@ def compose_run(
     *,
     uid: Optional[str] = None,
     time: Optional[float] = None,
-    metadata: Optional[dict] = None,
+    metadata: Optional[Dict] = None,
     validate: bool = True,
-    event_counters: Optional[dict] = None,
+    event_counters: Optional[Dict[str, int]] = None,
 ) -> ComposeRunBundle:
     """
     Compose a RunStart document and factory functions for related documents.
