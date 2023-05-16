@@ -1847,6 +1847,7 @@ class ComposeRunBundle:
     compose_stop: Callable
     compose_stream_resource: Optional[Callable] = None
 
+    # iter for backwards compatibility
     def __iter__(self) -> Iterator:
         return iter(
             (
@@ -1859,31 +1860,12 @@ class ComposeRunBundle:
 
 
 @dataclass
-class ComposeDescriptorBundle:
-    descriptor_doc: EventDescriptor
-    compose_event: Callable
-    compose_event_page: Callable
-    stream_name: Optional[str] = None
-    objs_read: Optional[Any] = None
-
-    def __iter__(self) -> Iterator:
-        return iter(
-            (
-                self.descriptor_doc,
-                self.compose_event,
-                self.compose_event_page,
-                self.stream_name,
-                self.objs_read,
-            )
-        )
-
-
-@dataclass
 class ComposeResourceBundle:
     resource_doc: Resource
     compose_datum: Callable
     compose_datum_page: Callable
 
+    # iter for backwards compatibility
     def __iter__(self) -> Iterator:
         return iter(
             (
@@ -1899,6 +1881,7 @@ class ComposeStreamResourceBundle:
     stream_resource_doc: StreamResource
     compose_stream_data: List[Callable]
 
+    # iter for backwards compatibility
     def __iter__(self) -> Iterator:
         return iter(
             (
@@ -2326,7 +2309,7 @@ def compose_event_page(
 @dataclass
 class ComposeEvent:
     descriptor: EventDescriptor
-    event_counters: dict
+    event_counters: Dict[str, int]
     validate: bool = True
 
     def __call__(
@@ -2397,6 +2380,22 @@ def compose_event(
     return ComposeEvent(descriptor, event_counters, validate=validate)(
         data, timestamps, seq_num=seq_num, filled=filled, uid=uid, time=time
     )
+
+
+@dataclass
+class ComposeDescriptorBundle:
+    descriptor_doc: EventDescriptor
+    compose_event: ComposeEvent
+    compose_event_page: ComposeEventPage
+
+    def __iter__(self) -> Iterator:
+        return iter(
+            (
+                self.descriptor_doc,
+                self.compose_event,
+                self.compose_event_page,
+            )
+        )
 
 
 @dataclass
