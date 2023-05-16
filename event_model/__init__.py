@@ -40,7 +40,7 @@ from typing_extensions import Literal
 from .documents.datum import Datum
 from .documents.datum_page import DatumPage
 from .documents.event import Event
-from .documents.event_descriptor import DataKey, Configuration, EventDescriptor
+from .documents.event_descriptor import Configuration, DataKey, EventDescriptor
 from .documents.event_page import EventPage
 from .documents.resource import Resource
 from .documents.run_start import RunStart
@@ -2138,35 +2138,68 @@ def compose_stream_datum(
 
 def compose_stream_resource(
     *,
-    start: RunStart,
-    event_counters: Dict[str, int],
-    poison_pill: List,
-    exit_status: Literal["success", "abort", "fail"] = "success",
-    reason: str = "",
+    spec: str,
+    root: str,
+    resource_path: str,
+    resource_kwargs: Dict[str, Any],
+    stream_names: Union[List, str],
+    counters: List = [],
+    path_semantics: Literal["posix", "windows"] = default_path_semantics,
+    start: Optional[RunStart] = None,
     uid: Optional[str] = None,
-    time: Optional[float] = None,
     validate: bool = True,
-) -> RunStop:
-    if poison_pill:
-        raise EventModelError(
-            "Already composed a RunStop document for run " "{!r}.".format(start["uid"])
-        )
-    poison_pill.append(object())
-    if uid is None:
-        uid = str(uuid.uuid4())
-    if time is None:
-        time = ttime.time()
-    doc = RunStop(
+) -> ComposeStreamResourceBundle:
+    """
+    Here for backwards compatibility, the Compose class is prefered.
+    """
+    return ComposeStreamResource(start=start)(
+        spec,
+        root,
+        resource_path,
+        resource_kwargs,
+        stream_names,
+        counters=counters,
+        path_semantics=path_semantics,
         uid=uid,
-        time=time,
-        run_start=start["uid"],
-        exit_status=exit_status,
-        reason=reason,
-        num_events={k: v - 1 for k, v in event_counters.items()},
+        validate=validate,
     )
-    if validate:
-        schema_validators[DocumentNames.stop].validate(doc)
-    return doc
+
+
+@dataclass
+class ComposeStop:
+    start: RunStart
+    event_counters: dict
+    poison_pill: List
+
+    def __call__(
+        self,
+        exit_status: Literal["success", "abort", "fail"] = "success",
+        reason: str = "",
+        uid: Optional[str] = None,
+        time: Optional[float] = None,
+        validate: bool = True,
+    ) -> RunStop:
+        if self.poison_pill:
+            raise EventModelError(
+                "Already composed a RunStop document for run "
+                "{!r}.".format(self.start["uid"])
+            )
+        self.poison_pill.append(object())
+        if uid is None:
+            uid = str(uuid.uuid4())
+        if time is None:
+            time = ttime.time()
+        doc = RunStop(
+            uid=uid,
+            time=time,
+            run_start=self.start["uid"],
+            exit_status=exit_status,
+            reason=reason,
+            num_events={k: v - 1 for k, v in self.event_counters.items()},
+        )
+        if validate:
+            schema_validators[DocumentNames.stop].validate(doc)
+        return doc
 
 
 def compose_stop(
