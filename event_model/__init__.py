@@ -41,7 +41,7 @@ from ._version import get_versions
 from .documents.datum import Datum
 from .documents.datum_page import DatumPage
 from .documents.event import Event
-from .documents.event_descriptor import DataKey, Configuration, EventDescriptor
+from .documents.event_descriptor import Configuration, DataKey, EventDescriptor
 from .documents.event_page import EventPage
 from .documents.resource import Resource
 from .documents.run_start import RunStart
@@ -2165,7 +2165,7 @@ def compose_stream_resource(
         counters=counters,
         path_semantics=path_semantics,
         uid=uid,
-        validate=validate
+        validate=validate,
     )
 
 
