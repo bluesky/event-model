@@ -421,19 +421,40 @@ def strip_newline_literal(schema: dict):
     return schema
 
 
-def sort_jsonschema(schema: dict) -> dict:
-    """Sorts the schema properties keys alphabetically by key name, exchanging the
+def sort_alphabetically(schema: dict) -> dict:
+    """Sorts the schema alphabetically by key name, exchanging the
     properties dicts for OrderedDicts"""
-    for key in schema:
-        if key == "properties":
-            schema[key] = OrderedDict(
-                sorted(list(schema[key].items()), key=lambda x: x[0])
-            )
+    schema = OrderedDict(sorted(list(schema.items()), key=lambda x: x[0]))
 
-        # We need to sort the properties in the definitions too.
-        elif isinstance(schema[key], dict):
-            schema[key] = sort_jsonschema(schema[key])
     return schema
+
+
+def sort_schema(schema: dict) -> dict:
+    if isinstance(schema, dict):
+        schema = OrderedDict(
+            sorted(list(schema.items()), key=lambda x: SortOrder.get(x[0], 8))
+        )
+
+        for key in schema:
+            if key in ("definitions", "properties"):
+                schema[key] = sort_alphabetically(schema[key])
+                for key2 in schema[key]:
+                    if isinstance(schema[key][key2], dict):
+                        schema[key][key2] = sort_schema(schema[key][key2])
+
+    return schema
+
+
+SortOrder = {
+    "title": 0,
+    "description": 1,
+    "type": 2,
+    "definitions": 3,
+    "properties": 4,
+    "required": 5,
+    "additionalProperties": 6,
+    "patternProperties": 7,
+}
 
 
 # From https://github.com/pydantic/pydantic/issues/760#issuecomment-589708485
@@ -498,7 +519,7 @@ def parse_typeddict_to_schema(
         model_schema = merge_dicts(extra_schema[typed_dict], model_schema)
 
     if sort:
-        model_schema = sort_jsonschema(model_schema)
+        model_schema = sort_schema(model_schema)
 
     if out_dir:
         with open(out_dir / f'{model_schema["title"]}.json', "w+") as f:

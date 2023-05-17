@@ -6,11 +6,11 @@
       "path_semantics": {
          "title": "Path Semantics",
          "description": "Rules for joining paths",
+         "type": "string",
          "enum": [
             "posix",
             "windows"
-         ],
-         "type": "string"
+         ]
       },
       "resource_kwargs": {
          "title": "Resource Kwargs",
