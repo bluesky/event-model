@@ -22,14 +22,25 @@ import numpy
 from packaging import version
 from pkg_resources import resource_filename as rs_fn
 
-from ._version import get_versions
-
 if sys.version_info < (3, 8):
     from importlib_metadata import metadata
+    from importlib_metadata import version as importlib_version
 else:
     from importlib.metadata import metadata
+    from importlib.metadata import version as importlib_version
 
-__all__ = ["DocumentNames", "schemas", "schema_validators", "compose_run"]
+__version__ = importlib_version("event-model")
+
+del importlib_version
+
+
+__all__ = [
+    "DocumentNames",
+    "schemas",
+    "schema_validators",
+    "compose_run",
+    "__version__",
+]
 
 
 class DocumentNames(Enum):
@@ -1758,10 +1769,6 @@ else:
         )
         for name, schema in schemas.items()
     }
-
-
-__version__ = get_versions()["version"]
-del get_versions
 
 
 @dataclass
