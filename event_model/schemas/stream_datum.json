@@ -4,65 +4,42 @@
    "type": "object",
    "properties": {
       "block_idx": {
-<<<<<<< HEAD
          "title": "Block Idx",
-=======
->>>>>>> master
          "description": "The order in the stream of this block of data. This must be contiguous for a given stream.",
          "type": "integer"
       },
       "datum_kwargs": {
-<<<<<<< HEAD
          "title": "Datum Kwargs",
-=======
->>>>>>> master
          "description": "Arguments to pass to the Handler to retrieve one quanta of data",
          "type": "object"
       },
       "event_count": {
-<<<<<<< HEAD
          "title": "Event Count",
-=======
->>>>>>> master
          "description": "The number of events in this datum.",
          "type": "integer"
       },
       "event_offset": {
-<<<<<<< HEAD
          "title": "Event Offset",
-=======
->>>>>>> master
          "description": "The sequence number of the first event in this block. This increasing value allows the presence of gaps.",
          "type": "integer"
       },
       "stream_name": {
-<<<<<<< HEAD
          "title": "Stream Name",
-=======
->>>>>>> master
          "description": "The name of the stream that this Datum is providing a block of.",
          "type": "string"
       },
       "stream_resource": {
-<<<<<<< HEAD
          "title": "Stream Resource",
          "description": "The UID of the Stream Resource to which this Datum belongs.",
          "type": "string"
       },
       "uid": {
          "title": "Uid",
-=======
-         "description": "The UID of the Stream Resource to which this Datum belongs",
-         "type": "string"
-      },
-      "uid": {
->>>>>>> master
          "description": "Globally unique identifier for this Datum. A suggested formatting being '<stream_resource>/<stream_name>/<block_id>",
          "type": "string"
       }
    },
    "required": [
-<<<<<<< HEAD
       "block_idx",
       "datum_kwargs",
       "event_count",
@@ -71,15 +48,4 @@
       "stream_resource",
       "uid"
    ]
-=======
-      "datum_kwargs",
-      "stream_resource",
-      "uid",
-      "stream_name",
-      "block_idx",
-      "event_count",
-      "event_offset"
-   ],
-   "additionalProperties": false
->>>>>>> master
 }

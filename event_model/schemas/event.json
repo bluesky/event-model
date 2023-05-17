@@ -4,23 +4,16 @@
    "type": "object",
    "properties": {
       "data": {
-<<<<<<< HEAD
          "title": "Data",
-=======
->>>>>>> master
          "description": "The actual measurement data",
          "type": "object"
       },
       "descriptor": {
-<<<<<<< HEAD
          "title": "Descriptor",
-=======
->>>>>>> master
          "description": "UID of the EventDescriptor to which this Event belongs",
          "type": "string"
       },
       "filled": {
-<<<<<<< HEAD
          "title": "Filled",
          "description": "Mapping each of the keys of externally-stored data to the boolean False, indicating that the data has not been loaded, or to foreign keys (moved here from 'data' when the data was loaded)",
          "type": "object",
@@ -32,52 +25,31 @@
                {
                   "type": "string"
                }
-=======
-         "description": "Mapping each of the keys of externally-stored data to the boolean False, indicating that the data has not been loaded, or to foreign keys (moved here from 'data' when the data was loaded)",
-         "type": "object",
-         "additionalProperties": {
-            "type": [
-               "boolean",
-               "string"
->>>>>>> master
             ]
          }
       },
       "seq_num": {
-<<<<<<< HEAD
          "title": "Seq Num",
-=======
->>>>>>> master
          "description": "Sequence number to identify the location of this Event in the Event stream",
          "type": "integer"
       },
       "time": {
-<<<<<<< HEAD
          "title": "Time",
-=======
->>>>>>> master
          "description": "The event time. This maybe different than the timestamps on each of the data entries.",
          "type": "number"
       },
       "timestamps": {
-<<<<<<< HEAD
          "title": "Timestamps",
-=======
->>>>>>> master
          "description": "The timestamps of the individual measurement data",
          "type": "object"
       },
       "uid": {
-<<<<<<< HEAD
          "title": "Uid",
-=======
->>>>>>> master
          "description": "Globally unique identifier for this Event",
          "type": "string"
       }
    },
    "required": [
-<<<<<<< HEAD
       "data",
       "descriptor",
       "seq_num",
@@ -85,14 +57,4 @@
       "timestamps",
       "uid"
    ]
-=======
-      "uid",
-      "data",
-      "timestamps",
-      "time",
-      "descriptor",
-      "seq_num"
-   ],
-   "additionalProperties": false
->>>>>>> master
 }

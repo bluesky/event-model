@@ -1,5 +1,4 @@
 {
-<<<<<<< HEAD
    "title": "run_start",
    "description": "Document created at the start of run. Provides a seach target and later documents link to it",
    "type": "object",
@@ -61,28 +60,12 @@
       },
       "Projection": {
          "title": "Projection",
-=======
-   "description": "Document created at the start of run.  Provides a search target and later documents link to it",
-   "type": "object",
-   "definitions": {
-      "data_type": {
-         "title": "data_type",
-         "additionalProperties": false,
-         "patternProperties": {
-            "^([^./]+)$": {
-               "$ref": "#/definitions/data_type"
-            }
-         }
-      },
-      "projection": {
->>>>>>> master
          "description": "Where to get the data from",
          "type": "object",
          "properties": {
             "calculation": {
                "title": "calculation properties",
                "description": "required fields if type is calculated",
-<<<<<<< HEAD
                "allOf": [
                   {
                      "$ref": "#/definitions/Calculation"
@@ -105,37 +88,6 @@
                "title": "Location",
                "description": "start comes from metadata fields in the start document, event comes from event, configuration comes from configuration fields in the event_descriptor document",
                "type": "string",
-=======
-               "properties": {
-                  "args": {
-                     "description": "args for calculation callable",
-                     "type": "array"
-                  },
-                  "callable": {
-                     "description": "callable function to perform calculation",
-                     "type": "string"
-                  },
-                  "kwargs": {
-                     "description": "kwargs for calculation callable",
-                     "type": "object"
-                  }
-               },
-               "required": [
-                  "callable"
-               ]
-            },
-            "config_device": {
-               "type": "string"
-            },
-            "config_index": {
-               "type": "integer"
-            },
-            "field": {
-               "type": "string"
-            },
-            "location": {
-               "description": "start comes from metadata fields in the start document, event comes from event, configuration comes from configuration fields in the event_descriptor document",
->>>>>>> master
                "enum": [
                   "start",
                   "event",
@@ -143,7 +95,6 @@
                ]
             },
             "stream": {
-<<<<<<< HEAD
                "title": "Stream",
                "type": "string"
             },
@@ -151,12 +102,6 @@
                "title": "Type",
                "description": "linked: a value linked from the data set, calculated: a value that requires calculation, static:  a value defined here in the projection ",
                "type": "string",
-=======
-               "type": "string"
-            },
-            "type": {
-               "description": "linked: a value linked from the data set, calculated: a value that requires calculation, static:  a value defined here in the projection ",
->>>>>>> master
                "enum": [
                   "linked",
                   "calculated",
@@ -164,17 +109,10 @@
                ]
             },
             "value": {
-<<<<<<< HEAD
                "title": "Value",
                "description": "value explicitely defined in the projection when type==static."
             }
          },
-=======
-               "description": "value explicitly defined in the projection when type==static."
-            }
-         },
-         "additionalProperties": false,
->>>>>>> master
          "allOf": [
             {
                "if": {
@@ -182,26 +120,14 @@
                      {
                         "properties": {
                            "location": {
-<<<<<<< HEAD
                               "enum": "configuration"
-=======
-                              "enum": [
-                                 "configuration"
-                              ]
->>>>>>> master
                            }
                         }
                      },
                      {
                         "properties": {
                            "type": {
-<<<<<<< HEAD
                               "enum": "linked"
-=======
-                              "enum": [
-                                 "linked"
-                              ]
->>>>>>> master
                            }
                         }
                      }
@@ -224,26 +150,14 @@
                      {
                         "properties": {
                            "location": {
-<<<<<<< HEAD
                               "enum": "event"
-=======
-                              "enum": [
-                                 "event"
-                              ]
->>>>>>> master
                            }
                         }
                      },
                      {
                         "properties": {
                            "type": {
-<<<<<<< HEAD
                               "enum": "linked"
-=======
-                              "enum": [
-                                 "linked"
-                              ]
->>>>>>> master
                            }
                         }
                      }
@@ -264,26 +178,14 @@
                      {
                         "properties": {
                            "location": {
-<<<<<<< HEAD
                               "enum": "event"
-=======
-                              "enum": [
-                                 "event"
-                              ]
->>>>>>> master
                            }
                         }
                      },
                      {
                         "properties": {
                            "type": {
-<<<<<<< HEAD
                               "enum": "calculated"
-=======
-                              "enum": [
-                                 "calculated"
-                              ]
->>>>>>> master
                            }
                         }
                      }
@@ -302,13 +204,7 @@
                "if": {
                   "properties": {
                      "type": {
-<<<<<<< HEAD
                         "enum": "static"
-=======
-                        "enum": [
-                           "static"
-                        ]
->>>>>>> master
                      }
                   }
                },
@@ -321,7 +217,6 @@
             }
          ]
       },
-<<<<<<< HEAD
       "Projections": {
          "title": "Projections",
          "description": "Describe how to interperet this run as the given projection",
@@ -329,25 +224,15 @@
          "properties": {
             "configuration": {
                "title": "Configuration",
-=======
-      "projections": {
-         "title": "Describe how to interpret this run as the given projection",
-         "properties": {
-            "configuration": {
->>>>>>> master
                "description": "Static information about projection",
                "type": "object"
             },
             "name": {
-<<<<<<< HEAD
                "title": "Name",
-=======
->>>>>>> master
                "description": "The name of the projection",
                "type": "string"
             },
             "projection": {
-<<<<<<< HEAD
                "title": "Projection",
                "type": "object",
                "additionalProperties": {
@@ -356,42 +241,20 @@
             },
             "version": {
                "title": "Version",
-=======
-               "type": "object",
-               "additionalProperties": false,
-               "patternProperties": {
-                  ".": {
-                     "$ref": "#/definitions/projection"
-                  }
-               }
-            },
-            "version": {
->>>>>>> master
                "description": "The version of the projection spec. Can specify the version of an external specification.",
                "type": "string"
             }
          },
          "required": [
-<<<<<<< HEAD
             "configuration",
             "projection",
             "version"
          ]
-=======
-            "projection",
-            "version",
-            "configuration"
-         ],
-         "additionalProperties": false
->>>>>>> master
       }
    },
    "properties": {
       "data_groups": {
-<<<<<<< HEAD
          "title": "Data Groups",
-=======
->>>>>>> master
          "description": "An optional list of data access groups that have meaning to some external system. Examples might include facility, beamline, end stations, proposal, safety form.",
          "type": "array",
          "items": {
@@ -399,7 +262,6 @@
          }
       },
       "data_session": {
-<<<<<<< HEAD
          "title": "Data Session",
          "description": "An optional field for grouping runs. The meaning is not mandated, but this is a data management grouping and not a scientific grouping. It is intended to group runs in a visit or set of trials.",
          "type": "string"
@@ -409,17 +271,10 @@
       },
       "group": {
          "title": "Group",
-=======
-         "description": "An optional field for grouping runs. The meaning is not mandated, but this is a data management grouping and not a scientific grouping. It is intended to group runs in a visit or set of trials.",
-         "type": "string"
-      },
-      "group": {
->>>>>>> master
          "description": "Unix group to associate this data with",
          "type": "string"
       },
       "hints": {
-<<<<<<< HEAD
          "title": "Hints",
          "description": "Start-level hints",
          "allOf": [
@@ -430,56 +285,15 @@
       },
       "owner": {
          "title": "Owner",
-=======
-         "description": "Start-level hints",
-         "type": "object",
-         "properties": {
-            "dimensions": {
-               "description": "The independent axes of the experiment.  Ordered slow to fast",
-               "type": "array",
-               "items": {
-                  "type": "array",
-                  "description": "Each entry in this list is of the from ([<FIELD>, ...], <STREAM>).  A 1d scan will have 1 such entry, a scan with 3 independent entries would have 3",
-                  "items": [
-                     {
-                        "type": "array",
-                        "description": "The data key(s) for the given dimension.",
-                        "items": {
-                           "type": "string"
-                        }
-                     },
-                     {
-                        "type": "string",
-                        "description": "The stream to find the datakeys in."
-                     }
-                  ],
-                  "additionalItems": false,
-                  "minItems": 2
-               }
-            }
-         },
-         "additionalProperties": false,
-         "patternProperties": {
-            "^([^.]+)$": {
-               "$ref": "#/definitions/data_type"
-            }
-         }
-      },
-      "owner": {
->>>>>>> master
          "description": "Unix owner to associate this data with",
          "type": "string"
       },
       "project": {
-<<<<<<< HEAD
          "title": "Project",
-=======
->>>>>>> master
          "description": "Name of project that this run is part of",
          "type": "string"
       },
       "projections": {
-<<<<<<< HEAD
          "title": "Projections",
          "type": "array",
          "items": {
@@ -500,58 +314,27 @@
       },
       "scan_id": {
          "title": "Scan Id",
-=======
-         "type": "array",
-         "items": {
-            "$ref": "#/definitions/projections"
-         }
-      },
-      "sample": {
-         "description": "Information about the sample, may be a UID to another collection",
-         "type": [
-            "object",
-            "string"
-         ]
-      },
-      "scan_id": {
->>>>>>> master
          "description": "Scan ID number, not globally unique",
          "type": "integer"
       },
       "time": {
-<<<<<<< HEAD
          "title": "Time",
-=======
->>>>>>> master
          "description": "Time the run started.  Unix epoch time",
          "type": "number"
       },
       "uid": {
-<<<<<<< HEAD
          "title": "Uid",
-=======
->>>>>>> master
          "description": "Globally unique ID for this run",
          "type": "string"
       }
    },
    "required": [
-<<<<<<< HEAD
       "time",
       "uid"
    ],
    "patternProperties": {
       "^([^./]+)$": {
          "$ref": "#/definitions/DataType"
-=======
-      "uid",
-      "time"
-   ],
-   "additionalProperties": false,
-   "patternProperties": {
-      "^([^./]+)$": {
-         "$ref": "#/definitions/data_type"
->>>>>>> master
       }
    }
 }

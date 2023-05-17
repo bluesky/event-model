@@ -4,10 +4,7 @@
    "type": "object",
    "properties": {
       "path_semantics": {
-<<<<<<< HEAD
          "title": "Path Semantics",
-=======
->>>>>>> master
          "description": "Rules for joining paths",
          "type": "string",
          "enum": [
@@ -16,69 +13,41 @@
          ]
       },
       "resource_kwargs": {
-<<<<<<< HEAD
          "title": "Resource Kwargs",
-=======
->>>>>>> master
          "description": "Additional argument to pass to the Handler to read a Resource",
          "type": "object"
       },
       "resource_path": {
-<<<<<<< HEAD
          "title": "Resource Path",
-=======
->>>>>>> master
          "description": "Filepath or URI for locating this resource",
          "type": "string"
       },
       "root": {
-<<<<<<< HEAD
          "title": "Root",
-=======
->>>>>>> master
          "description": "Subset of resource_path that is a local detail, not semantic.",
          "type": "string"
       },
       "run_start": {
-<<<<<<< HEAD
          "title": "Run Start",
-=======
->>>>>>> master
          "description": "Globally unique ID to the run_start document this resource is associated with.",
          "type": "string"
       },
       "spec": {
-<<<<<<< HEAD
          "title": "Spec",
-=======
->>>>>>> master
          "description": "String identifying the format/type of this Resource, used to identify a compatible Handler",
          "type": "string"
       },
       "uid": {
-<<<<<<< HEAD
          "title": "Uid",
-=======
->>>>>>> master
          "description": "Globally unique identifier for this Resource",
          "type": "string"
       }
    },
    "required": [
-<<<<<<< HEAD
       "resource_kwargs",
       "resource_path",
       "root",
       "spec",
       "uid"
    ]
-=======
-      "spec",
-      "resource_path",
-      "resource_kwargs",
-      "root",
-      "uid"
-   ],
-   "additionalProperties": false
->>>>>>> master
 }

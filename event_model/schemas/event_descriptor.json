@@ -3,24 +3,16 @@
    "description": "Document to describe the data captured in the associated event documents",
    "type": "object",
    "definitions": {
-<<<<<<< HEAD
       "Configuration": {
          "title": "Configuration",
          "type": "object",
          "properties": {
             "data": {
                "title": "Data",
-=======
-      "configuration": {
-         "type": "object",
-         "properties": {
-            "data": {
->>>>>>> master
                "description": "The actual measurement data",
                "type": "object"
             },
             "data_keys": {
-<<<<<<< HEAD
                "title": "Data Keys",
                "description": "This describes the data stored alongside it in this configuration object.",
                "type": "object",
@@ -92,66 +84,10 @@
             "units": {
                "title": "Units",
                "description": "Engineering units of the value",
-=======
-               "description": "This describes the data stored alongside it in this configuration object.",
-               "type": "object",
-               "additionalProperties": {
-                  "$ref": "#/definitions/data_key"
-               }
-            },
-            "timestamps": {
-               "description": "The timestamps of the individual measurement data",
-               "type": "object"
-            }
-         }
-      },
-      "data_key": {
-         "title": "data_key",
-         "description": "Describes the objects in the data property of Event documents",
-         "type": "object",
-         "properties": {
-            "dims": {
-               "description": "The names for dimensions of the data. Null or empty list if scalar data",
-               "type": "array",
-               "items": {
-                  "type": "string"
-               }
-            },
-            "dtype": {
-               "description": "The type of the data in the event.",
-               "type": "string",
-               "enum": [
-                  "string",
-                  "number",
-                  "array",
-                  "boolean",
-                  "integer"
-               ]
-            },
-            "external": {
-               "description": "Where the data is stored if it is stored external to the events.",
-               "type": "string",
-               "pattern": "^[A-Z]+:?"
-            },
-            "object_name": {
-               "description": "The name of the object this key was pulled from.",
-               "type": "string"
-            },
-            "shape": {
-               "description": "The shape of the data.  Empty list indicates scalar data.",
-               "type": "array",
-               "items": {
-                  "type": "integer"
-               }
-            },
-            "source": {
-               "description": "The source (ex piece of hardware) of the data.",
->>>>>>> master
                "type": "string"
             }
          },
          "required": [
-<<<<<<< HEAD
             "dtype",
             "shape",
             "source"
@@ -168,58 +104,15 @@
       },
       "ObjectHints": {
          "title": "ObjectHints"
-=======
-            "source",
-            "dtype",
-            "shape"
-         ]
-      },
-      "data_type": {
-         "title": "data_type",
-         "additionalProperties": false,
-         "patternProperties": {
-            "^([^./]+)$": {
-               "$ref": "#/definitions/data_type"
-            }
-         }
-      },
-      "object_hints": {
-         "title": "Object Hints",
-         "additionalProperties": false,
-         "patternProperties": {
-            "^([^./]+)$": {
-               "$ref": "#/definitions/per_object_hint"
-            }
-         }
-      },
-      "per_object_hint": {
-         "type": "object",
-         "properties": {
-            "fields": {
-               "description": "The 'interesting' data keys for this device.",
-               "type": "array",
-               "items": {
-                  "type": "string"
-               }
-            }
-         }
->>>>>>> master
       }
    },
    "properties": {
       "configuration": {
-<<<<<<< HEAD
          "title": "Configuration",
          "description": "Readings of configurational fields necessary for interpreting data in the Events.",
          "type": "object",
          "additionalProperties": {
             "$ref": "#/definitions/Configuration"
-=======
-         "description": "Readings of configurational fields necessary for interpreting data in the Events.",
-         "type": "object",
-         "additionalProperties": {
-            "$ref": "#/definitions/configuration"
->>>>>>> master
          }
       },
       "data_keys": {
@@ -227,7 +120,6 @@
          "description": "This describes the data in the Event Documents.",
          "type": "object",
          "additionalProperties": {
-<<<<<<< HEAD
             "$ref": "#/definitions/DataKey"
          }
       },
@@ -236,39 +128,21 @@
       },
       "name": {
          "title": "Name",
-=======
-            "$ref": "#/definitions/data_key"
-         }
-      },
-      "hints": {
-         "$ref": "#/definitions/object_hints"
-      },
-      "name": {
->>>>>>> master
          "description": "A human-friendly name for this data stream, such as 'primary' or 'baseline'.",
          "type": "string"
       },
       "object_keys": {
-<<<<<<< HEAD
          "title": "Object Keys",
-=======
->>>>>>> master
          "description": "Maps a Device/Signal name to the names of the entries it produces in data_keys.",
          "type": "object"
       },
       "run_start": {
-<<<<<<< HEAD
          "title": "Run Start",
-=======
->>>>>>> master
          "description": "Globally unique ID of this run's 'start' document.",
          "type": "string"
       },
       "time": {
-<<<<<<< HEAD
          "title": "Time",
-=======
->>>>>>> master
          "description": "Creation time of the document as unix epoch time.",
          "type": "number"
       },
@@ -279,7 +153,6 @@
       }
    },
    "required": [
-<<<<<<< HEAD
       "data_keys",
       "run_start",
       "time",
@@ -288,17 +161,6 @@
    "patternProperties": {
       "^([^./]+)$": {
          "$ref": "#/definitions/DataType"
-=======
-      "uid",
-      "data_keys",
-      "run_start",
-      "time"
-   ],
-   "additionalProperties": false,
-   "patternProperties": {
-      "^([^./]+)$": {
-         "$ref": "#/definitions/data_type"
->>>>>>> master
       }
    }
 }
