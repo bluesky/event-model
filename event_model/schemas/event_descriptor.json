@@ -158,6 +158,7 @@
       "time",
       "uid"
    ],
+   "additionalProperties": false,
    "patternProperties": {
       "^([^./]+)$": {
          "$ref": "#/definitions/DataType"

@@ -2,9 +2,12 @@ from typing import Any, Dict
 
 from typing_extensions import Annotated, TypedDict
 
-from .generate.type_wrapper import Field
+from .generate.type_wrapper import Field, add_extra_schema
+
+DATUM_EXTRA_SCHEMA = {"additionalProperties": False}
 
 
+@add_extra_schema(DATUM_EXTRA_SCHEMA)
 class Datum(TypedDict):
     """Document to reference a quanta of externally-stored data"""
 

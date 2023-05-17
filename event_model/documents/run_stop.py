@@ -5,7 +5,8 @@ from typing_extensions import Annotated, Literal, NotRequired, TypedDict
 from .generate.type_wrapper import AsRef, Field, add_extra_schema
 
 RUN_STOP_EXTRA_SCHEMA = {
-    "patternProperties": {"^([^./]+)$": {"$ref": "#/definitions/DataType"}}
+    "patternProperties": {"^([^./]+)$": {"$ref": "#/definitions/DataType"}},
+    "additionalProperties": False,
 }
 
 

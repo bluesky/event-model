@@ -126,6 +126,7 @@ RUN_START_EXTRA_SCHEMA = {
         }
     },
     "patternProperties": {"^([^./]+)$": {"$ref": "#/definitions/DataType"}},
+    "additionalProperties": False,
 }
 
 

@@ -94,5 +94,6 @@
       "time",
       "timestamps",
       "uid"
-   ]
+   ],
+   "additionalProperties": false
 }
