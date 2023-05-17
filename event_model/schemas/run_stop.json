@@ -1,4 +1,5 @@
 {
+<<<<<<< HEAD
    "title": "run_stop",
    "description": "Document for the end of a run indicating the success/fail state of the run and the end time",
    "type": "object",
@@ -19,6 +20,23 @@
       },
       "exit_status": {
          "title": "Exit Status",
+=======
+   "description": "Document for the end of a run indicating the success/fail state of the run and the end time",
+   "type": "object",
+   "definitions": {
+      "data_type": {
+         "title": "data_type",
+         "additionalProperties": false,
+         "patternProperties": {
+            "^([^./]+)$": {
+               "$ref": "#/definitions/data_type"
+            }
+         }
+      }
+   },
+   "properties": {
+      "exit_status": {
+>>>>>>> master
          "description": "State of the run when it ended",
          "type": "string",
          "enum": [
@@ -28,35 +46,54 @@
          ]
       },
       "num_events": {
+<<<<<<< HEAD
          "title": "Num Events",
          "description": "Number of Events per named stream",
          "type": "object",
+=======
+         "description": "Number of Events per named stream",
+         "type": "object",
+         "properties": {},
+>>>>>>> master
          "additionalProperties": {
             "type": "integer"
          }
       },
       "reason": {
+<<<<<<< HEAD
          "title": "Reason",
+=======
+>>>>>>> master
          "description": "Long-form description of why the run ended",
          "type": "string"
       },
       "run_start": {
+<<<<<<< HEAD
          "title": "Run Start",
+=======
+>>>>>>> master
          "description": "Reference back to the run_start document that this document is paired with.",
          "type": "string"
       },
       "time": {
+<<<<<<< HEAD
          "title": "Time",
+=======
+>>>>>>> master
          "description": "The time the run ended. Unix epoch",
          "type": "number"
       },
       "uid": {
+<<<<<<< HEAD
          "title": "Uid",
+=======
+>>>>>>> master
          "description": "Globally unique ID for this document",
          "type": "string"
       }
    },
    "required": [
+<<<<<<< HEAD
       "exit_status",
       "run_start",
       "time",
@@ -65,6 +102,17 @@
    "patternProperties": {
       "^([^./]+)$": {
          "$ref": "#/definitions/DataType"
+=======
+      "uid",
+      "run_start",
+      "time",
+      "exit_status"
+   ],
+   "additionalProperties": false,
+   "patternProperties": {
+      "^([^./]+)$": {
+         "$ref": "#/definitions/data_type"
+>>>>>>> master
       }
    }
 }

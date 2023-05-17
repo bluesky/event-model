@@ -3,6 +3,7 @@
    "description": "Page of documents to record a quanta of collected data",
    "type": "object",
    "definitions": {
+<<<<<<< HEAD
       "Dataframe": {
          "title": "Dataframe",
          "type": "object",
@@ -13,10 +14,24 @@
       },
       "DataframeForFilled": {
          "title": "DataframeForFilled",
+=======
+      "dataframe": {
+         "title": "dataframe",
+         "description": "A DataFrame-like object",
+         "type": "object",
+         "additionalProperties": {
+            "type": "array"
+         }
+      },
+      "dataframe_for_filled": {
+         "title": "dataframe_for_filled",
+         "description": "A DataFrame-like object with boolean or string entries",
+>>>>>>> master
          "type": "object",
          "additionalProperties": {
             "type": "array",
             "items": {
+<<<<<<< HEAD
                "anyOf": [
                   {
                      "type": "boolean"
@@ -24,6 +39,11 @@
                   {
                      "type": "string"
                   }
+=======
+               "type": [
+                  "boolean",
+                  "string"
+>>>>>>> master
                ]
             }
          }
@@ -31,6 +51,7 @@
    },
    "properties": {
       "data": {
+<<<<<<< HEAD
          "title": "Data",
          "description": "The actual measurement data",
          "allOf": [
@@ -41,10 +62,17 @@
       },
       "descriptor": {
          "title": "Descriptor",
+=======
+         "description": "The actual measurement data",
+         "$ref": "#/definitions/dataframe"
+      },
+      "descriptor": {
+>>>>>>> master
          "description": "The UID of the EventDescriptor to which all of the Events in this page belong",
          "type": "string"
       },
       "filled": {
+<<<<<<< HEAD
          "title": "Filled",
          "description": "Mapping each of the keys of externally-stored data to an array containing the boolean False, indicating that the data has not been loaded, or to foreign keys (moved here from 'data' when the data was loaded)",
          "allOf": [
@@ -55,6 +83,12 @@
       },
       "seq_num": {
          "title": "Seq Num",
+=======
+         "description": "Mapping each of the keys of externally-stored data to an array containing the boolean False, indicating that the data has not been loaded, or to foreign keys (moved here from 'data' when the data was loaded)",
+         "$ref": "#/definitions/dataframe_for_filled"
+      },
+      "seq_num": {
+>>>>>>> master
          "description": "Array of sequence numbers to identify the location of each Event in the Event stream",
          "type": "array",
          "items": {
@@ -62,7 +96,10 @@
          }
       },
       "time": {
+<<<<<<< HEAD
          "title": "Time",
+=======
+>>>>>>> master
          "description": "Array of Event times. This maybe different than the timestamps on each of the data entries",
          "type": "array",
          "items": {
@@ -70,6 +107,7 @@
          }
       },
       "timestamps": {
+<<<<<<< HEAD
          "title": "Timestamps",
          "description": "The timestamps of the individual measurement data",
          "allOf": [
@@ -80,6 +118,12 @@
       },
       "uid": {
          "title": "Uid",
+=======
+         "description": "The timestamps of the individual measurement data",
+         "$ref": "#/definitions/dataframe"
+      },
+      "uid": {
+>>>>>>> master
          "description": "Array of globally unique identifiers for each Event",
          "type": "array",
          "items": {
@@ -88,6 +132,7 @@
       }
    },
    "required": [
+<<<<<<< HEAD
       "data",
       "descriptor",
       "seq_num",
@@ -95,4 +140,14 @@
       "timestamps",
       "uid"
    ]
+=======
+      "descriptor",
+      "uid",
+      "data",
+      "timestamps",
+      "time",
+      "seq_num"
+   ],
+   "additionalProperties": false
+>>>>>>> master
 }

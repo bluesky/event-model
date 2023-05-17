@@ -1,10 +1,28 @@
 {
+<<<<<<< HEAD
    "title": "datum_page",
    "description": "Page of documents to reference a quanta of externally-stored data",
    "type": "object",
    "properties": {
       "datum_id": {
          "title": "Datum Id",
+=======
+   "title": "datum",
+   "description": "Page of documents to reference a quanta of externally-stored data",
+   "type": "object",
+   "definitions": {
+      "dataframe": {
+         "title": "dataframe",
+         "description": "A DataFrame-like object",
+         "type": "object",
+         "additionalProperties": {
+            "type": "array"
+         }
+      }
+   },
+   "properties": {
+      "datum_id": {
+>>>>>>> master
          "description": "Array unique identifiers for each Datum (akin to 'uid' for other Document types), typically formatted as '<resource>/<integer>'",
          "type": "array",
          "items": {
@@ -12,6 +30,7 @@
          }
       },
       "datum_kwargs": {
+<<<<<<< HEAD
          "title": "Datum Kwargs",
          "description": "Array of arguments to pass to the Handler to retrieve one quanta of data",
          "type": "object",
@@ -35,12 +54,26 @@
       },
       "resource": {
          "title": "Resource",
+=======
+         "description": "Array of arguments to pass to the Handler to retrieve one quanta of data",
+         "$ref": "#/definitions/dataframe"
+      },
+      "resource": {
+>>>>>>> master
          "description": "The UID of the Resource to which all Datums in the page belong",
          "type": "string"
       }
    },
    "required": [
+<<<<<<< HEAD
       "datum_id",
       "resource"
    ]
+=======
+      "resource",
+      "datum_kwargs",
+      "datum_id"
+   ],
+   "additionalProperties": false
+>>>>>>> master
 }
