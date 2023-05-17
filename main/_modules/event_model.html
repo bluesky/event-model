@@ -8,7 +8,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>event_model &#8212; event-model 1.19.2.post80+g7a5fdd6 documentation</title>
+    <title>event_model &#8212; event-model 1.19.3.dev82+gfc6c544 documentation</title>
   
   
   
@@ -426,14 +426,25 @@ document.write(`
 <span class="kn">from</span> <span class="nn">packaging</span> <span class="kn">import</span> <span class="n">version</span>
 <span class="kn">from</span> <span class="nn">pkg_resources</span> <span class="kn">import</span> <span class="n">resource_filename</span> <span class="k">as</span> <span class="n">rs_fn</span>
 
-<span class="kn">from</span> <span class="nn">._version</span> <span class="kn">import</span> <span class="n">get_versions</span>
-
 <span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">version_info</span> <span class="o">&lt;</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">8</span><span class="p">):</span>
     <span class="kn">from</span> <span class="nn">importlib_metadata</span> <span class="kn">import</span> <span class="n">metadata</span>
+    <span class="kn">from</span> <span class="nn">importlib_metadata</span> <span class="kn">import</span> <span class="n">version</span> <span class="k">as</span> <span class="n">importlib_version</span>
 <span class="k">else</span><span class="p">:</span>
     <span class="kn">from</span> <span class="nn">importlib.metadata</span> <span class="kn">import</span> <span class="n">metadata</span>
+    <span class="kn">from</span> <span class="nn">importlib.metadata</span> <span class="kn">import</span> <span class="n">version</span> <span class="k">as</span> <span class="n">importlib_version</span>
 
-<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;DocumentNames&quot;</span><span class="p">,</span> <span class="s2">&quot;schemas&quot;</span><span class="p">,</span> <span class="s2">&quot;schema_validators&quot;</span><span class="p">,</span> <span class="s2">&quot;compose_run&quot;</span><span class="p">]</span>
+<span class="n">__version__</span> <span class="o">=</span> <span class="n">importlib_version</span><span class="p">(</span><span class="s2">&quot;event-model&quot;</span><span class="p">)</span>
+
+<span class="k">del</span> <span class="n">importlib_version</span>
+
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s2">&quot;DocumentNames&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;schemas&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;schema_validators&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;compose_run&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;__version__&quot;</span><span class="p">,</span>
+<span class="p">]</span>
 
 
 <div class="viewcode-block" id="DocumentNames"><a class="viewcode-back" href="../user/reference/api.html#event_model.DocumentNames">[docs]</a><span class="k">class</span> <span class="nc">DocumentNames</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
@@ -2162,10 +2173,6 @@ document.write(`
         <span class="p">)</span>
         <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">schema</span> <span class="ow">in</span> <span class="n">schemas</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
     <span class="p">}</span>
-
-
-<span class="n">__version__</span> <span class="o">=</span> <span class="n">get_versions</span><span class="p">()[</span><span class="s2">&quot;version&quot;</span><span class="p">]</span>
-<span class="k">del</span> <span class="n">get_versions</span>
 
 
 <div class="viewcode-block" id="ComposeRunBundle"><a class="viewcode-back" href="../user/reference/api.html#event_model.ComposeRunBundle">[docs]</a><span class="nd">@dataclass</span>
