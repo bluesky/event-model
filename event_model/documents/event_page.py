@@ -2,9 +2,13 @@ from typing import Any, Dict, List, Union
 
 from typing_extensions import Annotated, NotRequired, TypedDict
 
-from .generate.type_wrapper import AsRef, Field
+from .generate.type_wrapper import AsRef, Field, add_extra_schema
 
 
+EVENT_PAGE_EXTRA_SCHEMA = {"additionalProperties": False}
+
+
+@add_extra_schema(EVENT_PAGE_EXTRA_SCHEMA)
 class EventPage(TypedDict):
     """Page of documents to record a quanta of collected data"""
 

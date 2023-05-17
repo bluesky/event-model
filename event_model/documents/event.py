@@ -2,9 +2,12 @@ from typing import Any, Dict, Union
 
 from typing_extensions import Annotated, NotRequired, TypedDict
 
-from .generate.type_wrapper import Field
+from .generate.type_wrapper import Field, add_extra_schema
+
+EVENT_EXTRA_SCHEMA = {"additionalProperties": False}
 
 
+@add_extra_schema(EVENT_EXTRA_SCHEMA)
 class Event(TypedDict):
     """Document to record a quanta of collected data"""
 

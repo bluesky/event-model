@@ -49,5 +49,6 @@
       "root",
       "spec",
       "uid"
-   ]
+   ],
+   "additionalProperties": false
 }

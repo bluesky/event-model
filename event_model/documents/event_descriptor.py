@@ -99,6 +99,7 @@ EVENT_DESCRIPTOR_EXTRA_SCHEMA = {
             "additionalProperties": False,
         }
     },
+    "additionalProperties": False,
 }
 
 

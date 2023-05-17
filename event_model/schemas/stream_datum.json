@@ -47,5 +47,6 @@
       "stream_name",
       "stream_resource",
       "uid"
-   ]
+   ],
+   "additionalProperties": false
 }

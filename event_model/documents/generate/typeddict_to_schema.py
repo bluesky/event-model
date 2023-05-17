@@ -432,7 +432,9 @@ def sort_alphabetically(schema: dict) -> dict:
 def sort_schema(schema: dict) -> dict:
     if isinstance(schema, dict):
         schema = OrderedDict(
-            sorted(list(schema.items()), key=lambda x: SortOrder.get(x[0], 8))
+            sorted(
+                list(schema.items()), key=lambda x: SortOrder.get(x[0], len(SortOrder))
+            )
         )
 
         for key in schema:
