@@ -1891,7 +1891,7 @@ def compose_datum_page(
     *,
     resource: Resource,
     counter: Iterator,
-    datum_kwargs: dict,
+    datum_kwargs: Dict[str, Any],
     validate: bool = True,
 ) -> DatumPage:
     resource_uid = resource["uid"]
