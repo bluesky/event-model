@@ -4,7 +4,6 @@ from typing_extensions import Annotated, NotRequired, TypedDict
 
 from .generate.type_wrapper import AsRef, Field, add_extra_schema
 
-
 EVENT_PAGE_EXTRA_SCHEMA = {"additionalProperties": False}
 
 
