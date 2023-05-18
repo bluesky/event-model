@@ -37,7 +37,6 @@ from packaging import version
 from pkg_resources import resource_filename as rs_fn
 from typing_extensions import Literal
 
-from ._version import get_versions
 from .documents.datum import Datum
 from .documents.datum_page import DatumPage
 from .documents.event import Event
