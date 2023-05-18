@@ -1,5 +1,3 @@
-from typing import Any, Dict
-
 from typing_extensions import Annotated, TypedDict
 
 from .generate.type_wrapper import Field, add_extra_schema
@@ -18,13 +16,6 @@ class StreamDatum(TypedDict):
             "be contiguous for a given stream.",
         ),
     ]
-    datum_kwargs: Annotated[
-        Dict[str, Any],
-        Field(
-            description="Arguments to pass to the Handler to retrieve one "
-            "quanta of data",
-        ),
-    ]
     event_count: Annotated[
         int, Field(description="The number of events in this datum.")
     ]
@@ -33,13 +24,6 @@ class StreamDatum(TypedDict):
         Field(
             description="The sequence number of the first event in this block. This "
             "increasing value allows the presence of gaps.",
-        ),
-    ]
-    stream_name: Annotated[
-        str,
-        Field(
-            description="The name of the stream that this Datum is providing a "
-            "block of.",
         ),
     ]
     stream_resource: Annotated[

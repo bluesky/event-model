@@ -15,6 +15,28 @@ class StreamResource(TypedDict):
     externally-stored data streams
     """
 
+    data_keys: Annotated[
+        List[str],
+        Field(
+            description="A list to show which data_keys of the "
+            "Descriptor are being streamed"
+        ),
+    ]
+    seq_nums: Annotated[
+        Dict[str, int],
+        Field(
+            description="A slice object showing the Event numbers the "
+            "resource corresponds to"
+        ),
+    ]
+    indices: Annotated[
+        Dict[str, int],
+        Field(
+            description="A slice object passed to the StreamResource "
+            "handler so it can hand back data and timestamps"
+        ),
+    ]
+
     path_semantics: NotRequired[
         Annotated[
             Literal["posix", "windows"],
@@ -34,7 +56,7 @@ class StreamResource(TypedDict):
     root: Annotated[
         str,
         Field(
-            description="Subset of resource_path that is a local detail, not semantic."
+            description="Subset of resource_path that is a local detail, not semantic"
         ),
     ]
     run_start: NotRequired[
@@ -42,7 +64,7 @@ class StreamResource(TypedDict):
             str,
             Field(
                 description="Globally unique ID to the run_start document "
-                "this Stream Resource is associated with.",
+                "this Stream Resource is associated with",
             ),
         ]
     ]
@@ -55,12 +77,4 @@ class StreamResource(TypedDict):
     ]
     uid: Annotated[
         str, Field(description="Globally unique identifier for this Stream Resource")
-    ]
-    stream_names: Annotated[
-        List[str],
-        Field(
-            description="List of the stream names this resource provides",
-            min_items=1,
-            unique_items=True,
-        ),
     ]
