@@ -18,9 +18,7 @@ class RunStop(TypedDict):
     """
 
     data_type: NotRequired[
-        Annotated[
-            Any, Field(description="data_type", regex="^([^./]+)$"), AsRef("DataType")
-        ]
+        Annotated[Any, Field(description="data_type"), AsRef("DataType")]
     ]
     exit_status: Annotated[
         Literal["success", "abort", "fail"],

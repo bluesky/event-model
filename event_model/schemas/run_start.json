@@ -120,7 +120,9 @@
                      {
                         "properties": {
                            "location": {
-                              "enum": "configuration"
+                              "enum": [
+                                 "configuration"
+                              ]
                            }
                         }
                      },
