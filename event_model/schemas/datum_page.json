@@ -2,14 +2,24 @@
    "title": "datum_page",
    "description": "Page of documents to reference a quanta of externally-stored data",
    "type": "object",
-   "properties": {
-      "datum_id": {
-         "title": "Datum Id",
-         "description": "Array unique identifiers for each Datum (akin to 'uid' for other Document types), typically formatted as '<resource>/<integer>'",
+   "definitions": {
+      "Dataframe": {
+         "title": "Dataframe",
          "type": "array",
          "items": {
             "type": "string"
          }
+      }
+   },
+   "properties": {
+      "datum_id": {
+         "title": "Datum Id",
+         "description": "Array unique identifiers for each Datum (akin to 'uid' for other Document types), typically formatted as '<resource>/<integer>'",
+         "allOf": [
+            {
+               "$ref": "#/definitions/Dataframe"
+            }
+         ]
       },
       "datum_kwargs": {
          "title": "Datum Kwargs",

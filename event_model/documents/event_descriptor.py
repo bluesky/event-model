@@ -2,7 +2,7 @@ from typing import Any, Dict, List
 
 from typing_extensions import Annotated, Literal, NotRequired, TypedDict
 
-from .generate.type_wrapper import AsRef, Field, add_extra_schema
+from .generate.type_wrapper import Field, add_extra_schema
 
 
 class DataKey(TypedDict):
@@ -124,8 +124,7 @@ class EventDescriptor(TypedDict):
             title="data_keys",
         ),
     ]
-
-    hints: NotRequired[Annotated[Any, AsRef("ObjectHints")]]
+    hints: NotRequired[PerObjectHint]
     name: NotRequired[
         Annotated[
             str,

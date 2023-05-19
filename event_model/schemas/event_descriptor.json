@@ -102,8 +102,20 @@
             }
          }
       },
-      "ObjectHints": {
-         "title": "ObjectHints"
+      "PerObjectHint": {
+         "title": "PerObjectHint",
+         "description": "The 'interesting' data keys for this device.",
+         "type": "object",
+         "properties": {
+            "fields": {
+               "title": "Fields",
+               "description": "The 'interesting' data keys for this device.",
+               "type": "array",
+               "items": {
+                  "type": "string"
+               }
+            }
+         }
       }
    },
    "properties": {
@@ -124,7 +136,7 @@
          }
       },
       "hints": {
-         "$ref": "#/definitions/ObjectHints"
+         "$ref": "#/definitions/PerObjectHint"
       },
       "name": {
          "title": "Name",
