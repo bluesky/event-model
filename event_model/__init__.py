@@ -40,7 +40,12 @@ from typing_extensions import Literal
 from .documents.datum import Datum
 from .documents.datum_page import DatumPage
 from .documents.event import Event
-from .documents.event_descriptor import Configuration, DataKey, EventDescriptor
+from .documents.event_descriptor import (
+    Configuration,
+    DataKey,
+    EventDescriptor,
+    PerObjectHint,
+)
 from .documents.event_page import EventPage
 from .documents.resource import Resource
 from .documents.run_start import RunStart
@@ -2466,7 +2471,7 @@ def compose_descriptor(
     time: Optional[float] = None,
     object_keys: Optional[Dict[str, Any]] = None,
     configuration: Optional[Dict[str, Configuration]] = None,
-    hints: Optional[Any] = None,
+    hints: Optional[PerObjectHint] = None,
     validate: bool = True,
 ) -> ComposeDescriptorBundle:
     """
