@@ -127,7 +127,6 @@ RUN_START_EXTRA_SCHEMA = {
                     "then": {"required": ["type", "value"]},
                 },
             ],
-        },
     },
     "properties": {
         "hints": {
