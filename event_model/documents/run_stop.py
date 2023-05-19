@@ -1,4 +1,4 @@
-from typing import Any, Dict
+from typing import Dict, Any
 
 from typing_extensions import Annotated, Literal, NotRequired, TypedDict
 
@@ -18,9 +18,7 @@ class RunStop(TypedDict):
     """
 
     data_type: NotRequired[
-        Annotated[
-            Any, Field(description="data_type", regex="^([^./]+)$"), AsRef("DataType")
-        ]
+        Annotated[Any, Field(description="data_type"), AsRef("DataType")]
     ]
     exit_status: Annotated[
         Literal["success", "abort", "fail"],

@@ -85,7 +85,7 @@ RUN_START_EXTRA_SCHEMA = {
                 {
                     "if": {
                         "allOf": [
-                            {"properties": {"location": {"enum": "configuration"}}},
+                            {"properties": {"location": {"enum": ["configuration"]}}},
                             {"properties": {"type": {"enum": "linked"}}},
                         ]
                     },

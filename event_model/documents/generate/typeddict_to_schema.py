@@ -92,7 +92,7 @@ def merge_dicts(dict1: dict, dict2: dict) -> dict:
 
 
 def format_all_annotations(
-    typed_dict: _TypedDictMeta, new_basemodel_classes: Dict[str, BaseModel] = {}
+    typed_dict: _TypedDictMeta, new_basemodel_classes: Dict[str, BaseModel] = None
 ) -> _TypedDictMeta:
     """Goes through all field type annotations and formats them to be acceptable
     to pydantic.
@@ -110,7 +110,7 @@ def format_all_annotations(
     typed_dict : dict
         TypedDict to change annotations of prior to being converted to BaseModel.
 
-    new_basemodel_classes : dict
+    new_basemodel_classes : Optional[Dict[str, BaseModel]
         Dict where keys are names of _TypedDictMeta classes referenced inside
         the TypedDict being converted to a BaseModel, and values are BaseModel
         classes that have already been generated from those TypedDicts -
@@ -125,6 +125,9 @@ def format_all_annotations(
 
     """
     new_annotations = {}
+
+    if new_basemodel_classes is None:
+        new_basemodel_classes = {}
 
     for field_name, field_type in typed_dict.__annotations__.items():
         new_annotations[field_name] = field_parser(
@@ -464,7 +467,7 @@ def parse_typeddict_to_schema(
     typed_dict: _TypedDictMeta,
     out_dir: Optional[Path] = None,
     return_basemodel: bool = False,
-    new_basemodel_classes: Dict[str, BaseModel] = {},
+    new_basemodel_classes: Optional[Dict[str, BaseModel]] = None,
     sort: bool = True,
 ) -> Union[Type[BaseModel], Dict[str, type]]:
     """Takes a TypedDict and generates a jsonschema from it.
@@ -492,6 +495,9 @@ def parse_typeddict_to_schema(
     Either the generated BaseModel or the schema dictionary generated from it,
     depending on if return_basemodel is True.
     """
+
+    if new_basemodel_classes is None:
+        new_basemodel_classes = {}
     annotations: Dict[str, type] = {}
 
     typed_dict = format_all_annotations(
