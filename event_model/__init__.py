@@ -2046,6 +2046,9 @@ class ComposeStreamDatum:
 
     def __call__(
         self,
+        data_keys: List[str],
+        seq_nums: Dict[str, int],
+        indices: Dict[str, int],
         event_count: int = 1,
         event_offset: int = 0,
         validate: bool = True,
@@ -2058,6 +2061,9 @@ class ComposeStreamDatum:
             block_idx=block_idx,
             event_count=event_count,
             event_offset=event_offset,
+            data_keys=data_keys,
+            seq_nums=seq_nums,
+            indices=indices,
         )
         if validate:
             schema_validators[DocumentNames.stream_datum].validate(doc)
@@ -2069,6 +2075,9 @@ def compose_stream_datum(
     *,
     stream_resource: StreamResource,
     counter: Iterator,
+    data_keys: List[str],
+    seq_nums: Dict[str, int],
+    indices: Dict[str, int],
     event_count: int = 1,
     event_offset: int = 0,
     validate: bool = True,
@@ -2077,6 +2086,9 @@ def compose_stream_datum(
     Here for backwards compatibility, the Compose class is prefered.
     """
     return ComposeStreamDatum(stream_resource, counter)(
+        data_keys,
+        seq_nums,
+        indices,
         event_count=event_count,
         event_offset=event_offset,
         validate=validate,
@@ -2093,9 +2105,6 @@ class ComposeStreamResource:
         root: str,
         resource_path: str,
         resource_kwargs: Dict[str, Any],
-        data_keys: List[str],
-        seq_nums: Dict[str, int],
-        indices: Dict[str, int],
         counters: List = [],
         path_semantics: Literal["posix", "windows"] = default_path_semantics,
         uid: Optional[str] = None,
@@ -2111,9 +2120,6 @@ class ComposeStreamResource:
             resource_path=resource_path,
             resource_kwargs=resource_kwargs,
             path_semantics=path_semantics,
-            seq_nums=seq_nums,
-            data_keys=data_keys,
-            indices=indices,
         )
         if self.start:
             doc["run_start"] = self.start["uid"]

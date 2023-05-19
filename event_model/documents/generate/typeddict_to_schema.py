@@ -412,8 +412,8 @@ class Config(BaseConfig):
 
 def strip_newline_literal(schema: dict):
     """
-    Pydantic formats the docstring newlines by literally including `\n` in the
-    description. To avoid this uglyness this function swaps `\n` for ` ` in
+    Pydantic formats the docstring newlines by literally including `\\n` in the
+    description. To avoid this uglyness this function swaps `\\n` for ` ` in
     every "description` key in the schema.
     """
     for key in schema:
@@ -491,7 +491,7 @@ def parse_typeddict_to_schema(
         If true, sort the properties keys in the outputted schema.
 
     Returns
-    --------------------------------------------------------------------------
+    -------
     Either the generated BaseModel or the schema dictionary generated from it,
     depending on if return_basemodel is True.
     """

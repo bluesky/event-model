@@ -8,6 +8,14 @@
          "description": "The order in the stream of this block of data. This must be contiguous for a given stream.",
          "type": "integer"
       },
+      "data_keys": {
+         "title": "Data Keys",
+         "description": "A list to show which data_keys of the Descriptor are being streamed",
+         "type": "array",
+         "items": {
+            "type": "string"
+         }
+      },
       "event_count": {
          "title": "Event Count",
          "description": "The number of events in this datum.",
@@ -17,6 +25,22 @@
          "title": "Event Offset",
          "description": "The sequence number of the first event in this block. This increasing value allows the presence of gaps.",
          "type": "integer"
+      },
+      "indices": {
+         "title": "Indices",
+         "description": "A slice object passed to the StreamResource handler so it can hand back data and timestamps",
+         "type": "object",
+         "additionalProperties": {
+            "type": "integer"
+         }
+      },
+      "seq_nums": {
+         "title": "Seq Nums",
+         "description": "A slice object showing the Event numbers the resource corresponds to",
+         "type": "object",
+         "additionalProperties": {
+            "type": "integer"
+         }
       },
       "stream_resource": {
          "title": "Stream Resource",
@@ -34,7 +58,10 @@
       "event_count",
       "event_offset",
       "stream_resource",
-      "uid"
+      "uid",
+      "data_keys",
+      "seq_nums",
+      "indices"
    ],
    "additionalProperties": false
 }

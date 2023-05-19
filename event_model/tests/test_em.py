@@ -3,7 +3,6 @@ import pickle
 from distutils.version import LooseVersion
 from itertools import count
 
-
 import jsonschema
 import numpy
 import pytest
@@ -116,9 +115,6 @@ def test_compose_stream_resource(tmp_path):
         root=str(tmp_path),
         resource_path="test_streams",
         resource_kwargs={},
-        seq_nums={},
-        indices={},
-        data_keys=[],
         counters=[count(1), count(1)],
     )
     resource_doc, compose_stream_data = bundle
@@ -126,11 +122,11 @@ def test_compose_stream_resource(tmp_path):
     assert bundle.compose_stream_data is compose_stream_data
     assert compose_stream_data[0] is not compose_stream_data[1]
     datum_doc_0, datum_doc_1 = (
-        compose_stream_datum() for compose_stream_datum in compose_stream_data
+        compose_stream_datum([], {}, {}) for compose_stream_datum in compose_stream_data
     )
     # Ensure independent counters
     assert datum_doc_0["block_idx"] == datum_doc_1["block_idx"]
-    datum_doc_1a = compose_stream_data[1]()
+    datum_doc_1a = compose_stream_data[1]([], {}, {})
     assert datum_doc_1a["block_idx"] != datum_doc_1["block_idx"]
 
 
@@ -405,16 +401,13 @@ def test_document_router_streams_smoke_test(tmp_path):
     stream_resource_doc, compose_stream_data = compose_stream_resource(
         spec="TIFF_STREAM",
         root=str(tmp_path),
-        data_keys=[],
-        seq_nums={},
-        indices={},
         counters=[count(1), count(6)],
         resource_path="test_streams",
         resource_kwargs={},
     )
     dr("stream_resource", stream_resource_doc)
     datum_doc_0, datum_doc_1 = (
-        compose_stream_datum() for compose_stream_datum in compose_stream_data
+        compose_stream_datum([], {}, {}) for compose_stream_datum in compose_stream_data
     )
     dr("stream_datum", datum_doc_0)
     dr("stream_datum", datum_doc_1)

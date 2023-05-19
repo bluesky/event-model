@@ -3,22 +3,6 @@
    "description": "Document to reference a collection (e.g. file or group of files) of externally-stored data streams",
    "type": "object",
    "properties": {
-      "data_keys": {
-         "title": "Data Keys",
-         "description": "A list to show which data_keys of the Descriptor are being streamed",
-         "type": "array",
-         "items": {
-            "type": "string"
-         }
-      },
-      "indices": {
-         "title": "Indices",
-         "description": "A slice object passed to the StreamResource handler so it can hand back data and timestamps",
-         "type": "object",
-         "additionalProperties": {
-            "type": "integer"
-         }
-      },
       "path_semantics": {
          "title": "Path Semantics",
          "description": "Rules for joining paths",
@@ -48,14 +32,6 @@
          "description": "Globally unique ID to the run_start document this Stream Resource is associated with",
          "type": "string"
       },
-      "seq_nums": {
-         "title": "Seq Nums",
-         "description": "A slice object showing the Event numbers the resource corresponds to",
-         "type": "object",
-         "additionalProperties": {
-            "type": "integer"
-         }
-      },
       "spec": {
          "title": "Spec",
          "description": "String identifying the format/type of this Stream Resource, used to identify a compatible Handler",
@@ -68,9 +44,6 @@
       }
    },
    "required": [
-      "data_keys",
-      "seq_nums",
-      "indices",
       "resource_kwargs",
       "resource_path",
       "root",

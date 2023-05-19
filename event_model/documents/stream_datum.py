@@ -1,3 +1,5 @@
+from typing import Dict, List
+
 from typing_extensions import Annotated, TypedDict
 
 from .generate.type_wrapper import Field, add_extra_schema
@@ -37,5 +39,27 @@ class StreamDatum(TypedDict):
         Field(
             description="Globally unique identifier for this Datum. A suggested "
             "formatting being '<stream_resource>/<stream_name>/<block_id>",
+        ),
+    ]
+
+    data_keys: Annotated[
+        List[str],
+        Field(
+            description="A list to show which data_keys of the "
+            "Descriptor are being streamed"
+        ),
+    ]
+    seq_nums: Annotated[
+        Dict[str, int],
+        Field(
+            description="A slice object showing the Event numbers the "
+            "resource corresponds to"
+        ),
+    ]
+    indices: Annotated[
+        Dict[str, int],
+        Field(
+            description="A slice object passed to the StreamResource "
+            "handler so it can hand back data and timestamps"
         ),
     ]
