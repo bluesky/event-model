@@ -116,6 +116,7 @@ def test_compose_stream_resource(tmp_path):
         resource_path="test_streams",
         resource_kwargs={},
         counters=[count(1), count(1)],
+        stream_names=["primary"],
     )
     resource_doc, compose_stream_data = bundle
     assert bundle.stream_resource_doc is resource_doc
@@ -404,6 +405,7 @@ def test_document_router_streams_smoke_test(tmp_path):
         counters=[count(1), count(6)],
         resource_path="test_streams",
         resource_kwargs={},
+        stream_names=["primary"],
     )
     dr("stream_resource", stream_resource_doc)
     datum_doc_0, datum_doc_1 = (

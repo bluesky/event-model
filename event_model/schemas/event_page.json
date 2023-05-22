@@ -89,10 +89,10 @@
    },
    "required": [
       "data",
-      "time",
-      "timestamps",
       "descriptor",
       "seq_num",
+      "time",
+      "timestamps",
       "uid"
    ],
    "additionalProperties": false

@@ -222,6 +222,7 @@ def test_run_router_streams(tmp_path):
         resource_path="test_streams",
         resource_kwargs={},
         counters=[count(3), count(2)],
+        stream_names=["primary"],
     )
     docs.append(("stream_resource", stream_resource_doc))
     datum_doc_0, datum_doc_1 = (

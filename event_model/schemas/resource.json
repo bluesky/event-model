@@ -45,9 +45,9 @@
    },
    "required": [
       "resource_kwargs",
+      "resource_path",
       "root",
       "spec",
-      "resource_path",
       "uid"
    ],
    "additionalProperties": false

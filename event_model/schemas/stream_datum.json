@@ -55,13 +55,13 @@
    },
    "required": [
       "block_idx",
+      "data_keys",
       "event_count",
       "event_offset",
-      "stream_resource",
-      "uid",
-      "data_keys",
+      "indices",
       "seq_nums",
-      "indices"
+      "stream_resource",
+      "uid"
    ],
    "additionalProperties": false
 }

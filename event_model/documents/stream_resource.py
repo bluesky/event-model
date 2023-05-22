@@ -15,6 +15,8 @@ class StreamResource(TypedDict):
     externally-stored data streams
     """
 
+    stream_names: Annotated[list[str], Field(description="List of datum names")]
+
     path_semantics: NotRequired[
         Annotated[
             Literal["posix", "windows"],
