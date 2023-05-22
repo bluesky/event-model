@@ -7,11 +7,9 @@ from .generate.type_wrapper import Field, add_extra_schema
 RESOURCE_EXTRA_SCHEMA = {"additionalProperties": False}
 
 
-@add_extra_schema(RESOURCE_EXTRA_SCHEMA)
-class Resource(TypedDict):
+class PartialResource(TypedDict):
     """
-    Document to reference a collection (e.g. file or group of files) of
-    externally-stored data
+    Fields seperated from the complete Resource for use by the protocols.
     """
 
     path_semantics: NotRequired[
@@ -26,23 +24,11 @@ class Resource(TypedDict):
             description="Additional argument to pass to the Handler to read a Resource"
         ),
     ]
-    resource_path: Annotated[
-        str, Field(description="Filepath or URI for locating this resource")
-    ]
     root: Annotated[
         str,
         Field(
             description="Subset of resource_path that is a local detail, not semantic."
         ),
-    ]
-    run_start: NotRequired[
-        Annotated[
-            str,
-            Field(
-                description="Globally unique ID to the run_start document this "
-                "resource is associated with.",
-            ),
-        ]
     ]
     spec: Annotated[
         str,
@@ -51,6 +37,27 @@ class Resource(TypedDict):
             "identify a compatible Handler",
         ),
     ]
+    resource_path: Annotated[
+        str, Field(description="Filepath or URI for locating this resource")
+    ]
     uid: Annotated[
         str, Field(description="Globally unique identifier for this Resource")
+    ]
+
+
+@add_extra_schema(RESOURCE_EXTRA_SCHEMA)
+class Resource(PartialResource):
+    """
+    Document to reference a collection (e.g. file or group of files) of
+    externally-stored data
+    """
+
+    run_start: NotRequired[
+        Annotated[
+            str,
+            Field(
+                description="Globally unique ID to the run_start document this "
+                "resource is associated with.",
+            ),
+        ]
     ]

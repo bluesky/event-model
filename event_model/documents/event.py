@@ -7,14 +7,11 @@ from .generate.type_wrapper import Field, add_extra_schema
 EVENT_EXTRA_SCHEMA = {"additionalProperties": False}
 
 
-@add_extra_schema(EVENT_EXTRA_SCHEMA)
-class Event(TypedDict):
-    """Document to record a quanta of collected data"""
+class PartialEvent(TypedDict):
+    """
+    Fields seperated from the complete Event for use by the protocols.
+    """
 
-    data: Annotated[Dict[str, Any], Field(description="The actual measurement data")]
-    descriptor: Annotated[
-        str, Field(description="UID of the EventDescriptor to which this Event belongs")
-    ]
     filled: NotRequired[
         Annotated[
             Dict[str, Union[bool, str]],
@@ -25,13 +22,7 @@ class Event(TypedDict):
             ),
         ]
     ]
-    seq_num: Annotated[
-        int,
-        Field(
-            description="Sequence number to identify the location of this Event in the "
-            "Event stream",
-        ),
-    ]
+    data: Annotated[Dict[str, Any], Field(description="The actual measurement data")]
     time: Annotated[
         float,
         Field(
@@ -43,4 +34,22 @@ class Event(TypedDict):
         Dict[str, Any],
         Field(description="The timestamps of the individual measurement data"),
     ]
+
+
+@add_extra_schema(EVENT_EXTRA_SCHEMA)
+class Event(PartialEvent):
+    """Document to record a quanta of collected data"""
+
+    descriptor: Annotated[
+        str, Field(description="UID of the EventDescriptor to which this Event belongs")
+    ]
+
+    seq_num: Annotated[
+        int,
+        Field(
+            description="Sequence number to identify the location of this Event in the "
+            "Event stream",
+        ),
+    ]
+
     uid: Annotated[str, Field(description="Globally unique identifier for this Event")]

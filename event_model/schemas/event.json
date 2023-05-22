@@ -51,10 +51,10 @@
    },
    "required": [
       "data",
-      "descriptor",
-      "seq_num",
       "time",
       "timestamps",
+      "descriptor",
+      "seq_num",
       "uid"
    ],
    "additionalProperties": false

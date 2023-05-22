@@ -7,15 +7,34 @@ from .generate.type_wrapper import AsRef, Field, add_extra_schema
 EVENT_PAGE_EXTRA_SCHEMA = {"additionalProperties": False}
 
 
-@add_extra_schema(EVENT_PAGE_EXTRA_SCHEMA)
-class EventPage(TypedDict):
-    """Page of documents to record a quanta of collected data"""
+class PartialEventPage(TypedDict):
+    """
+    Fields seperated from the complete EventPage for use by the protocols.
+    """
 
     data: Annotated[
         Dict[str, List[Any]],
         AsRef("Dataframe"),
         Field(description="The actual measurement data"),
     ]
+    time: Annotated[
+        List[float],
+        Field(
+            description="Array of Event times. This maybe different than the "
+            "timestamps on each of the data entries"
+        ),
+    ]
+    timestamps: Annotated[
+        Dict[str, List[Any]],
+        AsRef("Dataframe"),
+        Field(description="The timestamps of the individual measurement data"),
+    ]
+
+
+@add_extra_schema(EVENT_PAGE_EXTRA_SCHEMA)
+class EventPage(PartialEventPage):
+    """Page of documents to record a quanta of collected data"""
+
     descriptor: Annotated[
         str,
         Field(
@@ -41,18 +60,6 @@ class EventPage(TypedDict):
             description="Array of sequence numbers to identify the location of each "
             "Event in the Event stream",
         ),
-    ]
-    time: Annotated[
-        List[float],
-        Field(
-            description="Array of Event times. This maybe different than the "
-            "timestamps on each of the data entries"
-        ),
-    ]
-    timestamps: Annotated[
-        Dict[str, List[Any]],
-        AsRef("Dataframe"),
-        Field(description="The timestamps of the individual measurement data"),
     ]
     uid: Annotated[
         List[str],
