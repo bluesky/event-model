@@ -441,11 +441,14 @@ def sort_schema(schema: dict) -> dict:
         )
 
         for key in schema:
-            if key in ("definitions", "properties"):
-                schema[key] = sort_alphabetically(schema[key])
-                for key2 in schema[key]:
-                    if isinstance(schema[key][key2], dict):
-                        schema[key][key2] = sort_schema(schema[key][key2])
+            if key in ("definitions", "properties", "required"):
+                if isinstance(schema[key], dict):
+                    schema[key] = sort_alphabetically(schema[key])
+                    for key2 in schema[key]:
+                        if isinstance(schema[key][key2], dict):
+                            schema[key][key2] = sort_schema(schema[key][key2])
+                elif isinstance(schema[key], list):
+                    schema[key].sort()
 
     return schema
 
