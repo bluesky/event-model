@@ -1,4 +1,4 @@
-from typing import Any, Dict
+from typing import Any, Dict, List
 
 from typing_extensions import Annotated, Literal, NotRequired, TypedDict
 
@@ -6,16 +6,15 @@ from .generate.type_wrapper import Field, add_extra_schema
 
 STREAM_RESOURCE_EXTRA_SCHEMA = {"additionalProperties": False}
 
-add_extra_schema(STREAM_RESOURCE_EXTRA_SCHEMA)
 
-
+@add_extra_schema(STREAM_RESOURCE_EXTRA_SCHEMA)
 class StreamResource(TypedDict):
     """
     Document to reference a collection (e.g. file or group of files) of
     externally-stored data streams
     """
 
-    stream_names: Annotated[list[str], Field(description="List of datum names")]
+    stream_names: Annotated[List[str], Field(description="List of datum names")]
 
     path_semantics: NotRequired[
         Annotated[
