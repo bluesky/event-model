@@ -1846,80 +1846,20 @@ else:
 
 
 @dataclass
-class ComposeRunBundle:
-    """Extensible compose run bundle. This maintains backward compatibility
-    by unpacking into a basic run bundle
-    (start, compose_descriptor, compose_resource, stop).
-    Further extensions are optional and require keyword referencing
-    (i.e. compose_stream_resource).
-    """
+class ComposeDatum:
+    resource: Resource
+    counter: Iterator
 
-    start_doc: RunStart
-    compose_descriptor: Callable
-    compose_resource: Callable
-    compose_stop: Callable
-    compose_stream_resource: Optional[Callable] = None
-
-    # iter for backwards compatibility
-    def __iter__(self) -> Iterator:
-        return iter(
-            (
-                self.start_doc,
-                self.compose_descriptor,
-                self.compose_resource,
-                self.compose_stop,
-            )
+    def __call__(self, datum_kwargs: Dict[str, Any], validate: bool = True) -> Datum:
+        resource_uid = self.resource["uid"]
+        doc = Datum(
+            resource=resource_uid,
+            datum_kwargs=datum_kwargs,
+            datum_id="{}/{}".format(resource_uid, next(self.counter)),
         )
-
-
-@dataclass
-class ComposeResourceBundle:
-    resource_doc: Resource
-    compose_datum: Callable
-    compose_datum_page: Callable
-
-    # iter for backwards compatibility
-    def __iter__(self) -> Iterator:
-        return iter(
-            (
-                self.resource_doc,
-                self.compose_datum,
-                self.compose_datum_page,
-            )
-        )
-
-
-@dataclass
-class ComposeStreamResourceBundle:
-    stream_resource_doc: StreamResource
-    compose_stream_data: List[Callable]
-
-    # iter for backwards compatibility
-    def __iter__(self) -> Iterator:
-        return iter(
-            (
-                self.stream_resource_doc,
-                self.compose_stream_data,
-            )
-        )
-
-
-def compose_datum(
-    *,
-    resource: Resource,
-    counter: Iterator,
-    datum_kwargs: Dict[str, Any],
-    validate: bool = True,
-) -> Datum:
-    resource_uid = resource["uid"]
-    doc = Datum(
-        resource=resource_uid,
-        datum_kwargs=datum_kwargs,
-        datum_id="{}/{}".format(resource_uid, next(counter)),
-    )
-    if validate:
-        schema_validators[DocumentNames.datum].validate(doc)
-    return doc
+        if validate:
+            schema_validators[DocumentNames.datum].validate(doc)
+        return doc
 
 
 def compose_datum(
@@ -1971,6 +1911,40 @@ def compose_datum_page(
     Here for backwards compatibility, the Compose class is prefered.
     """
     return ComposeDatumPage(resource, counter, validate=validate)(datum_kwargs)
+
+
+@dataclass
+class ComposeResourceBundle:
+    resource_doc: Resource
+    compose_datum: ComposeDatum
+    compose_datum_page: ComposeDatumPage
+
+    # iter for backwards compatibility
+    def __iter__(self) -> Iterator:
+        return iter(
+            (
+                self.resource_doc,
+                self.compose_datum,
+                self.compose_datum_page,
+            )
+        )
+
+
+@dataclass
+class ComposeResourceBundle:
+    resource_doc: Resource
+    compose_datum: ComposeDatum
+    compose_datum_page: ComposeDatumPage
+
+    # iter for backwards compatibility
+    def __iter__(self) -> Iterator:
+        return iter(
+            (
+                self.resource_doc,
+                self.compose_datum,
+                self.compose_datum_page,
+            )
+        )
 
 
 PATH_SEMANTICS: Dict[str, Literal["posix", "windows"]] = {
@@ -2086,6 +2060,21 @@ class ComposeStreamDatum:
         return doc
 
 
+@dataclass
+class ComposeStreamResourceBundle:
+    stream_resource_doc: StreamResource
+    compose_stream_data: List[ComposeStreamDatum]
+
+    # iter for backwards compatibility
+    def __iter__(self) -> Iterator:
+        return iter(
+            (
+                self.stream_resource_doc,
+                self.compose_stream_data,
+            )
+        )
+
+
 def compose_stream_datum(
     *,
     spec: str,
@@ -2173,7 +2162,7 @@ def compose_stream_resource(
 @dataclass
 class ComposeStop:
     start: RunStart
-    event_counters: dict
+    event_counters: Dict[str, int]
     poison_pill: List
 
     def __call__(
@@ -2209,10 +2198,86 @@ class ComposeStop:
 
 def compose_stop(
     *,
+    start: RunStart,
+    event_counters: Dict[str, int],
+    poison_pill: List,
+    exit_status: Literal["success", "abort", "fail"] = "success",
+    reason: str = "",
+    uid: Optional[str] = None,
+    time: Optional[float] = None,
+    validate: bool = True,
+) -> RunStop:
+    """
+    Here for backwards compatibility, the Compose class is prefered.
+    """
+    return ComposeStop(
+        start=start,
+        event_counters=event_counters,
+        poison_pill=poison_pill,
+    )(exit_status=exit_status, reason=reason, uid=uid, time=time, validate=validate)
+
+
+@dataclass
+class ComposeEventPage:
+    descriptor: EventDescriptor
+    event_counters: Dict[str, int]
+
+    def __call__(
+        self,
+        data: dict,
+        timestamps: dict,
+        seq_num: List[int],
+        filled: Optional[Dict[str, List[Union[bool, str]]]] = None,
+        uid: Optional[List] = None,
+        time: Optional[List] = None,
+        validate: bool = True,
+    ) -> EventPage:
+        N = len(seq_num)
+        if uid is None:
+            uid = [str(uuid.uuid4()) for _ in range(N)]
+        if time is None:
+            time = [ttime.time()] * N
+        if filled is None:
+            filled = {}
+        doc = EventPage(
+            uid=uid,
+            time=time,
+            data=data,
+            timestamps=timestamps,
+            seq_num=seq_num,
+            filled=filled,
+            descriptor=self.descriptor["uid"],
+        )
+        if validate:
+            schema_validators[DocumentNames.event_page].validate(doc)
+            if not (
+                self.descriptor["data_keys"].keys() == data.keys() == timestamps.keys()
+            ):
+                raise EventModelValidationError(
+                    "These sets of keys must match:\n"
+                    "event['data'].keys(): {}\n"
+                    "event['timestamps'].keys(): {}\n"
+                    "descriptor['data_keys'].keys(): {}\n".format(
+                        data.keys(),
+                        timestamps.keys(),
+                        self.descriptor["data_keys"].keys(),
+                    )
+                )
+            if set(filled) - set(data):
+                raise EventModelValidationError(
+                    "Keys in event['filled'] {} must be a subset of those in "
+                    "event['data'] {}".format(filled.keys(), data.keys())
+                )
+        self.event_counters[self.descriptor["name"]] += len(data)
+        return doc
+
+
+def compose_event_page(
+    *,
     descriptor: EventDescriptor,
     event_counters: Dict[str, int],
-    data: Dict[str, List],
-    timestamps: Dict[str, List],
+    data: dict,
+    timestamps: dict,
     seq_num: List[int],
     filled: Optional[Dict[str, List[Union[bool, str]]]] = None,
     uid: Optional[List] = None,
@@ -2306,11 +2371,12 @@ def compose_event_page(
 
 def compose_event(
     *,
-    start: RunStart,
-    streams: Dict[str, Iterable],
+    descriptor: EventDescriptor,
     event_counters: Dict[str, int],
-    name: str,
-    data_keys: Dict[str, DataKey],
+    data: Dict[str, Any],
+    timestamps: Dict[str, Any],
+    seq_num: int,
+    filled: Optional[dict] = None,
     uid: Optional[str] = None,
     time: Optional[float] = None,
     object_keys: Optional[Dict[str, Any]] = None,
@@ -2346,8 +2412,7 @@ class ComposeDescriptorBundle:
 class ComposeDescriptor:
     start: RunStart
     streams: dict
-    event_counters: dict
-    validate: bool = True
+    event_counters: Dict[str, int]
 
     def __call__(
         self,
@@ -2409,7 +2474,7 @@ def compose_descriptor(
     *,
     start: RunStart,
     streams: dict,
-    event_counters: dict,
+    event_counters: Dict[str, int],
     name: str,
     data_keys: Dict[str, DataKey],
     uid: Optional[str] = None,
@@ -2431,6 +2496,87 @@ def compose_descriptor(
         time=time,
         uid=uid,
     )
+
+
+@dataclass
+class ComposeRunBundle:
+    """Extensible compose run bundle. This maintains backward compatibility
+    by unpacking into a basic run bundle
+    (start, compose_descriptor, compose_resource, stop).
+    Further extensions are optional and require keyword referencing
+    (i.e. compose_stream_resource).
+    """
+
+    start_doc: RunStart
+    compose_descriptor: ComposeDescriptor
+    compose_resource: ComposeResource
+    compose_stop: ComposeStop
+    compose_stream_resource: Optional[ComposeStreamResource] = None
+
+    # iter for backwards compatibility
+    def __iter__(self) -> Iterator:
+        return iter(
+            (
+                self.start_doc,
+                self.compose_descriptor,
+                self.compose_resource,
+                self.compose_stop,
+            )
+        )
+
+
+@dataclass
+class ComposeRunBundle:
+    """Extensible compose run bundle. This maintains backward compatibility
+    by unpacking into a basic run bundle
+    (start, compose_descriptor, compose_resource, stop).
+    Further extensions are optional and require keyword referencing
+    (i.e. compose_stream_resource).
+    """
+
+    start_doc: RunStart
+    compose_descriptor: ComposeDescriptor
+    compose_resource: ComposeResource
+    compose_stop: ComposeStop
+    compose_stream_resource: Optional[ComposeStreamResource] = None
+
+    # iter for backwards compatibility
+    def __iter__(self) -> Iterator:
+        return iter(
+            (
+                self.start_doc,
+                self.compose_descriptor,
+                self.compose_resource,
+                self.compose_stop,
+            )
+        )
+
+
+@dataclass
+class ComposeRunBundle:
+    """Extensible compose run bundle. This maintains backward compatibility
+    by unpacking into a basic run bundle
+    (start, compose_descriptor, compose_resource, stop).
+    Further extensions are optional and require keyword referencing
+    (i.e. compose_stream_resource).
+    """
+
+    start_doc: RunStart
+    compose_descriptor: ComposeDescriptor
+    compose_resource: ComposeResource
+    compose_stop: ComposeStop
+    compose_stream_resource: Optional[ComposeStreamResource] = None
+
+    # iter for backwards compatibility
+    def __iter__(self) -> Iterator:
+        return iter(
+            (
+                self.start_doc,
+                self.compose_descriptor,
+                self.compose_resource,
+                self.compose_stop,
+            )
+        )
 
 
 def compose_run(
