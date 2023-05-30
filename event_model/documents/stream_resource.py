@@ -6,9 +6,8 @@ from .generate.type_wrapper import Field, add_extra_schema
 
 STREAM_RESOURCE_EXTRA_SCHEMA = {"additionalProperties": False}
 
-add_extra_schema(STREAM_RESOURCE_EXTRA_SCHEMA)
 
-
+@add_extra_schema(STREAM_RESOURCE_EXTRA_SCHEMA)
 class StreamResource(TypedDict):
     """
     Document to reference a collection (e.g. file or group of files) of

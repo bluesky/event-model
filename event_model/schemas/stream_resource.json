@@ -60,5 +60,6 @@
       "spec",
       "stream_names",
       "uid"
-   ]
+   ],
+   "additionalProperties": false
 }
