@@ -1,6 +1,6 @@
-from typing import Dict, List, Union
+from typing import Any, Dict, List
 
-from typing_extensions import Annotated, NotRequired, TypedDict
+from typing_extensions import Annotated, TypedDict
 
 from .generate.type_wrapper import AsRef, Field, add_extra_schema
 
@@ -19,14 +19,12 @@ class DatumPage(TypedDict):
             "other Document types), typically formatted as '<resource>/<integer>'"
         ),
     ]
-    datum_kwargs: NotRequired[
-        Annotated[
-            Dict[str, Union[bool, str, float, List]],
-            Field(
-                description="Array of arguments to pass to the Handler to "
-                "retrieve one quanta of data"
-            ),
-        ]
+    datum_kwargs: Annotated[
+        Dict[str, List[Any]],
+        Field(
+            description="Array of arguments to pass to the Handler to "
+            "retrieve one quanta of data"
+        ),
     ]
     resource: Annotated[
         str,
