@@ -1904,7 +1904,7 @@ def compose_datum_page(
     *,
     resource: Resource,
     counter: Iterator,
-    datum_kwargs: dict,
+    datum_kwargs: Dict[str, List[Any]],
     validate: bool = True,
 ) -> DatumPage:
     """

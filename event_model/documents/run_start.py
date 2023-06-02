@@ -84,6 +84,10 @@ RUN_START_EXTRA_SCHEMA = {
             "patternProperties": {"^([^./]+)$": {"$ref": "#/definitions/DataType"}},
             "additionalProperties": False,
         },
+        "DataType": {
+            "patternProperties": {"^([^./]+)$": {"$ref": "#/definitions/DataType"}},
+            "additionalProperties": False,
+        },
         "Projection": {
             "allOf": [
                 {
