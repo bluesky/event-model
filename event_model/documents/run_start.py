@@ -80,6 +80,10 @@ class Projection(TypedDict):
 
 RUN_START_EXTRA_SCHEMA = {
     "definitions": {
+        "DataType": {
+            "patternProperties": {"^([^./]+)$": {"$ref": "#/definitions/DataType"}},
+            "additionalProperties": False,
+        },
         "Projection": {
             "allOf": [
                 {
@@ -123,7 +127,13 @@ RUN_START_EXTRA_SCHEMA = {
                     "then": {"required": ["type", "value"]},
                 },
             ],
-        }
+        },
+    },
+    "properties": {
+        "hints": {
+            "additionalProperties": False,
+            "patternProperties": {"^([^.]+)$": {"$ref": "#/definitions/DataType"}},
+        },
     },
     "patternProperties": {"^([^./]+)$": {"$ref": "#/definitions/DataType"}},
     "additionalProperties": False,

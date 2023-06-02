@@ -26,21 +26,8 @@
          "description": "Array of arguments to pass to the Handler to retrieve one quanta of data",
          "type": "object",
          "additionalProperties": {
-            "anyOf": [
-               {
-                  "type": "boolean"
-               },
-               {
-                  "type": "string"
-               },
-               {
-                  "type": "number"
-               },
-               {
-                  "type": "array",
-                  "items": {}
-               }
-            ]
+            "type": "array",
+            "items": {}
          }
       },
       "resource": {
@@ -51,6 +38,7 @@
    },
    "required": [
       "datum_id",
+      "datum_kwargs",
       "resource"
    ],
    "additionalProperties": false

@@ -28,7 +28,13 @@
          ]
       },
       "DataType": {
-         "title": "DataType"
+         "title": "DataType",
+         "additionalProperties": false,
+         "patternProperties": {
+            "^([^./]+)$": {
+               "$ref": "#/definitions/DataType"
+            }
+         }
       },
       "Hints": {
          "title": "Hints",
@@ -279,6 +285,12 @@
       "hints": {
          "title": "Hints",
          "description": "Start-level hints",
+         "additionalProperties": false,
+         "patternProperties": {
+            "^([^.]+)$": {
+               "$ref": "#/definitions/DataType"
+            }
+         },
          "allOf": [
             {
                "$ref": "#/definitions/Hints"

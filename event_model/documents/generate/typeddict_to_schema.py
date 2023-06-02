@@ -106,7 +106,7 @@ def format_all_annotations(
         Annotated[parse_typeddict_to_schema(X), FieldInfo]
 
     Parameters
-    -----------------
+    ----------
     typed_dict : dict
         TypedDict to change annotations of prior to being converted to BaseModel.
 
@@ -119,7 +119,7 @@ def format_all_annotations(
         annotations have the same TypedDict.
 
     Returns
-    -----------------
+    -------
     typed_dict : dict
         The same dict with field annotations adjusted to be pydantic friendly.
 
@@ -150,14 +150,14 @@ def field_is_not_required(
     """Checks if a field is of type is NotRequired[X].
 
     Parameters
-    -----------------
+    ----------
     field_type : dict
         Field type taken from an annotation.
     remove_origin_if_NotRequired : bool
         If True returns the inputted field_type with NotRequired stripped off.
 
     Returns
-    -----------------
+    -------
     (field_type, is_not_required) : Tuple[type, bool]
         is_not_required is True if the field is of type NotRequired[X].
         field_type is the same as the inputted field_type however if
@@ -183,7 +183,7 @@ def get_field_type(
     origin.
 
     Parameters
-    ----------------
+    ----------
     field_name : str
         Name of the field being parsed.
     field_type : type
@@ -197,7 +197,7 @@ def get_field_type(
         annotations have the same TypedDict.
 
     Returns
-    -----------------
+    -------
     field_type : type
         The data type inside the annotation seperate from the other context in
         the annotation.
@@ -228,12 +228,12 @@ def get_annotation_contents(field_type: type) -> Tuple[Optional[AsRef], FieldInf
     FieldInfo.
 
     Parameters
-    -----------------
+    ----------
     field_type : type
         Annotation to be parsed.
 
     Returns
-    -----------------
+    -------
     (as_ref, field_info) : Tuple[AsRef, FieldInfo]
         as_ref is the AsRef tag in the annotation, or None if
         there is no AsRef tag. field_info is the FieldInfo class returned from
@@ -330,6 +330,7 @@ def change_sub_typed_dicts_to_basemodels(
     field_type : type
         New field type with TypedDicts swapped to basemodels
     """
+
     if isinstance(field_type, _TypedDictMeta):
         if field_type.__name__ not in new_basemodel_classes:
             field_type = parse_typeddict_to_schema(
@@ -475,8 +476,8 @@ def parse_typeddict_to_schema(
 ) -> Union[Type[BaseModel], Dict[str, type]]:
     """Takes a TypedDict and generates a jsonschema from it.
 
-    Parameters:
-    ---------------------------
+    Parameters
+    ----------
     typed_dict : _TypedDictMeta
         The typeddict to be converted to a pydantic basemodel.
     out_dir: Optional[Path]
