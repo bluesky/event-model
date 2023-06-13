@@ -3,32 +3,37 @@
    "description": "Document to describe the data captured in the associated event documents",
    "type": "object",
    "definitions": {
-      "configuration": {
+      "Configuration": {
+         "title": "Configuration",
          "type": "object",
          "properties": {
             "data": {
+               "title": "Data",
                "description": "The actual measurement data",
                "type": "object"
             },
             "data_keys": {
+               "title": "Data Keys",
                "description": "This describes the data stored alongside it in this configuration object.",
                "type": "object",
                "additionalProperties": {
-                  "$ref": "#/definitions/data_key"
+                  "$ref": "#/definitions/DataKey"
                }
             },
             "timestamps": {
+               "title": "Timestamps",
                "description": "The timestamps of the individual measurement data",
                "type": "object"
             }
          }
       },
-      "data_key": {
-         "title": "data_key",
+      "DataKey": {
+         "title": "DataKey",
          "description": "Describes the objects in the data property of Event documents",
          "type": "object",
          "properties": {
             "dims": {
+               "title": "Dims",
                "description": "The names for dimensions of the data. Null or empty list if scalar data",
                "type": "array",
                "items": {
@@ -36,6 +41,7 @@
                }
             },
             "dtype": {
+               "title": "Dtype",
                "description": "The type of the data in the event.",
                "type": "string",
                "enum": [
@@ -47,15 +53,23 @@
                ]
             },
             "external": {
-               "description": "Where the data is stored if it is stored external to the events.",
+               "title": "External",
+               "description": "Where the data is stored if it is stored external to the events",
                "type": "string",
                "pattern": "^[A-Z]+:?"
             },
             "object_name": {
+               "title": "Object Name",
                "description": "The name of the object this key was pulled from.",
                "type": "string"
             },
+            "precision": {
+               "title": "Precision",
+               "description": "Number of digits after decimal place if a floating point number",
+               "type": "integer"
+            },
             "shape": {
+               "title": "Shape",
                "description": "The shape of the data.  Empty list indicates scalar data.",
                "type": "array",
                "items": {
@@ -63,38 +77,38 @@
                }
             },
             "source": {
+               "title": "Source",
                "description": "The source (ex piece of hardware) of the data.",
+               "type": "string"
+            },
+            "units": {
+               "title": "Units",
+               "description": "Engineering units of the value",
                "type": "string"
             }
          },
          "required": [
-            "source",
             "dtype",
-            "shape"
+            "shape",
+            "source"
          ]
       },
-      "data_type": {
-         "title": "data_type",
+      "DataType": {
+         "title": "DataType",
          "additionalProperties": false,
          "patternProperties": {
             "^([^./]+)$": {
-               "$ref": "#/definitions/data_type"
+               "$ref": "#/definitions/DataType"
             }
          }
       },
-      "object_hints": {
-         "title": "Object Hints",
-         "additionalProperties": false,
-         "patternProperties": {
-            "^([^./]+)$": {
-               "$ref": "#/definitions/per_object_hint"
-            }
-         }
-      },
-      "per_object_hint": {
+      "PerObjectHint": {
+         "title": "PerObjectHint",
+         "description": "The 'interesting' data keys for this device.",
          "type": "object",
          "properties": {
             "fields": {
+               "title": "Fields",
                "description": "The 'interesting' data keys for this device.",
                "type": "array",
                "items": {
@@ -106,10 +120,11 @@
    },
    "properties": {
       "configuration": {
+         "title": "Configuration",
          "description": "Readings of configurational fields necessary for interpreting data in the Events.",
          "type": "object",
          "additionalProperties": {
-            "$ref": "#/definitions/configuration"
+            "$ref": "#/definitions/Configuration"
          }
       },
       "data_keys": {
@@ -117,25 +132,29 @@
          "description": "This describes the data in the Event Documents.",
          "type": "object",
          "additionalProperties": {
-            "$ref": "#/definitions/data_key"
+            "$ref": "#/definitions/DataKey"
          }
       },
       "hints": {
-         "$ref": "#/definitions/object_hints"
+         "$ref": "#/definitions/PerObjectHint"
       },
       "name": {
+         "title": "Name",
          "description": "A human-friendly name for this data stream, such as 'primary' or 'baseline'.",
          "type": "string"
       },
       "object_keys": {
+         "title": "Object Keys",
          "description": "Maps a Device/Signal name to the names of the entries it produces in data_keys.",
          "type": "object"
       },
       "run_start": {
+         "title": "Run Start",
          "description": "Globally unique ID of this run's 'start' document.",
          "type": "string"
       },
       "time": {
+         "title": "Time",
          "description": "Creation time of the document as unix epoch time.",
          "type": "number"
       },
@@ -146,15 +165,15 @@
       }
    },
    "required": [
-      "uid",
       "data_keys",
       "run_start",
-      "time"
+      "time",
+      "uid"
    ],
    "additionalProperties": false,
    "patternProperties": {
       "^([^./]+)$": {
-         "$ref": "#/definitions/data_type"
+         "$ref": "#/definitions/DataType"
       }
    }
 }

@@ -4,6 +4,7 @@
    "type": "object",
    "properties": {
       "path_semantics": {
+         "title": "Path Semantics",
          "description": "Rules for joining paths",
          "type": "string",
          "enum": [
@@ -12,46 +13,53 @@
          ]
       },
       "resource_kwargs": {
+         "title": "Resource Kwargs",
          "description": "Additional argument to pass to the Handler to read a Stream Resource",
          "type": "object"
       },
       "resource_path": {
+         "title": "Resource Path",
          "description": "Filepath or URI for locating this resource",
          "type": "string"
       },
       "root": {
+         "title": "Root",
          "description": "Subset of resource_path that is a local detail, not semantic.",
          "type": "string"
       },
       "run_start": {
+         "title": "Run Start",
          "description": "Globally unique ID to the run_start document this Stream Resource is associated with.",
          "type": "string"
       },
       "spec": {
+         "title": "Spec",
          "description": "String identifying the format/type of this Stream Resource, used to identify a compatible Handler",
          "type": "string"
       },
       "stream_names": {
+         "title": "Stream Names",
          "description": "List of the stream names this resource provides",
          "type": "array",
+         "minItems": 1,
+         "uniqueItems": true,
          "items": {
             "type": "string"
-         },
-         "minItems": 1,
-         "uniqueItems": true
+         }
       },
       "uid": {
+         "title": "Uid",
          "description": "Globally unique identifier for this Stream Resource",
          "type": "string"
       }
    },
    "required": [
-      "spec",
-      "resource_path",
       "resource_kwargs",
+      "resource_path",
       "root",
-      "uid",
-      "stream_names"
+      "spec",
+      "stream_names",
+      "uid"
    ],
    "additionalProperties": false
 }
