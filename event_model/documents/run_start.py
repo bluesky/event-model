@@ -90,7 +90,7 @@ RUN_START_EXTRA_SCHEMA = {
                     "if": {
                         "allOf": [
                             {"properties": {"location": {"enum": ["configuration"]}}},
-                            {"properties": {"type": {"enum": "linked"}}},
+                            {"properties": {"type": {"enum": ["linked"]}}},
                         ]
                     },
                     "then": {
@@ -107,8 +107,8 @@ RUN_START_EXTRA_SCHEMA = {
                 {
                     "if": {
                         "allOf": [
-                            {"properties": {"location": {"enum": "event"}}},
-                            {"properties": {"type": {"enum": "linked"}}},
+                            {"properties": {"location": {"enum": ["event"]}}},
+                            {"properties": {"type": {"enum": ["linked"]}}},
                         ]
                     },
                     "then": {"required": ["type", "location", "field", "stream"]},
@@ -116,14 +116,14 @@ RUN_START_EXTRA_SCHEMA = {
                 {
                     "if": {
                         "allOf": [
-                            {"properties": {"location": {"enum": "event"}}},
-                            {"properties": {"type": {"enum": "calculated"}}},
+                            {"properties": {"location": {"enum": ["event"]}}},
+                            {"properties": {"type": {"enum": ["calculated"]}}},
                         ]
                     },
                     "then": {"required": ["type", "field", "stream", "calculation"]},
                 },
                 {
-                    "if": {"properties": {"type": {"enum": "static"}}},
+                    "if": {"properties": {"type": {"enum": ["static"]}}},
                     "then": {"required": ["type", "value"]},
                 },
             ],
