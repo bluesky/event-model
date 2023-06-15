@@ -42,6 +42,7 @@ class PartialEventPage(TypedDict):
 @add_extra_schema(EVENT_PAGE_EXTRA_SCHEMA)
 class EventPage(PartialEventPage):
     """Page of documents to record a quanta of collected data"""
+
     descriptor: Annotated[
         str,
         Field(

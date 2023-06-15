@@ -39,7 +39,6 @@ class Event(PartialEvent):
     descriptor: Annotated[
         str, Field(description="UID of the EventDescriptor to which this Event belongs")
     ]
-   
     seq_num: Annotated[
         int,
         Field(
