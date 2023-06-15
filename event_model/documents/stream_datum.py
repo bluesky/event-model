@@ -1,4 +1,4 @@
-from typing import Any, Dict
+from typing import Dict, List
 
 from typing_extensions import Annotated, TypedDict
 
@@ -18,13 +18,6 @@ class StreamDatum(TypedDict):
             "be contiguous for a given stream.",
         ),
     ]
-    datum_kwargs: Annotated[
-        Dict[str, Any],
-        Field(
-            description="Arguments to pass to the Handler to retrieve one "
-            "quanta of data",
-        ),
-    ]
     event_count: Annotated[
         int, Field(description="The number of events in this datum.")
     ]
@@ -33,13 +26,6 @@ class StreamDatum(TypedDict):
         Field(
             description="The sequence number of the first event in this block. This "
             "increasing value allows the presence of gaps.",
-        ),
-    ]
-    stream_name: Annotated[
-        str,
-        Field(
-            description="The name of the stream that this Datum is providing a "
-            "block of.",
         ),
     ]
     stream_resource: Annotated[
@@ -53,5 +39,26 @@ class StreamDatum(TypedDict):
         Field(
             description="Globally unique identifier for this Datum. A suggested "
             "formatting being '<stream_resource>/<stream_name>/<block_id>",
+        ),
+    ]
+    data_keys: Annotated[
+        List[str],
+        Field(
+            description="A list to show which data_keys of the "
+            "Descriptor are being streamed"
+        ),
+    ]
+    seq_nums: Annotated[
+        Dict[str, int],
+        Field(
+            description="A slice object showing the Event numbers the "
+            "resource corresponds to"
+        ),
+    ]
+    indices: Annotated[
+        Dict[str, int],
+        Field(
+            description="A slice object passed to the StreamResource "
+            "handler so it can hand back data and timestamps"
         ),
     ]

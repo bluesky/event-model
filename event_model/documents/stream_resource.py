@@ -1,4 +1,4 @@
-from typing import Any, Dict, List
+from typing import Any, Dict
 
 from typing_extensions import Annotated, Literal, NotRequired, TypedDict
 
@@ -54,12 +54,4 @@ class StreamResource(TypedDict):
     ]
     uid: Annotated[
         str, Field(description="Globally unique identifier for this Stream Resource")
-    ]
-    stream_names: Annotated[
-        List[str],
-        Field(
-            description="List of the stream names this resource provides",
-            min_items=1,
-            unique_items=True,
-        ),
     ]

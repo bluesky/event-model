@@ -1,4 +1,5 @@
 from collections import defaultdict
+from itertools import count
 
 import numpy
 import pytest
@@ -215,18 +216,16 @@ def test_run_router_streams(tmp_path):
         bundle.compose_stop(),
     )
     docs.append(("start", start_doc))
-    stream_names = ["stream_1", "stream_2"]
     stream_resource_doc, compose_stream_data = compose_stream_resource(
         spec="TIFF_STREAM",
         root=str(tmp_path),
         resource_path="test_streams",
         resource_kwargs={},
-        stream_names=stream_names,
+        counters=[count(3), count(2)],
     )
     docs.append(("stream_resource", stream_resource_doc))
     datum_doc_0, datum_doc_1 = (
-        compose_stream_datum(datum_kwargs={})
-        for compose_stream_datum in compose_stream_data
+        compose_stream_datum([], {}, {}) for compose_stream_datum in compose_stream_data
     )
     docs.append(("stream_datum", datum_doc_0))
     docs.append(("stream_datum", datum_doc_1))

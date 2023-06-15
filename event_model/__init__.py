@@ -2000,31 +2000,28 @@ def compose_resource(
 @dataclass
 class ComposeStreamDatum:
     stream_resource: StreamResource
-    stream_name: str
     counter: Iterator
 
     def __call__(
         self,
-        datum_kwargs: Dict[str, Any],
+        data_keys: List[str],
+        seq_nums: Dict[str, int],
+        indices: Dict[str, int],
         event_count: int = 1,
         event_offset: int = 0,
         validate: bool = True,
     ) -> StreamDatum:
         resource_uid = self.stream_resource["uid"]
-        if self.stream_name not in self.stream_resource["stream_names"]:
-            raise EventModelKeyError(
-                "Attempt to create stream_datum with name not included"
-                "in stream_resource"
-            )
         block_idx = next(self.counter)
         doc = StreamDatum(
             stream_resource=resource_uid,
-            datum_kwargs=datum_kwargs,
-            uid=f"{resource_uid}/{self.stream_name}/{block_idx}",
-            stream_name=self.stream_name,
+            uid=f"{resource_uid}/{block_idx}",
             block_idx=block_idx,
             event_count=event_count,
             event_offset=event_offset,
+            data_keys=data_keys,
+            seq_nums=seq_nums,
+            indices=indices,
         )
         if validate:
             schema_validators[DocumentNames.stream_datum].validate(doc)
@@ -2035,9 +2032,10 @@ class ComposeStreamDatum:
 def compose_stream_datum(
     *,
     stream_resource: StreamResource,
-    stream_name: str,
     counter: Iterator,
-    datum_kwargs: Dict[str, Any],
+    data_keys: List[str],
+    seq_nums: Dict[str, int],
+    indices: Dict[str, int],
     event_count: int = 1,
     event_offset: int = 0,
     validate: bool = True,
@@ -2045,8 +2043,10 @@ def compose_stream_datum(
     """
     Here for backwards compatibility, the Compose class is prefered.
     """
-    return ComposeStreamDatum(stream_resource, stream_name, counter)(
-        datum_kwargs,
+    return ComposeStreamDatum(stream_resource, counter)(
+        data_keys,
+        seq_nums,
+        indices,
         event_count=event_count,
         event_offset=event_offset,
         validate=validate,
@@ -2078,7 +2078,6 @@ class ComposeStreamResource:
         root: str,
         resource_path: str,
         resource_kwargs: Dict[str, Any],
-        stream_names: Union[List, str],
         counters: List = [],
         path_semantics: Literal["posix", "windows"] = default_path_semantics,
         uid: Optional[str] = None,
@@ -2086,17 +2085,6 @@ class ComposeStreamResource:
     ) -> ComposeStreamResourceBundle:
         if uid is None:
             uid = str(uuid.uuid4())
-        if isinstance(stream_names, str):
-            stream_names = [
-                stream_names,
-            ]
-        if len(counters) == 0:
-            counters = [itertools.count() for _ in stream_names]
-        elif len(counters) > len(stream_names):
-            raise ValueError(
-                "Insufficient number of counters "
-                f"{len(counters)} for stream names: {stream_names}"
-            )
 
         doc = StreamResource(
             uid=uid,
@@ -2104,7 +2092,6 @@ class ComposeStreamResource:
             root=root,
             resource_path=resource_path,
             resource_kwargs=resource_kwargs,
-            stream_names=stream_names,
             path_semantics=path_semantics,
         )
         if self.start:
@@ -2118,10 +2105,9 @@ class ComposeStreamResource:
             [
                 ComposeStreamDatum(
                     stream_resource=doc,
-                    stream_name=stream_name,
                     counter=counter,
                 )
-                for stream_name, counter in zip(stream_names, counters)
+                for counter in counters
             ],
         )
 
@@ -2132,7 +2118,6 @@ def compose_stream_resource(
     root: str,
     resource_path: str,
     resource_kwargs: Dict[str, Any],
-    stream_names: Union[List, str],
     counters: List = [],
     path_semantics: Literal["posix", "windows"] = default_path_semantics,
     start: Optional[RunStart] = None,
@@ -2147,7 +2132,6 @@ def compose_stream_resource(
         root,
         resource_path,
         resource_kwargs,
-        stream_names,
         counters=counters,
         path_semantics=path_semantics,
         uid=uid,
