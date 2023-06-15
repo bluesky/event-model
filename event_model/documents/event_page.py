@@ -7,21 +7,11 @@ from .generate.type_wrapper import AsRef, Field, add_extra_schema
 EVENT_PAGE_EXTRA_SCHEMA = {"additionalProperties": False}
 
 
-@add_extra_schema(EVENT_PAGE_EXTRA_SCHEMA)
-class EventPage(TypedDict):
-    """Page of documents to record a quanta of collected data"""
-
+class PartialEventPage(TypedDict):
     data: Annotated[
         Dict[str, List[Any]],
         AsRef("Dataframe"),
         Field(description="The actual measurement data"),
-    ]
-    descriptor: Annotated[
-        str,
-        Field(
-            description="The UID of the EventDescriptor to which all of the Events in "
-            "this page belong",
-        ),
     ]
     filled: NotRequired[
         Annotated[
@@ -35,12 +25,10 @@ class EventPage(TypedDict):
             ),
         ]
     ]
-    seq_num: Annotated[
-        List[int],
-        Field(
-            description="Array of sequence numbers to identify the location of each "
-            "Event in the Event stream",
-        ),
+    timestamps: Annotated[
+        Dict[str, List[Any]],
+        AsRef("Dataframe"),
+        Field(description="The timestamps of the individual measurement data"),
     ]
     time: Annotated[
         List[float],
@@ -49,10 +37,26 @@ class EventPage(TypedDict):
             "timestamps on each of the data entries"
         ),
     ]
-    timestamps: Annotated[
-        Dict[str, List[Any]],
-        AsRef("Dataframe"),
-        Field(description="The timestamps of the individual measurement data"),
+
+
+@add_extra_schema(EVENT_PAGE_EXTRA_SCHEMA)
+class EventPage(PartialEventPage):
+    """Page of documents to record a quanta of collected data"""
+
+    descriptor: Annotated[
+        str,
+        Field(
+            description="The UID of the EventDescriptor to which all of the Events in "
+            "this page belong",
+        ),
+    ]
+
+    seq_num: Annotated[
+        List[int],
+        Field(
+            description="Array of sequence numbers to identify the location of each "
+            "Event in the Event stream",
+        ),
     ]
     uid: Annotated[
         List[str],
