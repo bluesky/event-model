@@ -4,6 +4,10 @@
     "url": "https://bluesky.github.io/event-model/main/"
   },
   {
+    "version": "pkg_resources_dep_v2",
+    "url": "https://bluesky.github.io/event-model/pkg_resources_dep_v2/"
+  },
+  {
     "version": "start-model-fix",
     "url": "https://bluesky.github.io/event-model/start-model-fix/"
   }

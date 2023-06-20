@@ -1,0 +1,662 @@
+
+
+<!DOCTYPE html>
+
+
+<html lang="en" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>Event Model Patterns &#8212; event-model 1.19.3.dev126+ga9e6ff9 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../../_static/styles/bootstrap.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+
+  
+  <link href="../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=e353d410970836974a52" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/plot_directive.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" />
+
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/sphinx_highlight.js"></script>
+    <script src="../../_static/clipboard.min.js"></script>
+    <script src="../../_static/copybutton.js"></script>
+    <script src="../../_static/design-tabs.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'user/how-to/use-cases';</script>
+    <script>
+        DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://bluesky.github.io/event-model/switcher.json';
+        DOCUMENTATION_OPTIONS.theme_switcher_version_match = 'pkg_resources_dep_v2';
+        </script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="About The Documentation" href="../explanations/docs-structure.html" />
+    <link rel="prev" title="Installation" href="../tutorials/installation.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+<div class="bd-header__inner bd-page-width">
+  <label class="sidebar-toggle primary-toggle" for="__primary">
+    <span class="fa-solid fa-bars"></span>
+  </label>
+  
+  <div class="navbar-header-items__start">
+    
+      <div class="navbar-item">
+  
+
+<a class="navbar-brand logo" href="../../index.html">
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../../_static/bluesky-logo-dark.svg" class="logo__image only-light" alt="Logo image"/>
+    <script>document.write(`<img src="../../_static/bluesky-logo-dark.svg" class="logo__image only-dark" alt="Logo image"/>`);</script>
+  
+  
+    <p class="title logo__title">event-model</p>
+  
+</a></div>
+    
+  </div>
+  
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item"><nav class="navbar-nav">
+  <p class="sidebar-header-items__title"
+     role="heading"
+     aria-level="1"
+     aria-label="Site Navigation">
+    Site Navigation
+  </p>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+                    <li class="nav-item current active">
+                      <a class="nav-link nav-internal" href="../index.html">
+                        User Guide
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../developer/index.html">
+                        Developer Guide
+                      </a>
+                    </li>
+                
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+  </button>
+`);
+</script>
+        </div>
+      
+      
+        <div class="navbar-item">
+<script>
+document.write(`
+  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+  </button>
+`);
+</script></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links navbar-nav"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/bluesky/event-model" title="GitHub" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-brands fa-square-github"></i></span>
+            <label class="sr-only">GitHub</label></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://pypi.org/project/event-model" title="PyPI" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fas fa-cube"></i></span>
+            <label class="sr-only">PyPI</label></a>
+        </li>
+</ul></div>
+      
+        <div class="navbar-item">
+<script>
+document.write(`
+  <div class="version-switcher__container dropdown">
+    <button type="button" class="version-switcher__button btn btn-sm navbar-btn dropdown-toggle" data-bs-toggle="dropdown">
+      pkg_resources_dep_v2  <!-- this text may get changed later by javascript -->
+      <span class="caret"></span>
+    </button>
+    <div class="version-switcher__menu dropdown-menu list-group-flush py-0">
+    <!-- dropdown will be populated by javascript on page load -->
+    </div>
+  </div>
+`);
+</script></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+  </button>
+`);
+</script>
+    </div>
+  
+
+  
+    <label class="sidebar-toggle secondary-toggle" for="__secondary">
+      <span class="fa-solid fa-outdent"></span>
+    </label>
+  
+</div>
+
+    </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          <div class="navbar-item"><nav class="navbar-nav">
+  <p class="sidebar-header-items__title"
+     role="heading"
+     aria-level="1"
+     aria-label="Site Navigation">
+    Site Navigation
+  </p>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+                    <li class="nav-item current active">
+                      <a class="nav-link nav-internal" href="../index.html">
+                        User Guide
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../developer/index.html">
+                        Developer Guide
+                      </a>
+                    </li>
+                
+  </ul>
+</nav></div>
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+<script>
+document.write(`
+  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+  </button>
+`);
+</script></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links navbar-nav"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/bluesky/event-model" title="GitHub" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-brands fa-square-github"></i></span>
+            <label class="sr-only">GitHub</label></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://pypi.org/project/event-model" title="PyPI" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fas fa-cube"></i></span>
+            <label class="sr-only">PyPI</label></a>
+        </li>
+</ul></div>
+        
+          <div class="navbar-item">
+<script>
+document.write(`
+  <div class="version-switcher__container dropdown">
+    <button type="button" class="version-switcher__button btn btn-sm navbar-btn dropdown-toggle" data-bs-toggle="dropdown">
+      pkg_resources_dep_v2  <!-- this text may get changed later by javascript -->
+      <span class="caret"></span>
+    </button>
+    <div class="version-switcher__menu dropdown-menu list-group-flush py-0">
+    <!-- dropdown will be populated by javascript on page load -->
+    </div>
+  </div>
+`);
+</script></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item"><nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><p aria-level="2" class="caption" role="heading"><span class="caption-text">Tutorials</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/installation.html">Installation</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">How-to Guides</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Event Model Patterns</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Explanations</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../explanations/docs-structure.html">About The Documentation</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../explanations/data-model.html">Data Model</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../explanations/event-descriptors.html">Event Descriptors</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../explanations/external.html">External Assets</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Reference</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../reference/api.html">API Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference/release-history.html">Release History</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../genindex.html">Index</a></li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+
+
+<nav aria-label="Breadcrumbs">
+  <ul class="bd-breadcrumbs" role="navigation" aria-label="Breadcrumb">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../index.html" class="nav-link">User Guide</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page">Event Model Patterns</li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
+  <section id="event-model-patterns">
+<h1>Event Model Patterns<a class="headerlink" href="#event-model-patterns" title="Permalink to this heading">#</a></h1>
+<p>When implementing a system with the Event Model for a particular use case (technique, scan type, etc.), many design choices can be made. For example: how many streams you define (through Event Descriptor documents), what events you put into those streams, and what how data points are stored in an event. Here, we present a use case and a potential design, discussing the pros and cons of different options.</p>
+<p>To further complicate things, we can consider that a document stream might be be optimized for very different scenarios within the same technique. For example, for the sample scan of the same sample, a document stream might read as the scan as it is being run for the purpose of providing in-scan feedback to a user or beamline analysis tool. For the same scan, a docstream might be serialized into a Mongo database and read back out by analysis and visualiztion tools. In these different uses of data from the same scan, the level of granularity that one puts into an Event Document might be very different. The streaming consumer might require a large number of very small granular events in order to quickly make decisions that affect the course of the scan. On the other hand, MongoDB document retrieval is much more efficient with a small number of larger documents, and a small number of events that each contain data from multiple time steps might be preferrable.</p>
+<section id="use-case-tomography-tiling-and-mongodb-serialization">
+<h2>Use Case - Tomography Tiling and MongoDB Serialization<a class="headerlink" href="#use-case-tomography-tiling-and-mongodb-serialization" title="Permalink to this heading">#</a></h2>
+<p>A common pattern in tomography is the concept of “tiling”. When tiling, a single location is chosen, a number of scans are taken around an axis to create a volume for the tile, then the sample is moved to take another tile. Post processing tools then stitch the various tiles together, creating a mosaic.</p>
+<p>How are these best represented in event model documents? We consider two alternative, based on the relationship between Event and Event Descriptor documents:</p>
+<ul class="simple">
+<li><p>Represent each tile as its own stream, letting the concept of the stream be a natural container.</p></li>
+<li><p>Define a single “primary” stream for all sample scan events, then store tile information in fields in each event (either as a separate tile-identifier field, or let analysis tools note tile boundaries with changes in sample position.)</p></li>
+</ul>
+<p><strong>Multiple Streams</strong></p>
+<p>With multiple streams, we would assign multiple Descriptor documents to represent each tile:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1">#  Descriptors - one for each tile</span>
+
+<span class="p">{</span><span class="s2">&quot;uid&quot;</span><span class="p">:</span> <span class="s2">&quot;4fa521e7-fcdc-4a68-9171-d4838d1fc9a2&quot;</span><span class="p">,</span>
+<span class="s2">&quot;time&quot;</span><span class="p">:</span> <span class="mf">1600995123.1785965</span><span class="p">,</span>
+<span class="s2">&quot;run_start&quot;</span><span class="p">:</span> <span class="s2">&quot;9b5dd575-b556-439a-ba71-357307caebb9&quot;</span><span class="p">,</span>
+<span class="o">.</span> <span class="o">.</span> <span class="o">.</span>
+<span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;tile_0&quot;</span><span class="p">}</span>
+
+<span class="p">{</span><span class="s2">&quot;uid&quot;</span><span class="p">:</span> <span class="s2">&quot;a82a83b0-5959-4ca3-a7ed-7fb1d0f07994&quot;</span><span class="p">,</span>
+<span class="s2">&quot;time&quot;</span><span class="p">:</span> <span class="mf">1600995123.1785965</span><span class="p">,</span>
+<span class="s2">&quot;run_start&quot;</span><span class="p">:</span> <span class="s2">&quot;9b5dd575-b556-439a-ba71-357307caebb9&quot;</span><span class="p">,</span>
+<span class="o">.</span> <span class="o">.</span> <span class="o">.</span>
+<span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;tile_1&quot;</span><span class="p">}</span>
+</pre></div>
+</div>
+<p>Then each Event would carry data for the tile. Here we show two events for each of the two tile descriptors:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1">#  Events</span>
+
+<span class="p">{</span><span class="s2">&quot;uid&quot;</span><span class="p">:</span> <span class="s2">&quot;c4aa6916-3d84-446c-850a-95fb71cee6b6&quot;</span><span class="p">,</span>
+ <span class="s2">&quot;time&quot;</span><span class="p">:</span> <span class="mf">1600995123.1808913</span><span class="p">,</span>
+ <span class="s2">&quot;data&quot;</span><span class="p">:</span> <span class="p">{</span> <span class="o">...</span><span class="p">},</span>
+ <span class="s2">&quot;timestamps&quot;</span><span class="p">:</span> <span class="p">{</span> <span class="o">...</span> <span class="p">},</span>
+ <span class="s2">&quot;seq_num&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+ <span class="s2">&quot;descriptor&quot;</span><span class="p">:</span> <span class="s2">&quot;4fa521e7-fcdc-4a68-9171-d4838d1fc9a2&quot;</span><span class="p">}</span>
+
+ <span class="p">{</span><span class="s2">&quot;uid&quot;</span><span class="p">:</span> <span class="s2">&quot;c4aa6916-3d84-446c-850a-95fb71cee6b6&quot;</span><span class="p">,</span>
+ <span class="s2">&quot;time&quot;</span><span class="p">:</span> <span class="mf">1600995123.1808913</span><span class="p">,</span>
+ <span class="s2">&quot;data&quot;</span><span class="p">:</span> <span class="p">{</span> <span class="o">...</span><span class="p">},</span>
+ <span class="s2">&quot;timestamps&quot;</span><span class="p">:</span> <span class="p">{</span> <span class="o">...</span> <span class="p">},</span>
+ <span class="s2">&quot;seq_num&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
+ <span class="s2">&quot;descriptor&quot;</span><span class="p">:</span> <span class="s2">&quot;4fa521e7-fcdc-4a68-9171-d4838d1fc9a2&quot;</span><span class="p">}</span>
+
+ <span class="p">{</span><span class="s2">&quot;uid&quot;</span><span class="p">:</span> <span class="s2">&quot;c4aa6916-3d84-446c-850a-95fb71cee6b6&quot;</span><span class="p">,</span>
+ <span class="s2">&quot;time&quot;</span><span class="p">:</span> <span class="mf">1600995123.1808913</span><span class="p">,</span>
+ <span class="s2">&quot;data&quot;</span><span class="p">:</span> <span class="p">{</span> <span class="o">...</span><span class="p">},</span>
+ <span class="s2">&quot;timestamps&quot;</span><span class="p">:</span> <span class="p">{</span> <span class="o">...</span> <span class="p">},</span>
+ <span class="s2">&quot;seq_num&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+ <span class="s2">&quot;descriptor&quot;</span><span class="p">:</span> <span class="s2">&quot;a82a83b0-5959-4ca3-a7ed-7fb1d0f07994&quot;</span><span class="p">}</span>
+
+ <span class="p">{</span><span class="s2">&quot;uid&quot;</span><span class="p">:</span> <span class="s2">&quot;c4aa6916-3d84-446c-850a-95fb71cee6b6&quot;</span><span class="p">,</span>
+ <span class="s2">&quot;time&quot;</span><span class="p">:</span> <span class="mf">1600995123.1808913</span><span class="p">,</span>
+ <span class="s2">&quot;data&quot;</span><span class="p">:</span> <span class="p">{</span> <span class="o">...</span><span class="p">},</span>
+ <span class="s2">&quot;timestamps&quot;</span><span class="p">:</span> <span class="p">{</span> <span class="o">...</span> <span class="p">},</span>
+ <span class="s2">&quot;seq_num&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
+ <span class="s2">&quot;descriptor&quot;</span><span class="p">:</span> <span class="s2">&quot;a82a83b0-5959-4ca3-a7ed-7fb1d0f07994&quot;</span><span class="p">}</span>
+</pre></div>
+</div>
+<p><strong>Single Stream</strong></p>
+<p>With a single stream, we would create a single descriptor document that all events map to, then each tile would be somehow identified within the Event:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1">#  Descriptor - just one for all tiles</span>
+
+<span class="p">{</span><span class="s2">&quot;uid&quot;</span><span class="p">:</span> <span class="s2">&quot;4fa521e7-fcdc-4a68-9171-d4838d1fc9a2&quot;</span><span class="p">,</span>
+<span class="s2">&quot;time&quot;</span><span class="p">:</span> <span class="mf">1600995123.1785965</span><span class="p">,</span>
+<span class="s2">&quot;run_start&quot;</span><span class="p">:</span> <span class="s2">&quot;9b5dd575-b556-439a-ba71-357307caebb9&quot;</span><span class="p">,</span>
+<span class="o">.</span> <span class="o">.</span> <span class="o">.</span>
+<span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;primary&quot;</span><span class="p">}</span>
+</pre></div>
+</div>
+<p>Then each Event would carry data for the tile. Here we show two events for each of the two tile descriptors. Again, we are showing two tiles and two events per tile:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1">#  Events - events have</span>
+
+<span class="p">{</span><span class="s2">&quot;uid&quot;</span><span class="p">:</span> <span class="s2">&quot;c4aa6916-3d84-446c-850a-95fb71cee6b6&quot;</span><span class="p">,</span>
+ <span class="s2">&quot;time&quot;</span><span class="p">:</span> <span class="mf">1600995123.1808913</span><span class="p">,</span>
+ <span class="s2">&quot;data&quot;</span><span class="p">:</span> <span class="p">{</span> <span class="s2">&quot;tile_id&quot;</span><span class="p">:</span> <span class="s2">&quot;0&quot;</span><span class="p">,</span>  <span class="o">...</span><span class="p">},</span>
+ <span class="s2">&quot;timestamps&quot;</span><span class="p">:</span> <span class="p">{</span> <span class="o">...</span> <span class="p">},</span>
+ <span class="s2">&quot;seq_num&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+ <span class="s2">&quot;descriptor&quot;</span><span class="p">:</span> <span class="s2">&quot;4fa521e7-fcdc-4a68-9171-d4838d1fc9a2&quot;</span><span class="p">}</span>
+
+ <span class="p">{</span><span class="s2">&quot;uid&quot;</span><span class="p">:</span> <span class="s2">&quot;c4aa6916-3d84-446c-850a-95fb71cee6b6&quot;</span><span class="p">,</span>
+ <span class="s2">&quot;time&quot;</span><span class="p">:</span> <span class="mf">1600995123.1808913</span><span class="p">,</span>
+ <span class="s2">&quot;data&quot;</span><span class="p">:</span> <span class="p">{</span> <span class="s2">&quot;tile_id&quot;</span><span class="p">:</span> <span class="s2">&quot;0&quot;</span><span class="p">,</span>  <span class="o">...</span><span class="p">},</span>
+ <span class="s2">&quot;timestamps&quot;</span><span class="p">:</span> <span class="p">{</span> <span class="o">...</span> <span class="p">},</span>
+ <span class="s2">&quot;seq_num&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
+ <span class="s2">&quot;descriptor&quot;</span><span class="p">:</span> <span class="s2">&quot;4fa521e7-fcdc-4a68-9171-d4838d1fc9a2&quot;</span><span class="p">}</span>
+
+ <span class="p">{</span><span class="s2">&quot;uid&quot;</span><span class="p">:</span> <span class="s2">&quot;c4aa6916-3d84-446c-850a-95fb71cee6b6&quot;</span><span class="p">,</span>
+ <span class="s2">&quot;time&quot;</span><span class="p">:</span> <span class="mf">1600995123.1808913</span><span class="p">,</span>
+ <span class="s2">&quot;data&quot;</span><span class="p">:</span> <span class="p">{</span> <span class="s2">&quot;tile_id&quot;</span><span class="p">:</span> <span class="s2">&quot;1&quot;</span><span class="p">,</span>  <span class="o">...</span><span class="p">},</span>
+ <span class="s2">&quot;timestamps&quot;</span><span class="p">:</span> <span class="p">{</span> <span class="o">...</span> <span class="p">},</span>
+ <span class="s2">&quot;seq_num&quot;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span>
+ <span class="s2">&quot;descriptor&quot;</span><span class="p">:</span> <span class="s2">&quot;4fa521e7-fcdc-4a68-9171-d4838d1fc9a2&quot;</span><span class="p">}</span>
+
+ <span class="p">{</span><span class="s2">&quot;uid&quot;</span><span class="p">:</span> <span class="s2">&quot;c4aa6916-3d84-446c-850a-95fb71cee6b6&quot;</span><span class="p">,</span>
+ <span class="s2">&quot;time&quot;</span><span class="p">:</span> <span class="mf">1600995123.1808913</span><span class="p">,</span>
+ <span class="s2">&quot;data&quot;</span><span class="p">:</span> <span class="p">{</span> <span class="s2">&quot;tile_id&quot;</span><span class="p">:</span> <span class="s2">&quot;1&quot;</span><span class="p">,</span>  <span class="o">...</span><span class="p">},</span>
+ <span class="s2">&quot;timestamps&quot;</span><span class="p">:</span> <span class="p">{</span> <span class="o">...</span> <span class="p">},</span>
+ <span class="s2">&quot;seq_num&quot;</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span>
+ <span class="s2">&quot;descriptor&quot;</span><span class="p">:</span> <span class="s2">&quot;4fa521e7-fcdc-4a68-9171-d4838d1fc9a2&quot;</span><span class="p">}</span>
+</pre></div>
+</div>
+<p><strong>Summary</strong>
+Both layouts carry advantages. The number of tiles can be quite large in tomographic scans, adding a large number of descriptor documents. Hijacking the concept of a stream for the purpose of defining tile boundaries might challenge the intent of streams, but could potentially prove extremely useful for downstream analysis and visulization tools that will require definitions of tile bounaries in their events.</p>
+</section>
+<section id="other-use-cases">
+<h2>Other Use Cases<a class="headerlink" href="#other-use-cases" title="Permalink to this heading">#</a></h2>
+<p>Do you have other interesting use cases for event model structures? Please contribute them here!</p>
+</section>
+</section>
+
+
+                </article>
+              
+              
+              
+                <footer class="bd-footer-article">
+                  
+<div class="footer-article-items footer-article__inner">
+  
+    <div class="footer-article-item"><!-- Previous / next buttons -->
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="../tutorials/installation.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Installation</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="../explanations/docs-structure.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">About The Documentation</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div></div>
+  
+</div>
+
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#use-case-tomography-tiling-and-mongodb-serialization">Use Case - Tomography Tiling and MongoDB Serialization</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#other-use-cases">Other Use Cases</a></li>
+</ul>
+  </nav></div>
+
+  <div class="sidebar-secondary-item">
+  
+  <div class="tocsection editthispage">
+    <a href="https://github.com/bluesky/event-model/edit/pkg_resources_dep_v2/docs/user/how-to/use-cases.rst">
+      <i class="fa-solid fa-pencil"></i>
+      
+      
+        
+          Edit on GitHub
+        
+      
+    </a>
+  </div>
+</div>
+
+  <div class="sidebar-secondary-item">
+  <div class="tocsection sourcelink">
+    <a href="../../_sources/user/how-to/use-cases.rst.txt">
+      <i class="fa-solid fa-file-lines"></i> Show Source
+    </a>
+  </div>
+</div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../_static/scripts/bootstrap.js?digest=e353d410970836974a52"></script>
+<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item"><p class="theme-version">
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.13.3.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>
