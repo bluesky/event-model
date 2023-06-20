@@ -15,6 +15,8 @@ from collections import defaultdict, deque, namedtuple
 from dataclasses import dataclass
 from enum import Enum
 from functools import partial
+from importlib.metadata import metadata
+from importlib.metadata import version as importlib_version
 from typing import (
     Any,
     Callable,
@@ -34,7 +36,6 @@ from typing import (
 import jsonschema
 import numpy
 from packaging import version
-from pkg_resources import resource_filename as rs_fn
 from typing_extensions import Literal
 
 from .documents.datum import Datum
@@ -53,12 +54,10 @@ from .documents.run_stop import RunStop
 from .documents.stream_datum import StreamDatum
 from .documents.stream_resource import StreamResource
 
-if sys.version_info < (3, 8):
-    from importlib_metadata import metadata
-    from importlib_metadata import version as importlib_version
+if sys.version_info < (3, 9):
+    import importlib_resources
 else:
-    from importlib.metadata import metadata
-    from importlib.metadata import version as importlib_version
+    import importlib.resources as importlib_resources
 
 __version__ = importlib_version("event-model")
 
@@ -1803,8 +1802,9 @@ SCHEMA_NAMES = {
 }
 schemas = {}
 for name, filename in SCHEMA_NAMES.items():
-    with open(rs_fn("event_model", filename)) as fin:
-        schemas[name] = json.load(fin)
+    ref = importlib_resources.files("event_model") / filename
+    with ref.open() as f:
+        schemas[name] = json.load(f)
 
 # We pin jsonschema >=3.0.0 in requirements.txt but due to pip's dependency
 # resolution it is easy to end up with an environment where that pin is not
