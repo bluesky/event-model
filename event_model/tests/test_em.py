@@ -1026,8 +1026,8 @@ def test_array_like():
     )
     desc_bundle.compose_event_page(
         data={"a": dask_array.ones((5, 3))},
-        timestamps={"a": [1, 2, 3]},
-        seq_num=[1, 2, 3],
+        timestamps={"a": [1, 2, 3, 4, 5]},
+        seq_num=[1, 2, 3, 4, 5],
     )
 
 

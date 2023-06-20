@@ -2197,6 +2197,20 @@ def compose_stop(
     )(exit_status=exit_status, reason=reason, uid=uid, time=time, validate=validate)
 
 
+def dict_of_lists_has_equal_size_lists(dictionary: Dict[str, List]) -> bool:
+    """Return True if all lists are the same size in a Dict[str, List]."""
+
+    dictionary_values = iter(dictionary.values())
+    first_element_len = len(next(dictionary_values))
+    next_element = next(dictionary_values, None)
+
+    while next_element:
+        if len(next_element) != first_element_len:
+            return False
+        next_element = next(dictionary_values, None)
+    return True
+
+
 @dataclass
 class ComposeEventPage:
     descriptor: EventDescriptor
@@ -2206,12 +2220,30 @@ class ComposeEventPage:
         self,
         data: Dict[str, List],
         timestamps: Dict[str, Any],
-        seq_num: List[int],
+        seq_num: Optional[List[int]] = None,
         filled: Optional[Dict[str, List[Union[bool, str]]]] = None,
         uid: Optional[List] = None,
         time: Optional[List] = None,
         validate: bool = True,
     ) -> EventPage:
+        assert dict_of_lists_has_equal_size_lists(timestamps), (
+            "Cannot compose event_page: event_page contains `timestamps` "
+            "list values of different lengths"
+        )
+        assert dict_of_lists_has_equal_size_lists(data), (
+            "Cannot compose event_page: event_page contains `data` "
+            "lists of different lengths"
+        )
+        assert len(next(iter(timestamps.values()))) == len(next(iter(data.values()))), (
+            "Cannot compose event_page: the lists in `timestamps` are of a different "
+            "length to those in `data`"
+        )
+
+        if seq_num is None:
+            last_seq_num = self.event_counters[self.descriptor["name"]]
+            seq_num = list(
+                range(last_seq_num, len(next(iter(data.values()))) + last_seq_num)
+            )
         N = len(seq_num)
         if uid is None:
             uid = [str(uuid.uuid4()) for _ in range(N)]
@@ -2248,7 +2280,7 @@ class ComposeEventPage:
                     "Keys in event['filled'] {} must be a subset of those in "
                     "event['data'] {}".format(filled.keys(), data.keys())
                 )
-        self.event_counters[self.descriptor["name"]] += len(data)
+        self.event_counters[self.descriptor["name"]] += len(seq_num)
         return doc
 
 
@@ -2268,7 +2300,13 @@ def compose_event_page(
     Here for backwards compatibility, the Compose class is prefered.
     """
     return ComposeEventPage(descriptor, event_counters)(
-        data, timestamps, seq_num, filled, uid=uid, time=time, validate=validate
+        data,
+        timestamps,
+        seq_num=seq_num,
+        filled=filled,
+        uid=uid,
+        time=time,
+        validate=validate,
     )
 
 
@@ -2324,7 +2362,7 @@ class ComposeEvent:
                     "Keys in event['filled'] {} must be a subset of those in "
                     "event['data'] {}".format(filled.keys(), data.keys())
                 )
-        self.event_counters[self.descriptor["name"]] += 1
+        self.event_counters[self.descriptor["name"]] = seq_num + 1
         return doc
 
 
