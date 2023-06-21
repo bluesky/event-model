@@ -8,7 +8,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>event_model &#8212; event-model 1.19.3.dev125+gbc8cdbf documentation</title>
+    <title>event_model &#8212; event-model 1.19.3.dev127+gd71e567 documentation</title>
   
   
   
@@ -419,6 +419,8 @@ document.write(`
 <span class="kn">from</span> <span class="nn">dataclasses</span> <span class="kn">import</span> <span class="n">dataclass</span>
 <span class="kn">from</span> <span class="nn">enum</span> <span class="kn">import</span> <span class="n">Enum</span>
 <span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">partial</span>
+<span class="kn">from</span> <span class="nn">importlib.metadata</span> <span class="kn">import</span> <span class="n">metadata</span>
+<span class="kn">from</span> <span class="nn">importlib.metadata</span> <span class="kn">import</span> <span class="n">version</span> <span class="k">as</span> <span class="n">importlib_version</span>
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="p">(</span>
     <span class="n">Any</span><span class="p">,</span>
     <span class="n">Callable</span><span class="p">,</span>
@@ -438,7 +440,6 @@ document.write(`
 <span class="kn">import</span> <span class="nn">jsonschema</span>
 <span class="kn">import</span> <span class="nn">numpy</span>
 <span class="kn">from</span> <span class="nn">packaging</span> <span class="kn">import</span> <span class="n">version</span>
-<span class="kn">from</span> <span class="nn">pkg_resources</span> <span class="kn">import</span> <span class="n">resource_filename</span> <span class="k">as</span> <span class="n">rs_fn</span>
 <span class="kn">from</span> <span class="nn">typing_extensions</span> <span class="kn">import</span> <span class="n">Literal</span>
 
 <span class="kn">from</span> <span class="nn">.documents.datum</span> <span class="kn">import</span> <span class="n">Datum</span>
@@ -457,12 +458,10 @@ document.write(`
 <span class="kn">from</span> <span class="nn">.documents.stream_datum</span> <span class="kn">import</span> <span class="n">StreamDatum</span>
 <span class="kn">from</span> <span class="nn">.documents.stream_resource</span> <span class="kn">import</span> <span class="n">StreamResource</span>
 
-<span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">version_info</span> <span class="o">&lt;</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">8</span><span class="p">):</span>
-    <span class="kn">from</span> <span class="nn">importlib_metadata</span> <span class="kn">import</span> <span class="n">metadata</span>
-    <span class="kn">from</span> <span class="nn">importlib_metadata</span> <span class="kn">import</span> <span class="n">version</span> <span class="k">as</span> <span class="n">importlib_version</span>
+<span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">version_info</span> <span class="o">&lt;</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">9</span><span class="p">):</span>
+    <span class="kn">import</span> <span class="nn">importlib_resources</span>
 <span class="k">else</span><span class="p">:</span>
-    <span class="kn">from</span> <span class="nn">importlib.metadata</span> <span class="kn">import</span> <span class="n">metadata</span>
-    <span class="kn">from</span> <span class="nn">importlib.metadata</span> <span class="kn">import</span> <span class="n">version</span> <span class="k">as</span> <span class="n">importlib_version</span>
+    <span class="kn">import</span> <span class="nn">importlib.resources</span> <span class="k">as</span> <span class="nn">importlib_resources</span>
 
 <span class="n">__version__</span> <span class="o">=</span> <span class="n">importlib_version</span><span class="p">(</span><span class="s2">&quot;event-model&quot;</span><span class="p">)</span>
 
@@ -2207,8 +2206,9 @@ document.write(`
 <span class="p">}</span>
 <span class="n">schemas</span> <span class="o">=</span> <span class="p">{}</span>
 <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">filename</span> <span class="ow">in</span> <span class="n">SCHEMA_NAMES</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">rs_fn</span><span class="p">(</span><span class="s2">&quot;event_model&quot;</span><span class="p">,</span> <span class="n">filename</span><span class="p">))</span> <span class="k">as</span> <span class="n">fin</span><span class="p">:</span>
-        <span class="n">schemas</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">fin</span><span class="p">)</span>
+    <span class="n">ref</span> <span class="o">=</span> <span class="n">importlib_resources</span><span class="o">.</span><span class="n">files</span><span class="p">(</span><span class="s2">&quot;event_model&quot;</span><span class="p">)</span> <span class="o">/</span> <span class="n">filename</span>
+    <span class="k">with</span> <span class="n">ref</span><span class="o">.</span><span class="n">open</span><span class="p">()</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">schemas</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
 
 <span class="c1"># We pin jsonschema &gt;=3.0.0 in requirements.txt but due to pip&#39;s dependency</span>
 <span class="c1"># resolution it is easy to end up with an environment where that pin is not</span>
