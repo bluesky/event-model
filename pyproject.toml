@@ -14,7 +14,7 @@ classifiers = [
 ]
 description = "Data model used by the bluesky ecosystem"
 dependencies = [
-    "importlib-metadata",
+    "importlib-resources",
     "jsonschema",
     "numpy",
     "packaging",
