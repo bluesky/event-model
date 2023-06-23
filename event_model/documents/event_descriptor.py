@@ -97,7 +97,8 @@ EVENT_DESCRIPTOR_EXTRA_SCHEMA = {
             "title": "DataType",
             "patternProperties": {"^([^./]+)$": {"$ref": "#/definitions/DataType"}},
             "additionalProperties": False,
-        }
+        },
+        "DataKey": {"properties": {"units": {"type": ["string", "null"]}}},
     },
     "additionalProperties": False,
 }
