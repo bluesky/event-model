@@ -84,7 +84,10 @@
             "units": {
                "title": "Units",
                "description": "Engineering units of the value",
-               "type": "string"
+               "type": [
+                  "string",
+                  "null"
+               ]
             }
          },
          "required": [
