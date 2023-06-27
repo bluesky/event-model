@@ -4,19 +4,19 @@
     "url": "https://bluesky.github.io/event-model/main/"
   },
   {
-    "version": "pkg_resources_dep_v2",
-    "url": "https://bluesky.github.io/event-model/pkg_resources_dep_v2/"
-  },
-  {
-    "version": "start-model-fix",
-    "url": "https://bluesky.github.io/event-model/start-model-fix/"
+    "version": "v1.19.4",
+    "url": "https://bluesky.github.io/event-model/v1.19.4/"
   },
   {
     "version": "v1.19.3",
     "url": "https://bluesky.github.io/event-model/v1.19.3/"
   },
   {
-    "version": "v1.19.4",
-    "url": "https://bluesky.github.io/event-model/v1.19.4/"
+    "version": "pkg_resources_dep_v2",
+    "url": "https://bluesky.github.io/event-model/pkg_resources_dep_v2/"
+  },
+  {
+    "version": "start-model-fix",
+    "url": "https://bluesky.github.io/event-model/start-model-fix/"
   }
 ]
