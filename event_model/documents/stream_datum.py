@@ -1,8 +1,22 @@
-from typing import Dict, List
+from typing import List
 
 from typing_extensions import Annotated, TypedDict
 
 from .generate.type_wrapper import Field, add_extra_schema
+
+
+class Range(TypedDict):
+    """The parameters required to describe a sequence of incrementing integers"""
+
+    start: Annotated[
+        int,
+        Field(description="First number in the range"),
+    ]
+    stop: Annotated[
+        int,
+        Field(description="Last number in the range is less than this number"),
+    ]
+
 
 STREAM_DATUM_EXTRA_SCHEMA = {"additionalProperties": False}
 
@@ -16,16 +30,6 @@ class StreamDatum(TypedDict):
         Field(
             description="The order in the stream of this block of data. This must "
             "be contiguous for a given stream.",
-        ),
-    ]
-    event_count: Annotated[
-        int, Field(description="The number of events in this datum.")
-    ]
-    event_offset: Annotated[
-        int,
-        Field(
-            description="The sequence number of the first event in this block. This "
-            "increasing value allows the presence of gaps.",
         ),
     ]
     stream_resource: Annotated[
@@ -49,14 +53,14 @@ class StreamDatum(TypedDict):
         ),
     ]
     seq_nums: Annotated[
-        Dict[str, int],
+        Range,
         Field(
             description="A slice object showing the Event numbers the "
             "resource corresponds to"
         ),
     ]
     indices: Annotated[
-        Dict[str, int],
+        Range,
         Field(
             description="A slice object passed to the StreamResource "
             "handler so it can hand back data and timestamps"

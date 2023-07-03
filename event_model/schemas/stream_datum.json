@@ -2,6 +2,29 @@
    "title": "stream_datum",
    "description": "Document to reference a quanta of an externally-stored stream of data.",
    "type": "object",
+   "definitions": {
+      "Range": {
+         "title": "Range",
+         "description": "The parameters required to describe a sequence of incrementing integers",
+         "type": "object",
+         "properties": {
+            "start": {
+               "title": "Start",
+               "description": "First number in the range",
+               "type": "integer"
+            },
+            "stop": {
+               "title": "Stop",
+               "description": "Last number in the range is less than this number",
+               "type": "integer"
+            }
+         },
+         "required": [
+            "start",
+            "stop"
+         ]
+      }
+   },
    "properties": {
       "block_idx": {
          "title": "Block Idx",
@@ -16,31 +39,23 @@
             "type": "string"
          }
       },
-      "event_count": {
-         "title": "Event Count",
-         "description": "The number of events in this datum.",
-         "type": "integer"
-      },
-      "event_offset": {
-         "title": "Event Offset",
-         "description": "The sequence number of the first event in this block. This increasing value allows the presence of gaps.",
-         "type": "integer"
-      },
       "indices": {
          "title": "Indices",
          "description": "A slice object passed to the StreamResource handler so it can hand back data and timestamps",
-         "type": "object",
-         "additionalProperties": {
-            "type": "integer"
-         }
+         "allOf": [
+            {
+               "$ref": "#/definitions/Range"
+            }
+         ]
       },
       "seq_nums": {
          "title": "Seq Nums",
          "description": "A slice object showing the Event numbers the resource corresponds to",
-         "type": "object",
-         "additionalProperties": {
-            "type": "integer"
-         }
+         "allOf": [
+            {
+               "$ref": "#/definitions/Range"
+            }
+         ]
       },
       "stream_resource": {
          "title": "Stream Resource",
@@ -56,8 +71,6 @@
    "required": [
       "block_idx",
       "data_keys",
-      "event_count",
-      "event_offset",
       "indices",
       "seq_nums",
       "stream_resource",

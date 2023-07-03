@@ -51,7 +51,7 @@ from .documents.event_page import EventPage
 from .documents.resource import Resource
 from .documents.run_start import RunStart
 from .documents.run_stop import RunStop
-from .documents.stream_datum import StreamDatum
+from .documents.stream_datum import Range, StreamDatum
 from .documents.stream_resource import StreamResource
 
 if sys.version_info < (3, 9):
@@ -2005,10 +2005,8 @@ class ComposeStreamDatum:
     def __call__(
         self,
         data_keys: List[str],
-        seq_nums: Dict[str, int],
-        indices: Dict[str, int],
-        event_count: int = 1,
-        event_offset: int = 0,
+        seq_nums: Range,
+        indices: Range,
         validate: bool = True,
     ) -> StreamDatum:
         resource_uid = self.stream_resource["uid"]
@@ -2017,8 +2015,6 @@ class ComposeStreamDatum:
             stream_resource=resource_uid,
             uid=f"{resource_uid}/{block_idx}",
             block_idx=block_idx,
-            event_count=event_count,
-            event_offset=event_offset,
             data_keys=data_keys,
             seq_nums=seq_nums,
             indices=indices,
@@ -2034,10 +2030,8 @@ def compose_stream_datum(
     stream_resource: StreamResource,
     counter: Iterator,
     data_keys: List[str],
-    seq_nums: Dict[str, int],
-    indices: Dict[str, int],
-    event_count: int = 1,
-    event_offset: int = 0,
+    seq_nums: Range,
+    indices: Range,
     validate: bool = True,
 ) -> StreamDatum:
     """
@@ -2047,8 +2041,6 @@ def compose_stream_datum(
         data_keys,
         seq_nums,
         indices,
-        event_count=event_count,
-        event_offset=event_offset,
         validate=validate,
     )
 
@@ -2104,7 +2096,7 @@ class ComposeStreamResource:
             ComposeStreamDatum(
                 stream_resource=doc,
                 counter=itertools.count(),
-            )
+            ),
         )
 
 
@@ -2128,7 +2120,6 @@ def compose_stream_resource(
         root,
         resource_path,
         resource_kwargs,
-        counters=counters,
         path_semantics=path_semantics,
         uid=uid,
         validate=validate,

@@ -4,6 +4,7 @@ import numpy
 import pytest
 
 import event_model
+from event_model.documents.stream_datum import Range
 
 
 def test_run_router(tmp_path):
@@ -222,7 +223,7 @@ def test_run_router_streams(tmp_path):
         resource_kwargs={},
     )
     docs.append(("stream_resource", stream_resource_doc))
-    datum_doc = compose_stream_datum([], {}, {})
+    datum_doc = compose_stream_datum([], Range(start=0, stop=0), Range(start=0, stop=0))
     docs.append(("stream_datum", datum_doc))
     docs.append(("stop", stop_doc))
 
