@@ -51,7 +51,7 @@ dev = [
     "numpydoc",
 
     # For schema generation.
-    "pydantic",
+    "pydantic<2.0",
 ]
 
 [project.scripts]

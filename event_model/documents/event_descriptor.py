@@ -20,7 +20,7 @@ class DataKey(TypedDict):
         ]
     ]
     dtype: Annotated[
-        Dtype, 
+        Dtype,
         Field(description="The type of the data in the event."),
     ]
     external: NotRequired[

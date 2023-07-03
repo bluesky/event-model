@@ -1,5 +1,4 @@
 from collections import defaultdict
-from itertools import count
 
 import numpy
 import pytest
@@ -216,19 +215,15 @@ def test_run_router_streams(tmp_path):
         bundle.compose_stop(),
     )
     docs.append(("start", start_doc))
-    stream_resource_doc, compose_stream_data = compose_stream_resource(
+    stream_resource_doc, compose_stream_datum = compose_stream_resource(
         spec="TIFF_STREAM",
         root=str(tmp_path),
         resource_path="test_streams",
         resource_kwargs={},
-        counters=[count(3), count(2)],
     )
     docs.append(("stream_resource", stream_resource_doc))
-    datum_doc_0, datum_doc_1 = (
-        compose_stream_datum([], {}, {}) for compose_stream_datum in compose_stream_data
-    )
-    docs.append(("stream_datum", datum_doc_0))
-    docs.append(("stream_datum", datum_doc_1))
+    datum_doc = compose_stream_datum([], {}, {})
+    docs.append(("stream_datum", datum_doc))
     docs.append(("stop", stop_doc))
 
     # Empty list of factories. Just make sure nothing blows up.
@@ -253,7 +248,7 @@ def test_run_router_streams(tmp_path):
     for name, doc in docs:
         rr(name, doc)
     assert len(resource_list) == 1
-    assert len(data_list) == 2
+    assert len(data_list) == 1
 
 
 def test_subfactory():

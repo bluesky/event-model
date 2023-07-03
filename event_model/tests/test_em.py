@@ -1,7 +1,6 @@
 import json
 import pickle
 from distutils.version import LooseVersion
-from itertools import count
 
 import jsonschema
 import numpy
@@ -115,19 +114,11 @@ def test_compose_stream_resource(tmp_path):
         root=str(tmp_path),
         resource_path="test_streams",
         resource_kwargs={},
-        counters=[count(1), count(1)],
     )
-    resource_doc, compose_stream_data = bundle
+    resource_doc, compose_stream_datum = bundle
     assert bundle.stream_resource_doc is resource_doc
-    assert bundle.compose_stream_data is compose_stream_data
-    assert compose_stream_data[0] is not compose_stream_data[1]
-    datum_doc_0, datum_doc_1 = (
-        compose_stream_datum([], {}, {}) for compose_stream_datum in compose_stream_data
-    )
-    # Ensure independent counters
-    assert datum_doc_0["block_idx"] == datum_doc_1["block_idx"]
-    datum_doc_1a = compose_stream_data[1]([], {}, {})
-    assert datum_doc_1a["block_idx"] != datum_doc_1["block_idx"]
+    assert bundle.compose_stream_data is compose_stream_datum
+    compose_stream_datum([], {}, {})
 
 
 def test_round_trip_pagination():
@@ -398,19 +389,15 @@ def test_document_router_streams_smoke_test(tmp_path):
     compose_stream_resource = run_bundle.compose_stream_resource
     start = run_bundle.start_doc
     dr("start", start)
-    stream_resource_doc, compose_stream_data = compose_stream_resource(
+    stream_resource_doc, compose_stream_datum = compose_stream_resource(
         spec="TIFF_STREAM",
         root=str(tmp_path),
-        counters=[count(1), count(6)],
         resource_path="test_streams",
         resource_kwargs={},
     )
     dr("stream_resource", stream_resource_doc)
-    datum_doc_0, datum_doc_1 = (
-        compose_stream_datum([], {}, {}) for compose_stream_datum in compose_stream_data
-    )
-    dr("stream_datum", datum_doc_0)
-    dr("stream_datum", datum_doc_1)
+    datum_doc = compose_stream_datum([], {}, {})
+    dr("stream_datum", datum_doc)
     dr("stop", run_bundle.compose_stop())
 
 
