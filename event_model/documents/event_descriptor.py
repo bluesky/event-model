@@ -4,6 +4,8 @@ from typing_extensions import Annotated, Literal, NotRequired, TypedDict
 
 from .generate.type_wrapper import Field, add_extra_schema
 
+Dtype = Literal["string", "number", "array", "boolean", "integer"]
+
 
 class DataKey(TypedDict):
     """Describes the objects in the data property of Event documents"""
@@ -18,7 +20,7 @@ class DataKey(TypedDict):
         ]
     ]
     dtype: Annotated[
-        Literal["string", "number", "array", "boolean", "integer"],
+        Dtype, 
         Field(description="The type of the data in the event."),
     ]
     external: NotRequired[

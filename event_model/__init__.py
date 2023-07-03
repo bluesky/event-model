@@ -2056,7 +2056,7 @@ def compose_stream_datum(
 @dataclass
 class ComposeStreamResourceBundle:
     stream_resource_doc: StreamResource
-    compose_stream_data: List[ComposeStreamDatum]
+    compose_stream_data: ComposeStreamDatum
 
     # iter for backwards compatibility
     def __iter__(self) -> Iterator:
@@ -2078,7 +2078,6 @@ class ComposeStreamResource:
         root: str,
         resource_path: str,
         resource_kwargs: Dict[str, Any],
-        counters: List = [],
         path_semantics: Literal["posix", "windows"] = default_path_semantics,
         uid: Optional[str] = None,
         validate: bool = True,
@@ -2102,13 +2101,10 @@ class ComposeStreamResource:
 
         return ComposeStreamResourceBundle(
             doc,
-            [
-                ComposeStreamDatum(
-                    stream_resource=doc,
-                    counter=counter,
-                )
-                for counter in counters
-            ],
+            ComposeStreamDatum(
+                stream_resource=doc,
+                counter=itertools.count(),
+            )
         )
 
 
