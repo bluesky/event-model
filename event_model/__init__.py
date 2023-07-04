@@ -2249,11 +2249,16 @@ class ComposeEventPage:
         )
         if validate:
             schema_validators[DocumentNames.event_page].validate(doc)
+
             if not (
-                self.descriptor["data_keys"].keys() == data.keys() == timestamps.keys()
+                keys_without_stream_keys(
+                    self.descriptor["data_keys"], self.descriptor["data_keys"]
+                ) ==
+                keys_without_stream_keys(data, self.descriptor["data_keys"]) ==
+                keys_without_stream_keys(timestamps, self.descriptor["data_keys"])
             ):
                 raise EventModelValidationError(
-                    "These sets of keys must match:\n"
+                    "These sets of keys must match (other than \"STREAM:\" keys):\n"
                     "event['data'].keys(): {}\n"
                     "event['timestamps'].keys(): {}\n"
                     "descriptor['data_keys'].keys(): {}\n".format(
@@ -2297,6 +2302,15 @@ def compose_event_page(
     )
 
 
+def keys_without_stream_keys(dictionary, descriptor_data_keys):
+    return [
+        key for key in dictionary.keys() if (
+            "external" not in descriptor_data_keys[key] or
+            descriptor_data_keys[key]["external"] != "STREAM:"
+        )
+    ]
+
+
 @dataclass
 class ComposeEvent:
     descriptor: EventDescriptor
@@ -2331,11 +2345,16 @@ class ComposeEvent:
         )
         if validate:
             schema_validators[DocumentNames.event].validate(doc)
+
             if not (
-                self.descriptor["data_keys"].keys() == data.keys() == timestamps.keys()
+                keys_without_stream_keys(
+                    self.descriptor["data_keys"], self.descriptor["data_keys"]
+                ) ==
+                keys_without_stream_keys(data, self.descriptor["data_keys"]) ==
+                keys_without_stream_keys(timestamps, self.descriptor["data_keys"])
             ):
                 raise EventModelValidationError(
-                    "These sets of keys must match:\n"
+                    "These sets of keys must match (other than \"STREAM:\" keys):\n"
                     "event['data'].keys(): {}\n"
                     "event['timestamps'].keys(): {}\n"
                     "descriptor['data_keys'].keys(): {}\n".format(
