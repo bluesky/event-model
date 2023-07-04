@@ -5,17 +5,35 @@ A wrapper used to patch out schema generation utilities.
 
 from dataclasses import dataclass
 
+pydantic_version = None
 try:
-    import pydantic
+    try:
+        from pydantic import v1 as pydantic  # type: ignore
+    except ImportError:
+        import pydantic
+
+    pydantic_version = pydantic.__version__
 
     Field = pydantic.Field
     FieldInfo = pydantic.fields.FieldInfo
+    BaseConfig = pydantic.BaseConfig
+    BaseModel = pydantic.BaseModel
+    create_model = pydantic.create_model
 except ModuleNotFoundError:
 
     def Field(*args, **kwargs):  # type: ignore
         ...
 
     class FieldInfo:  # type: ignore
+        ...
+
+    class BaseConfig:  # type: ignore
+        ...
+
+    class BaseModel:  # type: ignore
+        ...
+
+    def create_model(*args, **kwargs):  # type: ignore
         ...
 
 

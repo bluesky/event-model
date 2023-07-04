@@ -2251,11 +2251,11 @@ class ComposeEventPage:
             schema_validators[DocumentNames.event_page].validate(doc)
 
             if not (
-                keys_without_stream_keys(
+                set(keys_without_stream_keys(
                     self.descriptor["data_keys"], self.descriptor["data_keys"]
-                ) ==
-                keys_without_stream_keys(data, self.descriptor["data_keys"]) ==
-                keys_without_stream_keys(timestamps, self.descriptor["data_keys"])
+                )) ==
+                set(keys_without_stream_keys(data, self.descriptor["data_keys"])) ==
+                set(keys_without_stream_keys(timestamps, self.descriptor["data_keys"]))
             ):
                 raise EventModelValidationError(
                     "These sets of keys must match (other than \"STREAM:\" keys):\n"
@@ -2347,11 +2347,11 @@ class ComposeEvent:
             schema_validators[DocumentNames.event].validate(doc)
 
             if not (
-                keys_without_stream_keys(
+                set(keys_without_stream_keys(
                     self.descriptor["data_keys"], self.descriptor["data_keys"]
-                ) ==
-                keys_without_stream_keys(data, self.descriptor["data_keys"]) ==
-                keys_without_stream_keys(timestamps, self.descriptor["data_keys"])
+                )) ==
+                set(keys_without_stream_keys(data, self.descriptor["data_keys"])) ==
+                set(keys_without_stream_keys(timestamps, self.descriptor["data_keys"]))
             ):
                 raise EventModelValidationError(
                     "These sets of keys must match (other than \"STREAM:\" keys):\n"
