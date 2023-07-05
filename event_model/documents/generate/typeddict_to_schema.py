@@ -7,8 +7,6 @@ from collections import OrderedDict
 from pathlib import Path
 from typing import Dict, Optional, Tuple, Type, Union
 
-from pydantic import BaseConfig, BaseModel, Field, create_model
-from pydantic.fields import FieldInfo
 from typing_extensions import (
     Annotated,
     NotRequired,
@@ -33,12 +31,23 @@ from event_model.documents import (
 from event_model.documents.generate.type_wrapper import (
     ALLOWED_ANNOTATION_ELEMENTS,
     AsRef,
+    BaseConfig,
+    BaseModel,
+    Field,
+    FieldInfo,
+    create_model,
     extra_schema,
+    pydantic_version,
 )
 
 # The hacky indexing on types isn't possible with python < 3.9
 if sys.version_info[:2] < (3, 9):
     raise EnvironmentError("schema generation requires python 3.8 or higher")
+
+if not pydantic_version:
+    raise EnvironmentError(
+        "schema generation requires pydantic < 2.0 to run, pydantic isn't installed"
+    )
 
 
 SCHEMA_OUT_DIR = Path("event_model") / SCHEMA_PATH
