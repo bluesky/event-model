@@ -5,7 +5,7 @@ from typing_extensions import Annotated, TypedDict
 from .generate.type_wrapper import Field, add_extra_schema
 
 
-class Range(TypedDict):
+class StreamRange(TypedDict):
     """The parameters required to describe a sequence of incrementing integers"""
 
     start: Annotated[
@@ -53,14 +53,14 @@ class StreamDatum(TypedDict):
         ),
     ]
     seq_nums: Annotated[
-        Range,
+        StreamRange,
         Field(
             description="A slice object showing the Event numbers the "
             "resource corresponds to"
         ),
     ]
     indices: Annotated[
-        Range,
+        StreamRange,
         Field(
             description="A slice object passed to the StreamResource "
             "handler so it can hand back data and timestamps"

@@ -7,7 +7,7 @@ import numpy
 import pytest
 
 import event_model
-from event_model.documents.stream_datum import Range
+from event_model.documents.stream_datum import StreamRange
 
 JSONSCHEMA_2 = LooseVersion(jsonschema.__version__) < LooseVersion("3.0.0")
 
@@ -119,7 +119,7 @@ def test_compose_stream_resource(tmp_path):
     resource_doc, compose_stream_datum = bundle
     assert bundle.stream_resource_doc is resource_doc
     assert bundle.compose_stream_data is compose_stream_datum
-    compose_stream_datum([], Range(start=0, stop=0), Range(start=0, stop=0))
+    compose_stream_datum([], StreamRange(start=0, stop=0), StreamRange(start=0, stop=0))
 
 
 def test_round_trip_pagination():
@@ -397,7 +397,9 @@ def test_document_router_streams_smoke_test(tmp_path):
         resource_kwargs={},
     )
     dr("stream_resource", stream_resource_doc)
-    datum_doc = compose_stream_datum([], Range(start=0, stop=0), Range(start=0, stop=0))
+    datum_doc = compose_stream_datum(
+        [], StreamRange(start=0, stop=0), StreamRange(start=0, stop=0)
+    )
     dr("stream_datum", datum_doc)
     dr("stop", run_bundle.compose_stop())
 
