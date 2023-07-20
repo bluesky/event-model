@@ -2007,6 +2007,7 @@ class ComposeStreamDatum:
         data_keys: List[str],
         seq_nums: StreamRange,
         indices: StreamRange,
+        descriptor: Optional[EventDescriptor] = None,
         validate: bool = True,
     ) -> StreamDatum:
         resource_uid = self.stream_resource["uid"]
@@ -2019,6 +2020,9 @@ class ComposeStreamDatum:
             seq_nums=seq_nums,
             indices=indices,
         )
+        if descriptor:
+            doc["descriptor"] = descriptor["uid"]
+
         if validate:
             schema_validators[DocumentNames.stream_datum].validate(doc)
 

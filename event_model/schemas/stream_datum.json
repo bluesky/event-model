@@ -3,8 +3,8 @@
    "description": "Document to reference a quanta of an externally-stored stream of data.",
    "type": "object",
    "definitions": {
-      "Range": {
-         "title": "Range",
+      "StreamRange": {
+         "title": "StreamRange",
          "description": "The parameters required to describe a sequence of incrementing integers",
          "type": "object",
          "properties": {
@@ -39,12 +39,17 @@
             "type": "string"
          }
       },
+      "descriptor": {
+         "title": "Descriptor",
+         "description": "UID of the EventDescriptor to which this Datum belongs",
+         "type": "string"
+      },
       "indices": {
          "title": "Indices",
          "description": "A slice object passed to the StreamResource handler so it can hand back data and timestamps",
          "allOf": [
             {
-               "$ref": "#/definitions/Range"
+               "$ref": "#/definitions/StreamRange"
             }
          ]
       },
@@ -53,7 +58,7 @@
          "description": "A slice object showing the Event numbers the resource corresponds to",
          "allOf": [
             {
-               "$ref": "#/definitions/Range"
+               "$ref": "#/definitions/StreamRange"
             }
          ]
       },
