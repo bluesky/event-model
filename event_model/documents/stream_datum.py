@@ -1,6 +1,6 @@
 from typing import List
 
-from typing_extensions import Annotated, TypedDict, NotRequired
+from typing_extensions import Annotated, TypedDict
 
 from .generate.type_wrapper import Field, add_extra_schema
 
@@ -25,10 +25,9 @@ STREAM_DATUM_EXTRA_SCHEMA = {"additionalProperties": False}
 class StreamDatum(TypedDict):
     """Document to reference a quanta of an externally-stored stream of data."""
 
-    descriptor: NotRequired[
-        Annotated[
-            str, Field(description="UID of the EventDescriptor to which this Datum belongs")
-        ]
+    descriptor: Annotated[
+        str,
+        Field(description="UID of the EventDescriptor to " "which this Datum belongs"),
     ]
 
     block_idx: Annotated[
@@ -47,8 +46,8 @@ class StreamDatum(TypedDict):
     uid: Annotated[
         str,
         Field(
-            description="Globally unique identifier for this Datum. A suggested "
-            "formatting being '<stream_resource>/<stream_name>/<block_id>",
+            description="A slice object passed to the StreamResource "
+            "handler so it can hand back data and timestamps."
         ),
     ]
     data_keys: Annotated[

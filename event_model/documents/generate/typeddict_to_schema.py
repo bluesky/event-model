@@ -49,6 +49,7 @@ if not pydantic_version:
         "schema generation requires pydantic < 2.0 to run, pydantic isn't installed"
     )
 
+
 SCHEMA_OUT_DIR = Path("event_model") / SCHEMA_PATH
 
 

@@ -49,12 +49,10 @@ class Resource(PartialResource):
             Field(description="Rules for joining paths"),
         ]
     ]
-    run_start: NotRequired[
-        Annotated[
-            str,
-            Field(
-                description="Globally unique ID to the run_start document this "
-                "resource is associated with.",
-            ),
-        ]
+    run_start: Annotated[
+        str,
+        Field(
+            description="Globally unique ID to the run_start document this "
+            "resource is associated with.",
+        ),
     ]

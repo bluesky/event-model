@@ -36,14 +36,12 @@ class StreamResource(TypedDict):
             description="Subset of resource_path that is a local detail, not semantic."
         ),
     ]
-    run_start: NotRequired[
-        Annotated[
-            str,
-            Field(
-                description="Globally unique ID to the run_start document "
-                "this Stream Resource is associated with.",
-            ),
-        ]
+    run_start: Annotated[
+        str,
+        Field(
+            description="Globally unique ID to the run_start document "
+            "this Stream Resource is associated with.",
+        ),
     ]
     spec: Annotated[
         str,

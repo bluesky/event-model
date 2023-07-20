@@ -1957,12 +1957,11 @@ class ComposeResource:
             root=root,
             resource_kwargs=resource_kwargs,
             resource_path=resource_path,
+            run_start=self.start["uid"] if self.start else "",
         )
+
         if validate:
             schema_validators[DocumentNames.resource].validate(doc)
-
-        if self.start:
-            doc["run_start"] = self.start["uid"]
 
         counter = itertools.count()
         return ComposeResourceBundle(
@@ -2019,9 +2018,8 @@ class ComposeStreamDatum:
             data_keys=data_keys,
             seq_nums=seq_nums,
             indices=indices,
+            descriptor=descriptor["uid"] if descriptor else "",
         )
-        if descriptor:
-            doc["descriptor"] = descriptor["uid"]
 
         if validate:
             schema_validators[DocumentNames.stream_datum].validate(doc)
@@ -2043,7 +2041,7 @@ def compose_stream_datum(
     """
     warnings.warn(
         "compose_stream_datum() will be removed in the minor version.",
-        DeprecationWarning
+        DeprecationWarning,
     )
     return ComposeStreamDatum(stream_resource, counter)(
         data_keys,
@@ -2092,9 +2090,8 @@ class ComposeStreamResource:
             resource_path=resource_path,
             resource_kwargs=resource_kwargs,
             path_semantics=path_semantics,
+            run_start=self.start["uid"] if self.start else "",
         )
-        if self.start:
-            doc["run_start"] = self.start["uid"]
 
         if validate:
             schema_validators[DocumentNames.stream_resource].validate(doc)

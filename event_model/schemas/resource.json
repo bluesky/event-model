@@ -47,6 +47,7 @@
       "resource_kwargs",
       "resource_path",
       "root",
+      "run_start",
       "spec",
       "uid"
    ],

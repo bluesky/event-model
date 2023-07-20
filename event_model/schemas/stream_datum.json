@@ -69,13 +69,14 @@
       },
       "uid": {
          "title": "Uid",
-         "description": "Globally unique identifier for this Datum. A suggested formatting being '<stream_resource>/<stream_name>/<block_id>",
+         "description": "A slice object passed to the StreamResource handler so it can hand back data and timestamps.",
          "type": "string"
       }
    },
    "required": [
       "block_idx",
       "data_keys",
+      "descriptor",
       "indices",
       "seq_nums",
       "stream_resource",
