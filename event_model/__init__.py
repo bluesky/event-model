@@ -2010,11 +2010,9 @@ class ComposeStreamDatum:
         validate: bool = True,
     ) -> StreamDatum:
         resource_uid = self.stream_resource["uid"]
-        block_idx = next(self.counter)
         doc = StreamDatum(
             stream_resource=resource_uid,
-            uid=f"{resource_uid}/{block_idx}",
-            block_idx=block_idx,
+            uid=f"{resource_uid}/{next(self.counter)}",
             data_keys=data_keys,
             seq_nums=seq_nums,
             indices=indices,

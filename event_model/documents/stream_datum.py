@@ -29,14 +29,6 @@ class StreamDatum(TypedDict):
         str,
         Field(description="UID of the EventDescriptor to " "which this Datum belongs"),
     ]
-
-    block_idx: Annotated[
-        int,
-        Field(
-            description="The order in the stream of this block of data. This must "
-            "be contiguous for a given stream.",
-        ),
-    ]
     stream_resource: Annotated[
         str,
         Field(

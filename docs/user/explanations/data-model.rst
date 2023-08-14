@@ -526,7 +526,6 @@ Minimal nontrivial valid example:
    {'resource': '272132cf-564f-428f-bf6b-149ee4287024',  # foreign key
     'datum_kwargs': {},  # format-specific parameters
     'datum_id': '272132cf-564f-428f-bf6b-149ee4287024/1',
-    'block_idx': 0,
     'event_count': 1
     }
 
@@ -538,7 +537,6 @@ Typical example:
    {'resource': '3b300e6f-b431-4750-a635-5630d15c81a8',
     'datum_kwargs': {'index': 3},
     'datum_id': '3b300e6f-b431-4750-a635-5630d15c81a8/3',
-    'block_idx': 0,
     'event_count': 5,
     'event_offset': 14}
 

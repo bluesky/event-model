@@ -26,11 +26,6 @@
       }
    },
    "properties": {
-      "block_idx": {
-         "title": "Block Idx",
-         "description": "The order in the stream of this block of data. This must be contiguous for a given stream.",
-         "type": "integer"
-      },
       "data_keys": {
          "title": "Data Keys",
          "description": "A list to show which data_keys of the Descriptor are being streamed",
@@ -74,7 +69,6 @@
       }
    },
    "required": [
-      "block_idx",
       "data_keys",
       "descriptor",
       "indices",
