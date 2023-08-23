@@ -6,6 +6,7 @@ from time import time
 import pytest
 
 from event_model import ComposeDescriptor
+from event_model.documents import RunStart
 from event_model.documents.event_descriptor import DataKey
 
 if sys.version_info[:2] >= (3, 9):
@@ -21,7 +22,6 @@ if sys.version_info[:2] >= (3, 9):
         EventDescriptor,
         EventPage,
         Resource,
-        RunStart,
         RunStop,
         StreamDatum,
         StreamResource,
