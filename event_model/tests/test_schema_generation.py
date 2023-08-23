@@ -1,8 +1,12 @@
 # type: ignore
 
 import sys
+from time import time
 
 import pytest
+
+from event_model import ComposeDescriptor
+from event_model.documents.event_descriptor import DataKey
 
 if sys.version_info[:2] >= (3, 9):
     # Test schema generation
@@ -68,3 +72,19 @@ else:
             from event_model.documents.generate import typeddict_to_schema
 
             typeddict_to_schema
+
+
+def test_descriptor_creation_with_metadata():
+    start = RunStart(time=time(), uid="abcdef")
+    cd = ComposeDescriptor(start, {}, {})
+    kwargs = {
+        "field1": "extra field",
+        "field2": 123,
+        "field3": DataKey(source="", shape=[], dtype="array"),
+    }
+    bundle = cd(
+        "primary", {"motor": DataKey(source="", shape=[], dtype="number")}, **kwargs
+    )
+
+    for key, value in kwargs.items():
+        assert bundle.descriptor_doc.get(key) == value
