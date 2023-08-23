@@ -2402,6 +2402,7 @@ class ComposeDescriptor:
         time=None,
         uid=None,
         validate=True,
+        **kwargs
     ) -> ComposeDescriptorBundle:
         if time is None:
             time = ttime.time()
@@ -2423,6 +2424,7 @@ class ComposeDescriptor:
             time=time,
             uid=uid,
             hints=hints,
+            **kwargs
         )
         if validate:
             if name in self.streams and self.streams[name] != set(data_keys):
