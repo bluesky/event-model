@@ -1996,6 +1996,11 @@ def compose_resource(
     )
 
 
+# A dict of Tuple[str, StreamRange] where the string is the StreamDatum uuid
+
+_stream_datum_seq_nums: Dict[str, StreamRange] = {}
+
+
 @dataclass
 class ComposeStreamDatum:
     stream_resource: StreamResource
@@ -2004,12 +2009,18 @@ class ComposeStreamDatum:
     def __call__(
         self,
         data_keys: List[str],
-        seq_nums: StreamRange,
         indices: StreamRange,
+        seq_nums: Optional[StreamRange] = None,
         descriptor: Optional[EventDescriptor] = None,
         validate: bool = True,
     ) -> StreamDatum:
         resource_uid = self.stream_resource["uid"]
+
+        # If the seq_nums aren't passed in then the bluesky
+        # bundler will keep track of them
+        if not seq_nums:
+            seq_nums = StreamRange(start=0, stop=0)
+
         doc = StreamDatum(
             stream_resource=resource_uid,
             uid=f"{resource_uid}/{next(self.counter)}",
