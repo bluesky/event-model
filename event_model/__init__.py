@@ -1996,11 +1996,6 @@ def compose_resource(
     )
 
 
-# A dict of Tuple[str, StreamRange] where the string is the StreamDatum uuid
-
-_stream_datum_seq_nums: Dict[str, StreamRange] = {}
-
-
 @dataclass
 class ComposeStreamDatum:
     stream_resource: StreamResource
@@ -2008,7 +2003,6 @@ class ComposeStreamDatum:
 
     def __call__(
         self,
-        data_keys: List[str],
         indices: StreamRange,
         seq_nums: Optional[StreamRange] = None,
         descriptor: Optional[EventDescriptor] = None,
@@ -2024,7 +2018,6 @@ class ComposeStreamDatum:
         doc = StreamDatum(
             stream_resource=resource_uid,
             uid=f"{resource_uid}/{next(self.counter)}",
-            data_keys=data_keys,
             seq_nums=seq_nums,
             indices=indices,
             descriptor=descriptor["uid"] if descriptor else "",
@@ -2040,7 +2033,6 @@ def compose_stream_datum(
     *,
     stream_resource: StreamResource,
     counter: Iterator,
-    data_keys: List[str],
     seq_nums: StreamRange,
     indices: StreamRange,
     validate: bool = True,
@@ -2053,7 +2045,6 @@ def compose_stream_datum(
         DeprecationWarning,
     )
     return ComposeStreamDatum(stream_resource, counter)(
-        data_keys,
         seq_nums,
         indices,
         validate=validate,
@@ -2084,6 +2075,7 @@ class ComposeStreamResource:
         spec: str,
         root: str,
         resource_path: str,
+        data_key: str,
         resource_kwargs: Dict[str, Any],
         path_semantics: Literal["posix", "windows"] = default_path_semantics,
         uid: Optional[str] = None,
@@ -2094,6 +2086,7 @@ class ComposeStreamResource:
 
         doc = StreamResource(
             uid=uid,
+            data_key=data_key,
             spec=spec,
             root=root,
             resource_path=resource_path,
@@ -2119,6 +2112,7 @@ def compose_stream_resource(
     spec: str,
     root: str,
     resource_path: str,
+    data_key: str,
     resource_kwargs: Dict[str, Any],
     counters: List = [],
     path_semantics: Literal["posix", "windows"] = default_path_semantics,
@@ -2133,6 +2127,7 @@ def compose_stream_resource(
         spec,
         root,
         resource_path,
+        data_key,
         resource_kwargs,
         path_semantics=path_semantics,
         uid=uid,

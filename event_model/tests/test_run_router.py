@@ -218,13 +218,14 @@ def test_run_router_streams(tmp_path):
     docs.append(("start", start_doc))
     stream_resource_doc, compose_stream_datum = compose_stream_resource(
         spec="TIFF_STREAM",
+        data_key="det1",
         root=str(tmp_path),
         resource_path="test_streams",
         resource_kwargs={},
     )
     docs.append(("stream_resource", stream_resource_doc))
     datum_doc = compose_stream_datum(
-        [], StreamRange(start=0, stop=0), StreamRange(start=0, stop=0)
+        StreamRange(start=0, stop=0), StreamRange(start=0, stop=0)
     )
     docs.append(("stream_datum", datum_doc))
     docs.append(("stop", stop_doc))

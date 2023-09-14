@@ -3,6 +3,11 @@
    "description": "Document to reference a collection (e.g. file or group of files) of externally-stored data streams",
    "type": "object",
    "properties": {
+      "data_key": {
+         "title": "Data Key",
+         "description": "A string to show which data_key of the Descriptor are being streamed",
+         "type": "string"
+      },
       "path_semantics": {
          "title": "Path Semantics",
          "description": "Rules for joining paths",
@@ -44,6 +49,7 @@
       }
    },
    "required": [
+      "data_key",
       "resource_kwargs",
       "resource_path",
       "root",

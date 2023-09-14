@@ -26,14 +26,6 @@
       }
    },
    "properties": {
-      "data_keys": {
-         "title": "Data Keys",
-         "description": "A list to show which data_keys of the Descriptor are being streamed",
-         "type": "array",
-         "items": {
-            "type": "string"
-         }
-      },
       "descriptor": {
          "title": "Descriptor",
          "description": "UID of the EventDescriptor to which this Datum belongs",
@@ -69,7 +61,6 @@
       }
    },
    "required": [
-      "data_keys",
       "descriptor",
       "indices",
       "seq_nums",

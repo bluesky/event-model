@@ -113,13 +113,14 @@ def test_compose_stream_resource(tmp_path):
     bundle = compose_stream_resource(
         spec="TIFF_STREAM",
         root=str(tmp_path),
+        data_key="det1",
         resource_path="test_streams",
         resource_kwargs={},
     )
     resource_doc, compose_stream_datum = bundle
     assert bundle.stream_resource_doc is resource_doc
     assert bundle.compose_stream_data is compose_stream_datum
-    compose_stream_datum([], StreamRange(start=0, stop=0), StreamRange(start=0, stop=0))
+    compose_stream_datum(StreamRange(start=0, stop=0), StreamRange(start=0, stop=0))
 
 
 def test_round_trip_pagination():
@@ -392,13 +393,14 @@ def test_document_router_streams_smoke_test(tmp_path):
     dr("start", start)
     stream_resource_doc, compose_stream_datum = compose_stream_resource(
         spec="TIFF_STREAM",
+        data_key="det1",
         root=str(tmp_path),
         resource_path="test_streams",
         resource_kwargs={},
     )
     dr("stream_resource", stream_resource_doc)
     datum_doc = compose_stream_datum(
-        [], StreamRange(start=0, stop=0), StreamRange(start=0, stop=0)
+        StreamRange(start=0, stop=0), StreamRange(start=0, stop=0)
     )
     dr("stream_datum", datum_doc)
     dr("stop", run_bundle.compose_stop())

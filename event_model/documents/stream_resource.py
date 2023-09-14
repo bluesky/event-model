@@ -20,6 +20,13 @@ class StreamResource(TypedDict):
             Field(description="Rules for joining paths"),
         ]
     ]
+    data_key: Annotated[
+        str,
+        Field(
+            description="A string to show which data_key of the "
+            "Descriptor are being streamed"
+        ),
+    ]
     resource_kwargs: Annotated[
         Dict[str, Any],
         Field(

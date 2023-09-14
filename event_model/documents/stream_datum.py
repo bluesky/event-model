@@ -1,5 +1,3 @@
-from typing import List
-
 from typing_extensions import Annotated, TypedDict
 
 from .generate.type_wrapper import Field, add_extra_schema
@@ -40,13 +38,6 @@ class StreamDatum(TypedDict):
         Field(
             description="A slice object passed to the StreamResource "
             "handler so it can hand back data and timestamps."
-        ),
-    ]
-    data_keys: Annotated[
-        List[str],
-        Field(
-            description="A list to show which data_keys of the "
-            "Descriptor are being streamed"
         ),
     ]
     seq_nums: Annotated[
