@@ -119,7 +119,7 @@ def test_compose_stream_resource(tmp_path):
     )
     resource_doc, compose_stream_data = bundle
     assert bundle.stream_resource_doc is resource_doc
-    assert bundle.compose_stream_data is compose_stream_data
+    assert bundle.compose_stream_datum is compose_stream_data
     assert compose_stream_data[0] is not compose_stream_data[1]
     datum_doc_0, datum_doc_1 = (
         compose_stream_datum(datum_kwargs={})
