@@ -2193,18 +2193,15 @@ def compose_stop(
     )(exit_status=exit_status, reason=reason, uid=uid, time=time, validate=validate)
 
 
-def dict_of_lists_has_equal_size_lists(dictionary: Dict[str, List]) -> bool:
-    """Return True if all lists are the same size in a Dict[str, List]."""
-
-    dictionary_values = iter(dictionary.values())
-    first_element_len = len(next(dictionary_values))
-    next_element = next(dictionary_values, None)
-
-    while next_element:
-        if len(next_element) != first_element_len:
-            return False
-        next_element = next(dictionary_values, None)
-    return True
+def length_of_value(dictionary: Dict[str, List], error_msg: str) -> Optional[int]:
+    length = None
+    for k, v in dictionary.items():
+        v_len = len(v)
+        if length is not None:
+            if v_len != length:
+                raise EventModelError(error_msg)
+        length = v_len
+    return length
 
 
 @dataclass
@@ -2222,15 +2219,17 @@ class ComposeEventPage:
         time: Optional[List] = None,
         validate: bool = True,
     ) -> EventPage:
-        assert dict_of_lists_has_equal_size_lists(timestamps), (
+        timestamps_length = length_of_value(
+            timestamps,
             "Cannot compose event_page: event_page contains `timestamps` "
             "list values of different lengths"
         )
-        assert dict_of_lists_has_equal_size_lists(data), (
+        data_length = length_of_value(
+            data,
             "Cannot compose event_page: event_page contains `data` "
             "lists of different lengths"
         )
-        assert len(next(iter(timestamps.values()))) == len(next(iter(data.values()))), (
+        assert timestamps_length == data_length, (
             "Cannot compose event_page: the lists in `timestamps` are of a different "
             "length to those in `data`"
         )
