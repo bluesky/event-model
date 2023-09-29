@@ -2222,12 +2222,12 @@ class ComposeEventPage:
         timestamps_length = length_of_value(
             timestamps,
             "Cannot compose event_page: event_page contains `timestamps` "
-            "list values of different lengths"
+            "list values of different lengths",
         )
         data_length = length_of_value(
             data,
             "Cannot compose event_page: event_page contains `data` "
-            "lists of different lengths"
+            "lists of different lengths",
         )
         assert timestamps_length == data_length, (
             "Cannot compose event_page: the lists in `timestamps` are of a different "
