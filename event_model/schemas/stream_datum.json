@@ -56,7 +56,7 @@
       },
       "uid": {
          "title": "Uid",
-         "description": "A slice object passed to the StreamResource handler so it can hand back data and timestamps.",
+         "description": "Globally unique identifier for this Datum. A suggested formatting being '<stream_resource>/<stream_name>/<block_id>",
          "type": "string"
       }
    },

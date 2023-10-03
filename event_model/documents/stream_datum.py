@@ -36,8 +36,8 @@ class StreamDatum(TypedDict):
     uid: Annotated[
         str,
         Field(
-            description="A slice object passed to the StreamResource "
-            "handler so it can hand back data and timestamps."
+            description="Globally unique identifier for this Datum. A suggested "
+            "formatting being '<stream_resource>/<stream_name>/<block_id>"
         ),
     ]
     seq_nums: Annotated[
