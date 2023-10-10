@@ -1,12 +1,11 @@
-from distutils.version import LooseVersion
-
 import jsonschema
+from packaging.version import parse
 import pytest
 from jsonschema.exceptions import ValidationError
 
 import event_model
 
-skip_json_validations = LooseVersion(jsonschema.__version__) < LooseVersion("3.0.0")
+skip_json_validations = parse(jsonschema.__version__) < parse("3.0.0")
 
 
 @pytest.fixture
