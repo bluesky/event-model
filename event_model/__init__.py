@@ -2054,14 +2054,14 @@ def compose_stream_datum(
 @dataclass
 class ComposeStreamResourceBundle:
     stream_resource_doc: StreamResource
-    compose_stream_data: ComposeStreamDatum
+    compose_stream_datum: ComposeStreamDatum
 
     # iter for backwards compatibility
     def __iter__(self) -> Iterator:
         return iter(
             (
                 self.stream_resource_doc,
-                self.compose_stream_data,
+                self.compose_stream_datum,
             )
         )
 
