@@ -35,7 +35,6 @@ from typing import (
 
 import jsonschema
 import numpy
-from packaging import version
 from typing_extensions import Literal
 
 from .documents.datum import Datum
@@ -1806,43 +1805,28 @@ for name, filename in SCHEMA_NAMES.items():
     with ref.open() as f:
         schemas[name] = json.load(f)
 
-# We pin jsonschema >=3.0.0 in requirements.txt but due to pip's dependency
-# resolution it is easy to end up with an environment where that pin is not
-# respected. Thus, we maintain best-effort support for 2.x.
 
-if version.parse(metadata("jsonschema")["version"]) >= version.parse("3.0.0"):
-
-    def _is_array(checker, instance):
-        return (
-            jsonschema.validators.Draft7Validator.TYPE_CHECKER.is_type(
-                instance, "array"
-            )
-            or isinstance(instance, tuple)
-            or hasattr(instance, "__array__")
+def _is_array(checker, instance):
+    return (
+        jsonschema.validators.Draft7Validator.TYPE_CHECKER.is_type(
+            instance, "array"
         )
-
-    _array_type_checker = jsonschema.validators.Draft7Validator.TYPE_CHECKER.redefine(
-        "array", _is_array
+        or isinstance(instance, tuple)
+        or hasattr(instance, "__array__")
     )
 
-    _Validator = jsonschema.validators.extend(
-        jsonschema.validators.Draft7Validator, type_checker=_array_type_checker
-    )
 
-    schema_validators = {
-        name: _Validator(schema=schema) for name, schema in schemas.items()
-    }
-else:
-    # Make objects that mock the one method on the jsonschema 3.x
-    # Draft7Validator API that we need.
-    schema_validators = {
-        name: types.SimpleNamespace(
-            validate=partial(
-                jsonschema.validate, schema=schema, types={"array": (list, tuple)}
-            )
-        )
-        for name, schema in schemas.items()
-    }
+_array_type_checker = jsonschema.validators.Draft7Validator.TYPE_CHECKER.redefine(
+    "array", _is_array
+)
+
+_Validator = jsonschema.validators.extend(
+    jsonschema.validators.Draft7Validator, type_checker=_array_type_checker
+)
+
+schema_validators = {
+    name: _Validator(schema=schema) for name, schema in schemas.items()
+}
 
 
 @dataclass

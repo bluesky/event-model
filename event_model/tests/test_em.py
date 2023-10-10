@@ -1,14 +1,11 @@
 import json
 import pickle
-from packaging.version import parse
 
 import jsonschema
 import numpy
 import pytest
 
 import event_model
-
-JSONSCHEMA_2 = parse(jsonschema.__version__) < parse("3.0.0")
 
 
 def test_documents():
@@ -1030,7 +1027,6 @@ def test_pickle_filler():
     assert filler == deserialized
 
 
-@pytest.mark.skipif(JSONSCHEMA_2, reason="requres jsonschema >= 3")
 def test_array_like():
     "Accept any __array__-like as an array."
     dask_array = pytest.importorskip("dask.array")
