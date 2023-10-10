@@ -9,7 +9,7 @@ if sys.version_info[:2] >= (3, 9):
     import json
     import os
 
-    from event_model import SCHEMA_PATH
+    import event_model
     from event_model.documents import (
         Datum,
         DatumPage,
@@ -39,7 +39,7 @@ if sys.version_info[:2] >= (3, 9):
         StreamResource,
     ]
 
-    SCHEMA_PATH = "event_model/" + SCHEMA_PATH
+    SCHEMA_PATH = event_model.__path__[0] + "/schemas/"
 
     @pytest.mark.parametrize("typed_dict_class", typed_dict_class_list)
     def test_generated_json_matches_typed_dict(typed_dict_class, tmpdir):
