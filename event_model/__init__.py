@@ -1957,8 +1957,10 @@ class ComposeResource:
             root=root,
             resource_kwargs=resource_kwargs,
             resource_path=resource_path,
-            run_start=self.start["uid"] if self.start else "",
         )
+
+        if self.start:
+            doc["run_start"] = self.start["uid"]
 
         if validate:
             schema_validators[DocumentNames.resource].validate(doc)
@@ -2092,8 +2094,10 @@ class ComposeStreamResource:
             resource_path=resource_path,
             resource_kwargs=resource_kwargs,
             path_semantics=path_semantics,
-            run_start=self.start["uid"] if self.start else "",
         )
+
+        if self.start:
+            doc["run_start"] = self.start["uid"]
 
         if validate:
             schema_validators[DocumentNames.stream_resource].validate(doc)
@@ -2114,7 +2118,6 @@ def compose_stream_resource(
     resource_path: str,
     data_key: str,
     resource_kwargs: Dict[str, Any],
-    counters: List = [],
     path_semantics: Literal["posix", "windows"] = default_path_semantics,
     start: Optional[RunStart] = None,
     uid: Optional[str] = None,

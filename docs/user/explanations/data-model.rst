@@ -477,31 +477,17 @@ See :doc:`external` for details on the role Stream Resource documents play in
 referencing external assets that are natively ragged, such as single-photon detectors,
 or assets where there are many relatively small data sets (e.g. scanned fluorescence data).
 
-Minimal nontrivial valid example:
-
-.. code-block:: python
-
-   # 'Stream Resource' document
-   {'path_semantics': 'posix',
-    'resource_kwargs': {},
-    'resource_path': '/local/path/subdirectory/data_file',
-    'root': '/local/path/',
-    'run_start': '10bf6945-4afd-43ca-af36-6ad8f3540bcd',
-    'spec': 'SOME_SPEC',
-    'stream_names': ['point_det'],
-    'uid': '272132cf-564f-428f-bf6b-149ee4287024'}
-
 Typical example:
 
 .. code-block:: python
 
-   # resource
-   {'spec': 'AD_HDF5',
+   # 'Stream Resource' document
+   {'data_key': 'detector_1',
+    'spec': 'AD_HDF5',
     'root': '/GPFS/DATA/Andor/',
     'resource_path': '2020/01/03/8ff08ff9-a2bf-48c3-8ff3-dcac0f309d7d.h5',
     'resource_kwargs': {'frame_per_point': 1},
     'path_semantics': 'posix',
-    'stream_names': ['point_det'],
     'uid': '3b300e6f-b431-4750-a635-5630d15c81a8',
     'run_start': '10bf6945-4afd-43ca-af36-6ad8f3540bcd'}
 
@@ -518,30 +504,17 @@ See :doc:`external` for details on the role Stream Datum documents play in refer
 external assets that are natively ragged, such as single-photon detectors,
 or assets where there are many relatively small data sets (e.g. scanned fluorescence data).
 
-Minimal nontrivial valid example:
-
-.. code-block:: python
-
-   # 'datum' document
-   {'resource': '272132cf-564f-428f-bf6b-149ee4287024',  # foreign key
-    'datum_kwargs': {},  # format-specific parameters
-    'datum_id': '272132cf-564f-428f-bf6b-149ee4287024/1',
-    'event_count': 1
-    }
-
 Typical example:
 
 .. code-block:: python
 
-   # datum
-   {'resource': '3b300e6f-b431-4750-a635-5630d15c81a8',
-    'datum_kwargs': {'index': 3},
-    'datum_id': '3b300e6f-b431-4750-a635-5630d15c81a8/3',
-    'event_count': 5,
-    'event_offset': 14}
-
-It is an implementation detail that ``datum_id`` is often formatted as
-``{resource}/{counter}`` but this should not be considered part of the schema.
+   # 'Stream Datum' document
+   {'uid': '86340942-9865-47f9-9a8d-bdaaab1bfce2',
+    'descriptor': '8c70b8c2-df32-40e3-9f50-29cda8142fa0',
+    'stream_resource': '272132cf-564f-428f-bf6b-149ee4287024',  # foreign key
+    'indices': {'start': 0, 'stop': 1},
+    'seq_nums': {'start': 1, 'stop': 2},
+    }
 
 Formal schema:
 
