@@ -1,4 +1,4 @@
-from typing import Any, Dict, List
+from typing import Any, Dict
 
 from typing_extensions import Annotated, Literal, NotRequired, TypedDict
 
@@ -19,6 +19,13 @@ class StreamResource(TypedDict):
             Literal["posix", "windows"],
             Field(description="Rules for joining paths"),
         ]
+    ]
+    data_key: Annotated[
+        str,
+        Field(
+            description="A string to show which data_key of the "
+            "Descriptor are being streamed"
+        ),
     ]
     resource_kwargs: Annotated[
         Dict[str, Any],
@@ -54,12 +61,4 @@ class StreamResource(TypedDict):
     ]
     uid: Annotated[
         str, Field(description="Globally unique identifier for this Stream Resource")
-    ]
-    stream_names: Annotated[
-        List[str],
-        Field(
-            description="List of the stream names this resource provides",
-            min_items=1,
-            unique_items=True,
-        ),
     ]

@@ -7,6 +7,7 @@ import numpy
 import pytest
 
 import event_model
+from event_model.documents.stream_datum import StreamRange
 
 JSONSCHEMA_2 = LooseVersion(jsonschema.__version__) < LooseVersion("3.0.0")
 
@@ -109,37 +110,17 @@ def test_compose_stream_resource(tmp_path):
     bundle = event_model.compose_run()
     compose_stream_resource = bundle.compose_stream_resource
     assert bundle.compose_stream_resource is compose_stream_resource
-    stream_names = ["stream_1", "stream_2"]
     bundle = compose_stream_resource(
         spec="TIFF_STREAM",
         root=str(tmp_path),
+        data_key="det1",
         resource_path="test_streams",
         resource_kwargs={},
-        stream_names=stream_names,
     )
-    resource_doc, compose_stream_data = bundle
+    resource_doc, compose_stream_datum = bundle
     assert bundle.stream_resource_doc is resource_doc
-    assert bundle.compose_stream_data is compose_stream_data
-    assert compose_stream_data[0] is not compose_stream_data[1]
-    datum_doc_0, datum_doc_1 = (
-        compose_stream_datum(datum_kwargs={})
-        for compose_stream_datum in compose_stream_data
-    )
-    # Ensure independent counters
-    assert datum_doc_0["block_idx"] == datum_doc_1["block_idx"]
-    datum_doc_1a = compose_stream_data[1](datum_kwargs={})
-    assert datum_doc_1a["block_idx"] != datum_doc_1["block_idx"]
-
-    # Ensure safety check
-    from itertools import count
-
-    with pytest.raises(KeyError):
-        event_model.compose_stream_datum(
-            stream_resource=resource_doc,
-            stream_name="stream_NA",
-            counter=count(),
-            datum_kwargs={},
-        )
+    assert bundle.compose_stream_datum is compose_stream_datum
+    compose_stream_datum(StreamRange(start=0, stop=0), StreamRange(start=0, stop=0))
 
 
 def test_round_trip_pagination():
@@ -410,21 +391,18 @@ def test_document_router_streams_smoke_test(tmp_path):
     compose_stream_resource = run_bundle.compose_stream_resource
     start = run_bundle.start_doc
     dr("start", start)
-    stream_names = ["stream_1", "stream_2"]
-    stream_resource_doc, compose_stream_data = compose_stream_resource(
+    stream_resource_doc, compose_stream_datum = compose_stream_resource(
         spec="TIFF_STREAM",
+        data_key="det1",
         root=str(tmp_path),
         resource_path="test_streams",
         resource_kwargs={},
-        stream_names=stream_names,
     )
     dr("stream_resource", stream_resource_doc)
-    datum_doc_0, datum_doc_1 = (
-        compose_stream_datum(datum_kwargs={})
-        for compose_stream_datum in compose_stream_data
+    datum_doc = compose_stream_datum(
+        StreamRange(start=0, stop=0), StreamRange(start=0, stop=0)
     )
-    dr("stream_datum", datum_doc_0)
-    dr("stream_datum", datum_doc_1)
+    dr("stream_datum", datum_doc)
     dr("stop", run_bundle.compose_stop())
 
 
@@ -1040,8 +1018,8 @@ def test_array_like():
     )
     desc_bundle.compose_event_page(
         data={"a": dask_array.ones((5, 3))},
-        timestamps={"a": [1, 2, 3]},
-        seq_num=[1, 2, 3],
+        timestamps={"a": [1, 2, 3, 4, 5]},
+        seq_num=[1, 2, 3, 4, 5],
     )
 
 

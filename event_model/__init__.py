@@ -51,7 +51,7 @@ from .documents.event_page import EventPage
 from .documents.resource import Resource
 from .documents.run_start import RunStart
 from .documents.run_stop import RunStop
-from .documents.stream_datum import StreamDatum
+from .documents.stream_datum import StreamDatum, StreamRange
 from .documents.stream_resource import StreamResource
 
 if sys.version_info < (3, 9):
@@ -1958,11 +1958,12 @@ class ComposeResource:
             resource_kwargs=resource_kwargs,
             resource_path=resource_path,
         )
-        if validate:
-            schema_validators[DocumentNames.resource].validate(doc)
 
         if self.start:
             doc["run_start"] = self.start["uid"]
+
+        if validate:
+            schema_validators[DocumentNames.resource].validate(doc)
 
         counter = itertools.count()
         return ComposeResourceBundle(
@@ -2000,32 +2001,30 @@ def compose_resource(
 @dataclass
 class ComposeStreamDatum:
     stream_resource: StreamResource
-    stream_name: str
     counter: Iterator
 
     def __call__(
         self,
-        datum_kwargs: Dict[str, Any],
-        event_count: int = 1,
-        event_offset: int = 0,
+        indices: StreamRange,
+        seq_nums: Optional[StreamRange] = None,
+        descriptor: Optional[EventDescriptor] = None,
         validate: bool = True,
     ) -> StreamDatum:
         resource_uid = self.stream_resource["uid"]
-        if self.stream_name not in self.stream_resource["stream_names"]:
-            raise EventModelKeyError(
-                "Attempt to create stream_datum with name not included"
-                "in stream_resource"
-            )
-        block_idx = next(self.counter)
+
+        # If the seq_nums aren't passed in then the bluesky
+        # bundler will keep track of them
+        if not seq_nums:
+            seq_nums = StreamRange(start=0, stop=0)
+
         doc = StreamDatum(
             stream_resource=resource_uid,
-            datum_kwargs=datum_kwargs,
-            uid=f"{resource_uid}/{self.stream_name}/{block_idx}",
-            stream_name=self.stream_name,
-            block_idx=block_idx,
-            event_count=event_count,
-            event_offset=event_offset,
+            uid=f"{resource_uid}/{next(self.counter)}",
+            seq_nums=seq_nums,
+            indices=indices,
+            descriptor=descriptor["uid"] if descriptor else "",
         )
+
         if validate:
             schema_validators[DocumentNames.stream_datum].validate(doc)
 
@@ -2035,20 +2034,21 @@ class ComposeStreamDatum:
 def compose_stream_datum(
     *,
     stream_resource: StreamResource,
-    stream_name: str,
     counter: Iterator,
-    datum_kwargs: Dict[str, Any],
-    event_count: int = 1,
-    event_offset: int = 0,
+    seq_nums: StreamRange,
+    indices: StreamRange,
     validate: bool = True,
 ) -> StreamDatum:
     """
     Here for backwards compatibility, the Compose class is prefered.
     """
-    return ComposeStreamDatum(stream_resource, stream_name, counter)(
-        datum_kwargs,
-        event_count=event_count,
-        event_offset=event_offset,
+    warnings.warn(
+        "compose_stream_datum() will be removed in the minor version.",
+        DeprecationWarning,
+    )
+    return ComposeStreamDatum(stream_resource, counter)(
+        seq_nums,
+        indices,
         validate=validate,
     )
 
@@ -2056,14 +2056,14 @@ def compose_stream_datum(
 @dataclass
 class ComposeStreamResourceBundle:
     stream_resource_doc: StreamResource
-    compose_stream_data: List[ComposeStreamDatum]
+    compose_stream_datum: ComposeStreamDatum
 
     # iter for backwards compatibility
     def __iter__(self) -> Iterator:
         return iter(
             (
                 self.stream_resource_doc,
-                self.compose_stream_data,
+                self.compose_stream_datum,
             )
         )
 
@@ -2077,36 +2077,25 @@ class ComposeStreamResource:
         spec: str,
         root: str,
         resource_path: str,
+        data_key: str,
         resource_kwargs: Dict[str, Any],
-        stream_names: Union[List, str],
-        counters: List = [],
         path_semantics: Literal["posix", "windows"] = default_path_semantics,
         uid: Optional[str] = None,
         validate: bool = True,
     ) -> ComposeStreamResourceBundle:
         if uid is None:
             uid = str(uuid.uuid4())
-        if isinstance(stream_names, str):
-            stream_names = [
-                stream_names,
-            ]
-        if len(counters) == 0:
-            counters = [itertools.count() for _ in stream_names]
-        elif len(counters) > len(stream_names):
-            raise ValueError(
-                "Insufficient number of counters "
-                f"{len(counters)} for stream names: {stream_names}"
-            )
 
         doc = StreamResource(
             uid=uid,
+            data_key=data_key,
             spec=spec,
             root=root,
             resource_path=resource_path,
             resource_kwargs=resource_kwargs,
-            stream_names=stream_names,
             path_semantics=path_semantics,
         )
+
         if self.start:
             doc["run_start"] = self.start["uid"]
 
@@ -2115,14 +2104,10 @@ class ComposeStreamResource:
 
         return ComposeStreamResourceBundle(
             doc,
-            [
-                ComposeStreamDatum(
-                    stream_resource=doc,
-                    stream_name=stream_name,
-                    counter=counter,
-                )
-                for stream_name, counter in zip(stream_names, counters)
-            ],
+            ComposeStreamDatum(
+                stream_resource=doc,
+                counter=itertools.count(),
+            ),
         )
 
 
@@ -2131,9 +2116,8 @@ def compose_stream_resource(
     spec: str,
     root: str,
     resource_path: str,
+    data_key: str,
     resource_kwargs: Dict[str, Any],
-    stream_names: Union[List, str],
-    counters: List = [],
     path_semantics: Literal["posix", "windows"] = default_path_semantics,
     start: Optional[RunStart] = None,
     uid: Optional[str] = None,
@@ -2146,9 +2130,8 @@ def compose_stream_resource(
         spec,
         root,
         resource_path,
+        data_key,
         resource_kwargs,
-        stream_names,
-        counters=counters,
         path_semantics=path_semantics,
         uid=uid,
         validate=validate,
@@ -2213,6 +2196,17 @@ def compose_stop(
     )(exit_status=exit_status, reason=reason, uid=uid, time=time, validate=validate)
 
 
+def length_of_value(dictionary: Dict[str, List], error_msg: str) -> Optional[int]:
+    length = None
+    for k, v in dictionary.items():
+        v_len = len(v)
+        if length is not None:
+            if v_len != length:
+                raise EventModelError(error_msg)
+        length = v_len
+    return length
+
+
 @dataclass
 class ComposeEventPage:
     descriptor: EventDescriptor
@@ -2222,12 +2216,32 @@ class ComposeEventPage:
         self,
         data: Dict[str, List],
         timestamps: Dict[str, Any],
-        seq_num: List[int],
+        seq_num: Optional[List[int]] = None,
         filled: Optional[Dict[str, List[Union[bool, str]]]] = None,
         uid: Optional[List] = None,
         time: Optional[List] = None,
         validate: bool = True,
     ) -> EventPage:
+        timestamps_length = length_of_value(
+            timestamps,
+            "Cannot compose event_page: event_page contains `timestamps` "
+            "list values of different lengths",
+        )
+        data_length = length_of_value(
+            data,
+            "Cannot compose event_page: event_page contains `data` "
+            "lists of different lengths",
+        )
+        assert timestamps_length == data_length, (
+            "Cannot compose event_page: the lists in `timestamps` are of a different "
+            "length to those in `data`"
+        )
+
+        if seq_num is None:
+            last_seq_num = self.event_counters[self.descriptor["name"]]
+            seq_num = list(
+                range(last_seq_num, len(next(iter(data.values()))) + last_seq_num)
+            )
         N = len(seq_num)
         if uid is None:
             uid = [str(uuid.uuid4()) for _ in range(N)]
@@ -2246,11 +2260,20 @@ class ComposeEventPage:
         )
         if validate:
             schema_validators[DocumentNames.event_page].validate(doc)
+
             if not (
-                self.descriptor["data_keys"].keys() == data.keys() == timestamps.keys()
+                set(
+                    keys_without_stream_keys(
+                        self.descriptor["data_keys"], self.descriptor["data_keys"]
+                    )
+                )
+                == set(keys_without_stream_keys(data, self.descriptor["data_keys"]))
+                == set(
+                    keys_without_stream_keys(timestamps, self.descriptor["data_keys"])
+                )
             ):
                 raise EventModelValidationError(
-                    "These sets of keys must match:\n"
+                    'These sets of keys must match (other than "STREAM:" keys):\n'
                     "event['data'].keys(): {}\n"
                     "event['timestamps'].keys(): {}\n"
                     "descriptor['data_keys'].keys(): {}\n".format(
@@ -2264,7 +2287,7 @@ class ComposeEventPage:
                     "Keys in event['filled'] {} must be a subset of those in "
                     "event['data'] {}".format(filled.keys(), data.keys())
                 )
-        self.event_counters[self.descriptor["name"]] += len(data)
+        self.event_counters[self.descriptor["name"]] += len(seq_num)
         return doc
 
 
@@ -2284,8 +2307,25 @@ def compose_event_page(
     Here for backwards compatibility, the Compose class is prefered.
     """
     return ComposeEventPage(descriptor, event_counters)(
-        data, timestamps, seq_num, filled, uid=uid, time=time, validate=validate
+        data,
+        timestamps,
+        seq_num=seq_num,
+        filled=filled,
+        uid=uid,
+        time=time,
+        validate=validate,
     )
+
+
+def keys_without_stream_keys(dictionary, descriptor_data_keys):
+    return [
+        key
+        for key in dictionary.keys()
+        if (
+            "external" not in descriptor_data_keys[key]
+            or descriptor_data_keys[key]["external"] != "STREAM:"
+        )
+    ]
 
 
 @dataclass
@@ -2322,11 +2362,20 @@ class ComposeEvent:
         )
         if validate:
             schema_validators[DocumentNames.event].validate(doc)
+
             if not (
-                self.descriptor["data_keys"].keys() == data.keys() == timestamps.keys()
+                set(
+                    keys_without_stream_keys(
+                        self.descriptor["data_keys"], self.descriptor["data_keys"]
+                    )
+                )
+                == set(keys_without_stream_keys(data, self.descriptor["data_keys"]))
+                == set(
+                    keys_without_stream_keys(timestamps, self.descriptor["data_keys"])
+                )
             ):
                 raise EventModelValidationError(
-                    "These sets of keys must match:\n"
+                    'These sets of keys must match (other than "STREAM:" keys):\n'
                     "event['data'].keys(): {}\n"
                     "event['timestamps'].keys(): {}\n"
                     "descriptor['data_keys'].keys(): {}\n".format(
@@ -2340,7 +2389,7 @@ class ComposeEvent:
                     "Keys in event['filled'] {} must be a subset of those in "
                     "event['data'] {}".format(filled.keys(), data.keys())
                 )
-        self.event_counters[self.descriptor["name"]] += 1
+        self.event_counters[self.descriptor["name"]] = seq_num + 1
         return doc
 
 

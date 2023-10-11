@@ -2,31 +2,52 @@
    "title": "stream_datum",
    "description": "Document to reference a quanta of an externally-stored stream of data.",
    "type": "object",
+   "definitions": {
+      "StreamRange": {
+         "title": "StreamRange",
+         "description": "The parameters required to describe a sequence of incrementing integers",
+         "type": "object",
+         "properties": {
+            "start": {
+               "title": "Start",
+               "description": "First number in the range",
+               "type": "integer"
+            },
+            "stop": {
+               "title": "Stop",
+               "description": "Last number in the range is less than this number",
+               "type": "integer"
+            }
+         },
+         "required": [
+            "start",
+            "stop"
+         ]
+      }
+   },
    "properties": {
-      "block_idx": {
-         "title": "Block Idx",
-         "description": "The order in the stream of this block of data. This must be contiguous for a given stream.",
-         "type": "integer"
-      },
-      "datum_kwargs": {
-         "title": "Datum Kwargs",
-         "description": "Arguments to pass to the Handler to retrieve one quanta of data",
-         "type": "object"
-      },
-      "event_count": {
-         "title": "Event Count",
-         "description": "The number of events in this datum.",
-         "type": "integer"
-      },
-      "event_offset": {
-         "title": "Event Offset",
-         "description": "The sequence number of the first event in this block. This increasing value allows the presence of gaps.",
-         "type": "integer"
-      },
-      "stream_name": {
-         "title": "Stream Name",
-         "description": "The name of the stream that this Datum is providing a block of.",
+      "descriptor": {
+         "title": "Descriptor",
+         "description": "UID of the EventDescriptor to which this Datum belongs",
          "type": "string"
+      },
+      "indices": {
+         "title": "Indices",
+         "description": "A slice object passed to the StreamResource handler so it can hand back data and timestamps",
+         "allOf": [
+            {
+               "$ref": "#/definitions/StreamRange"
+            }
+         ]
+      },
+      "seq_nums": {
+         "title": "Seq Nums",
+         "description": "A slice object showing the Event numbers the resource corresponds to",
+         "allOf": [
+            {
+               "$ref": "#/definitions/StreamRange"
+            }
+         ]
       },
       "stream_resource": {
          "title": "Stream Resource",
@@ -40,11 +61,9 @@
       }
    },
    "required": [
-      "block_idx",
-      "datum_kwargs",
-      "event_count",
-      "event_offset",
-      "stream_name",
+      "descriptor",
+      "indices",
+      "seq_nums",
       "stream_resource",
       "uid"
    ],
