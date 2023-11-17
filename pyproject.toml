@@ -11,13 +11,13 @@ classifiers = [
     "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
 ]
 description = "Data model used by the bluesky ecosystem"
 dependencies = [
     "importlib-resources",
-    "jsonschema",
+    "jsonschema>=3",
     "numpy",
-    "packaging",
     "typing_extensions"
 ]
 dynamic = ["version"]
@@ -117,8 +117,8 @@ skipsdist=True
 # Don't create a virtualenv for the command, requires tox-direct plugin
 direct = True
 passenv = *
-allowlist_externals = 
-    pytest 
+allowlist_externals =
+    pytest
     pre-commit
     mypy
     sphinx-build

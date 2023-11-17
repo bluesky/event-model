@@ -1,15 +1,11 @@
 import json
 import pickle
-from distutils.version import LooseVersion
 
-import jsonschema
 import numpy
 import pytest
 
 import event_model
 from event_model.documents.stream_datum import StreamRange
-
-JSONSCHEMA_2 = LooseVersion(jsonschema.__version__) < LooseVersion("3.0.0")
 
 
 def test_documents():
@@ -1008,7 +1004,6 @@ def test_pickle_filler():
     assert filler == deserialized
 
 
-@pytest.mark.skipif(JSONSCHEMA_2, reason="requres jsonschema >= 3")
 def test_array_like():
     "Accept any __array__-like as an array."
     dask_array = pytest.importorskip("dask.array")

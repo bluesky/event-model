@@ -5,7 +5,7 @@ on:
   pull_request:
 env:
   # The target python version, which must match the Dockerfile version
-  CONTAINER_PYTHON: "3.11"
+  CONTAINER_PYTHON: "3.12"
 
 jobs:
   lint:
@@ -32,8 +32,7 @@ jobs:
       fail-fast: false
       matrix:
         os: ["ubuntu-latest"] # can add windows-latest, macos-latest
-        python: ["3.9", "3.10", "3.11"]
-        jsonschema: [2, 3]
+        python: ["3.9", "3.10", "3.11", "3.12"]
 
         install: ["-e .[dev]"]
         # Make one version be non-editable to test both paths of version code
@@ -59,7 +58,6 @@ jobs:
         uses: ./.github/actions/install_requirements
         with:
           python_version: ${{ matrix.python }}
-          jsonschema_version: ${{ matrix.jsonschema }}
           requirements_file: requirements-test-${{ matrix.os }}-${{matrix.python }}-${{ matrix.jsonschema }}.txt
           install_options: ${{ matrix.install }}
 
