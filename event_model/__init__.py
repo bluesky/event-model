@@ -1808,9 +1808,7 @@ for name, filename in SCHEMA_NAMES.items():
 
 def _is_array(checker, instance):
     return (
-        jsonschema.validators.Draft7Validator.TYPE_CHECKER.is_type(
-            instance, "array"
-        )
+        jsonschema.validators.Draft7Validator.TYPE_CHECKER.is_type(instance, "array")
         or isinstance(instance, tuple)
         or hasattr(instance, "__array__")
     )
