@@ -1,7 +1,6 @@
 import json
 import pickle
 
-import jsonschema
 import numpy
 import pytest
 

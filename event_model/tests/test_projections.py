@@ -1,4 +1,3 @@
-import jsonschema
 import pytest
 from jsonschema.exceptions import ValidationError
 

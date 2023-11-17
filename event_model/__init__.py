@@ -7,15 +7,12 @@ import os
 import sys
 import threading
 import time as ttime
-import types
 import uuid
 import warnings
 import weakref
 from collections import defaultdict, deque
 from dataclasses import dataclass
 from enum import Enum
-from functools import partial
-from importlib.metadata import metadata
 from importlib.metadata import version as importlib_version
 from typing import (
     Any,
