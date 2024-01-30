@@ -2,18 +2,17 @@
    "title": "run_stop",
    "description": "Document for the end of a run indicating the success/fail state of the run and the end time",
    "type": "object",
-   "definitions": {
+   "$defs": {
       "DataType": {
          "title": "DataType"
       }
    },
    "properties": {
       "data_type": {
-         "title": "Data Type",
          "description": "data_type",
          "allOf": [
             {
-               "$ref": "#/definitions/DataType"
+               "$ref": "#/$defs/DataType"
             }
          ]
       },
@@ -62,10 +61,10 @@
       "time",
       "uid"
    ],
-   "additionalProperties": false,
    "patternProperties": {
       "^([^./]+)$": {
-         "$ref": "#/definitions/DataType"
+         "$ref": "#/$defs/DataType"
       }
-   }
+   },
+   "additionalProperties": false
 }

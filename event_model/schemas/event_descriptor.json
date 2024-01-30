@@ -2,7 +2,7 @@
    "title": "event_descriptor",
    "description": "Document to describe the data captured in the associated event documents",
    "type": "object",
-   "definitions": {
+   "$defs": {
       "Configuration": {
          "title": "Configuration",
          "type": "object",
@@ -17,7 +17,7 @@
                "description": "This describes the data stored alongside it in this configuration object.",
                "type": "object",
                "additionalProperties": {
-                  "$ref": "#/definitions/DataKey"
+                  "$ref": "#/$defs/DataKey"
                }
             },
             "timestamps": {
@@ -66,9 +66,13 @@
             "precision": {
                "title": "Precision",
                "description": "Number of digits after decimal place if a floating point number",
-               "type": [
-                  "integer",
-                  "null"
+               "anyOf": [
+                  {
+                     "type": "integer"
+                  },
+                  {
+                     "type": "null"
+                  }
                ]
             },
             "shape": {
@@ -87,9 +91,13 @@
             "units": {
                "title": "Units",
                "description": "Engineering units of the value",
-               "type": [
-                  "string",
-                  "null"
+               "anyOf": [
+                  {
+                     "type": "string"
+                  },
+                  {
+                     "type": "null"
+                  }
                ]
             }
          },
@@ -98,15 +106,6 @@
             "shape",
             "source"
          ]
-      },
-      "DataType": {
-         "title": "DataType",
-         "additionalProperties": false,
-         "patternProperties": {
-            "^([^./]+)$": {
-               "$ref": "#/definitions/DataType"
-            }
-         }
       },
       "PerObjectHint": {
          "title": "PerObjectHint",
@@ -122,6 +121,15 @@
                }
             }
          }
+      },
+      "DataType": {
+         "title": "DataType",
+         "patternProperties": {
+            "^([^./]+)$": {
+               "$ref": "#/$defs/DataType"
+            }
+         },
+         "additionalProperties": false
       }
    },
    "properties": {
@@ -130,7 +138,7 @@
          "description": "Readings of configurational fields necessary for interpreting data in the Events.",
          "type": "object",
          "additionalProperties": {
-            "$ref": "#/definitions/Configuration"
+            "$ref": "#/$defs/Configuration"
          }
       },
       "data_keys": {
@@ -138,11 +146,11 @@
          "description": "This describes the data in the Event Documents.",
          "type": "object",
          "additionalProperties": {
-            "$ref": "#/definitions/DataKey"
+            "$ref": "#/$defs/DataKey"
          }
       },
       "hints": {
-         "$ref": "#/definitions/PerObjectHint"
+         "$ref": "#/$defs/PerObjectHint"
       },
       "name": {
          "title": "Name",
@@ -176,10 +184,10 @@
       "time",
       "uid"
    ],
-   "additionalProperties": false,
    "patternProperties": {
       "^([^./]+)$": {
-         "$ref": "#/definitions/DataType"
+         "$ref": "#/$defs/DataType"
       }
-   }
+   },
+   "additionalProperties": false
 }

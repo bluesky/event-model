@@ -1,22 +1,25 @@
-from typing import Any, Dict, List, Union
+from typing import List
 
 from typing_extensions import Annotated, NotRequired, TypedDict
 
-from .generate.type_wrapper import AsRef, Field, add_extra_schema
+from .generate.type_wrapper import (
+    DataFrameForEventPage,
+    DataFrameForFilled,
+    Field,
+    add_extra_schema,
+)
 
 EVENT_PAGE_EXTRA_SCHEMA = {"additionalProperties": False}
 
 
 class PartialEventPage(TypedDict):
     data: Annotated[
-        Dict[str, List[Any]],
-        AsRef("Dataframe"),
+        DataFrameForEventPage,
         Field(description="The actual measurement data"),
     ]
     filled: NotRequired[
         Annotated[
-            Dict[str, List[Union[bool, str]]],
-            AsRef("DataframeForFilled"),
+            DataFrameForFilled,
             Field(
                 description="Mapping each of the keys of externally-stored data to an "
                 "array containing the boolean False, indicating that the data has not "
@@ -26,8 +29,7 @@ class PartialEventPage(TypedDict):
         ]
     ]
     timestamps: Annotated[
-        Dict[str, List[Any]],
-        AsRef("Dataframe"),
+        DataFrameForEventPage,
         Field(description="The timestamps of the individual measurement data"),
     ]
     time: Annotated[

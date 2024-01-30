@@ -1217,8 +1217,7 @@ class Filler(DocumentRouter):
         return super().__call__(name, doc, validate)
 
 
-class EventModelError(Exception):
-    ...
+class EventModelError(Exception): ...
 
 
 def _attempt_with_retries(
@@ -1712,24 +1711,19 @@ class RunRouter(DocumentRouter):
 # useful for higher-level libraries and for debugging.
 
 
-class EventModelKeyError(EventModelError, KeyError):
-    ...
+class EventModelKeyError(EventModelError, KeyError): ...
 
 
-class EventModelValueError(EventModelError, ValueError):
-    ...
+class EventModelValueError(EventModelError, ValueError): ...
 
 
-class EventModelRuntimeError(EventModelError, RuntimeError):
-    ...
+class EventModelRuntimeError(EventModelError, RuntimeError): ...
 
 
-class EventModelTypeError(EventModelError, TypeError):
-    ...
+class EventModelTypeError(EventModelError, TypeError): ...
 
 
-class EventModelValidationError(EventModelError):
-    ...
+class EventModelValidationError(EventModelError): ...
 
 
 class UnfilledData(EventModelError):

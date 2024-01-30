@@ -110,8 +110,7 @@ def test_run_router(tmp_path):
 
     collected_header_docs = {}
 
-    class LocalException3(Exception):
-        ...
+    class LocalException3(Exception): ...
 
     def header_collector(name, doc):
         if name in ("start", "stop", "descriptor"):

@@ -2,9 +2,9 @@
    "title": "datum_page",
    "description": "Page of documents to reference a quanta of externally-stored data",
    "type": "object",
-   "definitions": {
-      "Dataframe": {
-         "title": "Dataframe",
+   "$defs": {
+      "DataFrameForDatumPage": {
+         "title": "DataFrameForDatumPage",
          "type": "array",
          "items": {
             "type": "string"
@@ -13,11 +13,10 @@
    },
    "properties": {
       "datum_id": {
-         "title": "Datum Id",
          "description": "Array unique identifiers for each Datum (akin to 'uid' for other Document types), typically formatted as '<resource>/<integer>'",
          "allOf": [
             {
-               "$ref": "#/definitions/Dataframe"
+               "$ref": "#/$defs/DataFrameForDatumPage"
             }
          ]
       },
@@ -26,8 +25,8 @@
          "description": "Array of arguments to pass to the Handler to retrieve one quanta of data",
          "type": "object",
          "additionalProperties": {
-            "type": "array",
-            "items": {}
+            "items": {},
+            "type": "array"
          }
       },
       "resource": {

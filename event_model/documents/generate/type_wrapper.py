@@ -2,57 +2,95 @@
 A wrapper used to patch out schema generation utilities.
 """
 
-
-from dataclasses import dataclass
+from typing import TYPE_CHECKING, Any, Dict, List, Union
 
 pydantic_version = None
-try:
-    try:
-        from pydantic import v1 as pydantic  # type: ignore
-    except ImportError:
-        import pydantic
 
-    pydantic_version = pydantic.__version__
 
-    Field = pydantic.Field
-    FieldInfo = pydantic.fields.FieldInfo
-    BaseConfig = pydantic.BaseConfig
-    BaseModel = pydantic.BaseModel
-    create_model = pydantic.create_model
-except ModuleNotFoundError:
+def Field(*args, **kwargs): ...
 
-    def Field(*args, **kwargs):  # type: ignore
+
+class BaseModel: ...
+
+
+class TypeAdapter:
+    def __init__(self, *args, **kwargs):
+        self.by_alias = True
         ...
 
-    class FieldInfo:  # type: ignore
-        ...
-
-    class BaseConfig:  # type: ignore
-        ...
-
-    class BaseModel:  # type: ignore
-        ...
-
-    def create_model(*args, **kwargs):  # type: ignore
-        ...
+    def json_schema(self, *args, **kwargs): ...
 
 
-extra_schema = {}
+class GenerateJsonSchema: ...
 
 
-def add_extra_schema(schema: dict):
+def to_snake(*args, **kwargs): ...
+
+
+DataFrameForDatumPage = List[str]
+
+DataFrameForEventPage = Dict[str, List]
+
+DataFrameForFilled = Dict[str, List[Union[bool, str]]]
+
+
+class DataType: ...
+
+
+def add_extra_schema(*args, **kwargs):
     def inner(cls):
-        extra_schema[cls] = schema
         return cls
 
     return inner
 
 
-@dataclass
-class AsRef:
-    ref_name: str
+# Dictionary for patching in schema post generation
+extra_schema = {}  # type: ignore
 
+if not TYPE_CHECKING:
+    try:
+        import pydantic
 
-# We need to check that only one element in an annotation is the type of
-# the field, the others have to be instances of classes in this tuple
-ALLOWED_ANNOTATION_ELEMENTS = (AsRef, FieldInfo)
+        if pydantic.__version__ < "2":
+            raise ImportError
+
+        pydantic_version = pydantic.__version__
+
+        # Root models for root definitions:
+        # we want some types to reference definitions in the
+        # schema
+        BaseModel = pydantic.BaseModel
+        ConfigDict = pydantic.ConfigDict
+        Field = pydantic.Field
+        RootModel = pydantic.RootModel
+        TypeAdapter = pydantic.TypeAdapter
+        GenerateJsonSchema = pydantic.json_schema.GenerateJsonSchema
+        from pydantic.alias_generators import to_snake  # noqa
+
+        class Config(ConfigDict): ...
+
+        class DataFrameForDatumPage(RootModel):
+            root: List[str] = Field(alias="Dataframe")
+
+        class DataFrameForEventPage(RootModel):
+            root: Dict[str, List] = Field(alias="Dataframe")
+
+        class DataFrameForFilled(RootModel):
+            root: Dict[str, List[Union[bool, str]]] = Field(alias="DataframeForFilled")
+
+        class DataType(RootModel):
+            root: Any = Field(alias="DataType")
+
+        def add_extra_schema(schema: Dict) -> Dict:
+            def inner(cls):
+                extra_schema[cls] = schema
+                return cls
+
+            return inner
+
+    # If pydantic is not installed (e.g the install isn't [dev]),
+    # or pydantic v1 is being used, then we expect to be able to
+    # run event-model, just not the schema generation code.
+    except (ModuleNotFoundError, ImportError):
+        # None of the dummy functions/classes should have been overwritten.
+        assert pydantic_version is None

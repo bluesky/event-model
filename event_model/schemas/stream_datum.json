@@ -2,7 +2,7 @@
    "title": "stream_datum",
    "description": "Document to reference a quanta of an externally-stored stream of data.",
    "type": "object",
-   "definitions": {
+   "$defs": {
       "StreamRange": {
          "title": "StreamRange",
          "description": "The parameters required to describe a sequence of incrementing integers",
@@ -32,20 +32,18 @@
          "type": "string"
       },
       "indices": {
-         "title": "Indices",
          "description": "A slice object passed to the StreamResource handler so it can hand back data and timestamps",
          "allOf": [
             {
-               "$ref": "#/definitions/StreamRange"
+               "$ref": "#/$defs/StreamRange"
             }
          ]
       },
       "seq_nums": {
-         "title": "Seq Nums",
          "description": "A slice object showing the Event numbers the resource corresponds to",
          "allOf": [
             {
-               "$ref": "#/definitions/StreamRange"
+               "$ref": "#/$defs/StreamRange"
             }
          ]
       },

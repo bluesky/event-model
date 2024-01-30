@@ -2,7 +2,7 @@
    "title": "run_start",
    "description": "Document created at the start of run. Provides a seach target and later documents link to it",
    "type": "object",
-   "definitions": {
+   "$defs": {
       "Calculation": {
          "title": "Calculation",
          "type": "object",
@@ -29,12 +29,12 @@
       },
       "DataType": {
          "title": "DataType",
-         "additionalProperties": false,
          "patternProperties": {
             "^([^./]+)$": {
-               "$ref": "#/definitions/DataType"
+               "$ref": "#/$defs/DataType"
             }
-         }
+         },
+         "additionalProperties": false
       },
       "Hints": {
          "title": "Hints",
@@ -46,20 +46,20 @@
                "description": "The independent axes of the experiment. Ordered slow to fast",
                "type": "array",
                "items": {
-                  "type": "array",
                   "items": {
                      "anyOf": [
                         {
-                           "type": "array",
                            "items": {
                               "type": "string"
-                           }
+                           },
+                           "type": "array"
                         },
                         {
                            "type": "string"
                         }
                      ]
-                  }
+                  },
+                  "type": "array"
                }
             }
          }
@@ -74,7 +74,7 @@
                "description": "required fields if type is calculated",
                "allOf": [
                   {
-                     "$ref": "#/definitions/Calculation"
+                     "$ref": "#/$defs/Calculation"
                   }
                ]
             },
@@ -254,9 +254,10 @@
             },
             "projection": {
                "title": "Projection",
+               "description": "",
                "type": "object",
                "additionalProperties": {
-                  "$ref": "#/definitions/Projection"
+                  "$ref": "#/$defs/Projection"
                }
             },
             "version": {
@@ -287,7 +288,12 @@
          "type": "string"
       },
       "data_type": {
-         "$ref": "#/definitions/DataType"
+         "description": "",
+         "allOf": [
+            {
+               "$ref": "#/$defs/DataType"
+            }
+         ]
       },
       "group": {
          "title": "Group",
@@ -295,19 +301,13 @@
          "type": "string"
       },
       "hints": {
-         "title": "Hints",
-         "description": "Start-level hints",
+         "$ref": "#/$defs/Hints",
          "additionalProperties": false,
          "patternProperties": {
             "^([^.]+)$": {
-               "$ref": "#/definitions/DataType"
+               "$ref": "#/$defs/DataType"
             }
-         },
-         "allOf": [
-            {
-               "$ref": "#/definitions/Hints"
-            }
-         ]
+         }
       },
       "owner": {
          "title": "Owner",
@@ -321,9 +321,10 @@
       },
       "projections": {
          "title": "Projections",
+         "description": "",
          "type": "array",
          "items": {
-            "$ref": "#/definitions/Projections"
+            "$ref": "#/$defs/Projections"
          }
       },
       "sample": {
@@ -358,10 +359,10 @@
       "time",
       "uid"
    ],
-   "additionalProperties": false,
    "patternProperties": {
       "^([^./]+)$": {
-         "$ref": "#/definitions/DataType"
+         "$ref": "#/$defs/DataType"
       }
-   }
+   },
+   "additionalProperties": false
 }
