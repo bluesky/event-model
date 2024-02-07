@@ -1,193 +1,193 @@
 {
-   "title": "event_descriptor",
-   "description": "Document to describe the data captured in the associated event documents",
-   "type": "object",
-   "$defs": {
-      "Configuration": {
-         "title": "Configuration",
-         "type": "object",
-         "properties": {
-            "data": {
-               "title": "Data",
-               "description": "The actual measurement data",
-               "type": "object"
-            },
-            "data_keys": {
-               "title": "Data Keys",
-               "description": "This describes the data stored alongside it in this configuration object.",
-               "type": "object",
-               "additionalProperties": {
-                  "$ref": "#/$defs/DataKey"
-               }
-            },
-            "timestamps": {
-               "title": "Timestamps",
-               "description": "The timestamps of the individual measurement data",
-               "type": "object"
+    "title": "event_descriptor",
+    "description": "Document to describe the data captured in the associated event documents",
+    "type": "object",
+    "$defs": {
+        "Configuration": {
+            "title": "Configuration",
+            "type": "object",
+            "properties": {
+                "data": {
+                    "title": "Data",
+                    "description": "The actual measurement data",
+                    "type": "object"
+                },
+                "data_keys": {
+                    "title": "Data Keys",
+                    "description": "This describes the data stored alongside it in this configuration object.",
+                    "type": "object",
+                    "additionalProperties": {
+                        "$ref": "#/$defs/DataKey"
+                    }
+                },
+                "timestamps": {
+                    "title": "Timestamps",
+                    "description": "The timestamps of the individual measurement data",
+                    "type": "object"
+                }
             }
-         }
-      },
-      "DataKey": {
-         "title": "DataKey",
-         "description": "Describes the objects in the data property of Event documents",
-         "type": "object",
-         "properties": {
-            "dims": {
-               "title": "Dims",
-               "description": "The names for dimensions of the data. Null or empty list if scalar data",
-               "type": "array",
-               "items": {
-                  "type": "string"
-               }
+        },
+        "DataKey": {
+            "title": "DataKey",
+            "description": "Describes the objects in the data property of Event documents",
+            "type": "object",
+            "properties": {
+                "dims": {
+                    "title": "Dims",
+                    "description": "The names for dimensions of the data. Null or empty list if scalar data",
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "dtype": {
+                    "title": "Dtype",
+                    "description": "The type of the data in the event.",
+                    "type": "string",
+                    "enum": [
+                        "string",
+                        "number",
+                        "array",
+                        "boolean",
+                        "integer"
+                    ]
+                },
+                "external": {
+                    "title": "External",
+                    "description": "Where the data is stored if it is stored external to the events",
+                    "type": "string",
+                    "pattern": "^[A-Z]+:?"
+                },
+                "object_name": {
+                    "title": "Object Name",
+                    "description": "The name of the object this key was pulled from.",
+                    "type": "string"
+                },
+                "precision": {
+                    "title": "Precision",
+                    "description": "Number of digits after decimal place if a floating point number",
+                    "anyOf": [
+                        {
+                            "type": "integer"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ]
+                },
+                "shape": {
+                    "title": "Shape",
+                    "description": "The shape of the data.  Empty list indicates scalar data.",
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                },
+                "source": {
+                    "title": "Source",
+                    "description": "The source (ex piece of hardware) of the data.",
+                    "type": "string"
+                },
+                "units": {
+                    "title": "Units",
+                    "description": "Engineering units of the value",
+                    "anyOf": [
+                        {
+                            "type": "string"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ]
+                }
             },
-            "dtype": {
-               "title": "Dtype",
-               "description": "The type of the data in the event.",
-               "type": "string",
-               "enum": [
-                  "string",
-                  "number",
-                  "array",
-                  "boolean",
-                  "integer"
-               ]
-            },
-            "external": {
-               "title": "External",
-               "description": "Where the data is stored if it is stored external to the events",
-               "type": "string",
-               "pattern": "^[A-Z]+:?"
-            },
-            "object_name": {
-               "title": "Object Name",
-               "description": "The name of the object this key was pulled from.",
-               "type": "string"
-            },
-            "precision": {
-               "title": "Precision",
-               "description": "Number of digits after decimal place if a floating point number",
-               "anyOf": [
-                  {
-                     "type": "integer"
-                  },
-                  {
-                     "type": "null"
-                  }
-               ]
-            },
-            "shape": {
-               "title": "Shape",
-               "description": "The shape of the data.  Empty list indicates scalar data.",
-               "type": "array",
-               "items": {
-                  "type": "integer"
-               }
-            },
-            "source": {
-               "title": "Source",
-               "description": "The source (ex piece of hardware) of the data.",
-               "type": "string"
-            },
-            "units": {
-               "title": "Units",
-               "description": "Engineering units of the value",
-               "anyOf": [
-                  {
-                     "type": "string"
-                  },
-                  {
-                     "type": "null"
-                  }
-               ]
+            "required": [
+                "dtype",
+                "shape",
+                "source"
+            ]
+        },
+        "PerObjectHint": {
+            "title": "PerObjectHint",
+            "description": "The 'interesting' data keys for this device.",
+            "type": "object",
+            "properties": {
+                "fields": {
+                    "title": "Fields",
+                    "description": "The 'interesting' data keys for this device.",
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                }
             }
-         },
-         "required": [
-            "dtype",
-            "shape",
-            "source"
-         ]
-      },
-      "PerObjectHint": {
-         "title": "PerObjectHint",
-         "description": "The 'interesting' data keys for this device.",
-         "type": "object",
-         "properties": {
-            "fields": {
-               "title": "Fields",
-               "description": "The 'interesting' data keys for this device.",
-               "type": "array",
-               "items": {
-                  "type": "string"
-               }
+        },
+        "DataType": {
+            "title": "DataType",
+            "patternProperties": {
+                "^([^./]+)$": {
+                    "$ref": "#/$defs/DataType"
+                }
+            },
+            "additionalProperties": false
+        }
+    },
+    "properties": {
+        "configuration": {
+            "title": "Configuration",
+            "description": "Readings of configurational fields necessary for interpreting data in the Events.",
+            "type": "object",
+            "additionalProperties": {
+                "$ref": "#/$defs/Configuration"
             }
-         }
-      },
-      "DataType": {
-         "title": "DataType",
-         "patternProperties": {
-            "^([^./]+)$": {
-               "$ref": "#/$defs/DataType"
+        },
+        "data_keys": {
+            "title": "data_keys",
+            "description": "This describes the data in the Event Documents.",
+            "type": "object",
+            "additionalProperties": {
+                "$ref": "#/$defs/DataKey"
             }
-         },
-         "additionalProperties": false
-      }
-   },
-   "properties": {
-      "configuration": {
-         "title": "Configuration",
-         "description": "Readings of configurational fields necessary for interpreting data in the Events.",
-         "type": "object",
-         "additionalProperties": {
-            "$ref": "#/$defs/Configuration"
-         }
-      },
-      "data_keys": {
-         "title": "data_keys",
-         "description": "This describes the data in the Event Documents.",
-         "type": "object",
-         "additionalProperties": {
-            "$ref": "#/$defs/DataKey"
-         }
-      },
-      "hints": {
-         "$ref": "#/$defs/PerObjectHint"
-      },
-      "name": {
-         "title": "Name",
-         "description": "A human-friendly name for this data stream, such as 'primary' or 'baseline'.",
-         "type": "string"
-      },
-      "object_keys": {
-         "title": "Object Keys",
-         "description": "Maps a Device/Signal name to the names of the entries it produces in data_keys.",
-         "type": "object"
-      },
-      "run_start": {
-         "title": "Run Start",
-         "description": "Globally unique ID of this run's 'start' document.",
-         "type": "string"
-      },
-      "time": {
-         "title": "Time",
-         "description": "Creation time of the document as unix epoch time.",
-         "type": "number"
-      },
-      "uid": {
-         "title": "uid",
-         "description": "Globally unique ID for this event descriptor.",
-         "type": "string"
-      }
-   },
-   "required": [
-      "data_keys",
-      "run_start",
-      "time",
-      "uid"
-   ],
-   "patternProperties": {
-      "^([^./]+)$": {
-         "$ref": "#/$defs/DataType"
-      }
-   },
-   "additionalProperties": false
+        },
+        "hints": {
+            "$ref": "#/$defs/PerObjectHint"
+        },
+        "name": {
+            "title": "Name",
+            "description": "A human-friendly name for this data stream, such as 'primary' or 'baseline'.",
+            "type": "string"
+        },
+        "object_keys": {
+            "title": "Object Keys",
+            "description": "Maps a Device/Signal name to the names of the entries it produces in data_keys.",
+            "type": "object"
+        },
+        "run_start": {
+            "title": "Run Start",
+            "description": "Globally unique ID of this run's 'start' document.",
+            "type": "string"
+        },
+        "time": {
+            "title": "Time",
+            "description": "Creation time of the document as unix epoch time.",
+            "type": "number"
+        },
+        "uid": {
+            "title": "uid",
+            "description": "Globally unique ID for this event descriptor.",
+            "type": "string"
+        }
+    },
+    "required": [
+        "data_keys",
+        "run_start",
+        "time",
+        "uid"
+    ],
+    "patternProperties": {
+        "^([^./]+)$": {
+            "$ref": "#/$defs/DataType"
+        }
+    },
+    "additionalProperties": false
 }

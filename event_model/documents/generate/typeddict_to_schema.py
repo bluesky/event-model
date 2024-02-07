@@ -35,7 +35,10 @@ SortOrder = {
 def sort_schema(document_schema: Dict) -> Dict:
     assert isinstance(document_schema, dict)
     document_schema = OrderedDict(
-        sorted(list(document_schema.items()), key=lambda x: SortOrder.get(x[0], len(SortOrder)))
+        sorted(
+            list(document_schema.items()),
+            key=lambda x: SortOrder.get(x[0], len(SortOrder)),
+        )
     )
 
     for key in document_schema:
@@ -44,7 +47,9 @@ def sort_schema(document_schema: Dict) -> Dict:
                 document_schema[key] = sort_alphabetically(document_schema[key])
                 for key2 in document_schema[key]:
                     if isinstance(document_schema[key][key2], dict):
-                        document_schema[key][key2] = sort_schema(document_schema[key][key2])
+                        document_schema[key][key2] = sort_schema(
+                            document_schema[key][key2]
+                        )
             elif isinstance(document_schema[key], list):
                 document_schema[key].sort()
 
@@ -89,7 +94,7 @@ def add_extra_schema(document_schema: Dict, extra_schema: Dict):
 
 def dump_json(dictionary: Dict, file_path: Path, mode="w"):
     with open(file_path, mode) as f:
-        json.dump(dictionary, f, indent=3)
+        json.dump(dictionary, f, indent=4)
 
 
 class _GenerateJsonSchema(GenerateJsonSchema):

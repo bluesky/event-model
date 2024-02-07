@@ -1,60 +1,60 @@
 {
-   "title": "stream_resource",
-   "description": "Document to reference a collection (e.g. file or group of files) of externally-stored data streams",
-   "type": "object",
-   "properties": {
-      "data_key": {
-         "title": "Data Key",
-         "description": "A string to show which data_key of the Descriptor are being streamed",
-         "type": "string"
-      },
-      "path_semantics": {
-         "title": "Path Semantics",
-         "description": "Rules for joining paths",
-         "type": "string",
-         "enum": [
-            "posix",
-            "windows"
-         ]
-      },
-      "resource_kwargs": {
-         "title": "Resource Kwargs",
-         "description": "Additional argument to pass to the Handler to read a Stream Resource",
-         "type": "object"
-      },
-      "resource_path": {
-         "title": "Resource Path",
-         "description": "Filepath or URI for locating this resource",
-         "type": "string"
-      },
-      "root": {
-         "title": "Root",
-         "description": "Subset of resource_path that is a local detail, not semantic.",
-         "type": "string"
-      },
-      "run_start": {
-         "title": "Run Start",
-         "description": "Globally unique ID to the run_start document this Stream Resource is associated with.",
-         "type": "string"
-      },
-      "spec": {
-         "title": "Spec",
-         "description": "String identifying the format/type of this Stream Resource, used to identify a compatible Handler",
-         "type": "string"
-      },
-      "uid": {
-         "title": "Uid",
-         "description": "Globally unique identifier for this Stream Resource",
-         "type": "string"
-      }
-   },
-   "required": [
-      "data_key",
-      "resource_kwargs",
-      "resource_path",
-      "root",
-      "spec",
-      "uid"
-   ],
-   "additionalProperties": false
+    "title": "stream_resource",
+    "description": "Document to reference a collection (e.g. file or group of files) of externally-stored data streams",
+    "type": "object",
+    "properties": {
+        "data_key": {
+            "title": "Data Key",
+            "description": "A string to show which data_key of the Descriptor are being streamed",
+            "type": "string"
+        },
+        "path_semantics": {
+            "title": "Path Semantics",
+            "description": "Rules for joining paths",
+            "type": "string",
+            "enum": [
+                "posix",
+                "windows"
+            ]
+        },
+        "resource_kwargs": {
+            "title": "Resource Kwargs",
+            "description": "Additional argument to pass to the Handler to read a Stream Resource",
+            "type": "object"
+        },
+        "resource_path": {
+            "title": "Resource Path",
+            "description": "Filepath or URI for locating this resource",
+            "type": "string"
+        },
+        "root": {
+            "title": "Root",
+            "description": "Subset of resource_path that is a local detail, not semantic.",
+            "type": "string"
+        },
+        "run_start": {
+            "title": "Run Start",
+            "description": "Globally unique ID to the run_start document this Stream Resource is associated with.",
+            "type": "string"
+        },
+        "spec": {
+            "title": "Spec",
+            "description": "String identifying the format/type of this Stream Resource, used to identify a compatible Handler",
+            "type": "string"
+        },
+        "uid": {
+            "title": "Uid",
+            "description": "Globally unique identifier for this Stream Resource",
+            "type": "string"
+        }
+    },
+    "required": [
+        "data_key",
+        "resource_kwargs",
+        "resource_path",
+        "root",
+        "spec",
+        "uid"
+    ],
+    "additionalProperties": false
 }
