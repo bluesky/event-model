@@ -51,7 +51,7 @@ dev = [
     "numpydoc",
 
     # For schema generation.
-    "pydantic<2.0",
+    "pydantic>=2.6",
 ]
 
 [project.scripts]
@@ -83,6 +83,9 @@ extend-ignore = [
     "F811",
     # allow Annotated[typ, some_func("some string")]
     "F722",
+    # allow one line class definitions `class X(Y): ...`
+    # black formats this way, but flake8 is behind
+    "E701",
 ]
 max-line-length = 88
 exclude = [".tox", ".venv", "venv"]

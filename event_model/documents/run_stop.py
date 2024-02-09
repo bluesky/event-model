@@ -1,11 +1,11 @@
-from typing import Any, Dict
+from typing import Dict
 
 from typing_extensions import Annotated, Literal, NotRequired, TypedDict
 
-from .generate.type_wrapper import AsRef, Field, add_extra_schema
+from .generate.type_wrapper import DataType, Field, add_extra_schema
 
 RUN_STOP_EXTRA_SCHEMA = {
-    "patternProperties": {"^([^./]+)$": {"$ref": "#/definitions/DataType"}},
+    "patternProperties": {"^([^./]+)$": {"$ref": "#/$defs/DataType"}},
     "additionalProperties": False,
 }
 
@@ -17,9 +17,7 @@ class RunStop(TypedDict):
     run and the end time
     """
 
-    data_type: NotRequired[
-        Annotated[Any, Field(description="data_type"), AsRef("DataType")]
-    ]
+    data_type: NotRequired[Annotated[DataType, Field(description="data_type")]]
     exit_status: Annotated[
         Literal["success", "abort", "fail"],
         Field(description="State of the run when it ended"),

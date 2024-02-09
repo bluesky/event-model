@@ -4,7 +4,7 @@ from typing_extensions import Annotated, Literal, NotRequired, TypedDict
 
 from event_model.documents.generate.type_wrapper import Field, add_extra_schema
 
-from .generate.type_wrapper import AsRef
+from .generate.type_wrapper import DataType
 
 
 class Hints(TypedDict):
@@ -79,9 +79,9 @@ class Projection(TypedDict):
 
 
 RUN_START_EXTRA_SCHEMA = {
-    "definitions": {
+    "$defs": {
         "DataType": {
-            "patternProperties": {"^([^./]+)$": {"$ref": "#/definitions/DataType"}},
+            "patternProperties": {"^([^./]+)$": {"$ref": "#/$defs/DataType"}},
             "additionalProperties": False,
         },
         "Projection": {
@@ -132,10 +132,10 @@ RUN_START_EXTRA_SCHEMA = {
     "properties": {
         "hints": {
             "additionalProperties": False,
-            "patternProperties": {"^([^.]+)$": {"$ref": "#/definitions/DataType"}},
+            "patternProperties": {"^([^.]+)$": {"$ref": "#/$defs/DataType"}},
         },
     },
-    "patternProperties": {"^([^./]+)$": {"$ref": "#/definitions/DataType"}},
+    "patternProperties": {"^([^./]+)$": {"$ref": "#/$defs/DataType"}},
     "additionalProperties": False,
 }
 
@@ -185,7 +185,7 @@ class RunStart(TypedDict):
             ),
         ]
     ]
-    data_type: NotRequired[Annotated[Any, Field(description=""), AsRef("DataType")]]
+    data_type: NotRequired[Annotated[DataType, Field(description="")]]
     group: NotRequired[
         Annotated[str, Field(description="Unix group to associate this data with")]
     ]

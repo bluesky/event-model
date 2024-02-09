@@ -1,4 +1,4 @@
-from typing import Any, Dict, List
+from typing import Any, Dict, List, Optional
 
 from typing_extensions import Annotated, Literal, NotRequired, TypedDict
 
@@ -29,7 +29,7 @@ class DataKey(TypedDict):
             Field(
                 description="Where the data is stored if it is stored external "
                 "to the events",
-                regex=r"^[A-Z]+:?",
+                pattern=r"^[A-Z]+:?",
             ),
         ]
     ]
@@ -41,7 +41,7 @@ class DataKey(TypedDict):
     ]
     precision: NotRequired[
         Annotated[
-            int,
+            Optional[int],
             Field(
                 description="Number of digits after decimal place if "
                 "a floating point number"
@@ -56,7 +56,7 @@ class DataKey(TypedDict):
         str, Field(description="The source (ex piece of hardware) of the data.")
     ]
     units: NotRequired[
-        Annotated[str, Field(description="Engineering units of the value")]
+        Annotated[Optional[str], Field(description="Engineering units of the value")]
     ]
 
 
@@ -93,18 +93,12 @@ class Configuration(TypedDict):
 
 
 EVENT_DESCRIPTOR_EXTRA_SCHEMA = {
-    "patternProperties": {"^([^./]+)$": {"$ref": "#/definitions/DataType"}},
-    "definitions": {
+    "patternProperties": {"^([^./]+)$": {"$ref": "#/$defs/DataType"}},
+    "$defs": {
         "DataType": {
             "title": "DataType",
-            "patternProperties": {"^([^./]+)$": {"$ref": "#/definitions/DataType"}},
+            "patternProperties": {"^([^./]+)$": {"$ref": "#/$defs/DataType"}},
             "additionalProperties": False,
-        },
-        "DataKey": {
-            "properties": {
-                "units": {"type": ["string", "null"]},
-                "precision": {"type": ["integer", "null"]},
-            }
         },
     },
     "additionalProperties": False,
