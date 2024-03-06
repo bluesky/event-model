@@ -2772,7 +2772,7 @@ def rechunk_event_pages(event_pages: Iterable, chunk_size: int) -> Generator:
                     for key in page["timestamps"].keys()
                 },
                 "filled": {
-                    key: page["filled"][key][start:stop] for key in page["data"].keys()
+                    key: page["filled"][key][start:stop] for key in page["filled"].keys()
                 },
             }
 
