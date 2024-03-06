@@ -2831,7 +2831,7 @@ def merge_event_pages(event_pages: Iterable[EventPage]) -> EventPage:
             key: list(
                 itertools.chain.from_iterable([page["filled"][key] for page in pages])
             )
-            for key in pages[0]["data"].keys()
+            for key in pages[0]["filled"].keys()
         },
     )
     return cast(EventPage, doc)
