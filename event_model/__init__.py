@@ -2765,8 +2765,7 @@ def rechunk_event_pages(event_pages: Iterable, chunk_size: int) -> Generator:
                 "descriptor": page["descriptor"],
                 **{key: page[key][start:stop] for key in array_keys},
                 "data": {
-                    key: page["data"][key][start:stop]
-                    for key in page["data"].keys()
+                    key: page["data"][key][start:stop] for key in page["data"].keys()
                 },
                 "timestamps": {
                     key: page["timestamps"][key][start:stop]
