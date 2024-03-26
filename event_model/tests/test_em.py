@@ -838,7 +838,8 @@ def test_single_run_document_router():
         sr("descriptor", desc_bundle.descriptor_doc)
 
 
-def test_rechunk_event_pages():
+@pytest.mark.parametrize("filled", [True, False])
+def test_rechunk_event_pages(filled):
     def event_page_gen(page_size, num_pages):
         """
         Generator event_pages for testing.
@@ -851,7 +852,7 @@ def test_rechunk_event_pages():
                 **{key: list(range(page_size)) for key in array_keys},
                 "data": {key: list(range(page_size)) for key in data_keys},
                 "timestamps": {key: list(range(page_size)) for key in data_keys},
-                "filled": {key: list(range(page_size)) for key in data_keys},
+                "filled": {key: list(range(page_size)) for key in data_keys if filled},
             }
 
     # Get a list of event pages of size 13.
