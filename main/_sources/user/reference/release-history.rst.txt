@@ -2,6 +2,19 @@
 Release History
 ***************
 
+v1.20.0 (2024-03-28)
+====================
+
+Changed
+-------
+
+- Bumped from `pydantic 1.*` to `pydantic 2.*`
+
+Fixed
+-----
+
+- Bug in `rechunk_event_pages` affecting Events with an empty `filled` key
+
 v1.19.9 (2023-11-22)
 ====================
 
