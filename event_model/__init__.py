@@ -2772,7 +2772,8 @@ def rechunk_event_pages(event_pages: Iterable, chunk_size: int) -> Generator:
                     for key in page["timestamps"].keys()
                 },
                 "filled": {
-                    key: page["filled"][key][start:stop] for key in page["data"].keys()
+                    key: page["filled"][key][start:stop]
+                    for key in page["filled"].keys()
                 },
             }
 
@@ -2831,7 +2832,7 @@ def merge_event_pages(event_pages: Iterable[EventPage]) -> EventPage:
             key: list(
                 itertools.chain.from_iterable([page["filled"][key] for page in pages])
             )
-            for key in pages[0]["data"].keys()
+            for key in pages[0]["filled"].keys()
         },
     )
     return cast(EventPage, doc)
