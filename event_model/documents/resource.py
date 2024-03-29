@@ -1,6 +1,6 @@
 from typing import Any, Dict
 
-from typing_extensions import Annotated, Literal, NotRequired, TypedDict
+from typing_extensions import Annotated, NotRequired, TypedDict
 
 from .generate.type_wrapper import Field, add_extra_schema
 
