@@ -14,12 +14,6 @@ class StreamResource(TypedDict):
     externally-stored data streams
     """
 
-    path_semantics: NotRequired[
-        Annotated[
-            Literal["posix", "windows"],
-            Field(description="Rules for joining paths"),
-        ]
-    ]
     data_key: Annotated[
         str,
         Field(

@@ -43,12 +43,6 @@ class Resource(PartialResource):
     externally-stored data
     """
 
-    path_semantics: NotRequired[
-        Annotated[
-            Literal["posix", "windows"],
-            Field(description="Rules for joining paths"),
-        ]
-    ]
     run_start: NotRequired[
         Annotated[
             str,

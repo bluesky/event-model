@@ -1899,13 +1899,6 @@ class ComposeResourceBundle:
         )
 
 
-PATH_SEMANTICS: Dict[str, Literal["posix", "windows"]] = {
-    "posix": "posix",
-    "nt": "windows",
-}
-default_path_semantics: Literal["posix", "windows"] = PATH_SEMANTICS[os.name]
-
-
 @dataclass
 class ComposeResource:
     start: Optional[RunStart]
@@ -1916,7 +1909,6 @@ class ComposeResource:
         root: str,
         resource_path: str,
         resource_kwargs: Dict[str, Any],
-        path_semantics: Literal["posix", "windows"] = default_path_semantics,
         uid: Optional[str] = None,
         validate: bool = True,
     ) -> ComposeResourceBundle:
@@ -1924,7 +1916,6 @@ class ComposeResource:
             uid = str(uuid.uuid4())
 
         doc = Resource(
-            path_semantics=path_semantics,
             uid=uid,
             spec=spec,
             root=root,
@@ -1952,7 +1943,6 @@ def compose_resource(
     root: str,
     resource_path: str,
     resource_kwargs: Dict[str, Any],
-    path_semantics: Literal["posix", "windows"] = default_path_semantics,
     start: Optional[RunStart] = None,
     uid: Optional[str] = None,
     validate: bool = True,
@@ -1965,7 +1955,6 @@ def compose_resource(
         root,
         resource_path,
         resource_kwargs,
-        path_semantics=path_semantics,
         uid=uid,
         validate=validate,
     )
@@ -2052,7 +2041,6 @@ class ComposeStreamResource:
         resource_path: str,
         data_key: str,
         resource_kwargs: Dict[str, Any],
-        path_semantics: Literal["posix", "windows"] = default_path_semantics,
         uid: Optional[str] = None,
         validate: bool = True,
     ) -> ComposeStreamResourceBundle:
@@ -2066,7 +2054,6 @@ class ComposeStreamResource:
             root=root,
             resource_path=resource_path,
             resource_kwargs=resource_kwargs,
-            path_semantics=path_semantics,
         )
 
         if self.start:
@@ -2091,7 +2078,6 @@ def compose_stream_resource(
     resource_path: str,
     data_key: str,
     resource_kwargs: Dict[str, Any],
-    path_semantics: Literal["posix", "windows"] = default_path_semantics,
     start: Optional[RunStart] = None,
     uid: Optional[str] = None,
     validate: bool = True,
@@ -2105,7 +2091,6 @@ def compose_stream_resource(
         resource_path,
         data_key,
         resource_kwargs,
-        path_semantics=path_semantics,
         uid=uid,
         validate=validate,
     )

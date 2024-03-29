@@ -8,15 +8,6 @@
             "description": "A string to show which data_key of the Descriptor are being streamed",
             "type": "string"
         },
-        "path_semantics": {
-            "title": "Path Semantics",
-            "description": "Rules for joining paths",
-            "type": "string",
-            "enum": [
-                "posix",
-                "windows"
-            ]
-        },
         "resource_kwargs": {
             "title": "Resource Kwargs",
             "description": "Additional argument to pass to the Handler to read a Stream Resource",
