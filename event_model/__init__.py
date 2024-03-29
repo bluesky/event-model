@@ -538,7 +538,7 @@ class Filler(DocumentRouter):
 
         A 'handler class' may be any callable with the signature::
 
-            handler_class(full_path, **resource_kwargs)
+            handler_class(full_path, **parameters)
 
         It is expected to return an object, a 'handler instance', which is also
         callable and has the following signature::
@@ -1041,7 +1041,7 @@ class Filler(DocumentRouter):
         handler = _attempt_with_retries(
             func=handler_class,
             args=(resource_path,),
-            kwargs=resource["resource_kwargs"],
+            kwargs=resource["parameters"],
             intervals=[0] + self.retry_intervals,
             error_to_catch=IOError,
             error_to_raise=error_to_raise,
@@ -1422,7 +1422,7 @@ class RunRouter(DocumentRouter):
 
         A 'handler class' may be any callable with the signature::
 
-            handler_class(full_path, **resource_kwargs)
+            handler_class(full_path, **parameters)
 
         It is expected to return an object, a 'handler instance', which is also
         callable and has the following signature::
@@ -1908,7 +1908,7 @@ class ComposeResource:
         spec: str,
         root: str,
         resource_path: str,
-        resource_kwargs: Dict[str, Any],
+        parameters: Dict[str, Any],
         uid: Optional[str] = None,
         validate: bool = True,
     ) -> ComposeResourceBundle:
@@ -1919,7 +1919,7 @@ class ComposeResource:
             uid=uid,
             spec=spec,
             root=root,
-            resource_kwargs=resource_kwargs,
+            parameters=parameters,
             resource_path=resource_path,
         )
 
@@ -1942,7 +1942,7 @@ def compose_resource(
     spec: str,
     root: str,
     resource_path: str,
-    resource_kwargs: Dict[str, Any],
+    parameters: Dict[str, Any],
     start: Optional[RunStart] = None,
     uid: Optional[str] = None,
     validate: bool = True,
@@ -1954,7 +1954,7 @@ def compose_resource(
         spec,
         root,
         resource_path,
-        resource_kwargs,
+        parameters,
         uid=uid,
         validate=validate,
     )
@@ -2040,7 +2040,7 @@ class ComposeStreamResource:
         root: str,
         resource_path: str,
         data_key: str,
-        resource_kwargs: Dict[str, Any],
+        parameters: Dict[str, Any],
         uid: Optional[str] = None,
         validate: bool = True,
     ) -> ComposeStreamResourceBundle:
@@ -2053,7 +2053,7 @@ class ComposeStreamResource:
             spec=spec,
             root=root,
             resource_path=resource_path,
-            resource_kwargs=resource_kwargs,
+            parameters=parameters,
         )
 
         if self.start:
@@ -2077,7 +2077,7 @@ def compose_stream_resource(
     root: str,
     resource_path: str,
     data_key: str,
-    resource_kwargs: Dict[str, Any],
+    parameters: Dict[str, Any],
     start: Optional[RunStart] = None,
     uid: Optional[str] = None,
     validate: bool = True,
@@ -2090,7 +2090,7 @@ def compose_stream_resource(
         root,
         resource_path,
         data_key,
-        resource_kwargs,
+        parameters,
         uid=uid,
         validate=validate,
     )

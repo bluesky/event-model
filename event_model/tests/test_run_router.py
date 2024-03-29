@@ -33,7 +33,7 @@ def test_run_router(tmp_path):
     baseline_descriptor_doc, compose_baseline_event, compose_event_page = bundle
     docs.append(("descriptor", baseline_descriptor_doc))
     bundle = compose_resource(
-        spec="TIFF", root=str(tmp_path), resource_path="stack.tiff", resource_kwargs={}
+        spec="TIFF", root=str(tmp_path), resource_path="stack.tiff", parameters={}
     )
     resource_doc, compose_datum, compose_datum_page = bundle
     docs.append(("resource", resource_doc))
@@ -220,7 +220,7 @@ def test_run_router_streams(tmp_path):
         data_key="det1",
         root=str(tmp_path),
         resource_path="test_streams",
-        resource_kwargs={},
+        parameters={},
     )
     docs.append(("stream_resource", stream_resource_doc))
     datum_doc = compose_stream_datum(

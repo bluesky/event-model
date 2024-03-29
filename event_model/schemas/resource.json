@@ -3,9 +3,9 @@
     "description": "Document to reference a collection (e.g. file or group of files) of externally-stored data",
     "type": "object",
     "properties": {
-        "resource_kwargs": {
-            "title": "Resource Kwargs",
-            "description": "Additional argument to pass to the Handler to read a Resource",
+        "parameters": {
+            "title": "Parameters",
+            "description": "Additional keyword arguments to pass to the Handler to read a Resource",
             "type": "object"
         },
         "resource_path": {
@@ -35,7 +35,7 @@
         }
     },
     "required": [
-        "resource_kwargs",
+        "parameters",
         "resource_path",
         "root",
         "spec",

@@ -21,10 +21,10 @@ class StreamResource(TypedDict):
             "Descriptor are being streamed"
         ),
     ]
-    resource_kwargs: Annotated[
+    parameters: Annotated[
         Dict[str, Any],
         Field(
-            description="Additional argument to pass to the Handler to read a "
+            description="Additional keyword arguments to pass to the Handler to read a "
             "Stream Resource",
         ),
     ]

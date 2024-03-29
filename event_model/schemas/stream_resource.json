@@ -8,9 +8,9 @@
             "description": "A string to show which data_key of the Descriptor are being streamed",
             "type": "string"
         },
-        "resource_kwargs": {
-            "title": "Resource Kwargs",
-            "description": "Additional argument to pass to the Handler to read a Stream Resource",
+        "parameters": {
+            "title": "Parameters",
+            "description": "Additional keyword arguments to pass to the Handler to read a Stream Resource",
             "type": "object"
         },
         "resource_path": {
@@ -41,7 +41,7 @@
     },
     "required": [
         "data_key",
-        "resource_kwargs",
+        "parameters",
         "resource_path",
         "root",
         "spec",

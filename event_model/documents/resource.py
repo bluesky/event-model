@@ -18,10 +18,10 @@ class PartialResource(TypedDict):
     resource_path: Annotated[
         str, Field(description="Filepath or URI for locating this resource")
     ]
-    resource_kwargs: Annotated[
+    parameters: Annotated[
         Dict[str, Any],
         Field(
-            description="Additional argument to pass to the Handler to read a Resource"
+            description="Additional keyword arguments to pass to the Handler to read a Resource"
         ),
     ]
 
