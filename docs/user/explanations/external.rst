@@ -114,16 +114,17 @@ provide any additional parameters for reading it.
    # 'Stream Resource' document
    {'uid': 'aa10035d-1d2b-41d9-97e6-03e3fe62fa6c',
     'mimetype': 'application/x-hdf5',
-    'root': '/GPFS/DATA/Andor/',
-    'resource_path': '2020/01/03/8ff08ff9-a2bf-48c3-8ff3-dcac0f309d7d.h5',
+    'uri': 'file://localhost/{path}/GPFS/DATA/Andor/2020/01/03/8ff08ff9.h5',
     'parameters': {'frame_per_point': 10},
     'uid': '3b300e6f-b431-4750-a635-5630d15c81a8',
     'run_start': '10bf6945-4afd-43ca-af36-6ad8f3540bcd'}
 
-The ``resource_path`` is a relative path, all of which is semantic and should
-usually not change during the lifecycle of this asset. The ``root`` is more
-context-dependent (depending on what system you are accessing the data from)
-and subject to change (if the data is moved over time).
+The ``uri`` specifies the location of the data. It may be a path on the local
+filesystem, `file://localhost/{path}`, a path on a shared filesystem
+`file://{host}/{path}`, to be remapped at read time via local mount config,
+or a non-file-based resource like `s3://...`. The `{path}` part of the `uri`
+is typically a relative path, all of which is semantic and should usually not
+change during the lifecycle of this asset.
 
 The ``mimetype`` is a recognized standard way to specify the I/O procedures to
 read the asset. It gives us a hint about the format of this asset, whether it

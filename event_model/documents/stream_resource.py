@@ -28,14 +28,8 @@ class StreamResource(TypedDict):
             "Stream Resource",
         ),
     ]
-    resource_path: Annotated[
-        str, Field(description="Filepath or URI for locating this resource")
-    ]
-    root: Annotated[
-        str,
-        Field(
-            description="Subset of resource_path that is a local detail, not semantic."
-        ),
+    uri: Annotated[
+        str, Field(description="URI for locating this resource")
     ]
     run_start: NotRequired[
         Annotated[

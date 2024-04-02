@@ -108,9 +108,8 @@ def test_compose_stream_resource(tmp_path):
     assert bundle.compose_stream_resource is compose_stream_resource
     bundle = compose_stream_resource(
         mimetype="application/x-hdf5",
-        root=str(tmp_path),
+        uri="file://" + str(tmp_path) + "/test_streams",
         data_key="det1",
-        resource_path="test_streams",
         parameters={},
     )
     resource_doc, compose_stream_datum = bundle
@@ -390,8 +389,7 @@ def test_document_router_streams_smoke_test(tmp_path):
     stream_resource_doc, compose_stream_datum = compose_stream_resource(
         mimetype="application/x-hdf5",
         data_key="det1",
-        root=str(tmp_path),
-        resource_path="test_streams",
+        uri="file://" + str(tmp_path) + "/test_streams",
         parameters={},
     )
     dr("stream_resource", stream_resource_doc)

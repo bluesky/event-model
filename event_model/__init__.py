@@ -2048,8 +2048,7 @@ class ComposeStreamResource:
     def __call__(
         self,
         mimetype: str,
-        root: str,
-        resource_path: str,
+        uri: str,
         data_key: str,
         parameters: Dict[str, Any],
         uid: Optional[str] = None,
@@ -2062,8 +2061,7 @@ class ComposeStreamResource:
             uid=uid,
             data_key=data_key,
             mimetype=mimetype,
-            root=root,
-            resource_path=resource_path,
+            uri=uri,
             parameters=parameters,
         )
 
@@ -2085,8 +2083,7 @@ class ComposeStreamResource:
 def compose_stream_resource(
     *,
     mimetype: str,
-    root: str,
-    resource_path: str,
+    uri: str,
     data_key: str,
     parameters: Dict[str, Any],
     start: Optional[RunStart] = None,
@@ -2098,8 +2095,7 @@ def compose_stream_resource(
     """
     return ComposeStreamResource(start=start)(
         mimetype,
-        root,
-        resource_path,
+        uri,
         data_key,
         parameters,
         uid=uid,
