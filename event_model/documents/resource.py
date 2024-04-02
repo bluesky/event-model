@@ -1,6 +1,6 @@
 from typing import Any, Dict
 
-from typing_extensions import Annotated, NotRequired, TypedDict
+from typing_extensions import Annotated, Literal, NotRequired, TypedDict
 
 from .generate.type_wrapper import Field, add_extra_schema
 
@@ -18,10 +18,10 @@ class PartialResource(TypedDict):
     resource_path: Annotated[
         str, Field(description="Filepath or URI for locating this resource")
     ]
-    parameters: Annotated[
+    resource_kwargs: Annotated[
         Dict[str, Any],
         Field(
-            description="Additional keyword arguments to pass to the Handler to read a Resource"
+            description="Additional argument to pass to the Handler to read a Resource"
         ),
     ]
 
@@ -43,6 +43,12 @@ class Resource(PartialResource):
     externally-stored data
     """
 
+    path_semantics: NotRequired[
+        Annotated[
+            Literal["posix", "windows"],
+            Field(description="Rules for joining paths"),
+        ]
+    ]
     run_start: NotRequired[
         Annotated[
             str,

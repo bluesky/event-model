@@ -46,7 +46,7 @@ class StreamResource(TypedDict):
             ),
         ]
     ]
-    spec: Annotated[
+    mimetype: Annotated[
         str,
         Field(
             description="String identifying the format/type of this Stream Resource, "

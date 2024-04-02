@@ -28,8 +28,8 @@
             "description": "Globally unique ID to the run_start document this Stream Resource is associated with.",
             "type": "string"
         },
-        "spec": {
-            "title": "Spec",
+        "mimetype": {
+            "title": "Mimetype",
             "description": "String identifying the format/type of this Stream Resource, used to identify a compatible Handler",
             "type": "string"
         },
@@ -44,7 +44,7 @@
         "parameters",
         "resource_path",
         "root",
-        "spec",
+        "mimetype",
         "uid"
     ],
     "additionalProperties": false

@@ -538,7 +538,7 @@ class Filler(DocumentRouter):
 
         A 'handler class' may be any callable with the signature::
 
-            handler_class(full_path, **parameters)
+            handler_class(full_path, **resource_kwargs)
 
         It is expected to return an object, a 'handler instance', which is also
         callable and has the following signature::
@@ -1041,7 +1041,7 @@ class Filler(DocumentRouter):
         handler = _attempt_with_retries(
             func=handler_class,
             args=(resource_path,),
-            kwargs=resource["parameters"],
+            kwargs=resource["resource_kwargs"],
             intervals=[0] + self.retry_intervals,
             error_to_catch=IOError,
             error_to_raise=error_to_raise,
@@ -1422,7 +1422,7 @@ class RunRouter(DocumentRouter):
 
         A 'handler class' may be any callable with the signature::
 
-            handler_class(full_path, **parameters)
+            handler_class(full_path, **resource_kwargs)
 
         It is expected to return an object, a 'handler instance', which is also
         callable and has the following signature::
@@ -1899,6 +1899,13 @@ class ComposeResourceBundle:
         )
 
 
+PATH_SEMANTICS: Dict[str, Literal["posix", "windows"]] = {
+    "posix": "posix",
+    "nt": "windows",
+}
+default_path_semantics: Literal["posix", "windows"] = PATH_SEMANTICS[os.name]
+
+
 @dataclass
 class ComposeResource:
     start: Optional[RunStart]
@@ -1908,7 +1915,8 @@ class ComposeResource:
         spec: str,
         root: str,
         resource_path: str,
-        parameters: Dict[str, Any],
+        resource_kwargs: Dict[str, Any],
+        path_semantics: Literal["posix", "windows"] = default_path_semantics,
         uid: Optional[str] = None,
         validate: bool = True,
     ) -> ComposeResourceBundle:
@@ -1916,10 +1924,11 @@ class ComposeResource:
             uid = str(uuid.uuid4())
 
         doc = Resource(
+            path_semantics=path_semantics,
             uid=uid,
             spec=spec,
             root=root,
-            parameters=parameters,
+            resource_kwargs=resource_kwargs,
             resource_path=resource_path,
         )
 
@@ -1942,7 +1951,8 @@ def compose_resource(
     spec: str,
     root: str,
     resource_path: str,
-    parameters: Dict[str, Any],
+    resource_kwargs: Dict[str, Any],
+    path_semantics: Literal["posix", "windows"] = default_path_semantics,
     start: Optional[RunStart] = None,
     uid: Optional[str] = None,
     validate: bool = True,
@@ -1954,7 +1964,8 @@ def compose_resource(
         spec,
         root,
         resource_path,
-        parameters,
+        resource_kwargs,
+        path_semantics=path_semantics,
         uid=uid,
         validate=validate,
     )
@@ -2036,7 +2047,7 @@ class ComposeStreamResource:
 
     def __call__(
         self,
-        spec: str,
+        mimetype: str,
         root: str,
         resource_path: str,
         data_key: str,
@@ -2050,7 +2061,7 @@ class ComposeStreamResource:
         doc = StreamResource(
             uid=uid,
             data_key=data_key,
-            spec=spec,
+            mimetype=mimetype,
             root=root,
             resource_path=resource_path,
             parameters=parameters,
@@ -2073,7 +2084,7 @@ class ComposeStreamResource:
 
 def compose_stream_resource(
     *,
-    spec: str,
+    mimetype: str,
     root: str,
     resource_path: str,
     data_key: str,
@@ -2086,7 +2097,7 @@ def compose_stream_resource(
     Here for backwards compatibility, the Compose class is prefered.
     """
     return ComposeStreamResource(start=start)(
-        spec,
+        mimetype,
         root,
         resource_path,
         data_key,

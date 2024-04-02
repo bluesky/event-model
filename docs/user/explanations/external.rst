@@ -95,7 +95,8 @@ contains path-related details.
     'spec': 'AD_HDF5',
     'root': '/GPFS/DATA/Andor/',
     'resource_path': '2020/01/03/8ff08ff9-a2bf-48c3-8ff3-dcac0f309d7d.h5',
-    'parameters': {'frame_per_point': 10},
+    'resource_kwargs': {'frame_per_point': 10},
+    'path_semantics': 'posix',
     'uid': '3b300e6f-b431-4750-a635-5630d15c81a8',
     'run_start': '10bf6945-4afd-43ca-af36-6ad8f3540bcd'}
 
@@ -105,8 +106,31 @@ context-dependent (depending on what system you are accessing the data from)
 and subject to change (if the data is moved over time).
 
 The ``spec`` gives us a hint about the format of this asset, whether it be a
-file, multiple files, or something more specialized. The ``parameters``
+file, multiple files, or something more specialized. The ``resource_kwargs``
 provide any additional parameters for reading it.
+
+ .. code:: python
+
+   # 'Stream Resource' document
+   {'uid': 'aa10035d-1d2b-41d9-97e6-03e3fe62fa6c',
+    'mimetype': 'application/x-hdf5',
+    'root': '/GPFS/DATA/Andor/',
+    'resource_path': '2020/01/03/8ff08ff9-a2bf-48c3-8ff3-dcac0f309d7d.h5',
+    'parameters': {'frame_per_point': 10},
+    'uid': '3b300e6f-b431-4750-a635-5630d15c81a8',
+    'run_start': '10bf6945-4afd-43ca-af36-6ad8f3540bcd'}
+
+The ``resource_path`` is a relative path, all of which is semantic and should
+usually not change during the lifecycle of this asset. The ``root`` is more
+context-dependent (depending on what system you are accessing the data from)
+and subject to change (if the data is moved over time).
+
+The ``mimetype`` is a recognized standard way to specify the I/O procedures to
+read the asset. It gives us a hint about the format of this asset, whether it
+be a file, multiple files, or something more specialized. We support standard
+mimetypes, such as `image/tiff`, as well as custom ones, e.g.
+`application/x-hdf5-smwr-slice`. The ``parameters`` provide any additional
+parameters for reading the asset.
 
 Handlers
 ========
@@ -120,7 +144,7 @@ Handler Interface
 
 A 'handler class' may be any callable with the signature::
 
-    handler_class(full_path, **parameters)
+    handler_class(full_path, **resource_kwargs)
 
 It is expected to return an object, a 'handler instance', which is also
 callable and has the following signature::
@@ -134,8 +158,8 @@ typically implemented using a class that implements ``__init__`` and
 .. code:: python
 
    class MyHandler:
-       def __init__(self, path, **parameters):
-           # Consume the path information and the 'parameters' kwargs from the
+       def __init__(self, path, **resource_kwargs):
+           # Consume the path information and the 'resource_kwargs' from the
            # Resource. Typically stashes some state and/or opens file(s).
            ...
 
@@ -150,7 +174,7 @@ But in general it may be any callable-that-returns-a-callable.
 
 .. code:: python
 
-   def handler(path, **parameters):
+   def handler(path, **resource_kwargs):
        def f(**datum_kwargs):
            return some_array_like
        return f
