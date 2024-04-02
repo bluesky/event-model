@@ -108,7 +108,7 @@ def test_compose_stream_resource(tmp_path):
     assert bundle.compose_stream_resource is compose_stream_resource
     bundle = compose_stream_resource(
         mimetype="image/tiff",
-        uri="file://" + str(tmp_path) + "/test_streams",
+        uri="file://localhost" + str(tmp_path) + "/test_streams",
         data_key="det1",
         parameters={},
     )
