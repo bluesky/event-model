@@ -387,7 +387,7 @@ def test_document_router_streams_smoke_test(tmp_path):
     start = run_bundle.start_doc
     dr("start", start)
     stream_resource_doc, compose_stream_datum = compose_stream_resource(
-        mimetype="application/x-hdf5",
+        mimetype="image/tiff",
         data_key="det1",
         uri="file://" + str(tmp_path) + "/test_streams",
         parameters={},
