@@ -71,7 +71,7 @@ def test_compose_run():
     assert bundle.compose_event is compose_event
     assert bundle.compose_event_page is compose_event_page
     bundle = compose_resource(
-        spec="TIFF", root="/tmp", resource_path="stack.tiff", parameters={}
+        spec="TIFF", root="/tmp", resource_path="stack.tiff", resource_kwargs={}
     )
     resource_doc, compose_datum, compose_datum_page = bundle
     assert bundle.resource_doc is resource_doc
@@ -107,7 +107,7 @@ def test_compose_stream_resource(tmp_path):
     compose_stream_resource = bundle.compose_stream_resource
     assert bundle.compose_stream_resource is compose_stream_resource
     bundle = compose_stream_resource(
-        spec="TIFF_STREAM",
+        mimetype="application/x-hdf5",
         root=str(tmp_path),
         data_key="det1",
         resource_path="test_streams",
@@ -134,7 +134,7 @@ def test_round_trip_pagination():
         name="primary",
     )
     res_bundle = run_bundle.compose_resource(
-        spec="TIFF", root="/tmp", resource_path="stack.tiff", parameters={}
+        spec="TIFF", root="/tmp", resource_path="stack.tiff", resource_kwargs={}
     )
     datum_doc1 = res_bundle.compose_datum(datum_kwargs={"slice": 5})
     datum_doc2 = res_bundle.compose_datum(datum_kwargs={"slice": 10})
@@ -244,7 +244,7 @@ def test_bulk_events_to_event_page(tmp_path):
     path_root = str(tmp_path)
 
     res_bundle = run_bundle.compose_resource(
-        spec="TIFF", root=path_root, resource_path="stack.tiff", parameters={}
+        spec="TIFF", root=path_root, resource_path="stack.tiff", resource_kwargs={}
     )
     datum_doc1 = res_bundle.compose_datum(datum_kwargs={"slice": 5})
     datum_doc2 = res_bundle.compose_datum(datum_kwargs={"slice": 10})
@@ -315,7 +315,7 @@ def test_sanitize_doc():
 def test_bulk_datum_to_datum_page():
     run_bundle = event_model.compose_run()
     res_bundle = run_bundle.compose_resource(
-        spec="TIFF", root="/tmp", resource_path="stack.tiff", parameters={}
+        spec="TIFF", root="/tmp", resource_path="stack.tiff", resource_kwargs={}
     )
     datum1 = res_bundle.compose_datum(datum_kwargs={"slice": 5})
     datum2 = res_bundle.compose_datum(datum_kwargs={"slice": 10})
@@ -353,7 +353,7 @@ def test_document_router_smoke_test():
     )
     dr("descriptor", desc_bundle_baseline.descriptor_doc)
     res_bundle = run_bundle.compose_resource(
-        spec="TIFF", root="/tmp", resource_path="stack.tiff", parameters={}
+        spec="TIFF", root="/tmp", resource_path="stack.tiff", resource_kwargs={}
     )
     dr("resource", res_bundle.resource_doc)
     datum_doc1 = res_bundle.compose_datum(datum_kwargs={"slice": 5})
@@ -388,7 +388,7 @@ def test_document_router_streams_smoke_test(tmp_path):
     start = run_bundle.start_doc
     dr("start", start)
     stream_resource_doc, compose_stream_datum = compose_stream_resource(
-        spec="TIFF_STREAM",
+        mimetype="application/x-hdf5",
         data_key="det1",
         root=str(tmp_path),
         resource_path="test_streams",
@@ -425,7 +425,7 @@ def test_document_router_with_validation():
     )
     dr("descriptor", desc_bundle_baseline.descriptor_doc, validate=True)
     res_bundle = run_bundle.compose_resource(
-        spec="TIFF", root="/tmp", resource_path="stack.tiff", parameters={}
+        spec="TIFF", root="/tmp", resource_path="stack.tiff", resource_kwargs={}
     )
     dr("resource", res_bundle.resource_doc, validate=True)
     datum_doc1 = res_bundle.compose_datum(datum_kwargs={"slice": 5})
@@ -762,7 +762,7 @@ def test_single_run_document_router():
     )
     sr("descriptor", desc_bundle_baseline.descriptor_doc)
     res_bundle = run_bundle.compose_resource(
-        spec="TIFF", root="/tmp", resource_path="stack.tiff", parameters={}
+        spec="TIFF", root="/tmp", resource_path="stack.tiff", resource_kwargs={}
     )
     sr("resource", res_bundle.resource_doc)
     datum_doc1 = res_bundle.compose_datum(datum_kwargs={"slice": 5})
@@ -1020,4 +1020,6 @@ def test_array_like():
 
 
 def test_resource_start_optional():
-    event_model.compose_resource(spec="TEST", root="/", resource_path="", parameters={})
+    event_model.compose_resource(
+        spec="TEST", root="/", resource_path="", resource_kwargs={}
+    )
