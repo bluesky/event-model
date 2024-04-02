@@ -1020,6 +1020,4 @@ def test_array_like():
 
 
 def test_resource_start_optional():
-    event_model.compose_resource(
-        spec="TEST", root="/", resource_path="", parameters={}
-    )
+    event_model.compose_resource(spec="TEST", root="/", resource_path="", parameters={})
