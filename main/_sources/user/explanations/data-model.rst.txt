@@ -483,11 +483,9 @@ Typical example:
 
    # 'Stream Resource' document
    {'data_key': 'detector_1',
-    'spec': 'AD_HDF5',
-    'root': '/GPFS/DATA/Andor/',
-    'resource_path': '2020/01/03/8ff08ff9-a2bf-48c3-8ff3-dcac0f309d7d.h5',
-    'resource_kwargs': {'frame_per_point': 1},
-    'path_semantics': 'posix',
+    'mimetype': 'application/x-hdf5',
+    'uri': 'file://localhost/GPFS/DATA/Andor/01/03/8ff08ff9-a2bf-48c3-8ff3-dcac0f309d7d.h5',
+    'parameters': {'frame_per_point': 1},
     'uid': '3b300e6f-b431-4750-a635-5630d15c81a8',
     'run_start': '10bf6945-4afd-43ca-af36-6ad8f3540bcd'}
 

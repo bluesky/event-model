@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>event_model &#8212; event-model 1.20.0 documentation</title>
+    <title>event_model &#8212; event-model 1.20.1.dev18+gaf8fac3 documentation</title>
   
   
   
@@ -38,7 +38,7 @@
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae" />
   <script src="../_static/vendor/fontawesome/6.5.1/js/all.min.js?digest=8d27b9dea8ad943066ae"></script>
 
-    <script src="../_static/documentation_options.js?v=2a6ef5f7"></script>
+    <script src="../_static/documentation_options.js?v=bd7c497c"></script>
     <script src="../_static/doctools.js?v=888ff710"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -48,7 +48,7 @@
     <script>
         DOCUMENTATION_OPTIONS.theme_version = '0.15.2';
         DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://bluesky.github.io/event-model/switcher.json';
-        DOCUMENTATION_OPTIONS.theme_switcher_version_match = '1.20.0';
+        DOCUMENTATION_OPTIONS.theme_switcher_version_match = 'main';
         DOCUMENTATION_OPTIONS.show_version_warning_banner = false;
         </script>
     <link rel="index" title="Index" href="../genindex.html" />
@@ -2616,12 +2616,10 @@ document.write(`
 
     <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
-        <span class="n">spec</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
-        <span class="n">root</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
-        <span class="n">resource_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">mimetype</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">uri</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
         <span class="n">data_key</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
-        <span class="n">resource_kwargs</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span>
-        <span class="n">path_semantics</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;posix&quot;</span><span class="p">,</span> <span class="s2">&quot;windows&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">default_path_semantics</span><span class="p">,</span>
+        <span class="n">parameters</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span>
         <span class="n">uid</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">validate</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ComposeStreamResourceBundle</span><span class="p">:</span>
@@ -2631,11 +2629,9 @@ document.write(`
         <span class="n">doc</span> <span class="o">=</span> <span class="n">StreamResource</span><span class="p">(</span>
             <span class="n">uid</span><span class="o">=</span><span class="n">uid</span><span class="p">,</span>
             <span class="n">data_key</span><span class="o">=</span><span class="n">data_key</span><span class="p">,</span>
-            <span class="n">spec</span><span class="o">=</span><span class="n">spec</span><span class="p">,</span>
-            <span class="n">root</span><span class="o">=</span><span class="n">root</span><span class="p">,</span>
-            <span class="n">resource_path</span><span class="o">=</span><span class="n">resource_path</span><span class="p">,</span>
-            <span class="n">resource_kwargs</span><span class="o">=</span><span class="n">resource_kwargs</span><span class="p">,</span>
-            <span class="n">path_semantics</span><span class="o">=</span><span class="n">path_semantics</span><span class="p">,</span>
+            <span class="n">mimetype</span><span class="o">=</span><span class="n">mimetype</span><span class="p">,</span>
+            <span class="n">uri</span><span class="o">=</span><span class="n">uri</span><span class="p">,</span>
+            <span class="n">parameters</span><span class="o">=</span><span class="n">parameters</span><span class="p">,</span>
         <span class="p">)</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">start</span><span class="p">:</span>
@@ -2655,12 +2651,10 @@ document.write(`
 
 <span class="k">def</span> <span class="nf">compose_stream_resource</span><span class="p">(</span>
     <span class="o">*</span><span class="p">,</span>
-    <span class="n">spec</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
-    <span class="n">root</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
-    <span class="n">resource_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">mimetype</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">uri</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="n">data_key</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
-    <span class="n">resource_kwargs</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span>
-    <span class="n">path_semantics</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;posix&quot;</span><span class="p">,</span> <span class="s2">&quot;windows&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">default_path_semantics</span><span class="p">,</span>
+    <span class="n">parameters</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span>
     <span class="n">start</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">RunStart</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">uid</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">validate</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
@@ -2669,12 +2663,10 @@ document.write(`
 <span class="sd">    Here for backwards compatibility, the Compose class is prefered.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="n">ComposeStreamResource</span><span class="p">(</span><span class="n">start</span><span class="o">=</span><span class="n">start</span><span class="p">)(</span>
-        <span class="n">spec</span><span class="p">,</span>
-        <span class="n">root</span><span class="p">,</span>
-        <span class="n">resource_path</span><span class="p">,</span>
+        <span class="n">mimetype</span><span class="p">,</span>
+        <span class="n">uri</span><span class="p">,</span>
         <span class="n">data_key</span><span class="p">,</span>
-        <span class="n">resource_kwargs</span><span class="p">,</span>
-        <span class="n">path_semantics</span><span class="o">=</span><span class="n">path_semantics</span><span class="p">,</span>
+        <span class="n">parameters</span><span class="p">,</span>
         <span class="n">uid</span><span class="o">=</span><span class="n">uid</span><span class="p">,</span>
         <span class="n">validate</span><span class="o">=</span><span class="n">validate</span><span class="p">,</span>
     <span class="p">)</span>

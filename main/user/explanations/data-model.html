@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Data Model &#8212; event-model 1.20.0 documentation</title>
+    <title>Data Model &#8212; event-model 1.20.1.dev18+gaf8fac3 documentation</title>
   
   
   
@@ -39,7 +39,7 @@
 <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae" />
   <script src="../../_static/vendor/fontawesome/6.5.1/js/all.min.js?digest=8d27b9dea8ad943066ae"></script>
 
-    <script src="../../_static/documentation_options.js?v=2a6ef5f7"></script>
+    <script src="../../_static/documentation_options.js?v=bd7c497c"></script>
     <script src="../../_static/doctools.js?v=888ff710"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -49,7 +49,7 @@
     <script>
         DOCUMENTATION_OPTIONS.theme_version = '0.15.2';
         DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://bluesky.github.io/event-model/switcher.json';
-        DOCUMENTATION_OPTIONS.theme_switcher_version_match = '1.20.0';
+        DOCUMENTATION_OPTIONS.theme_switcher_version_match = 'main';
         DOCUMENTATION_OPTIONS.show_version_warning_banner = false;
         </script>
     <link rel="index" title="Index" href="../../genindex.html" />
@@ -1776,11 +1776,9 @@ or assets where there are many relatively small data sets (e.g. scanned fluoresc
 <p>Typical example:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># &#39;Stream Resource&#39; document</span>
 <span class="p">{</span><span class="s1">&#39;data_key&#39;</span><span class="p">:</span> <span class="s1">&#39;detector_1&#39;</span><span class="p">,</span>
- <span class="s1">&#39;spec&#39;</span><span class="p">:</span> <span class="s1">&#39;AD_HDF5&#39;</span><span class="p">,</span>
- <span class="s1">&#39;root&#39;</span><span class="p">:</span> <span class="s1">&#39;/GPFS/DATA/Andor/&#39;</span><span class="p">,</span>
- <span class="s1">&#39;resource_path&#39;</span><span class="p">:</span> <span class="s1">&#39;2020/01/03/8ff08ff9-a2bf-48c3-8ff3-dcac0f309d7d.h5&#39;</span><span class="p">,</span>
- <span class="s1">&#39;resource_kwargs&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;frame_per_point&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">},</span>
- <span class="s1">&#39;path_semantics&#39;</span><span class="p">:</span> <span class="s1">&#39;posix&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;mimetype&#39;</span><span class="p">:</span> <span class="s1">&#39;application/x-hdf5&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;uri&#39;</span><span class="p">:</span> <span class="s1">&#39;file://localhost/GPFS/DATA/Andor/01/03/8ff08ff9-a2bf-48c3-8ff3-dcac0f309d7d.h5&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;parameters&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;frame_per_point&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">},</span>
  <span class="s1">&#39;uid&#39;</span><span class="p">:</span> <span class="s1">&#39;3b300e6f-b431-4750-a635-5630d15c81a8&#39;</span><span class="p">,</span>
  <span class="s1">&#39;run_start&#39;</span><span class="p">:</span> <span class="s1">&#39;10bf6945-4afd-43ca-af36-6ad8f3540bcd&#39;</span><span class="p">}</span>
 </pre></div>
@@ -1796,53 +1794,38 @@ or assets where there are many relatively small data sets (e.g. scanned fluoresc
             <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;A string to show which data_key of the Descriptor are being streamed&quot;</span><span class="p">,</span>
             <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
         <span class="p">},</span>
-        <span class="s2">&quot;path_semantics&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Path Semantics&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Rules for joining paths&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;enum&quot;</span><span class="p">:</span> <span class="p">[</span>
-                <span class="s2">&quot;posix&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;windows&quot;</span>
-            <span class="p">]</span>
+        <span class="s2">&quot;mimetype&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Mimetype&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;String identifying the format/type of this Stream Resource, used to identify a compatible Handler&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
         <span class="p">},</span>
-        <span class="s2">&quot;resource_kwargs&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Resource Kwargs&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Additional argument to pass to the Handler to read a Stream Resource&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;parameters&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Parameters&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Additional keyword arguments to pass to the Handler to read a Stream Resource&quot;</span><span class="p">,</span>
             <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span>
-        <span class="p">},</span>
-        <span class="s2">&quot;resource_path&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Resource Path&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Filepath or URI for locating this resource&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
-        <span class="p">},</span>
-        <span class="s2">&quot;root&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Root&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Subset of resource_path that is a local detail, not semantic.&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
         <span class="p">},</span>
         <span class="s2">&quot;run_start&quot;</span><span class="p">:</span> <span class="p">{</span>
             <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Run Start&quot;</span><span class="p">,</span>
             <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Globally unique ID to the run_start document this Stream Resource is associated with.&quot;</span><span class="p">,</span>
             <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
         <span class="p">},</span>
-        <span class="s2">&quot;spec&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Spec&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;String identifying the format/type of this Stream Resource, used to identify a compatible Handler&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
-        <span class="p">},</span>
         <span class="s2">&quot;uid&quot;</span><span class="p">:</span> <span class="p">{</span>
             <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Uid&quot;</span><span class="p">,</span>
             <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Globally unique identifier for this Stream Resource&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;uri&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Uri&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;URI for locating this resource&quot;</span><span class="p">,</span>
             <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
         <span class="p">}</span>
     <span class="p">},</span>
     <span class="s2">&quot;required&quot;</span><span class="p">:</span> <span class="p">[</span>
         <span class="s2">&quot;data_key&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;resource_kwargs&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;resource_path&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;root&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;spec&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;uid&quot;</span>
+        <span class="s2">&quot;mimetype&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;parameters&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;uid&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;uri&quot;</span>
     <span class="p">],</span>
     <span class="s2">&quot;additionalProperties&quot;</span><span class="p">:</span> <span class="n">false</span>
 <span class="p">}</span>
@@ -2106,7 +2089,7 @@ DatumPage instead.</p>
 
   
   <div class="tocsection editthispage">
-    <a href="https://github.com/bluesky/event-model/edit/1.20.0/docs/user/explanations/data-model.rst">
+    <a href="https://github.com/bluesky/event-model/edit/main/docs/user/explanations/data-model.rst">
       <i class="fa-solid fa-pencil"></i>
       
       

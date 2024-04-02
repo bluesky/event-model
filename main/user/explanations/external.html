@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>External Assets &#8212; event-model 1.20.0 documentation</title>
+    <title>External Assets &#8212; event-model 1.20.1.dev18+gaf8fac3 documentation</title>
   
   
   
@@ -39,7 +39,7 @@
 <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae" />
   <script src="../../_static/vendor/fontawesome/6.5.1/js/all.min.js?digest=8d27b9dea8ad943066ae"></script>
 
-    <script src="../../_static/documentation_options.js?v=2a6ef5f7"></script>
+    <script src="../../_static/documentation_options.js?v=bd7c497c"></script>
     <script src="../../_static/doctools.js?v=888ff710"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -49,7 +49,7 @@
     <script>
         DOCUMENTATION_OPTIONS.theme_version = '0.15.2';
         DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://bluesky.github.io/event-model/switcher.json';
-        DOCUMENTATION_OPTIONS.theme_switcher_version_match = '1.20.0';
+        DOCUMENTATION_OPTIONS.theme_switcher_version_match = 'main';
         DOCUMENTATION_OPTIONS.show_version_warning_banner = false;
         </script>
     <link rel="index" title="Index" href="../../genindex.html" />
@@ -564,6 +564,29 @@ and subject to change (if the data is moved over time).</p>
 <p>The <code class="docutils literal notranslate"><span class="pre">spec</span></code> gives us a hint about the format of this asset, whether it be a
 file, multiple files, or something more specialized. The <code class="docutils literal notranslate"><span class="pre">resource_kwargs</span></code>
 provide any additional parameters for reading it.</p>
+<blockquote>
+<div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># &#39;Stream Resource&#39; document</span>
+<span class="p">{</span><span class="s1">&#39;uid&#39;</span><span class="p">:</span> <span class="s1">&#39;aa10035d-1d2b-41d9-97e6-03e3fe62fa6c&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;mimetype&#39;</span><span class="p">:</span> <span class="s1">&#39;application/x-hdf5&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;uri&#39;</span><span class="p">:</span> <span class="s1">&#39;file://localhost/</span><span class="si">{path}</span><span class="s1">/GPFS/DATA/Andor/2020/01/03/8ff08ff9.h5&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;parameters&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;frame_per_point&#39;</span><span class="p">:</span> <span class="mi">10</span><span class="p">},</span>
+ <span class="s1">&#39;uid&#39;</span><span class="p">:</span> <span class="s1">&#39;3b300e6f-b431-4750-a635-5630d15c81a8&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;run_start&#39;</span><span class="p">:</span> <span class="s1">&#39;10bf6945-4afd-43ca-af36-6ad8f3540bcd&#39;</span><span class="p">}</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>The <code class="docutils literal notranslate"><span class="pre">uri</span></code> specifies the location of the data. It may be a path on the local
+filesystem, <code class="xref any docutils literal notranslate"><span class="pre">file://localhost/{path}</span></code>, a path on a shared filesystem
+<code class="xref any docutils literal notranslate"><span class="pre">file://{host}/{path}</span></code>, to be remapped at read time via local mount config,
+or a non-file-based resource like <code class="xref any docutils literal notranslate"><span class="pre">s3://...</span></code>. The <code class="xref any docutils literal notranslate"><span class="pre">{path}</span></code> part of the <code class="xref any docutils literal notranslate"><span class="pre">uri</span></code>
+is typically a relative path, all of which is semantic and should usually not
+change during the lifecycle of this asset.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">mimetype</span></code> is a recognized standard way to specify the I/O procedures to
+read the asset. It gives us a hint about the format of this asset, whether it
+be a file, multiple files, or something more specialized. We support standard
+mimetypes, such as <code class="xref any docutils literal notranslate"><span class="pre">image/tiff</span></code>, as well as custom ones, e.g.
+<code class="xref any docutils literal notranslate"><span class="pre">application/x-hdf5-smwr-slice</span></code>. The <code class="docutils literal notranslate"><span class="pre">parameters</span></code> provide any additional
+parameters for reading the asset.</p>
 </section>
 <section id="handlers">
 <h2>Handlers<a class="headerlink" href="#handlers" title="Link to this heading">#</a></h2>
@@ -819,7 +842,7 @@ of asset.</p>
 
   
   <div class="tocsection editthispage">
-    <a href="https://github.com/bluesky/event-model/edit/1.20.0/docs/user/explanations/external.rst">
+    <a href="https://github.com/bluesky/event-model/edit/main/docs/user/explanations/external.rst">
       <i class="fa-solid fa-pencil"></i>
       
       
