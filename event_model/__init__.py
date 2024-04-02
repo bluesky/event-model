@@ -2047,12 +2047,10 @@ class ComposeStreamResource:
 
     def __call__(
         self,
-        spec: str,
-        root: str,
-        resource_path: str,
+        mimetype: str,
+        uri: str,
         data_key: str,
-        resource_kwargs: Dict[str, Any],
-        path_semantics: Literal["posix", "windows"] = default_path_semantics,
+        parameters: Dict[str, Any],
         uid: Optional[str] = None,
         validate: bool = True,
     ) -> ComposeStreamResourceBundle:
@@ -2062,11 +2060,9 @@ class ComposeStreamResource:
         doc = StreamResource(
             uid=uid,
             data_key=data_key,
-            spec=spec,
-            root=root,
-            resource_path=resource_path,
-            resource_kwargs=resource_kwargs,
-            path_semantics=path_semantics,
+            mimetype=mimetype,
+            uri=uri,
+            parameters=parameters,
         )
 
         if self.start:
@@ -2086,12 +2082,10 @@ class ComposeStreamResource:
 
 def compose_stream_resource(
     *,
-    spec: str,
-    root: str,
-    resource_path: str,
+    mimetype: str,
+    uri: str,
     data_key: str,
-    resource_kwargs: Dict[str, Any],
-    path_semantics: Literal["posix", "windows"] = default_path_semantics,
+    parameters: Dict[str, Any],
     start: Optional[RunStart] = None,
     uid: Optional[str] = None,
     validate: bool = True,
@@ -2100,12 +2094,10 @@ def compose_stream_resource(
     Here for backwards compatibility, the Compose class is prefered.
     """
     return ComposeStreamResource(start=start)(
-        spec,
-        root,
-        resource_path,
+        mimetype,
+        uri,
         data_key,
-        resource_kwargs,
-        path_semantics=path_semantics,
+        parameters,
         uid=uid,
         validate=validate,
     )

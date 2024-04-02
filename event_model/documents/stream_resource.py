@@ -1,6 +1,6 @@
 from typing import Any, Dict
 
-from typing_extensions import Annotated, Literal, NotRequired, TypedDict
+from typing_extensions import Annotated, NotRequired, TypedDict
 
 from .generate.type_wrapper import Field, add_extra_schema
 
@@ -14,12 +14,6 @@ class StreamResource(TypedDict):
     externally-stored data streams
     """
 
-    path_semantics: NotRequired[
-        Annotated[
-            Literal["posix", "windows"],
-            Field(description="Rules for joining paths"),
-        ]
-    ]
     data_key: Annotated[
         str,
         Field(
@@ -27,22 +21,14 @@ class StreamResource(TypedDict):
             "Descriptor are being streamed"
         ),
     ]
-    resource_kwargs: Annotated[
+    parameters: Annotated[
         Dict[str, Any],
         Field(
-            description="Additional argument to pass to the Handler to read a "
+            description="Additional keyword arguments to pass to the Handler to read a "
             "Stream Resource",
         ),
     ]
-    resource_path: Annotated[
-        str, Field(description="Filepath or URI for locating this resource")
-    ]
-    root: Annotated[
-        str,
-        Field(
-            description="Subset of resource_path that is a local detail, not semantic."
-        ),
-    ]
+    uri: Annotated[str, Field(description="URI for locating this resource")]
     run_start: NotRequired[
         Annotated[
             str,
@@ -52,7 +38,7 @@ class StreamResource(TypedDict):
             ),
         ]
     ]
-    spec: Annotated[
+    mimetype: Annotated[
         str,
         Field(
             description="String identifying the format/type of this Stream Resource, "

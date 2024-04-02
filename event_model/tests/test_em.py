@@ -107,11 +107,10 @@ def test_compose_stream_resource(tmp_path):
     compose_stream_resource = bundle.compose_stream_resource
     assert bundle.compose_stream_resource is compose_stream_resource
     bundle = compose_stream_resource(
-        spec="TIFF_STREAM",
-        root=str(tmp_path),
+        mimetype="image/tiff",
+        uri="file://localhost" + str(tmp_path) + "/test_streams",
         data_key="det1",
-        resource_path="test_streams",
-        resource_kwargs={},
+        parameters={},
     )
     resource_doc, compose_stream_datum = bundle
     assert bundle.stream_resource_doc is resource_doc
@@ -388,11 +387,10 @@ def test_document_router_streams_smoke_test(tmp_path):
     start = run_bundle.start_doc
     dr("start", start)
     stream_resource_doc, compose_stream_datum = compose_stream_resource(
-        spec="TIFF_STREAM",
+        mimetype="image/tiff",
         data_key="det1",
-        root=str(tmp_path),
-        resource_path="test_streams",
-        resource_kwargs={},
+        uri="file://localhost" + str(tmp_path) + "/test_streams",
+        parameters={},
     )
     dr("stream_resource", stream_resource_doc)
     datum_doc = compose_stream_datum(

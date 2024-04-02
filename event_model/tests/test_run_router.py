@@ -216,11 +216,10 @@ def test_run_router_streams(tmp_path):
     )
     docs.append(("start", start_doc))
     stream_resource_doc, compose_stream_datum = compose_stream_resource(
-        spec="TIFF_STREAM",
+        mimetype="image/tiff",
         data_key="det1",
-        root=str(tmp_path),
-        resource_path="test_streams",
-        resource_kwargs={},
+        uri="file://localhost" + str(tmp_path) + "/test_streams",
+        parameters={},
     )
     docs.append(("stream_resource", stream_resource_doc))
     datum_doc = compose_stream_datum(

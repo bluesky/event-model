@@ -109,6 +109,30 @@ The ``spec`` gives us a hint about the format of this asset, whether it be a
 file, multiple files, or something more specialized. The ``resource_kwargs``
 provide any additional parameters for reading it.
 
+ .. code:: python
+
+   # 'Stream Resource' document
+   {'uid': 'aa10035d-1d2b-41d9-97e6-03e3fe62fa6c',
+    'mimetype': 'application/x-hdf5',
+    'uri': 'file://localhost/{path}/GPFS/DATA/Andor/2020/01/03/8ff08ff9.h5',
+    'parameters': {'frame_per_point': 10},
+    'uid': '3b300e6f-b431-4750-a635-5630d15c81a8',
+    'run_start': '10bf6945-4afd-43ca-af36-6ad8f3540bcd'}
+
+The ``uri`` specifies the location of the data. It may be a path on the local
+filesystem, `file://localhost/{path}`, a path on a shared filesystem
+`file://{host}/{path}`, to be remapped at read time via local mount config,
+or a non-file-based resource like `s3://...`. The `{path}` part of the `uri`
+is typically a relative path, all of which is semantic and should usually not
+change during the lifecycle of this asset.
+
+The ``mimetype`` is a recognized standard way to specify the I/O procedures to
+read the asset. It gives us a hint about the format of this asset, whether it
+be a file, multiple files, or something more specialized. We support standard
+mimetypes, such as `image/tiff`, as well as custom ones, e.g.
+`application/x-hdf5-smwr-slice`. The ``parameters`` provide any additional
+parameters for reading the asset.
+
 Handlers
 ========
 
