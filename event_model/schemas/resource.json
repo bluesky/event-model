@@ -3,9 +3,18 @@
     "description": "Document to reference a collection (e.g. file or group of files) of externally-stored data",
     "type": "object",
     "properties": {
-        "parameters": {
-            "title": "Parameters",
-            "description": "Additional keyword arguments to pass to the Handler to read a Resource",
+        "path_semantics": {
+            "title": "Path Semantics",
+            "description": "Rules for joining paths",
+            "type": "string",
+            "enum": [
+                "posix",
+                "windows"
+            ]
+        },
+        "resource_kwargs": {
+            "title": "Resource Kwargs",
+            "description": "Additional argument to pass to the Handler to read a Resource",
             "type": "object"
         },
         "resource_path": {
@@ -35,7 +44,7 @@
         }
     },
     "required": [
-        "parameters",
+        "resource_kwargs",
         "resource_path",
         "root",
         "spec",

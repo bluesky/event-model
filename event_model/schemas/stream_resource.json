@@ -8,6 +8,11 @@
             "description": "A string to show which data_key of the Descriptor are being streamed",
             "type": "string"
         },
+        "mimetype": {
+            "title": "Mimetype",
+            "description": "String identifying the format/type of this Stream Resource, used to identify a compatible Handler",
+            "type": "string"
+        },
         "parameters": {
             "title": "Parameters",
             "description": "Additional keyword arguments to pass to the Handler to read a Stream Resource",
@@ -28,11 +33,6 @@
             "description": "Globally unique ID to the run_start document this Stream Resource is associated with.",
             "type": "string"
         },
-        "mimetype": {
-            "title": "Mimetype",
-            "description": "String identifying the format/type of this Stream Resource, used to identify a compatible Handler",
-            "type": "string"
-        },
         "uid": {
             "title": "Uid",
             "description": "Globally unique identifier for this Stream Resource",
@@ -41,10 +41,10 @@
     },
     "required": [
         "data_key",
+        "mimetype",
         "parameters",
         "resource_path",
         "root",
-        "mimetype",
         "uid"
     ],
     "additionalProperties": false

@@ -28,7 +28,7 @@ res_bundle = run_bundle.compose_resource(
     spec="DUMMY",
     root=str(path_root),
     resource_path="stack.tiff",
-    parameters={"a": 1, "b": 2},
+    resource_kwargs={"a": 1, "b": 2},
 )
 datum_doc = res_bundle.compose_datum(datum_kwargs={"c": 3, "d": 4})
 raw_event = desc_bundle.compose_event(
