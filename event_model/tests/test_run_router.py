@@ -216,7 +216,7 @@ def test_run_router_streams(tmp_path):
     )
     docs.append(("start", start_doc))
     stream_resource_doc, compose_stream_datum = compose_stream_resource(
-        mimetype="application/x-hdf5",
+        mimetype="image/tiff",
         data_key="det1",
         uri="file://" + str(tmp_path) + "/test_streams",
         parameters={},
