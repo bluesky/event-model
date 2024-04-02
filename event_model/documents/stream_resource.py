@@ -28,9 +28,7 @@ class StreamResource(TypedDict):
             "Stream Resource",
         ),
     ]
-    uri: Annotated[
-        str, Field(description="URI for locating this resource")
-    ]
+    uri: Annotated[str, Field(description="URI for locating this resource")]
     run_start: NotRequired[
         Annotated[
             str,
