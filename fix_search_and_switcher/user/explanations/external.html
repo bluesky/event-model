@@ -1,0 +1,900 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>External Assets &#8212; event-model 1.20.1.dev19+g3beeadf documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+<link href="../../_static/styles/bootstrap.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+
+  
+  <link href="../../_static/vendor/fontawesome/6.5.1/css/all.min.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.1/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.1/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.1/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=fd3f3429" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../../_static/plot_directive.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css?v=0a3b3ea7" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=8d27b9dea8ad943066ae" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae" />
+  <script src="../../_static/vendor/fontawesome/6.5.1/js/all.min.js?digest=8d27b9dea8ad943066ae"></script>
+
+    <script src="../../_static/documentation_options.js?v=1e4a8a9f"></script>
+    <script src="../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../_static/copybutton.js?v=30646c52"></script>
+    <script src="../../_static/design-tabs.js?v=36754332"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'user/explanations/external';</script>
+    <script>
+        DOCUMENTATION_OPTIONS.theme_version = '0.15.2';
+        DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://blueskyproject.io/event-model/switcher.json';
+        DOCUMENTATION_OPTIONS.theme_switcher_version_match = 'fix_search_and_switcher';
+        DOCUMENTATION_OPTIONS.show_version_warning_banner = false;
+        </script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="API Documentation" href="../reference/api.html" />
+    <link rel="prev" title="Event Descriptors" href="event-descriptors.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a id="pst-skip-link" class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>
+    Back to top
+  </button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar">
+<div class="bd-header__inner bd-page-width">
+  <label class="sidebar-toggle primary-toggle" for="__primary">
+    <span class="fa-solid fa-bars"></span>
+  </label>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+
+<a class="navbar-brand logo" href="../../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../../_static/bluesky-logo-dark.svg" class="logo__image only-light" alt=""/>
+    <script>document.write(`<img src="../../_static/bluesky-logo-dark.svg" class="logo__image only-dark" alt=""/>`);</script>
+  
+  
+    <p class="title logo__title">event-model</p>
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav class="navbar-nav">
+  <ul class="bd-navbar-elements navbar-nav">
+    
+                    <li class="nav-item current active">
+                      <a class="nav-link nav-internal" href="../index.html">
+                        User Guide
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../developer/index.html">
+                        Developer Guide
+                      </a>
+                    </li>
+                
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+ <script>
+ document.write(`
+   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
+  </button>
+`);
+</script></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links navbar-nav"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/bluesky/event-model" title="GitHub" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i></span>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://pypi.org/project/event-model" title="PyPI" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fas fa-cube fa-lg" aria-hidden="true"></i></span>
+            <span class="sr-only">PyPI</span></a>
+        </li>
+</ul></div>
+      
+        <div class="navbar-item">
+<script>
+document.write(`
+  <div class="version-switcher__container dropdown">
+    <button id="pst-version-switcher-button-2"
+      type="button"
+      class="version-switcher__button btn btn-sm navbar-btn dropdown-toggle"
+      data-bs-toggle="dropdown"
+      aria-haspopup="listbox"
+      aria-controls="pst-version-switcher-list-2"
+      aria-label="Version switcher list"
+    >
+      Choose version  <!-- this text may get changed later by javascript -->
+      <span class="caret"></span>
+    </button>
+    <div id="pst-version-switcher-list-2"
+      class="version-switcher__menu dropdown-menu list-group-flush py-0"
+      role="listbox" aria-labelledby="pst-version-switcher-button-2">
+      <!-- dropdown will be populated by javascript on page load -->
+    </div>
+  </div>
+`);
+</script></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+ <script>
+ document.write(`
+   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script>
+    </div>
+  
+
+  
+    <label class="sidebar-toggle secondary-toggle" for="__secondary" tabindex="0">
+      <span class="fa-solid fa-outdent"></span>
+    </label>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          <div class="navbar-item">
+<nav class="navbar-nav">
+  <ul class="bd-navbar-elements navbar-nav">
+    
+                    <li class="nav-item current active">
+                      <a class="nav-link nav-internal" href="../index.html">
+                        User Guide
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../developer/index.html">
+                        Developer Guide
+                      </a>
+                    </li>
+                
+  </ul>
+</nav></div>
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
+  </button>
+`);
+</script></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links navbar-nav"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/bluesky/event-model" title="GitHub" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i></span>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://pypi.org/project/event-model" title="PyPI" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fas fa-cube fa-lg" aria-hidden="true"></i></span>
+            <span class="sr-only">PyPI</span></a>
+        </li>
+</ul></div>
+        
+          <div class="navbar-item">
+<script>
+document.write(`
+  <div class="version-switcher__container dropdown">
+    <button id="pst-version-switcher-button-3"
+      type="button"
+      class="version-switcher__button btn btn-sm navbar-btn dropdown-toggle"
+      data-bs-toggle="dropdown"
+      aria-haspopup="listbox"
+      aria-controls="pst-version-switcher-list-3"
+      aria-label="Version switcher list"
+    >
+      Choose version  <!-- this text may get changed later by javascript -->
+      <span class="caret"></span>
+    </button>
+    <div id="pst-version-switcher-list-3"
+      class="version-switcher__menu dropdown-menu list-group-flush py-0"
+      role="listbox" aria-labelledby="pst-version-switcher-button-3">
+      <!-- dropdown will be populated by javascript on page load -->
+    </div>
+  </div>
+`);
+</script></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+<nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><p aria-level="2" class="caption" role="heading"><span class="caption-text">Tutorials</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/installation.html">Installation</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">How-to Guides</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../how-to/use-cases.html">Event Model Patterns</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Explanations</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="docs-structure.html">About The Documentation</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="data-model.html">Data Model</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="event-descriptors.html">Event Descriptors</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">External Assets</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Reference</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../reference/api.html">API Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference/release-history.html">Release History</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../genindex.html">Index</a></li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+
+
+<nav aria-label="Breadcrumb">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../index.html" class="nav-link">User Guide</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page">External Assets</li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="external-assets">
+<h1>External Assets<a class="headerlink" href="#external-assets" title="Link to this heading">#</a></h1>
+<section id="the-documents">
+<h2>The Documents<a class="headerlink" href="#the-documents" title="Link to this heading">#</a></h2>
+<p>The data model allows an Event document to contain a mixture of literal values
+and references to externally-stored values. Scalar values and very small arrays
+are typically placed directly in the document; large arrays such as from area
+detectors are typically stored externally.</p>
+<p>This design keeps the documents of reasonable size—suitable for storing in
+MongoDB or viewing directly as JSON text—and it allows large assets to be
+loaded only when needed.</p>
+<p>Suppose we have this Event</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># &#39;event&#39; document</span>
+<span class="p">{</span><span class="s1">&#39;data&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;image&#39;</span><span class="p">:</span> <span class="s1">&#39;aa10035d-1d2b-41d9-97e6-03e3fe62fa6c/5&#39;</span><span class="p">,</span>
+          <span class="s1">&#39;temperature&#39;</span><span class="p">:</span> <span class="mf">5.0</span><span class="p">},</span>
+ <span class="s1">&#39;descriptor&#39;</span><span class="p">:</span> <span class="s1">&#39;219310e0-faa0-4990-84a0-95b508d4ae35&#39;</span><span class="p">,</span>
+ <span class="o">...</span><span class="p">}</span>
+</pre></div>
+</div>
+<p>where the other fields in the Event have been omitted (<code class="docutils literal notranslate"><span class="pre">...</span></code>) for brevity.
+We can tell that the value of <code class="docutils literal notranslate"><span class="pre">'image'</span></code> is a placeholder, a foreign key
+referencing some array yet to be retrieved, by consulting the Event Descriptor
+referenced by this Event.</p>
+<p>(Of course, a human may be able to <em>guess</em> that the value of <code class="docutils literal notranslate"><span class="pre">'image'</span></code> looks
+like a placeholder, but that wouldn’t help a program.)</p>
+<p>Here is the Event Descriptor that goes with this Event; we can tell that
+because its <code class="docutils literal notranslate"><span class="pre">'uid'</span></code> matches the Event’s <code class="docutils literal notranslate"><span class="pre">'descriptor'</span></code> field.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># &#39;descriptor&#39; document</span>
+<span class="p">{</span><span class="s1">&#39;uid&#39;</span><span class="p">:</span> <span class="s1">&#39;219310e0-faa0-4990-84a0-95b508d4ae35&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;data_keys&#39;</span><span class="p">:</span>
+    <span class="p">{</span><span class="s1">&#39;image&#39;</span><span class="p">:</span>
+        <span class="p">{</span><span class="s1">&#39;source&#39;</span><span class="p">:</span> <span class="s1">&#39;...&#39;</span><span class="p">,</span>
+         <span class="s1">&#39;shape&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">512</span><span class="p">,</span> <span class="mi">512</span><span class="p">],</span>
+         <span class="s1">&#39;dtype&#39;</span><span class="p">:</span> <span class="s1">&#39;array&#39;</span><span class="p">,</span>
+         <span class="s1">&#39;external&#39;</span><span class="p">:</span> <span class="s1">&#39;...&#39;</span><span class="p">},</span>
+     <span class="s1">&#39;temperature&#39;</span><span class="p">:</span>
+        <span class="p">{</span><span class="s1">&#39;source&#39;</span><span class="p">:</span> <span class="s1">&#39;...&#39;</span><span class="p">,</span>
+         <span class="s1">&#39;shape&#39;</span><span class="p">:</span> <span class="p">[],</span>
+         <span class="s1">&#39;dtype&#39;</span><span class="p">:</span> <span class="s1">&#39;number&#39;</span><span class="p">}}</span>
+ <span class="o">...</span><span class="p">}</span>
+</pre></div>
+</div>
+<p>The presence of the key <code class="docutils literal notranslate"><span class="pre">'external'</span></code> indicates that the Events’ <code class="docutils literal notranslate"><span class="pre">'image'</span></code>
+contains a reference to an asset outside the documents. (The value of
+that key is not currently used by any part of the system; only its existence is
+checked for. The value may be used in the futue as a hook for integration with
+outside systems.)</p>
+<p>Returning to our Event</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># &#39;event&#39; document</span>
+<span class="p">{</span><span class="s1">&#39;data&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;image&#39;</span><span class="p">:</span> <span class="s1">&#39;aa10035d-1d2b-41d9-97e6-03e3fe62fa6c/5&#39;</span><span class="p">,</span>
+          <span class="s1">&#39;temperature&#39;</span><span class="p">:</span> <span class="mf">5.0</span><span class="p">}</span>
+ <span class="s1">&#39;descriptor&#39;</span><span class="p">:</span> <span class="s1">&#39;219310e0-faa0-4990-84a0-95b508d4ae35&#39;</span><span class="p">,</span>
+ <span class="o">...</span><span class="p">}</span>
+</pre></div>
+</div>
+<p>now that we know that <code class="docutils literal notranslate"><span class="pre">'image'</span></code> is external, the value
+<code class="docutils literal notranslate"><span class="pre">'aa10035d-1d2b-41d9-97e6-03e3fe62fa6c/5'</span></code> must be a <code class="docutils literal notranslate"><span class="pre">datum_id</span></code>,
+referencing a Datum document. Here is the matching Datum document. This
+document can be used to retrieve some data that belong in our Event. In our
+example it might be an image or stack of images that were taken at a
+given temperature during a temperature scan.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># &#39;datum&#39; document</span>
+<span class="p">{</span><span class="s1">&#39;datum_id&#39;</span><span class="p">:</span> <span class="s1">&#39;aa10035d-1d2b-41d9-97e6-03e3fe62fa6c/5&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;datum_kwargs&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;index&#39;</span><span class="p">:</span> <span class="mi">5</span><span class="p">},</span>
+ <span class="s1">&#39;resource&#39;</span><span class="p">:</span> <span class="s1">&#39;aa10035d-1d2b-41d9-97e6-03e3fe62fa6c&#39;</span><span class="p">}</span>
+</pre></div>
+</div>
+<p>You will notice that we still do not have a <em>filepath</em> anywhere here. It is
+common for many Datum documents to point into the same file (e.g. a large HDF5
+file) or series of files (e.g. TIFF series).  Rather than store that
+information separately and redundantly in each Datum, the Datum documents point
+to a Resource document—the last document type we’ll need here—which
+contains path-related details.</p>
+<blockquote>
+<div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># &#39;resource&#39; document</span>
+<span class="p">{</span><span class="s1">&#39;uid&#39;</span><span class="p">:</span> <span class="s1">&#39;aa10035d-1d2b-41d9-97e6-03e3fe62fa6c&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;spec&#39;</span><span class="p">:</span> <span class="s1">&#39;AD_HDF5&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;root&#39;</span><span class="p">:</span> <span class="s1">&#39;/GPFS/DATA/Andor/&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;resource_path&#39;</span><span class="p">:</span> <span class="s1">&#39;2020/01/03/8ff08ff9-a2bf-48c3-8ff3-dcac0f309d7d.h5&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;resource_kwargs&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;frame_per_point&#39;</span><span class="p">:</span> <span class="mi">10</span><span class="p">},</span>
+ <span class="s1">&#39;path_semantics&#39;</span><span class="p">:</span> <span class="s1">&#39;posix&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;uid&#39;</span><span class="p">:</span> <span class="s1">&#39;3b300e6f-b431-4750-a635-5630d15c81a8&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;run_start&#39;</span><span class="p">:</span> <span class="s1">&#39;10bf6945-4afd-43ca-af36-6ad8f3540bcd&#39;</span><span class="p">}</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>The <code class="docutils literal notranslate"><span class="pre">resource_path</span></code> is a relative path, all of which is semantic and should
+usually not change during the lifecycle of this asset. The <code class="docutils literal notranslate"><span class="pre">root</span></code> is more
+context-dependent (depending on what system you are accessing the data from)
+and subject to change (if the data is moved over time).</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">spec</span></code> gives us a hint about the format of this asset, whether it be a
+file, multiple files, or something more specialized. The <code class="docutils literal notranslate"><span class="pre">resource_kwargs</span></code>
+provide any additional parameters for reading it.</p>
+<blockquote>
+<div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># &#39;Stream Resource&#39; document</span>
+<span class="p">{</span><span class="s1">&#39;uid&#39;</span><span class="p">:</span> <span class="s1">&#39;aa10035d-1d2b-41d9-97e6-03e3fe62fa6c&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;mimetype&#39;</span><span class="p">:</span> <span class="s1">&#39;application/x-hdf5&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;uri&#39;</span><span class="p">:</span> <span class="s1">&#39;file://localhost/</span><span class="si">{path}</span><span class="s1">/GPFS/DATA/Andor/2020/01/03/8ff08ff9.h5&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;parameters&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;frame_per_point&#39;</span><span class="p">:</span> <span class="mi">10</span><span class="p">},</span>
+ <span class="s1">&#39;uid&#39;</span><span class="p">:</span> <span class="s1">&#39;3b300e6f-b431-4750-a635-5630d15c81a8&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;run_start&#39;</span><span class="p">:</span> <span class="s1">&#39;10bf6945-4afd-43ca-af36-6ad8f3540bcd&#39;</span><span class="p">}</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>The <code class="docutils literal notranslate"><span class="pre">uri</span></code> specifies the location of the data. It may be a path on the local
+filesystem, <code class="xref any docutils literal notranslate"><span class="pre">file://localhost/{path}</span></code>, a path on a shared filesystem
+<code class="xref any docutils literal notranslate"><span class="pre">file://{host}/{path}</span></code>, to be remapped at read time via local mount config,
+or a non-file-based resource like <code class="xref any docutils literal notranslate"><span class="pre">s3://...</span></code>. The <code class="xref any docutils literal notranslate"><span class="pre">{path}</span></code> part of the <code class="xref any docutils literal notranslate"><span class="pre">uri</span></code>
+is typically a relative path, all of which is semantic and should usually not
+change during the lifecycle of this asset.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">mimetype</span></code> is a recognized standard way to specify the I/O procedures to
+read the asset. It gives us a hint about the format of this asset, whether it
+be a file, multiple files, or something more specialized. We support standard
+mimetypes, such as <code class="xref any docutils literal notranslate"><span class="pre">image/tiff</span></code>, as well as custom ones, e.g.
+<code class="xref any docutils literal notranslate"><span class="pre">application/x-hdf5-smwr-slice</span></code>. The <code class="docutils literal notranslate"><span class="pre">parameters</span></code> provide any additional
+parameters for reading the asset.</p>
+</section>
+<section id="handlers">
+<h2>Handlers<a class="headerlink" href="#handlers" title="Link to this heading">#</a></h2>
+<p>In bluesky/databroker, a “handler” is a reader with a special interface. It
+accepts a Resource document and a Datum document and in exchange returns the
+pertinent data.</p>
+<section id="handler-interface">
+<h3>Handler Interface<a class="headerlink" href="#handler-interface" title="Link to this heading">#</a></h3>
+<p>A ‘handler class’ may be any callable with the signature:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">handler_class</span><span class="p">(</span><span class="n">full_path</span><span class="p">,</span> <span class="o">**</span><span class="n">resource_kwargs</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>It is expected to return an object, a ‘handler instance’, which is also
+callable and has the following signature:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">handler_instance</span><span class="p">(</span><span class="o">**</span><span class="n">datum_kwargs</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>As the names ‘handler class’ and ‘handler instance’ suggest, this is
+typically implemented using a class that implements <code class="docutils literal notranslate"><span class="pre">__init__</span></code> and
+<code class="docutils literal notranslate"><span class="pre">__call__</span></code>, with the respective signatures.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">MyHandler</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="o">**</span><span class="n">resource_kwargs</span><span class="p">):</span>
+        <span class="c1"># Consume the path information and the &#39;resource_kwargs&#39; from the</span>
+        <span class="c1"># Resource. Typically stashes some state and/or opens file(s).</span>
+        <span class="o">...</span>
+
+    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">datum_kwargs</span><span class="p">):</span>
+        <span class="c1"># Consumes the &#39;datum_kwargs&#39; from the datum and uses them to</span>
+        <span class="c1"># locate a specific unit (slice, chunk, or what you will...) of</span>
+        <span class="c1"># data and return it.</span>
+        <span class="o">...</span>
+        <span class="k">return</span> <span class="n">some_array_like</span>
+</pre></div>
+</div>
+<p>But in general it may be any callable-that-returns-a-callable.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">handler</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="o">**</span><span class="n">resource_kwargs</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">f</span><span class="p">(</span><span class="o">**</span><span class="n">datum_kwargs</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">some_array_like</span>
+    <span class="k">return</span> <span class="n">f</span>
+</pre></div>
+</div>
+<p>A handler may also implement the instance method <code class="docutils literal notranslate"><span class="pre">get_file_list()</span></code>. This
+presumes that the data in question comes from a filesystem, which may not
+always be the case, which is why this method is optional.</p>
+<p>A handler should implement <code class="docutils literal notranslate"><span class="pre">close()</span></code> if it caches any file handles, network
+connections or other system resources. The lifecycle of a handler is an
+implementation detail left up to the application. Below, we comment on how
+<a class="reference internal" href="../reference/api.html#event_model.Filler" title="event_model.Filler"><code class="xref py py-class docutils literal notranslate"><span class="pre">Filler</span></code></a> and <a class="reference internal" href="../reference/api.html#event_model.RunRouter" title="event_model.RunRouter"><code class="xref py py-class docutils literal notranslate"><span class="pre">RunRouter</span></code></a> make it easier
+to reuse handler instances and clean them up at the proper time.</p>
+</section>
+<section id="handler-discovery">
+<h3>Handler Discovery<a class="headerlink" href="#handler-discovery" title="Link to this heading">#</a></h3>
+<p>To discover all the handlers installed in an environment, use</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">databroker.core</span>
+<span class="n">handler_registry</span> <span class="o">=</span> <span class="n">databroker</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">discover_handlers</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>The result, <code class="docutils literal notranslate"><span class="pre">handler_registry</span></code>, is a dict mapping specs to handler classes.
+It uses an efficient mechanism, described later, for searching the installed
+packages for handlers. Thus, its contents will depend on which packages you
+have installed. In this case, we have installed the Python package
+<code class="docutils literal notranslate"><span class="pre">area-detector-handlers</span></code> which includes several handlers for reading the
+files output by area detectors.</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>{&#39;AD_CBF&#39;: &lt;class &#39;area_detector_handlers.handlers.PilatusCBFHandler&#39;&gt;,
+ &#39;AD_HDF5&#39;: &lt;class &#39;area_detector_handlers.handlers.AreaDetectorHDF5Handler&#39;&gt;,
+ &#39;AD_HDF5_SWMR&#39;: &lt;class &#39;area_detector_handlers.handlers.AreaDetectorHDF5SWMRHandler&#39;&gt;,
+ &#39;AD_HDF5_SWMR_TS&#39;: &lt;class &#39;area_detector_handlers.handlers.AreaDetectorHDF5SWMRTimestampHandler&#39;&gt;,
+ &#39;AD_HDF5_TS&#39;: &lt;class &#39;area_detector_handlers.handlers.AreaDetectorHDF5TimestampHandler&#39;&gt;,
+ &#39;AD_SPE&#39;: &lt;class &#39;area_detector_handlers.handlers.AreaDetectorSPEHandler&#39;&gt;,
+ &#39;AD_TIFF&#39;: &lt;class &#39;area_detector_handlers.handlers.AreaDetectorTiffHandler&#39;&gt;,
+ &#39;XSP3&#39;: &lt;class &#39;area_detector_handlers._xspress3.Xspress3HDF5Handler&#39;&gt;,
+ &#39;XSP3_FLY&#39;: &lt;class &#39;area_detector_handlers._xspress3.BulkXSPRESS&#39;&gt;}
+</pre></div>
+</div>
+<p>To hook into this discovery mechanism, see the section <a class="reference internal" href="#handler-packaging"><span class="std std-ref">Handler Packaging</span></a>
+below.</p>
+</section>
+</section>
+<section id="filling">
+<h2>Filling<a class="headerlink" href="#filling" title="Link to this heading">#</a></h2>
+<p>It is rarely necessary to create handlers directly. The
+<a class="reference internal" href="../reference/api.html#event_model.Filler" title="event_model.Filler"><code class="xref py py-class docutils literal notranslate"><span class="pre">Filler</span></code></a> object is designed to consume documents from a
+Run, determine which data is external, and create handlers as needed to access
+the external data, and “fill” that external in, moving the <code class="docutils literal notranslate"><span class="pre">datum_id</span></code> to a
+separate field.</p>
+<p>Before filling:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># &#39;event&#39; document before filling</span>
+<span class="p">{</span><span class="s1">&#39;data&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;image&#39;</span><span class="p">:</span> <span class="s1">&#39;aa10035d-1d2b-41d9-97e6-03e3fe62fa6c/5&#39;</span><span class="p">,</span>
+          <span class="s1">&#39;temperature&#39;</span><span class="p">:</span> <span class="mf">5.0</span><span class="p">},</span>
+ <span class="s1">&#39;descriptor&#39;</span><span class="p">:</span> <span class="s1">&#39;219310e0-faa0-4990-84a0-95b508d4ae35&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;filled&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;image&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">}</span>
+ <span class="o">...</span><span class="p">}</span>
+</pre></div>
+</div>
+<p>After filling:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># &#39;event&#39; document after filling</span>
+<span class="p">{</span><span class="s1">&#39;data&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;image&#39;</span><span class="p">:,</span> <span class="p">[[</span><span class="o">...</span><span class="p">]]</span>  <span class="c1"># array-like object</span>
+          <span class="s1">&#39;temperature&#39;</span><span class="p">:</span> <span class="mf">5.0</span><span class="p">},</span>
+ <span class="s1">&#39;descriptor&#39;</span><span class="p">:</span> <span class="s1">&#39;219310e0-faa0-4990-84a0-95b508d4ae35&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;filled&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;image&#39;</span><span class="p">:</span> <span class="s1">&#39;aa10035d-1d2b-41d9-97e6-03e3fe62fa6c/5&#39;</span><span class="p">}</span>
+ <span class="o">...</span><span class="p">}</span>
+</pre></div>
+</div>
+<p>Notice that the <code class="docutils literal notranslate"><span class="pre">datum_id</span></code> is still in the document; it has been moved out of
+the way into the <code class="docutils literal notranslate"><span class="pre">'filled'</span></code> mapping. The <code class="docutils literal notranslate"><span class="pre">'filled'</span></code> mapping is a way to
+track which if any keys on a document “in flight” have already been filled.
+It is allowable for an Event or EventPage to be _partially_ filled, where the
+<code class="docutils literal notranslate"><span class="pre">'data'</span></code> mapping contains a mixture of filled and not-yet-filled items.
+Fields that are not externally-stored (such as <code class="docutils literal notranslate"><span class="pre">'temperature'</span></code> in our
+example) do not appear in the <code class="docutils literal notranslate"><span class="pre">'filled'</span></code> mapping. Thus, the keys in the
+<code class="docutils literal notranslate"><span class="pre">'filled'</span></code> mapping are subset of the keys in <code class="docutils literal notranslate"><span class="pre">'data'</span></code>.</p>
+<p>A Filler takes in a <code class="docutils literal notranslate"><span class="pre">handler_registry</span></code>, such as the one shown in the previous
+section.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">event_model</span>
+<span class="n">filler</span> <span class="o">=</span> <span class="n">event_model</span><span class="o">.</span><span class="n">Filler</span><span class="p">(</span><span class="n">handler_registry</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>It uses the <code class="docutils literal notranslate"><span class="pre">'spec'</span></code> in each Resource document to find a matching
+handler class in its registry. If it cannot find a match for a given spec, an
+<code class="xref py py-class docutils literal notranslate"><span class="pre">UndefinedAssetSpecification</span></code> error is raised.</p>
+</section>
+<section id="resource-management">
+<h2>Resource Management<a class="headerlink" href="#resource-management" title="Link to this heading">#</a></h2>
+<p>A primary concern here is resource management. Fillers create and cache
+instances of handlers, which in turn may cache instances of file handles,
+network connections, or other system resources.
+When a Filler is closed with <a class="reference internal" href="../reference/api.html#event_model.Filler.close" title="event_model.Filler.close"><code class="xref py py-meth docutils literal notranslate"><span class="pre">close()</span></code></a> or used as a
+context manager, it releases all its handlers which in turn should close any
+resources they have allocated. The caches used by a Filler are injectable: by
+default all relevant documents and handler instances are cached until the
+Filler is closed, but the Filler can be configured to use any custom cache
+object, such as a <a class="reference external" href="https://cachetools.readthedocs.io/en/stable/index.html#cachetools.LRUCache" title="(in cachetools v5.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">cachetools.LRUCache</span></code></a> or
+<a class="reference external" href="https://cachetools.readthedocs.io/en/stable/index.html#cachetools.LFUCache" title="(in cachetools v5.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">cachetools.LFUCache</span></code></a>, to receive a prepopulated cache, or to share
+caches between Filler instances. This is an implementation detail left entirely
+up to the application. See <a class="reference internal" href="../reference/api.html#event_model.Filler" title="event_model.Filler"><code class="xref py py-class docutils literal notranslate"><span class="pre">Filler</span></code></a> for details on cache
+injection. Here is an example where two Fillers share a global LRU cache:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">event_model</span>
+<span class="kn">import</span> <span class="nn">cachetools</span>
+
+<span class="n">handler_registry</span> <span class="o">=</span> <span class="p">{</span><span class="o">...</span><span class="p">}</span>  <span class="c1"># or use databroker.core.discover_handlers()</span>
+
+<span class="n">handler_cache</span> <span class="o">=</span> <span class="n">cachetools</span><span class="o">.</span><span class="n">LRUCache</span><span class="p">(</span><span class="mi">32</span><span class="p">)</span>
+<span class="n">f1</span> <span class="o">=</span> <span class="n">Filler</span><span class="p">(</span><span class="n">handler_registry</span><span class="p">,</span> <span class="n">handler_cache</span><span class="o">=</span><span class="n">handler_cache</span><span class="p">)</span>
+<span class="n">f2</span> <span class="o">=</span> <span class="n">Filler</span><span class="p">(</span><span class="n">handler_registry</span><span class="p">,</span> <span class="n">handler_cache</span><span class="o">=</span><span class="n">handler_cache</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>If both fillers are asked for the same Resource, they can share the same
+handler instance and any system resources cached therein. When the handler is
+evicted from the LRUCache, the Filler will recover gracefully: an instance will
+be recreated on demand and put back into the cache.</p>
+<p>When streaming data from multiple runs, it is convenient to use the
+<a class="reference internal" href="../reference/api.html#event_model.RunRouter" title="event_model.RunRouter"><code class="xref py py-class docutils literal notranslate"><span class="pre">RunRouter</span></code></a> to manage Filler creation and disposal.
+It accepts a <code class="docutils literal notranslate"><span class="pre">handler_registry</span></code> and other optional Filler-related arguments.
+It uses them to make a separate Filler instance for each Run, which it closes
+when it sees the last document from the Run.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">event_model</span>
+<span class="n">rr</span> <span class="o">=</span> <span class="n">event_model</span><span class="o">.</span><span class="n">RunRouter</span><span class="p">([</span><span class="o">...</span><span class="p">],</span> <span class="n">handler_registry</span><span class="o">=</span><span class="n">handler_registry</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>See <a class="reference internal" href="../reference/api.html#event_model.RunRouter" title="event_model.RunRouter"><code class="xref py py-class docutils literal notranslate"><span class="pre">RunRouter</span></code></a> and <a class="reference internal" href="../reference/api.html#event_model.Filler" title="event_model.Filler"><code class="xref py py-class docutils literal notranslate"><span class="pre">Filler</span></code></a> for more.</p>
+</section>
+<section id="handler-packaging">
+<span id="id1"></span><h2>Handler Packaging<a class="headerlink" href="#handler-packaging" title="Link to this heading">#</a></h2>
+<p>Packages can use the <code class="docutils literal notranslate"><span class="pre">'databroker.handlers'</span></code>
+<a class="reference external" href="https://packaging.python.org/specifications/entry-points/">entrypoint</a>
+to declare that they include some handlers. See for example this excerpt from
+the <code class="docutils literal notranslate"><span class="pre">setup.py</span></code> in <a class="github reference external" href="https://github.com/bluesky/area-detector-handlers">bluesky/area-detector-handlers</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">setup</span><span class="p">(</span>
+    <span class="o">...</span>
+    <span class="n">entry_points</span><span class="o">=</span><span class="p">{</span>
+        <span class="s2">&quot;databroker.handlers&quot;</span><span class="p">:</span> <span class="p">[</span>
+            <span class="s2">&quot;AD_SPE = area_detector_handlers.handlers:AreaDetectorSPEHandler&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;AD_TIFF = area_detector_handlers.handlers:AreaDetectorTiffHandler&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;AD_HDF5 = area_detector_handlers.handlers:AreaDetectorHDF5Handler&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;AD_HDF5_SWMR = area_detector_handlers.handlers:AreaDetectorHDF5SWMRHandler&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;AD_HDF5_TS = area_detector_handlers.handlers:AreaDetectorHDF5TimestampHandler&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;AD_HDF5_SWMR_TS = area_detector_handlers.handlers:AreaDetectorHDF5SWMRTimestampHandler&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;XSP3 = area_detector_handlers.handlers:Xspress3HDF5Handler&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;AD_CBF = area_detector_handlers.handlers:PilatusCBFHandler&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;XSP3_FLY = area_detector_handlers.handlers:BulkXSPRESS&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;IMM = area_detector_handlers.handlers:IMMHandler&quot;</span><span class="p">,</span>
+        <span class="p">]</span>
+    <span class="p">},</span>
+    <span class="o">...</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>On the left-hand side of the <code class="docutils literal notranslate"><span class="pre">=</span></code> is given the spec, matching the <code class="docutils literal notranslate"><span class="pre">'spec'</span></code>
+in the Resource document, and on the right-hand side is given the
+<code class="docutils literal notranslate"><span class="pre">path.to.module:object_name</span></code> of the handler class that can handle that type
+of asset.</p>
+</section>
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="event-descriptors.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Event Descriptors</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="../reference/api.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">API Documentation</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-documents">The Documents</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#handlers">Handlers</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#handler-interface">Handler Interface</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#handler-discovery">Handler Discovery</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#filling">Filling</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#resource-management">Resource Management</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#handler-packaging">Handler Packaging</a></li>
+</ul>
+  </nav></div>
+
+  <div class="sidebar-secondary-item">
+
+  
+  <div class="tocsection editthispage">
+    <a href="https://github.com/bluesky/event-model/edit/fix_search_and_switcher/docs/user/explanations/external.rst">
+      <i class="fa-solid fa-pencil"></i>
+      
+      
+        
+          Edit on GitHub
+        
+      
+    </a>
+  </div>
+</div>
+
+  <div class="sidebar-secondary-item">
+
+  <div class="tocsection sourcelink">
+    <a href="../../_sources/user/explanations/external.rst.txt">
+      <i class="fa-solid fa-file-lines"></i> Show Source
+    </a>
+  </div>
+</div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../_static/scripts/bootstrap.js?digest=8d27b9dea8ad943066ae"></script>
+<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.15.2.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>
