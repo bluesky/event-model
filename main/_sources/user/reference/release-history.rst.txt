@@ -2,6 +2,21 @@
 Release History
 ***************
 
+v1.21.0 (2024-05-21)
+====================
+
+Changed
+-------
+
+* Update schemas for `StreamResource` and `StreamDatum`: introduced `uri`, `parameters`, and
+  `mimetype` fields; removed `path_semantics` and `resource_kwargs`.
+* Bump `peaceiris/actions-gh-pages` from 3.9.3 to 4.0.0.
+
+Fixed
+-----
+
+* DOC: Fix the switcher URL.
+
 v1.20.0 (2024-03-28)
 ====================
 
