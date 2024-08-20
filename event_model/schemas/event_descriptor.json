@@ -112,6 +112,12 @@
             "description": "The 'interesting' data keys for this device.",
             "type": "object",
             "properties": {
+                "NX_class": {
+                    "title": "Nx Class",
+                    "description": "The NeXus class definition for this device.",
+                    "type": "string",
+                    "pattern": "^NX[A-Za-z_]+$"
+                },
                 "fields": {
                     "title": "Fields",
                     "description": "The 'interesting' data keys for this device.",
