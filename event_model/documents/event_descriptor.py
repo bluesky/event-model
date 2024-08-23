@@ -69,6 +69,15 @@ class PerObjectHint(TypedDict):
             Field(description="The 'interesting' data keys for this device."),
         ]
     ]
+    NX_class: NotRequired[
+        Annotated[
+            str,
+            Field(
+                description="The NeXus class definition for this device.",
+                pattern=r"^NX[A-Za-z_]+$",
+            ),
+        ]
+    ]
 
 
 class Configuration(TypedDict):
