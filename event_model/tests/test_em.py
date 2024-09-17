@@ -56,7 +56,7 @@ def test_compose_run():
     assert bundle.compose_stop is compose_stop
     bundle = compose_descriptor(
         data_keys={
-            "motor": {"shape": [], "dtype": "number", "source": "...", "units": None},
+            "motor": {"shape": [], "dtype": "number", "source": "...", "units": "s"},
             "image": {
                 "shape": [512, 512],
                 "dtype": "number",

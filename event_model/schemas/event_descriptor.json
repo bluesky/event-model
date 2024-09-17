@@ -66,14 +66,7 @@
                 "precision": {
                     "title": "Precision",
                     "description": "Number of digits after decimal place if a floating point number",
-                    "anyOf": [
-                        {
-                            "type": "integer"
-                        },
-                        {
-                            "type": "null"
-                        }
-                    ]
+                    "type": "integer"
                 },
                 "shape": {
                     "title": "Shape",
@@ -91,14 +84,7 @@
                 "units": {
                     "title": "Units",
                     "description": "Engineering units of the value",
-                    "anyOf": [
-                        {
-                            "type": "string"
-                        },
-                        {
-                            "type": "null"
-                        }
-                    ]
+                    "type": "string"
                 }
             },
             "required": [

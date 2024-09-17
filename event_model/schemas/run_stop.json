@@ -10,11 +10,7 @@
     "properties": {
         "data_type": {
             "description": "data_type",
-            "allOf": [
-                {
-                    "$ref": "#/$defs/DataType"
-                }
-            ]
+            "$ref": "#/$defs/DataType"
         },
         "exit_status": {
             "title": "Exit Status",

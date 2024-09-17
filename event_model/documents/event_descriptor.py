@@ -1,4 +1,4 @@
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List
 
 from typing_extensions import Annotated, Literal, NotRequired, TypedDict
 
@@ -41,7 +41,7 @@ class DataKey(TypedDict):
     ]
     precision: NotRequired[
         Annotated[
-            Optional[int],
+            int,
             Field(
                 description="Number of digits after decimal place if "
                 "a floating point number"
@@ -56,7 +56,7 @@ class DataKey(TypedDict):
         str, Field(description="The source (ex piece of hardware) of the data.")
     ]
     units: NotRequired[
-        Annotated[Optional[str], Field(description="Engineering units of the value")]
+        Annotated[str, Field(description="Engineering units of the value")]
     ]
 
 

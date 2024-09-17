@@ -14,11 +14,7 @@
     "properties": {
         "datum_id": {
             "description": "Array unique identifiers for each Datum (akin to 'uid' for other Document types), typically formatted as '<resource>/<integer>'",
-            "allOf": [
-                {
-                    "$ref": "#/$defs/DataFrameForDatumPage"
-                }
-            ]
+            "$ref": "#/$defs/DataFrameForDatumPage"
         },
         "datum_kwargs": {
             "title": "Datum Kwargs",
