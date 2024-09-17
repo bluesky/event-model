@@ -40,6 +40,10 @@
     "url": "https://bluesky.github.io/event-model/v1.19.3/"
   },
   {
+    "version": "309-add-not-required-things-to-datakey-schema",
+    "url": "https://bluesky.github.io/event-model/309-add-not-required-things-to-datakey-schema/"
+  },
+  {
     "version": "fix_search_and_switcher",
     "url": "https://bluesky.github.io/event-model/fix_search_and_switcher/"
   },
