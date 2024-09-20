@@ -1,4 +1,4 @@
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List, Optional, Tuple, Union
 
 from typing_extensions import Annotated, Literal, NotRequired, TypedDict
 
@@ -21,7 +21,20 @@ class DataKey(TypedDict):
     ]
     dtype: Annotated[
         Dtype,
-        Field(description="The type of the data in the event."),
+        Field(description="The type of the data in the event, given as a broad JSON schema type."),
+    ]
+    dtype_numpy: NotRequired[
+        Annotated[
+            Union[
+                str,  # e.g. "<u4",
+                List[Tuple[str, str]],  # e.g. [("a", "<u4"), ("b", "<f8")]
+            ],
+            Field(
+                description="The type of the data in the event, given as a numpy dtype string (or, for structured dtypes, array)",
+                pattern="[|<>][tbiufcmMOSUV][0-9]+",
+            ),
+            # TODO Enforce the regex pattern.
+        ]
     ]
     external: NotRequired[
         Annotated[
