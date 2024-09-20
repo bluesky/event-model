@@ -1021,3 +1021,48 @@ def test_resource_start_optional():
     event_model.compose_resource(
         spec="TEST", root="/", resource_path="", resource_kwargs={}
     )
+
+
+def test_dtype_numpy():
+    "Test schema validation for various values for dtype_numpy."
+    bundle = event_model.compose_run()
+    start_doc, compose_descriptor, compose_resource, compose_stop = bundle
+    assert bundle.start_doc is start_doc
+    assert bundle.compose_descriptor is compose_descriptor
+    assert bundle.compose_resource is compose_resource
+    assert bundle.compose_stop is compose_stop
+    compose_descriptor(
+        data_keys={
+            "image": {
+                "shape": [512, 512],
+                "dtype": "number",
+                "source": "...",
+                "external": "FILESTORE:",
+            },
+        },
+        name="missing_dtype_numpy",
+    )
+    compose_descriptor(
+        data_keys={
+            "image": {
+                "shape": [512, 512],
+                "dtype": "number",
+                "dtype_numpy": "<u8",
+                "source": "...",
+                "external": "FILESTORE:",
+            },
+        },
+        name="basic_dtype_numpy",
+    )
+    compose_descriptor(
+        data_keys={
+            "image": {
+                "shape": [512, 512],
+                "dtype": "number",
+                "dtype_numpy": [("a", "<u8"), ("b", "<f8")],
+                "source": "...",
+                "external": "FILESTORE:",
+            },
+        },
+        name="structured_dtype_numpy",
+    )
