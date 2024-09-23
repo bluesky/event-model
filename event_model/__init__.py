@@ -34,6 +34,7 @@ import jsonschema
 import numpy
 from typing_extensions import Literal
 
+from .documents import Dtype
 from .documents.datum import Datum
 from .documents.datum_page import DatumPage
 from .documents.event import Event
@@ -61,6 +62,7 @@ del importlib_version
 
 
 __all__ = [
+    "Dtype",
     "DocumentNames",
     "schemas",
     "schema_validators",

@@ -32,11 +32,7 @@
     "properties": {
         "data": {
             "description": "The actual measurement data",
-            "allOf": [
-                {
-                    "$ref": "#/$defs/DataFrameForEventPage"
-                }
-            ]
+            "$ref": "#/$defs/DataFrameForEventPage"
         },
         "descriptor": {
             "title": "Descriptor",
@@ -45,11 +41,7 @@
         },
         "filled": {
             "description": "Mapping each of the keys of externally-stored data to an array containing the boolean False, indicating that the data has not been loaded, or to foreign keys (moved here from 'data' when the data was loaded)",
-            "allOf": [
-                {
-                    "$ref": "#/$defs/DataFrameForFilled"
-                }
-            ]
+            "$ref": "#/$defs/DataFrameForFilled"
         },
         "seq_num": {
             "title": "Seq Num",
@@ -69,11 +61,7 @@
         },
         "timestamps": {
             "description": "The timestamps of the individual measurement data",
-            "allOf": [
-                {
-                    "$ref": "#/$defs/DataFrameForEventPage"
-                }
-            ]
+            "$ref": "#/$defs/DataFrameForEventPage"
         },
         "uid": {
             "title": "Uid",

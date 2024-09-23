@@ -72,11 +72,7 @@
                 "calculation": {
                     "title": "calculation properties",
                     "description": "required fields if type is calculated",
-                    "allOf": [
-                        {
-                            "$ref": "#/$defs/Calculation"
-                        }
-                    ]
+                    "$ref": "#/$defs/Calculation"
                 },
                 "config_device": {
                     "title": "Config Device",
@@ -289,11 +285,7 @@
         },
         "data_type": {
             "description": "",
-            "allOf": [
-                {
-                    "$ref": "#/$defs/DataType"
-                }
-            ]
+            "$ref": "#/$defs/DataType"
         },
         "group": {
             "title": "Group",

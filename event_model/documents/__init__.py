@@ -4,7 +4,12 @@ from typing import Tuple, Type, Union
 from event_model.documents.datum import Datum
 from event_model.documents.datum_page import DatumPage
 from event_model.documents.event import Event
-from event_model.documents.event_descriptor import EventDescriptor
+from event_model.documents.event_descriptor import (
+    Dtype,
+    EventDescriptor,
+    Limits,
+    LimitsRange,
+)
 from event_model.documents.event_page import EventPage
 from event_model.documents.resource import Resource
 from event_model.documents.run_start import RunStart
@@ -42,9 +47,12 @@ ALL_DOCUMENTS: Tuple[DocumentType, ...] = (
 __all__ = [
     "Datum",
     "DatumPage",
+    "Dtype",
     "Event",
     "EventDescriptor",
     "EventPage",
+    "Limits",
+    "LimitsRange",
     "Resource",
     "RunStart",
     "RunStop",

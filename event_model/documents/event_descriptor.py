@@ -7,9 +7,30 @@ from .generate.type_wrapper import Field, add_extra_schema
 Dtype = Literal["string", "number", "array", "boolean", "integer"]
 
 
+class LimitsRange(TypedDict):
+    low: Optional[float]
+    high: Optional[float]
+
+
+class Limits(TypedDict):
+    """
+    Epics limits:
+    see 3.4.1 https://epics.anl.gov/base/R3-14/12-docs/AppDevGuide/node4.html
+    """
+
+    control: NotRequired[Annotated[LimitsRange, Field(description="Control limits.")]]
+    display: NotRequired[Annotated[LimitsRange, Field(description="Display limits.")]]
+    warning: NotRequired[Annotated[LimitsRange, Field(description="Warning limits.")]]
+    alarm: NotRequired[Annotated[LimitsRange, Field(description="Alarm limits.")]]
+
+
 class DataKey(TypedDict):
     """Describes the objects in the data property of Event documents"""
 
+    limits: NotRequired[Annotated[Limits, Field(description="Epics limits.")]]
+    choices: NotRequired[
+        Annotated[List[str], Field(description="Choices of enum value.")]
+    ]
     dims: NotRequired[
         Annotated[
             List[str],
@@ -41,7 +62,7 @@ class DataKey(TypedDict):
     ]
     precision: NotRequired[
         Annotated[
-            Optional[int],
+            int,
             Field(
                 description="Number of digits after decimal place if "
                 "a floating point number"
@@ -56,7 +77,7 @@ class DataKey(TypedDict):
         str, Field(description="The source (ex piece of hardware) of the data.")
     ]
     units: NotRequired[
-        Annotated[Optional[str], Field(description="Engineering units of the value")]
+        Annotated[str, Field(description="Engineering units of the value")]
     ]
 
 

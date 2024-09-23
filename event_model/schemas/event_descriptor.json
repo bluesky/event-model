@@ -32,6 +32,14 @@
             "description": "Describes the objects in the data property of Event documents",
             "type": "object",
             "properties": {
+                "choices": {
+                    "title": "Choices",
+                    "description": "Choices of enum value.",
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
                 "dims": {
                     "title": "Dims",
                     "description": "The names for dimensions of the data. Null or empty list if scalar data",
@@ -58,6 +66,10 @@
                     "type": "string",
                     "pattern": "^[A-Z]+:?"
                 },
+                "limits": {
+                    "description": "Epics limits.",
+                    "$ref": "#/$defs/Limits"
+                },
                 "object_name": {
                     "title": "Object Name",
                     "description": "The name of the object this key was pulled from.",
@@ -66,14 +78,7 @@
                 "precision": {
                     "title": "Precision",
                     "description": "Number of digits after decimal place if a floating point number",
-                    "anyOf": [
-                        {
-                            "type": "integer"
-                        },
-                        {
-                            "type": "null"
-                        }
-                    ]
+                    "type": "integer"
                 },
                 "shape": {
                     "title": "Shape",
@@ -91,9 +96,58 @@
                 "units": {
                     "title": "Units",
                     "description": "Engineering units of the value",
+                    "type": "string"
+                }
+            },
+            "required": [
+                "dtype",
+                "shape",
+                "source"
+            ]
+        },
+        "Limits": {
+            "title": "Limits",
+            "description": "Epics limits:\nsee 3.4.1 https://epics.anl.gov/base/R3-14/12-docs/AppDevGuide/node4.html",
+            "type": "object",
+            "properties": {
+                "alarm": {
+                    "description": "Alarm limits.",
+                    "$ref": "#/$defs/LimitsRange"
+                },
+                "control": {
+                    "description": "Control limits.",
+                    "$ref": "#/$defs/LimitsRange"
+                },
+                "display": {
+                    "description": "Display limits.",
+                    "$ref": "#/$defs/LimitsRange"
+                },
+                "warning": {
+                    "description": "Warning limits.",
+                    "$ref": "#/$defs/LimitsRange"
+                }
+            }
+        },
+        "LimitsRange": {
+            "title": "LimitsRange",
+            "type": "object",
+            "properties": {
+                "high": {
+                    "title": "High",
                     "anyOf": [
                         {
-                            "type": "string"
+                            "type": "number"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ]
+                },
+                "low": {
+                    "title": "Low",
+                    "anyOf": [
+                        {
+                            "type": "number"
                         },
                         {
                             "type": "null"
@@ -102,9 +156,8 @@
                 }
             },
             "required": [
-                "dtype",
-                "shape",
-                "source"
+                "high",
+                "low"
             ]
         },
         "PerObjectHint": {

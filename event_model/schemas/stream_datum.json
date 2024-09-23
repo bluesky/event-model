@@ -33,19 +33,11 @@
         },
         "indices": {
             "description": "A slice object passed to the StreamResource handler so it can hand back data and timestamps",
-            "allOf": [
-                {
-                    "$ref": "#/$defs/StreamRange"
-                }
-            ]
+            "$ref": "#/$defs/StreamRange"
         },
         "seq_nums": {
             "description": "A slice object showing the Event numbers the resource corresponds to",
-            "allOf": [
-                {
-                    "$ref": "#/$defs/StreamRange"
-                }
-            ]
+            "$ref": "#/$defs/StreamRange"
         },
         "stream_resource": {
             "title": "Stream Resource",
