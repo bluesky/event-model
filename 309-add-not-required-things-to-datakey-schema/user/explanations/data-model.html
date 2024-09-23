@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Data Model &#8212; event-model 1.21.1.dev4+g1e3f44a documentation</title>
+    <title>Data Model &#8212; event-model 1.21.1.dev5+g1dcac84 documentation</title>
   
   
   
@@ -39,7 +39,7 @@
 <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
   <script src="../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
-    <script src="../../_static/documentation_options.js?v=e95d6614"></script>
+    <script src="../../_static/documentation_options.js?v=594b2e58"></script>
     <script src="../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -1101,6 +1101,10 @@ is detailed and takes some time to cover, so we defer it to a
                     <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
                     <span class="s2">&quot;pattern&quot;</span><span class="p">:</span> <span class="s2">&quot;^[A-Z]+:?&quot;</span>
                 <span class="p">},</span>
+                <span class="s2">&quot;limits&quot;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Epics limits.&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;$ref&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/Limits&quot;</span>
+                <span class="p">},</span>
                 <span class="s2">&quot;object_name&quot;</span><span class="p">:</span> <span class="p">{</span>
                     <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Object Name&quot;</span><span class="p">,</span>
                     <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;The name of the object this key was pulled from.&quot;</span><span class="p">,</span>
@@ -1134,6 +1138,47 @@ is detailed and takes some time to cover, so we defer it to a
                 <span class="s2">&quot;dtype&quot;</span><span class="p">,</span>
                 <span class="s2">&quot;shape&quot;</span><span class="p">,</span>
                 <span class="s2">&quot;source&quot;</span>
+            <span class="p">]</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;Limits&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Limits&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Epics limits - see 3.4.1 https://epics.anl.gov/base/R3-14/12-docs/AppDevGuide/node4.html&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;alarm&quot;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Alarm limits.&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;$ref&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/LimitsRange&quot;</span>
+                <span class="p">},</span>
+                <span class="s2">&quot;control&quot;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Control limits.&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;$ref&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/LimitsRange&quot;</span>
+                <span class="p">},</span>
+                <span class="s2">&quot;display&quot;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Display limits.&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;$ref&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/LimitsRange&quot;</span>
+                <span class="p">},</span>
+                <span class="s2">&quot;warning&quot;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Warning limits.&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;$ref&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/LimitsRange&quot;</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;LimitsRange&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;LimitsRange&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;high&quot;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;High&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;number&quot;</span>
+                <span class="p">},</span>
+                <span class="s2">&quot;low&quot;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Low&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;number&quot;</span>
+                <span class="p">}</span>
+            <span class="p">},</span>
+            <span class="s2">&quot;required&quot;</span><span class="p">:</span> <span class="p">[</span>
+                <span class="s2">&quot;high&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;low&quot;</span>
             <span class="p">]</span>
         <span class="p">},</span>
         <span class="s2">&quot;PerObjectHint&quot;</span><span class="p">:</span> <span class="p">{</span>
