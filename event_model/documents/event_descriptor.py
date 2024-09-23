@@ -7,9 +7,27 @@ from .generate.type_wrapper import Field, add_extra_schema
 Dtype = Literal["string", "number", "array", "boolean", "integer"]
 
 
+class LimitsRange(TypedDict):
+    low: float
+    high: float
+
+
+class Limits(TypedDict):
+    """
+    Epics limits:
+    see 3.4.1 https://epics.anl.gov/base/R3-14/12-docs/AppDevGuide/node4.html
+    """
+
+    control: NotRequired[Annotated[LimitsRange, Field(description="Control limits.")]]
+    display: NotRequired[Annotated[LimitsRange, Field(description="Display limits.")]]
+    warning: NotRequired[Annotated[LimitsRange, Field(description="Warning limits.")]]
+    alarm: NotRequired[Annotated[LimitsRange, Field(description="Alarm limits.")]]
+
+
 class DataKey(TypedDict):
     """Describes the objects in the data property of Event documents"""
 
+    limits: NotRequired[Annotated[Limits, Field(description="Epics limits.")]]
     dims: NotRequired[
         Annotated[
             List[str],

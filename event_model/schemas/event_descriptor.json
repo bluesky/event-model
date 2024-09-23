@@ -58,6 +58,10 @@
                     "type": "string",
                     "pattern": "^[A-Z]+:?"
                 },
+                "limits": {
+                    "description": "Epics limits.",
+                    "$ref": "#/$defs/Limits"
+                },
                 "object_name": {
                     "title": "Object Name",
                     "description": "The name of the object this key was pulled from.",
@@ -91,6 +95,47 @@
                 "dtype",
                 "shape",
                 "source"
+            ]
+        },
+        "Limits": {
+            "title": "Limits",
+            "description": "Epics limits:\nsee 3.4.1 https://epics.anl.gov/base/R3-14/12-docs/AppDevGuide/node4.html",
+            "type": "object",
+            "properties": {
+                "alarm": {
+                    "description": "Alarm limits.",
+                    "$ref": "#/$defs/LimitsRange"
+                },
+                "control": {
+                    "description": "Control limits.",
+                    "$ref": "#/$defs/LimitsRange"
+                },
+                "display": {
+                    "description": "Display limits.",
+                    "$ref": "#/$defs/LimitsRange"
+                },
+                "warning": {
+                    "description": "Warning limits.",
+                    "$ref": "#/$defs/LimitsRange"
+                }
+            }
+        },
+        "LimitsRange": {
+            "title": "LimitsRange",
+            "type": "object",
+            "properties": {
+                "high": {
+                    "title": "High",
+                    "type": "number"
+                },
+                "low": {
+                    "title": "Low",
+                    "type": "number"
+                }
+            },
+            "required": [
+                "high",
+                "low"
             ]
         },
         "PerObjectHint": {
