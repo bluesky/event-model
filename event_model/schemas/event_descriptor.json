@@ -32,6 +32,14 @@
             "description": "Describes the objects in the data property of Event documents",
             "type": "object",
             "properties": {
+                "choices": {
+                    "title": "Choices",
+                    "description": "Choices of enum value.",
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
                 "dims": {
                     "title": "Dims",
                     "description": "The names for dimensions of the data. Null or empty list if scalar data",
@@ -126,11 +134,25 @@
             "properties": {
                 "high": {
                     "title": "High",
-                    "type": "number"
+                    "anyOf": [
+                        {
+                            "type": "number"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ]
                 },
                 "low": {
                     "title": "Low",
-                    "type": "number"
+                    "anyOf": [
+                        {
+                            "type": "number"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ]
                 }
             },
             "required": [

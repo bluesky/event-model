@@ -1,4 +1,4 @@
-from typing import Any, Dict, List
+from typing import Any, Dict, List, Optional
 
 from typing_extensions import Annotated, Literal, NotRequired, TypedDict
 
@@ -8,8 +8,8 @@ Dtype = Literal["string", "number", "array", "boolean", "integer"]
 
 
 class LimitsRange(TypedDict):
-    low: float
-    high: float
+    low: Optional[float]
+    high: Optional[float]
 
 
 class Limits(TypedDict):
@@ -28,6 +28,9 @@ class DataKey(TypedDict):
     """Describes the objects in the data property of Event documents"""
 
     limits: NotRequired[Annotated[Limits, Field(description="Epics limits.")]]
+    choices: NotRequired[
+        Annotated[List[str], Field(description="Choices of enum value.")]
+    ]
     dims: NotRequired[
         Annotated[
             List[str],
