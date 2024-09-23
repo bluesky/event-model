@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Data Model &#8212; event-model 1.21.1.dev3+ga2f134c documentation</title>
+    <title>Data Model &#8212; event-model 1.21.1.dev7+g3c9ce76 documentation</title>
   
   
   
@@ -39,7 +39,7 @@
 <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
   <script src="../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
-    <script src="../../_static/documentation_options.js?v=7a834bdd"></script>
+    <script src="../../_static/documentation_options.js?v=7989fca4"></script>
     <script src="../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -683,11 +683,7 @@ experimetal and subject to backward-incompatible changes in future releases.</p>
                 <span class="s2">&quot;calculation&quot;</span><span class="p">:</span> <span class="p">{</span>
                     <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;calculation properties&quot;</span><span class="p">,</span>
                     <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;required fields if type is calculated&quot;</span><span class="p">,</span>
-                    <span class="s2">&quot;allOf&quot;</span><span class="p">:</span> <span class="p">[</span>
-                        <span class="p">{</span>
-                            <span class="s2">&quot;$ref&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/Calculation&quot;</span>
-                        <span class="p">}</span>
-                    <span class="p">]</span>
+                    <span class="s2">&quot;$ref&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/Calculation&quot;</span>
                 <span class="p">},</span>
                 <span class="s2">&quot;config_device&quot;</span><span class="p">:</span> <span class="p">{</span>
                     <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Config Device&quot;</span><span class="p">,</span>
@@ -900,11 +896,7 @@ experimetal and subject to backward-incompatible changes in future releases.</p>
         <span class="p">},</span>
         <span class="s2">&quot;data_type&quot;</span><span class="p">:</span> <span class="p">{</span>
             <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;allOf&quot;</span><span class="p">:</span> <span class="p">[</span>
-                <span class="p">{</span>
-                    <span class="s2">&quot;$ref&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/DataType&quot;</span>
-                <span class="p">}</span>
-            <span class="p">]</span>
+            <span class="s2">&quot;$ref&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/DataType&quot;</span>
         <span class="p">},</span>
         <span class="s2">&quot;group&quot;</span><span class="p">:</span> <span class="p">{</span>
             <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Group&quot;</span><span class="p">,</span>
@@ -1083,6 +1075,14 @@ is detailed and takes some time to cover, so we defer it to a
             <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Describes the objects in the data property of Event documents&quot;</span><span class="p">,</span>
             <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span>
             <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;choices&quot;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Choices&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Choices of enum value.&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;array&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;items&quot;</span><span class="p">:</span> <span class="p">{</span>
+                        <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
+                    <span class="p">}</span>
+                <span class="p">},</span>
                 <span class="s2">&quot;dims&quot;</span><span class="p">:</span> <span class="p">{</span>
                     <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Dims&quot;</span><span class="p">,</span>
                     <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;The names for dimensions of the data. Null or empty list if scalar data&quot;</span><span class="p">,</span>
@@ -1109,6 +1109,10 @@ is detailed and takes some time to cover, so we defer it to a
                     <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
                     <span class="s2">&quot;pattern&quot;</span><span class="p">:</span> <span class="s2">&quot;^[A-Z]+:?&quot;</span>
                 <span class="p">},</span>
+                <span class="s2">&quot;limits&quot;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Epics limits.&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;$ref&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/Limits&quot;</span>
+                <span class="p">},</span>
                 <span class="s2">&quot;object_name&quot;</span><span class="p">:</span> <span class="p">{</span>
                     <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Object Name&quot;</span><span class="p">,</span>
                     <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;The name of the object this key was pulled from.&quot;</span><span class="p">,</span>
@@ -1117,14 +1121,7 @@ is detailed and takes some time to cover, so we defer it to a
                 <span class="s2">&quot;precision&quot;</span><span class="p">:</span> <span class="p">{</span>
                     <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Precision&quot;</span><span class="p">,</span>
                     <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Number of digits after decimal place if a floating point number&quot;</span><span class="p">,</span>
-                    <span class="s2">&quot;anyOf&quot;</span><span class="p">:</span> <span class="p">[</span>
-                        <span class="p">{</span>
-                            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;integer&quot;</span>
-                        <span class="p">},</span>
-                        <span class="p">{</span>
-                            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;null&quot;</span>
-                        <span class="p">}</span>
-                    <span class="p">]</span>
+                    <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;integer&quot;</span>
                 <span class="p">},</span>
                 <span class="s2">&quot;shape&quot;</span><span class="p">:</span> <span class="p">{</span>
                     <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Shape&quot;</span><span class="p">,</span>
@@ -1142,9 +1139,58 @@ is detailed and takes some time to cover, so we defer it to a
                 <span class="s2">&quot;units&quot;</span><span class="p">:</span> <span class="p">{</span>
                     <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Units&quot;</span><span class="p">,</span>
                     <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Engineering units of the value&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
+                <span class="p">}</span>
+            <span class="p">},</span>
+            <span class="s2">&quot;required&quot;</span><span class="p">:</span> <span class="p">[</span>
+                <span class="s2">&quot;dtype&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;shape&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;source&quot;</span>
+            <span class="p">]</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;Limits&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Limits&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Epics limits:</span><span class="se">\n</span><span class="s2">see 3.4.1 https://epics.anl.gov/base/R3-14/12-docs/AppDevGuide/node4.html&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;alarm&quot;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Alarm limits.&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;$ref&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/LimitsRange&quot;</span>
+                <span class="p">},</span>
+                <span class="s2">&quot;control&quot;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Control limits.&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;$ref&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/LimitsRange&quot;</span>
+                <span class="p">},</span>
+                <span class="s2">&quot;display&quot;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Display limits.&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;$ref&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/LimitsRange&quot;</span>
+                <span class="p">},</span>
+                <span class="s2">&quot;warning&quot;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Warning limits.&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;$ref&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/LimitsRange&quot;</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;LimitsRange&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;LimitsRange&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;high&quot;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;High&quot;</span><span class="p">,</span>
                     <span class="s2">&quot;anyOf&quot;</span><span class="p">:</span> <span class="p">[</span>
                         <span class="p">{</span>
-                            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
+                            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;number&quot;</span>
+                        <span class="p">},</span>
+                        <span class="p">{</span>
+                            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;null&quot;</span>
+                        <span class="p">}</span>
+                    <span class="p">]</span>
+                <span class="p">},</span>
+                <span class="s2">&quot;low&quot;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Low&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;anyOf&quot;</span><span class="p">:</span> <span class="p">[</span>
+                        <span class="p">{</span>
+                            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;number&quot;</span>
                         <span class="p">},</span>
                         <span class="p">{</span>
                             <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;null&quot;</span>
@@ -1153,9 +1199,8 @@ is detailed and takes some time to cover, so we defer it to a
                 <span class="p">}</span>
             <span class="p">},</span>
             <span class="s2">&quot;required&quot;</span><span class="p">:</span> <span class="p">[</span>
-                <span class="s2">&quot;dtype&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;shape&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;source&quot;</span>
+                <span class="s2">&quot;high&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;low&quot;</span>
             <span class="p">]</span>
         <span class="p">},</span>
         <span class="s2">&quot;PerObjectHint&quot;</span><span class="p">:</span> <span class="p">{</span>
@@ -1412,11 +1457,7 @@ the example Event above structured as an Event Page with a single row:</p>
     <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span>
         <span class="s2">&quot;data&quot;</span><span class="p">:</span> <span class="p">{</span>
             <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;The actual measurement data&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;allOf&quot;</span><span class="p">:</span> <span class="p">[</span>
-                <span class="p">{</span>
-                    <span class="s2">&quot;$ref&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/DataFrameForEventPage&quot;</span>
-                <span class="p">}</span>
-            <span class="p">]</span>
+            <span class="s2">&quot;$ref&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/DataFrameForEventPage&quot;</span>
         <span class="p">},</span>
         <span class="s2">&quot;descriptor&quot;</span><span class="p">:</span> <span class="p">{</span>
             <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Descriptor&quot;</span><span class="p">,</span>
@@ -1425,11 +1466,7 @@ the example Event above structured as an Event Page with a single row:</p>
         <span class="p">},</span>
         <span class="s2">&quot;filled&quot;</span><span class="p">:</span> <span class="p">{</span>
             <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Mapping each of the keys of externally-stored data to an array containing the boolean False, indicating that the data has not been loaded, or to foreign keys (moved here from &#39;data&#39; when the data was loaded)&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;allOf&quot;</span><span class="p">:</span> <span class="p">[</span>
-                <span class="p">{</span>
-                    <span class="s2">&quot;$ref&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/DataFrameForFilled&quot;</span>
-                <span class="p">}</span>
-            <span class="p">]</span>
+            <span class="s2">&quot;$ref&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/DataFrameForFilled&quot;</span>
         <span class="p">},</span>
         <span class="s2">&quot;seq_num&quot;</span><span class="p">:</span> <span class="p">{</span>
             <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Seq Num&quot;</span><span class="p">,</span>
@@ -1449,11 +1486,7 @@ the example Event above structured as an Event Page with a single row:</p>
         <span class="p">},</span>
         <span class="s2">&quot;timestamps&quot;</span><span class="p">:</span> <span class="p">{</span>
             <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;The timestamps of the individual measurement data&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;allOf&quot;</span><span class="p">:</span> <span class="p">[</span>
-                <span class="p">{</span>
-                    <span class="s2">&quot;$ref&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/DataFrameForEventPage&quot;</span>
-                <span class="p">}</span>
-            <span class="p">]</span>
+            <span class="s2">&quot;$ref&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/DataFrameForEventPage&quot;</span>
         <span class="p">},</span>
         <span class="s2">&quot;uid&quot;</span><span class="p">:</span> <span class="p">{</span>
             <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Uid&quot;</span><span class="p">,</span>
@@ -1525,11 +1558,7 @@ known until the run completes.</p>
     <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span>
         <span class="s2">&quot;data_type&quot;</span><span class="p">:</span> <span class="p">{</span>
             <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;data_type&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;allOf&quot;</span><span class="p">:</span> <span class="p">[</span>
-                <span class="p">{</span>
-                    <span class="s2">&quot;$ref&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/DataType&quot;</span>
-                <span class="p">}</span>
-            <span class="p">]</span>
+            <span class="s2">&quot;$ref&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/DataType&quot;</span>
         <span class="p">},</span>
         <span class="s2">&quot;exit_status&quot;</span><span class="p">:</span> <span class="p">{</span>
             <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Exit Status&quot;</span><span class="p">,</span>
@@ -1750,11 +1779,7 @@ strucuted as a Datum Page with one row:</p>
     <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span>
         <span class="s2">&quot;datum_id&quot;</span><span class="p">:</span> <span class="p">{</span>
             <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Array unique identifiers for each Datum (akin to &#39;uid&#39; for other Document types), typically formatted as &#39;&lt;resource&gt;/&lt;integer&gt;&#39;&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;allOf&quot;</span><span class="p">:</span> <span class="p">[</span>
-                <span class="p">{</span>
-                    <span class="s2">&quot;$ref&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/DataFrameForDatumPage&quot;</span>
-                <span class="p">}</span>
-            <span class="p">]</span>
+            <span class="s2">&quot;$ref&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/DataFrameForDatumPage&quot;</span>
         <span class="p">},</span>
         <span class="s2">&quot;datum_kwargs&quot;</span><span class="p">:</span> <span class="p">{</span>
             <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Datum Kwargs&quot;</span><span class="p">,</span>
@@ -1896,19 +1921,11 @@ or assets where there are many relatively small data sets (e.g. scanned fluoresc
         <span class="p">},</span>
         <span class="s2">&quot;indices&quot;</span><span class="p">:</span> <span class="p">{</span>
             <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;A slice object passed to the StreamResource handler so it can hand back data and timestamps&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;allOf&quot;</span><span class="p">:</span> <span class="p">[</span>
-                <span class="p">{</span>
-                    <span class="s2">&quot;$ref&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/StreamRange&quot;</span>
-                <span class="p">}</span>
-            <span class="p">]</span>
+            <span class="s2">&quot;$ref&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/StreamRange&quot;</span>
         <span class="p">},</span>
         <span class="s2">&quot;seq_nums&quot;</span><span class="p">:</span> <span class="p">{</span>
             <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;A slice object showing the Event numbers the resource corresponds to&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;allOf&quot;</span><span class="p">:</span> <span class="p">[</span>
-                <span class="p">{</span>
-                    <span class="s2">&quot;$ref&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/StreamRange&quot;</span>
-                <span class="p">}</span>
-            <span class="p">]</span>
+            <span class="s2">&quot;$ref&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/StreamRange&quot;</span>
         <span class="p">},</span>
         <span class="s2">&quot;stream_resource&quot;</span><span class="p">:</span> <span class="p">{</span>
             <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Stream Resource&quot;</span><span class="p">,</span>
