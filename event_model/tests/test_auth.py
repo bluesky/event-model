@@ -73,3 +73,62 @@ def test_dots_not_allowed_in_keys():
     doc.update({".b": "c"})
     with pytest.raises(jsonschema.ValidationError):
         schema_validators[DocumentNames.stop].validate(doc)
+
+
+@pytest.mark.parametrize(
+    "dtype_numpy",
+    [
+        "Z",
+        "i",
+        "i4",
+        "4i",
+        "i>4",
+        ">i",
+        ("some_str_1", "<u4"),
+        [("some_str_1", "<u4"), ("some_str", "Z")],
+    ],
+)
+def test_bad_numpy_datakeys(dtype_numpy):
+    descriptor = {
+        "time": 0,
+        "uid": new_uid(),
+        "data_keys": {
+            "a": {
+                "source": "",
+                "dtype": "number",
+                "shape": [],
+                "dtype_numpy": dtype_numpy,
+            }
+        },
+        "run_start": new_uid(),
+    }
+    with pytest.raises(
+        jsonschema.ValidationError,
+    ):
+        schema_validators[DocumentNames.descriptor].validate(descriptor)
+
+
+@pytest.mark.parametrize(
+    "dtype_numpy",
+    [
+        ">u4",
+        "<u4",
+        [("some_str_1", "<u4"), ("some_str", "<u4")],
+        [("some_str_1", "<u4"), ("some_str", ">u4")],
+    ],
+)
+def test_good_numpy_datakeys(dtype_numpy):
+    descriptor = {
+        "time": 0,
+        "uid": new_uid(),
+        "data_keys": {
+            "a": {
+                "source": "",
+                "dtype": "number",
+                "shape": [],
+                "dtype_numpy": dtype_numpy,
+            }
+        },
+        "run_start": new_uid(),
+    }
+    schema_validators[DocumentNames.descriptor].validate(descriptor)

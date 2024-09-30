@@ -24,6 +24,17 @@ class Limits(TypedDict):
     alarm: NotRequired[Annotated[LimitsRange, Field(description="Alarm limits.")]]
 
 
+_ConstrainedDtype = Annotated[
+    str,
+    Field(
+        description="A numpy dtype e.g `<U9`, `<f16`",
+        pattern="[|<>][tbiufcmMOSUV][0-9]+",
+    ),
+]
+
+_ConstrainedDtypeNpStructure = List[Tuple[str, _ConstrainedDtype]]
+
+
 class DataKey(TypedDict):
     """Describes the objects in the data property of Event documents"""
 
@@ -42,19 +53,22 @@ class DataKey(TypedDict):
     ]
     dtype: Annotated[
         Dtype,
-        Field(description="The type of the data in the event, given as a broad JSON schema type."),
+        Field(
+            description=(
+                "The type of the data in the event, given as a broad "
+                "JSON schema type."
+            )
+        ),
     ]
     dtype_numpy: NotRequired[
         Annotated[
-            Union[
-                str,  # e.g. "<u4",
-                List[Tuple[str, str]],  # e.g. [("a", "<u4"), ("b", "<f8")]
-            ],
+            Union[_ConstrainedDtype, _ConstrainedDtypeNpStructure],
             Field(
-                description="The type of the data in the event, given as a numpy dtype string (or, for structured dtypes, array)",
-                pattern="[|<>][tbiufcmMOSUV][0-9]+",
+                description=(
+                    "The type of the data in the event, given as a "
+                    "numpy dtype string (or, for structured dtypes, array)."
+                )
             ),
-            # TODO Enforce the regex pattern.
         ]
     ]
     external: NotRequired[

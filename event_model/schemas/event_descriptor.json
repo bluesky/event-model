@@ -50,7 +50,7 @@
                 },
                 "dtype": {
                     "title": "Dtype",
-                    "description": "The type of the data in the event.",
+                    "description": "The type of the data in the event, given as a broad JSON schema type.",
                     "type": "string",
                     "enum": [
                         "string",
@@ -58,6 +58,35 @@
                         "array",
                         "boolean",
                         "integer"
+                    ]
+                },
+                "dtype_numpy": {
+                    "title": "Dtype Numpy",
+                    "description": "The type of the data in the event, given as a numpy dtype string (or, for structured dtypes, array).",
+                    "anyOf": [
+                        {
+                            "description": "A numpy dtype e.g `<U9`, `<f16`",
+                            "pattern": "[|<>][tbiufcmMOSUV][0-9]+",
+                            "type": "string"
+                        },
+                        {
+                            "items": {
+                                "maxItems": 2,
+                                "minItems": 2,
+                                "prefixItems": [
+                                    {
+                                        "type": "string"
+                                    },
+                                    {
+                                        "description": "A numpy dtype e.g `<U9`, `<f16`",
+                                        "pattern": "[|<>][tbiufcmMOSUV][0-9]+",
+                                        "type": "string"
+                                    }
+                                ],
+                                "type": "array"
+                            },
+                            "type": "array"
+                        }
                     ]
                 },
                 "external": {
