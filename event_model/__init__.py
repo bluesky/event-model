@@ -1801,18 +1801,20 @@ for name, filename in SCHEMA_NAMES.items():
 
 def _is_array(checker, instance):
     return (
-        jsonschema.validators.Draft7Validator.TYPE_CHECKER.is_type(instance, "array")
+        jsonschema.validators.Draft202012Validator.TYPE_CHECKER.is_type(
+            instance, "array"
+        )
         or isinstance(instance, tuple)
         or hasattr(instance, "__array__")
     )
 
 
-_array_type_checker = jsonschema.validators.Draft7Validator.TYPE_CHECKER.redefine(
+_array_type_checker = jsonschema.validators.Draft202012Validator.TYPE_CHECKER.redefine(
     "array", _is_array
 )
 
 _Validator = jsonschema.validators.extend(
-    jsonschema.validators.Draft7Validator, type_checker=_array_type_checker
+    jsonschema.validators.Draft202012Validator, type_checker=_array_type_checker
 )
 
 schema_validators = {

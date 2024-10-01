@@ -1,4 +1,4 @@
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List, Optional, Tuple, Union
 
 from typing_extensions import Annotated, Literal, NotRequired, TypedDict
 
@@ -24,6 +24,17 @@ class Limits(TypedDict):
     alarm: NotRequired[Annotated[LimitsRange, Field(description="Alarm limits.")]]
 
 
+_ConstrainedDtype = Annotated[
+    str,
+    Field(
+        description="A numpy dtype e.g `<U9`, `<f16`",
+        pattern="[|<>][tbiufcmMOSUV][0-9]+",
+    ),
+]
+
+_ConstrainedDtypeNpStructure = List[Tuple[str, _ConstrainedDtype]]
+
+
 class DataKey(TypedDict):
     """Describes the objects in the data property of Event documents"""
 
@@ -42,7 +53,23 @@ class DataKey(TypedDict):
     ]
     dtype: Annotated[
         Dtype,
-        Field(description="The type of the data in the event."),
+        Field(
+            description=(
+                "The type of the data in the event, given as a broad "
+                "JSON schema type."
+            )
+        ),
+    ]
+    dtype_numpy: NotRequired[
+        Annotated[
+            Union[_ConstrainedDtype, _ConstrainedDtypeNpStructure],
+            Field(
+                description=(
+                    "The type of the data in the event, given as a "
+                    "numpy dtype string (or, for structured dtypes, array)."
+                )
+            ),
+        ]
     ]
     external: NotRequired[
         Annotated[
