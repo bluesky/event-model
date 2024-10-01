@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Data Model &#8212; event-model 1.21.1.dev7+g3c9ce76 documentation</title>
+    <title>Data Model &#8212; event-model 1.21.1.dev11+g4252db7 documentation</title>
   
   
   
@@ -39,7 +39,7 @@
 <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
   <script src="../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
-    <script src="../../_static/documentation_options.js?v=7989fca4"></script>
+    <script src="../../_static/documentation_options.js?v=033aae32"></script>
     <script src="../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -1093,7 +1093,7 @@ is detailed and takes some time to cover, so we defer it to a
                 <span class="p">},</span>
                 <span class="s2">&quot;dtype&quot;</span><span class="p">:</span> <span class="p">{</span>
                     <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Dtype&quot;</span><span class="p">,</span>
-                    <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;The type of the data in the event.&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;The type of the data in the event, given as a broad JSON schema type.&quot;</span><span class="p">,</span>
                     <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
                     <span class="s2">&quot;enum&quot;</span><span class="p">:</span> <span class="p">[</span>
                         <span class="s2">&quot;string&quot;</span><span class="p">,</span>
@@ -1101,6 +1101,35 @@ is detailed and takes some time to cover, so we defer it to a
                         <span class="s2">&quot;array&quot;</span><span class="p">,</span>
                         <span class="s2">&quot;boolean&quot;</span><span class="p">,</span>
                         <span class="s2">&quot;integer&quot;</span>
+                    <span class="p">]</span>
+                <span class="p">},</span>
+                <span class="s2">&quot;dtype_numpy&quot;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Dtype Numpy&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;The type of the data in the event, given as a numpy dtype string (or, for structured dtypes, array).&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;anyOf&quot;</span><span class="p">:</span> <span class="p">[</span>
+                        <span class="p">{</span>
+                            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;A numpy dtype e.g `&lt;U9`, `&lt;f16`&quot;</span><span class="p">,</span>
+                            <span class="s2">&quot;pattern&quot;</span><span class="p">:</span> <span class="s2">&quot;[|&lt;&gt;][tbiufcmMOSUV][0-9]+&quot;</span><span class="p">,</span>
+                            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
+                        <span class="p">},</span>
+                        <span class="p">{</span>
+                            <span class="s2">&quot;items&quot;</span><span class="p">:</span> <span class="p">{</span>
+                                <span class="s2">&quot;maxItems&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
+                                <span class="s2">&quot;minItems&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
+                                <span class="s2">&quot;prefixItems&quot;</span><span class="p">:</span> <span class="p">[</span>
+                                    <span class="p">{</span>
+                                        <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
+                                    <span class="p">},</span>
+                                    <span class="p">{</span>
+                                        <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;A numpy dtype e.g `&lt;U9`, `&lt;f16`&quot;</span><span class="p">,</span>
+                                        <span class="s2">&quot;pattern&quot;</span><span class="p">:</span> <span class="s2">&quot;[|&lt;&gt;][tbiufcmMOSUV][0-9]+&quot;</span><span class="p">,</span>
+                                        <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
+                                    <span class="p">}</span>
+                                <span class="p">],</span>
+                                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;array&quot;</span>
+                            <span class="p">},</span>
+                            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;array&quot;</span>
+                        <span class="p">}</span>
                     <span class="p">]</span>
                 <span class="p">},</span>
                 <span class="s2">&quot;external&quot;</span><span class="p">:</span> <span class="p">{</span>
