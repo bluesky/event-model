@@ -12,7 +12,7 @@ inputs:
     default: "3.x"
   jsonschema_version:
     description: version of the jsonschema pip package to install
-    default: 3
+    default: 4
 
 runs:
   using: composite
