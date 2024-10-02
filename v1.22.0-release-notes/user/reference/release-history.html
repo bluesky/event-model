@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Release History &#8212; event-model 1.21.1.dev11+g4252db7 documentation</title>
+    <title>Release History &#8212; event-model 1.21.1.dev12+g8da4b1c documentation</title>
   
   
   
@@ -39,7 +39,7 @@
 <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
   <script src="../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
-    <script src="../../_static/documentation_options.js?v=033aae32"></script>
+    <script src="../../_static/documentation_options.js?v=781d24fb"></script>
     <script src="../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -479,10 +479,22 @@ document.write(`
                   
   <section id="release-history">
 <h1>Release History<a class="headerlink" href="#release-history" title="Link to this heading">#</a></h1>
-<section id="v1-21-0-2024-05-21">
-<h2>v1.21.0 (2024-05-21)<a class="headerlink" href="#v1-21-0-2024-05-21" title="Link to this heading">#</a></h2>
+<section id="v1-22-0-2024-10-02">
+<h2>v1.22.0 (2024-10-02)<a class="headerlink" href="#v1-22-0-2024-10-02" title="Link to this heading">#</a></h2>
 <section id="changed">
 <h3>Changed<a class="headerlink" href="#changed" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Added a <code class="xref any docutils literal notranslate"><span class="pre">NX_class</span></code> field as a <code class="xref any docutils literal notranslate"><span class="pre">PerObjectHint</span></code> to the <code class="xref any docutils literal notranslate"><span class="pre">EventDescriptor</span></code> document.</p></li>
+<li><p>Removed <code class="xref any docutils literal notranslate"><span class="pre">Optional</span></code> on <code class="xref any docutils literal notranslate"><span class="pre">DataKey</span></code> fields <code class="xref any docutils literal notranslate"><span class="pre">precision</span></code>, <a class="reference external" href="https://docs.python.org/3/library/argparse.html#choices" title="(in Python v3.12)"><code class="xref any docutils literal notranslate"><span class="pre">choices</span></code></a>, and <code class="xref any docutils literal notranslate"><span class="pre">units</span></code>. These fields can still be left out of the <code class="xref any docutils literal notranslate"><span class="pre">DataKey</span></code>, but if provided they cannot be <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.12)"><code class="xref any docutils literal notranslate"><span class="pre">None</span></code></a>.</p></li>
+<li><p>Added a <code class="xref any docutils literal notranslate"><span class="pre">Limits</span></code> type for storing EPICS limit data and a <code class="xref any docutils literal notranslate"><span class="pre">NotRequired[Limits]</span></code> <code class="xref any docutils literal notranslate"><span class="pre">limits</span></code> field to <code class="xref any docutils literal notranslate"><span class="pre">DataKey</span></code>.</p></li>
+<li><p>Added a <code class="xref any docutils literal notranslate"><span class="pre">NotRequired</span></code> <code class="xref any docutils literal notranslate"><span class="pre">dtype_numpy</span></code> field to <code class="xref any docutils literal notranslate"><span class="pre">DataKey</span></code> for specifying the numpy dtype of data.</p></li>
+</ul>
+</section>
+</section>
+<section id="v1-21-0-2024-05-21">
+<h2>v1.21.0 (2024-05-21)<a class="headerlink" href="#v1-21-0-2024-05-21" title="Link to this heading">#</a></h2>
+<section id="id1">
+<h3>Changed<a class="headerlink" href="#id1" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Update schemas for <code class="xref any docutils literal notranslate"><span class="pre">StreamResource</span></code> and <code class="xref any docutils literal notranslate"><span class="pre">StreamDatum</span></code>: introduced <code class="xref any docutils literal notranslate"><span class="pre">uri</span></code>, <code class="xref any docutils literal notranslate"><span class="pre">parameters</span></code>, and
 <code class="xref any docutils literal notranslate"><span class="pre">mimetype</span></code> fields; removed <code class="xref any docutils literal notranslate"><span class="pre">path_semantics</span></code> and <code class="xref any docutils literal notranslate"><span class="pre">resource_kwargs</span></code>.</p></li>
@@ -498,14 +510,14 @@ document.write(`
 </section>
 <section id="v1-20-0-2024-03-28">
 <h2>v1.20.0 (2024-03-28)<a class="headerlink" href="#v1-20-0-2024-03-28" title="Link to this heading">#</a></h2>
-<section id="id1">
-<h3>Changed<a class="headerlink" href="#id1" title="Link to this heading">#</a></h3>
+<section id="id2">
+<h3>Changed<a class="headerlink" href="#id2" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Bumped from <code class="xref any docutils literal notranslate"><span class="pre">pydantic</span> <span class="pre">1.*</span></code> to <code class="xref any docutils literal notranslate"><span class="pre">pydantic</span> <span class="pre">2.*</span></code></p></li>
 </ul>
 </section>
-<section id="id2">
-<h3>Fixed<a class="headerlink" href="#id2" title="Link to this heading">#</a></h3>
+<section id="id3">
+<h3>Fixed<a class="headerlink" href="#id3" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Bug in <code class="xref any docutils literal notranslate"><span class="pre">rechunk_event_pages</span></code> affecting Events with an empty <code class="xref any docutils literal notranslate"><span class="pre">filled</span></code> key</p></li>
 </ul>
@@ -513,8 +525,8 @@ document.write(`
 </section>
 <section id="v1-19-9-2023-11-22">
 <h2>v1.19.9 (2023-11-22)<a class="headerlink" href="#v1-19-9-2023-11-22" title="Link to this heading">#</a></h2>
-<section id="id3">
-<h3>Changed<a class="headerlink" href="#id3" title="Link to this heading">#</a></h3>
+<section id="id4">
+<h3>Changed<a class="headerlink" href="#id4" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Dropped support for <code class="xref any docutils literal notranslate"><span class="pre">jsonschema</span> <span class="pre">2.*</span></code>.</p></li>
 </ul>
@@ -522,8 +534,8 @@ document.write(`
 </section>
 <section id="v1-19-2-2023-02-24">
 <h2>v1.19.2 (2023-02-24)<a class="headerlink" href="#v1-19-2-2023-02-24" title="Link to this heading">#</a></h2>
-<section id="id4">
-<h3>Changed<a class="headerlink" href="#id4" title="Link to this heading">#</a></h3>
+<section id="id5">
+<h3>Changed<a class="headerlink" href="#id5" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Fix warnings about distutils being deprecated in Python&gt;=3.10</p></li>
 </ul>
@@ -545,8 +557,8 @@ streams. This is especially relevant when the data is expected to be ragged
 or has no pre-determined shape (number of rows).</p></li>
 </ul>
 </section>
-<section id="id5">
-<h3>Changed<a class="headerlink" href="#id5" title="Link to this heading">#</a></h3>
+<section id="id6">
+<h3>Changed<a class="headerlink" href="#id6" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Added <code class="docutils literal notranslate"><span class="pre">object_name</span></code> to Event Descriptor schema. The RunEngine has been
 adding this for many years. This change merely documents the status quo.</p></li>
@@ -557,14 +569,14 @@ on jsonschema version.</p></li>
 </section>
 <section id="v1-18-0-2022-08-05">
 <h2>v1.18.0 (2022-08-05)<a class="headerlink" href="#v1-18-0-2022-08-05" title="Link to this heading">#</a></h2>
-<section id="id6">
-<h3>Added<a class="headerlink" href="#id6" title="Link to this heading">#</a></h3>
+<section id="id7">
+<h3>Added<a class="headerlink" href="#id7" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p>GitHub workflow to publish releases on PyPI</p></li>
 </ul>
 </section>
-<section id="id7">
-<h3>Changed<a class="headerlink" href="#id7" title="Link to this heading">#</a></h3>
+<section id="id8">
+<h3>Changed<a class="headerlink" href="#id8" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Fix for databroker.v0 API</p></li>
 <li><p>Fix versioneer compatibility with py311</p></li>
@@ -573,14 +585,14 @@ on jsonschema version.</p></li>
 </section>
 <section id="v1-17-2-2021-06-21">
 <h2>v1.17.2 (2021-06-21)<a class="headerlink" href="#v1-17-2-2021-06-21" title="Link to this heading">#</a></h2>
-<section id="id8">
-<h3>Added<a class="headerlink" href="#id8" title="Link to this heading">#</a></h3>
+<section id="id9">
+<h3>Added<a class="headerlink" href="#id9" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Event, Datum Page were added to TOC</p></li>
 </ul>
 </section>
-<section id="id9">
-<h3>Changed<a class="headerlink" href="#id9" title="Link to this heading">#</a></h3>
+<section id="id10">
+<h3>Changed<a class="headerlink" href="#id10" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p>The <code class="docutils literal notranslate"><span class="pre">start</span> <span class="pre">document</span></code> parameter to <a class="reference internal" href="api.html#event_model.compose_resource" title="event_model.compose_resource"><code class="xref py py-func docutils literal notranslate"><span class="pre">compose_resource()</span></code></a> is now optional</p></li>
 <li><p><a class="reference internal" href="api.html#event_model.RunRouter.descriptor" title="event_model.RunRouter.descriptor"><code class="xref py py-meth docutils literal notranslate"><span class="pre">descriptor()</span></code></a> has been modified to record descriptor document
@@ -590,8 +602,8 @@ id before executing callbacks</p></li>
 </section>
 <section id="v1-17-1-2021-01-29">
 <h2>v1.17.1 (2021-01-29)<a class="headerlink" href="#v1-17-1-2021-01-29" title="Link to this heading">#</a></h2>
-<section id="id10">
-<h3>Added<a class="headerlink" href="#id10" title="Link to this heading">#</a></h3>
+<section id="id11">
+<h3>Added<a class="headerlink" href="#id11" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Any object that implements <code class="docutils literal notranslate"><span class="pre">__array__</span></code> is accepted by the schema validators
 as any array. This enables the validator to tolerate numpy-like variants that
@@ -601,14 +613,14 @@ are not literal numpy arrays, such as dask, sparse, or cupy arrays.</p></li>
 </section>
 <section id="v1-17-0-2020-12-17">
 <h2>v1.17.0 (2020-12-17)<a class="headerlink" href="#v1-17-0-2020-12-17" title="Link to this heading">#</a></h2>
-<section id="id11">
-<h3>Added<a class="headerlink" href="#id11" title="Link to this heading">#</a></h3>
+<section id="id12">
+<h3>Added<a class="headerlink" href="#id12" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Added <code class="docutils literal notranslate"><span class="pre">data_session</span></code> and <code class="docutils literal notranslate"><span class="pre">data_groups</span></code> to Run Start document schema.</p></li>
 </ul>
 </section>
-<section id="id12">
-<h3>Changed<a class="headerlink" href="#id12" title="Link to this heading">#</a></h3>
+<section id="id13">
+<h3>Changed<a class="headerlink" href="#id13" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p>The package requirements have been relaxed to accept jsonschema versions 2 or
 3. Both are supported.</p></li>
@@ -617,8 +629,8 @@ are not literal numpy arrays, such as dask, sparse, or cupy arrays.</p></li>
 </section>
 <section id="v1-16-1-2020-10-15">
 <h2>v1.16.1 (2020-10-15)<a class="headerlink" href="#v1-16-1-2020-10-15" title="Link to this heading">#</a></h2>
-<section id="id13">
-<h3>Added<a class="headerlink" href="#id13" title="Link to this heading">#</a></h3>
+<section id="id14">
+<h3>Added<a class="headerlink" href="#id14" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p>The “projections” schema in the Run Start document has been enhanced to accept “configuration”
 locaitons intended to link to fields that are in Event stream Configuration See <a class="reference internal" href="../explanations/data-model.html#projections"><span class="std std-ref">Projections (Experimental)</span></a>.
@@ -630,8 +642,8 @@ colliding uids, raising an ValueError when this occurs.</p></li>
 </section>
 <section id="v1-16-0-2020-09-03">
 <h2>v1.16.0 (2020-09-03)<a class="headerlink" href="#v1-16-0-2020-09-03" title="Link to this heading">#</a></h2>
-<section id="id14">
-<h3>Added<a class="headerlink" href="#id14" title="Link to this heading">#</a></h3>
+<section id="id15">
+<h3>Added<a class="headerlink" href="#id15" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p>The schema for Run Start documents now includes an optional “projections”
 key. See <a class="reference internal" href="../explanations/data-model.html#projections"><span class="std std-ref">Projections (Experimental)</span></a>.</p></li>
@@ -647,8 +659,8 @@ attributes <code class="docutils literal notranslate"><span class="pre">resource
 to work around incorrect <code class="docutils literal notranslate"><span class="pre">shape</span></code> metadata.</p></li>
 </ul>
 </section>
-<section id="id15">
-<h3>Changed<a class="headerlink" href="#id15" title="Link to this heading">#</a></h3>
+<section id="id16">
+<h3>Changed<a class="headerlink" href="#id16" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p>The function <a class="reference internal" href="api.html#event_model.register_coercion" title="event_model.register_coercion"><code class="xref py py-func docutils literal notranslate"><span class="pre">register_coercion()</span></code></a> replaces
 the misspelled <code class="xref py py-func docutils literal notranslate"><span class="pre">register_coersion()</span></code>, which is retained as
@@ -656,10 +668,10 @@ an alias for backward-compatibility.</p></li>
 </ul>
 </section>
 </section>
-<section id="id16">
-<h2>v1.16.0 (2020-09-03)<a class="headerlink" href="#id16" title="Link to this heading">#</a></h2>
 <section id="id17">
-<h3>Added<a class="headerlink" href="#id17" title="Link to this heading">#</a></h3>
+<h2>v1.16.0 (2020-09-03)<a class="headerlink" href="#id17" title="Link to this heading">#</a></h2>
+<section id="id18">
+<h3>Added<a class="headerlink" href="#id18" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p>The schema for Run Start documents now includes an optional “projections”
 key. See <a class="reference internal" href="../explanations/data-model.html#projections"><span class="std std-ref">Projections (Experimental)</span></a>.</p></li>
@@ -675,8 +687,8 @@ attributes <code class="docutils literal notranslate"><span class="pre">resource
 to work around incorrect <code class="docutils literal notranslate"><span class="pre">shape</span></code> metadata.</p></li>
 </ul>
 </section>
-<section id="id18">
-<h3>Changed<a class="headerlink" href="#id18" title="Link to this heading">#</a></h3>
+<section id="id19">
+<h3>Changed<a class="headerlink" href="#id19" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p>The function <a class="reference internal" href="api.html#event_model.register_coercion" title="event_model.register_coercion"><code class="xref py py-func docutils literal notranslate"><span class="pre">register_coercion()</span></code></a> replaces
 the misspelled <code class="xref py py-func docutils literal notranslate"><span class="pre">register_coersion()</span></code>, which is retained as
@@ -686,8 +698,8 @@ an alias for backward-compatibility.</p></li>
 </section>
 <section id="v1-15-2-2020-06-12">
 <h2>v1.15.2 (2020-06-12)<a class="headerlink" href="#v1-15-2-2020-06-12" title="Link to this heading">#</a></h2>
-<section id="id19">
-<h3>Added<a class="headerlink" href="#id19" title="Link to this heading">#</a></h3>
+<section id="id20">
+<h3>Added<a class="headerlink" href="#id20" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Various documentation additions.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">jsonschema</span> <span class="pre">2.x</span></code> compatibility.</p></li>
@@ -697,8 +709,8 @@ an alias for backward-compatibility.</p></li>
 </section>
 <section id="v1-15-1-2020-05-01">
 <h2>v1.15.1 (2020-05-01)<a class="headerlink" href="#v1-15-1-2020-05-01" title="Link to this heading">#</a></h2>
-<section id="id20">
-<h3>Fixed<a class="headerlink" href="#id20" title="Link to this heading">#</a></h3>
+<section id="id21">
+<h3>Fixed<a class="headerlink" href="#id21" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p>A bug was fixed in <a class="reference internal" href="api.html#event_model.RunRouter" title="event_model.RunRouter"><code class="xref py py-class docutils literal notranslate"><span class="pre">RunRouter</span></code></a> which caused descriptor
 documents to be sent to subfactory callback start methods.</p></li>
@@ -707,15 +719,15 @@ documents to be sent to subfactory callback start methods.</p></li>
 </section>
 <section id="v1-15-0-2020-04-27">
 <h2>v1.15.0 (2020-04-27)<a class="headerlink" href="#v1-15-0-2020-04-27" title="Link to this heading">#</a></h2>
-<section id="id21">
-<h3>Fixed<a class="headerlink" href="#id21" title="Link to this heading">#</a></h3>
+<section id="id22">
+<h3>Fixed<a class="headerlink" href="#id22" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p>In the data model documentation an erroneous link to the RunStart schema
 was corrected to a link to the EventDescriptor schema.</p></li>
 </ul>
 </section>
-<section id="id22">
-<h3>Changed<a class="headerlink" href="#id22" title="Link to this heading">#</a></h3>
+<section id="id23">
+<h3>Changed<a class="headerlink" href="#id23" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p><a class="reference internal" href="api.html#event_model.SingleRunDocumentRouter" title="event_model.SingleRunDocumentRouter"><code class="xref py py-class docutils literal notranslate"><span class="pre">SingleRunDocumentRouter</span></code></a> was added with convenience
 methods for getting the start document, the descriptor document for an event
@@ -730,8 +742,8 @@ printed.</p></li>
 </section>
 <section id="v1-14-1-2020-04-06">
 <h2>v1.14.1 (2020-04-06)<a class="headerlink" href="#v1-14-1-2020-04-06" title="Link to this heading">#</a></h2>
-<section id="id23">
-<h3>Fixed<a class="headerlink" href="#id23" title="Link to this heading">#</a></h3>
+<section id="id24">
+<h3>Fixed<a class="headerlink" href="#id24" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p>In v1.13.0, the <a class="reference internal" href="api.html#event_model.Filler" title="event_model.Filler"><code class="xref py py-class docutils literal notranslate"><span class="pre">Filler</span></code></a> object was unintentionally made
 un-pickleable. It can now be pickled.</p></li>
@@ -741,8 +753,8 @@ un-pickleable. It can now be pickled.</p></li>
 </section>
 <section id="v1-14-0-2020-03-11">
 <h2>v1.14.0 (2020-03-11)<a class="headerlink" href="#v1-14-0-2020-03-11" title="Link to this heading">#</a></h2>
-<section id="id24">
-<h3>Fixed<a class="headerlink" href="#id24" title="Link to this heading">#</a></h3>
+<section id="id25">
+<h3>Fixed<a class="headerlink" href="#id25" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Let <code class="xref py py-func docutils literal notranslate"><span class="pre">register_coersion()</span></code> tolerate duplicate registration of
 the same coersion as the long the duplicate is identical with the original
@@ -752,8 +764,8 @@ registration works.</p></li>
 <code class="xref py py-func docutils literal notranslate"><span class="pre">register_coersion()</span></code>.</p></li>
 </ul>
 </section>
-<section id="id25">
-<h3>Changed<a class="headerlink" href="#id25" title="Link to this heading">#</a></h3>
+<section id="id26">
+<h3>Changed<a class="headerlink" href="#id26" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p>The <a class="reference internal" href="api.html#event_model.RunRouter" title="event_model.RunRouter"><code class="xref py py-class docutils literal notranslate"><span class="pre">RunRouter</span></code></a> hands RunStart documents to its factory
 functions so they can decide which if any callbacks to subscribe for that
@@ -773,15 +785,15 @@ EventDescriptor document inside a <code class="docutils literal notranslate"><sp
 </section>
 <section id="v1-13-3-2020-03-05">
 <h2>v1.13.3 (2020-03-05)<a class="headerlink" href="#v1-13-3-2020-03-05" title="Link to this heading">#</a></h2>
-<section id="id26">
-<h3>Fixed<a class="headerlink" href="#id26" title="Link to this heading">#</a></h3>
+<section id="id27">
+<h3>Fixed<a class="headerlink" href="#id27" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Make <a class="reference internal" href="api.html#event_model.unpack_event_page" title="event_model.unpack_event_page"><code class="xref py py-func docutils literal notranslate"><span class="pre">unpack_event_page()</span></code></a> tolerant of Event Pages with
 empty <code class="docutils literal notranslate"><span class="pre">data</span></code>.</p></li>
 </ul>
 </section>
-<section id="id27">
-<h3>Changed<a class="headerlink" href="#id27" title="Link to this heading">#</a></h3>
+<section id="id28">
+<h3>Changed<a class="headerlink" href="#id28" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Raise a more specific error when <a class="reference internal" href="api.html#event_model.Filler" title="event_model.Filler"><code class="xref py py-class docutils literal notranslate"><span class="pre">Filler</span></code></a> encounters
 an error due to a malformed document.</p></li>
@@ -793,8 +805,8 @@ for a complete list of changes in this release.</p>
 </section>
 <section id="v1-13-2-2020-01-31">
 <h2>v1.13.2 (2020-01-31)<a class="headerlink" href="#v1-13-2-2020-01-31" title="Link to this heading">#</a></h2>
-<section id="id28">
-<h3>Fixed<a class="headerlink" href="#id28" title="Link to this heading">#</a></h3>
+<section id="id29">
+<h3>Fixed<a class="headerlink" href="#id29" title="Link to this heading">#</a></h3>
 <p>A bug in the new dispatch logic in <a class="reference internal" href="api.html#event_model.DocumentRouter" title="event_model.DocumentRouter"><code class="xref py py-class docutils literal notranslate"><span class="pre">DocumentRouter</span></code></a>
 introduced in v1.13.1 caused the dispatcher to sometimes return
 <code class="docutils literal notranslate"><span class="pre">NotImplemented</span></code>. Now it always falls back to returning the original document
@@ -803,8 +815,8 @@ if the subclass returns <code class="docutils literal notranslate"><span class="
 </section>
 <section id="v1-13-1-2020-01-28">
 <h2>v1.13.1 (2020-01-28)<a class="headerlink" href="#v1-13-1-2020-01-28" title="Link to this heading">#</a></h2>
-<section id="id29">
-<h3>Changed<a class="headerlink" href="#id29" title="Link to this heading">#</a></h3>
+<section id="id30">
+<h3>Changed<a class="headerlink" href="#id30" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p>The <a class="reference internal" href="api.html#event_model.DocumentRouter" title="event_model.DocumentRouter"><code class="xref py py-class docutils literal notranslate"><span class="pre">DocumentRouter</span></code></a> converts and routes Event and
 EventPage documents correctly if either one or both of the methods
@@ -822,8 +834,8 @@ documents.</p></li>
 </section>
 <section id="v1-13-0-2020-01-21">
 <h2>v1.13.0 (2020-01-21)<a class="headerlink" href="#v1-13-0-2020-01-21" title="Link to this heading">#</a></h2>
-<section id="id30">
-<h3>Added<a class="headerlink" href="#id30" title="Link to this heading">#</a></h3>
+<section id="id31">
+<h3>Added<a class="headerlink" href="#id31" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p>The <a class="reference internal" href="api.html#event_model.Filler" title="event_model.Filler"><code class="xref py py-class docutils literal notranslate"><span class="pre">Filler</span></code></a> accepts an optional parameter <code class="docutils literal notranslate"><span class="pre">coerce</span></code> that
 can be used to change the behavior of the handlers. This is useful for
@@ -846,8 +858,8 @@ instantiation. If called with no arguments, it will make a “clone” with all
 the same options. Pass in arguments to override certain options.</p></li>
 </ul>
 </section>
-<section id="id31">
-<h3>Changed<a class="headerlink" href="#id31" title="Link to this heading">#</a></h3>
+<section id="id32">
+<h3>Changed<a class="headerlink" href="#id32" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p>The <a class="reference internal" href="api.html#event_model.NumpyEncoder" title="event_model.NumpyEncoder"><code class="xref py py-class docutils literal notranslate"><span class="pre">NumpyEncoder</span></code></a> special-cases dask arrays.</p></li>
 <li><p>Several error messages have been made more specific and useful.</p></li>
@@ -875,8 +887,8 @@ for a complete list of changes in this release.</p>
 </section>
 <section id="v1-12-0-2019-10-11">
 <h2>v1.12.0 (2019-10-11)<a class="headerlink" href="#v1-12-0-2019-10-11" title="Link to this heading">#</a></h2>
-<section id="id32">
-<h3>Added<a class="headerlink" href="#id32" title="Link to this heading">#</a></h3>
+<section id="id33">
+<h3>Added<a class="headerlink" href="#id33" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p>The <a class="reference internal" href="api.html#event_model.RunRouter" title="event_model.RunRouter"><code class="xref py py-class docutils literal notranslate"><span class="pre">RunRouter</span></code></a> can now “fill” documents that reference
 externally stored data. It accepts an optional <code class="docutils literal notranslate"><span class="pre">handler_registry</span></code> and
@@ -890,8 +902,8 @@ parameter <code class="docutils literal notranslate"><span class="pre">filler_cl
 <a class="reference internal" href="api.html#event_model.Filler" title="event_model.Filler"><code class="xref py py-class docutils literal notranslate"><span class="pre">Filler</span></code></a>.</p></li>
 </ul>
 </section>
-<section id="id33">
-<h3>Changed<a class="headerlink" href="#id33" title="Link to this heading">#</a></h3>
+<section id="id34">
+<h3>Changed<a class="headerlink" href="#id34" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p>The <code class="docutils literal notranslate"><span class="pre">handler_registry</span></code> attribute of <a class="reference internal" href="api.html#event_model.Filler" title="event_model.Filler"><code class="xref py py-class docutils literal notranslate"><span class="pre">Filler</span></code></a> is now a
 read-only view. It cannot be directly mutated. Instead, use the new methods
@@ -899,8 +911,8 @@ read-only view. It cannot be directly mutated. Instead, use the new methods
 <a class="reference internal" href="api.html#event_model.Filler.deregister_handler" title="event_model.Filler.deregister_handler"><code class="xref py py-meth docutils literal notranslate"><span class="pre">deregister_handler()</span></code></a>.</p></li>
 </ul>
 </section>
-<section id="id34">
-<h3>Fixed<a class="headerlink" href="#id34" title="Link to this heading">#</a></h3>
+<section id="id35">
+<h3>Fixed<a class="headerlink" href="#id35" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Fix cache management in <a class="reference internal" href="api.html#event_model.Filler" title="event_model.Filler"><code class="xref py py-class docutils literal notranslate"><span class="pre">Filler</span></code></a> such that registering a
 new handler for a given spec clears all cached instances of the previously
@@ -912,8 +924,8 @@ previously raised an error if used.</p></li>
 </section>
 <section id="v1-11-2-2019-09-03">
 <h2>v1.11.2 (2019-09-03)<a class="headerlink" href="#v1-11-2-2019-09-03" title="Link to this heading">#</a></h2>
-<section id="id35">
-<h3>Fixed<a class="headerlink" href="#id35" title="Link to this heading">#</a></h3>
+<section id="id36">
+<h3>Fixed<a class="headerlink" href="#id36" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Include <code class="docutils literal notranslate"><span class="pre">requirements.txt</span></code> in source distribution.</p></li>
 <li><p>When <code class="docutils literal notranslate"><span class="pre">UnresolveableForeignKeyError</span></code> is raised, it always includes a <code class="docutils literal notranslate"><span class="pre">key</span></code>
@@ -923,8 +935,8 @@ attribute with the key in question.</p></li>
 </section>
 <section id="v1-11-1-2019-08-09">
 <h2>v1.11.1 (2019-08-09)<a class="headerlink" href="#v1-11-1-2019-08-09" title="Link to this heading">#</a></h2>
-<section id="id36">
-<h3>Fixed<a class="headerlink" href="#id36" title="Link to this heading">#</a></h3>
+<section id="id37">
+<h3>Fixed<a class="headerlink" href="#id37" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Fix some inconsistent behavior in the <a class="reference internal" href="api.html#event_model.Filler" title="event_model.Filler"><code class="xref py py-class docutils literal notranslate"><span class="pre">Filler</span></code></a> <code class="docutils literal notranslate"><span class="pre">inplace</span></code>
 parameter, and test it better.</p></li>
@@ -933,8 +945,8 @@ parameter, and test it better.</p></li>
 </section>
 <section id="v1-11-0-2019-06-27">
 <h2>v1.11.0 (2019-06-27)<a class="headerlink" href="#v1-11-0-2019-06-27" title="Link to this heading">#</a></h2>
-<section id="id37">
-<h3>Added<a class="headerlink" href="#id37" title="Link to this heading">#</a></h3>
+<section id="id38">
+<h3>Added<a class="headerlink" href="#id38" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Added new optional parameter <code class="docutils literal notranslate"><span class="pre">inplace</span></code> to <a class="reference internal" href="api.html#event_model.Filler" title="event_model.Filler"><code class="xref py py-class docutils literal notranslate"><span class="pre">Filler</span></code></a>.</p></li>
 <li><p>Added new methods <code class="xref py py-meth docutils literal notranslate"><span class="pre">fill_event()</span></code> and
@@ -942,8 +954,8 @@ parameter, and test it better.</p></li>
 <li><p>Added <code class="xref py py-func docutils literal notranslate"><span class="pre">rechunk_event_pages()</span></code>.</p></li>
 </ul>
 </section>
-<section id="id38">
-<h3>Fixed<a class="headerlink" href="#id38" title="Link to this heading">#</a></h3>
+<section id="id39">
+<h3>Fixed<a class="headerlink" href="#id39" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Consult the Event Descriptor document to infer which columns need to be
 filled if there is no explicit <code class="docutils literal notranslate"><span class="pre">'filled'</span></code> key in the Event document.</p></li>
@@ -954,8 +966,8 @@ filled if there is no explicit <code class="docutils literal notranslate"><span 
 <h2>v1.10.0 (2019-05-24)<a class="headerlink" href="#v1-10-0-2019-05-24" title="Link to this heading">#</a></h2>
 <p>This release requires <code class="docutils literal notranslate"><span class="pre">jsonschema&gt;3</span></code>. Previous releases required
 <code class="docutils literal notranslate"><span class="pre">jsonschema&lt;3</span></code>.</p>
-<section id="id39">
-<h3>Added<a class="headerlink" href="#id39" title="Link to this heading">#</a></h3>
+<section id="id40">
+<h3>Added<a class="headerlink" href="#id40" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Added <code class="xref py py-data docutils literal notranslate"><span class="pre">schema_validators</span></code> using the new interface in
 jsonschema 3.0.</p></li>
@@ -970,14 +982,14 @@ jsonschema 3.0.</p></li>
 </section>
 <section id="v1-9-0-2019-05-01">
 <h2>v1.9.0 (2019-05-01)<a class="headerlink" href="#v1-9-0-2019-05-01" title="Link to this heading">#</a></h2>
-<section id="id40">
-<h3>Added<a class="headerlink" href="#id40" title="Link to this heading">#</a></h3>
+<section id="id41">
+<h3>Added<a class="headerlink" href="#id41" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Add experimental <a class="reference internal" href="api.html#event_model.RunRouter" title="event_model.RunRouter"><code class="xref py py-class docutils literal notranslate"><span class="pre">RunRouter</span></code></a>.</p></li>
 </ul>
 </section>
-<section id="id41">
-<h3>Fixes<a class="headerlink" href="#id41" title="Link to this heading">#</a></h3>
+<section id="id42">
+<h3>Fixes<a class="headerlink" href="#id42" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p><a class="reference internal" href="api.html#event_model.unpack_datum_page" title="event_model.unpack_datum_page"><code class="xref py py-func docutils literal notranslate"><span class="pre">unpack_datum_page()</span></code></a> errored when <code class="docutils literal notranslate"><span class="pre">datum_kwargs</span></code> were
 empty.</p></li>
@@ -988,8 +1000,8 @@ empty.</p></li>
 </section>
 <section id="v1-8-3-2019-03-28">
 <h2>v1.8.3 (2019-03-28)<a class="headerlink" href="#v1-8-3-2019-03-28" title="Link to this heading">#</a></h2>
-<section id="id42">
-<h3>Fixes<a class="headerlink" href="#id42" title="Link to this heading">#</a></h3>
+<section id="id43">
+<h3>Fixes<a class="headerlink" href="#id43" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Add <code class="docutils literal notranslate"><span class="pre">'configuration'</span></code> to <a class="reference internal" href="../explanations/data-model.html#descriptor"><span class="std std-ref">EventDescriptor</span></a> schema.</p></li>
 <li><p>Fix path semantics and be robust against empty <code class="docutils literal notranslate"><span class="pre">'filled'</span></code>.</p></li>
@@ -1005,8 +1017,8 @@ the wheels from being installed on python &lt; 3.6.</p>
 </section>
 <section id="v1-8-0-2019-03-05">
 <h2>v1.8.0 (2019-03-05)<a class="headerlink" href="#v1-8-0-2019-03-05" title="Link to this heading">#</a></h2>
-<section id="id43">
-<h3>Added<a class="headerlink" href="#id43" title="Link to this heading">#</a></h3>
+<section id="id44">
+<h3>Added<a class="headerlink" href="#id44" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p>This documentation!</p></li>
 <li><p>Schemas for <a class="reference internal" href="../explanations/data-model.html#event-page"><span class="std std-ref">EventPage</span></a> and <a class="reference internal" href="../explanations/data-model.html#datum-page"><span class="std std-ref">DatumPage</span></a></p></li>
@@ -1020,8 +1032,8 @@ the wheels from being installed on python &lt; 3.6.</p>
 </section>
 <section id="v1-7-0-2019-01-03">
 <h2>v1.7.0 (2019-01-03)<a class="headerlink" href="#v1-7-0-2019-01-03" title="Link to this heading">#</a></h2>
-<section id="id44">
-<h3>Added<a class="headerlink" href="#id44" title="Link to this heading">#</a></h3>
+<section id="id45">
+<h3>Added<a class="headerlink" href="#id45" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p>The DataKey in an EventDescriptors may contain a ‘dims’ key, providing names
 for each dimension of the data.</p></li>
@@ -1079,145 +1091,149 @@ non-backward-compatible way.</p></li>
   </div>
   <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#v1-21-0-2024-05-21">v1.21.0 (2024-05-21)</a><ul class="nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#v1-22-0-2024-10-02">v1.22.0 (2024-10-02)</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#changed">Changed</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#v1-21-0-2024-05-21">v1.21.0 (2024-05-21)</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">Changed</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#fixed">Fixed</a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#v1-20-0-2024-03-28">v1.20.0 (2024-03-28)</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">Changed</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">Fixed</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">Changed</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id3">Fixed</a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#v1-19-9-2023-11-22">v1.19.9 (2023-11-22)</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id3">Changed</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id4">Changed</a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#v1-19-2-2023-02-24">v1.19.2 (2023-02-24)</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id4">Changed</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id5">Changed</a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#v1-19-1-2022-12-09">v1.19.1 (2022-12-09)</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#v1-19-0-2022-11-03">v1.19.0 (2022-11-03)</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#added">Added</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id5">Changed</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id6">Changed</a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#v1-18-0-2022-08-05">v1.18.0 (2022-08-05)</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id6">Added</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id7">Changed</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id7">Added</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id8">Changed</a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#v1-17-2-2021-06-21">v1.17.2 (2021-06-21)</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id8">Added</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id9">Changed</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id9">Added</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id10">Changed</a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#v1-17-1-2021-01-29">v1.17.1 (2021-01-29)</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id10">Added</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id11">Added</a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#v1-17-0-2020-12-17">v1.17.0 (2020-12-17)</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id11">Added</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id12">Changed</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id12">Added</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id13">Changed</a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#v1-16-1-2020-10-15">v1.16.1 (2020-10-15)</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id13">Added</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id14">Added</a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#v1-16-0-2020-09-03">v1.16.0 (2020-09-03)</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id14">Added</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id15">Changed</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id15">Added</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id16">Changed</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id16">v1.16.0 (2020-09-03)</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id17">Added</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id18">Changed</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id17">v1.16.0 (2020-09-03)</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id18">Added</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id19">Changed</a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#v1-15-2-2020-06-12">v1.15.2 (2020-06-12)</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id19">Added</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id20">Added</a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#v1-15-1-2020-05-01">v1.15.1 (2020-05-01)</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id20">Fixed</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id21">Fixed</a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#v1-15-0-2020-04-27">v1.15.0 (2020-04-27)</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id21">Fixed</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id22">Changed</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id22">Fixed</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id23">Changed</a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#v1-14-1-2020-04-06">v1.14.1 (2020-04-06)</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id23">Fixed</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id24">Fixed</a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#v1-14-0-2020-03-11">v1.14.0 (2020-03-11)</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id24">Fixed</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id25">Changed</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id25">Fixed</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id26">Changed</a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#v1-13-3-2020-03-05">v1.13.3 (2020-03-05)</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id26">Fixed</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id27">Changed</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id27">Fixed</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id28">Changed</a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#v1-13-2-2020-01-31">v1.13.2 (2020-01-31)</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id28">Fixed</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id29">Fixed</a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#v1-13-1-2020-01-28">v1.13.1 (2020-01-28)</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id29">Changed</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id30">Changed</a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#v1-13-0-2020-01-21">v1.13.0 (2020-01-21)</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id30">Added</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id31">Changed</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id31">Added</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id32">Changed</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#deprecated">Deprecated</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#internal-changes">Internal Changes</a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#v1-12-0-2019-10-11">v1.12.0 (2019-10-11)</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id32">Added</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id33">Changed</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id34">Fixed</a></li>
-</ul>
-</li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#v1-11-2-2019-09-03">v1.11.2 (2019-09-03)</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id33">Added</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id34">Changed</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id35">Fixed</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#v1-11-1-2019-08-09">v1.11.1 (2019-08-09)</a><ul class="nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#v1-11-2-2019-09-03">v1.11.2 (2019-09-03)</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id36">Fixed</a></li>
 </ul>
 </li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#v1-11-1-2019-08-09">v1.11.1 (2019-08-09)</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id37">Fixed</a></li>
+</ul>
+</li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#v1-11-0-2019-06-27">v1.11.0 (2019-06-27)</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id37">Added</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id38">Fixed</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id38">Added</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id39">Fixed</a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#v1-10-0-2019-05-24">v1.10.0 (2019-05-24)</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id39">Added</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id40">Added</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#fixes">Fixes</a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#v1-9-0-2019-05-01">v1.9.0 (2019-05-01)</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id40">Added</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id41">Fixes</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id41">Added</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id42">Fixes</a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#v1-8-3-2019-03-28">v1.8.3 (2019-03-28)</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id42">Fixes</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id43">Fixes</a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#v1-8-2-2019-03-08">v1.8.2 (2019-03-08)</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#v1-8-0-2019-03-05">v1.8.0 (2019-03-05)</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id43">Added</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id44">Added</a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#v1-7-0-2019-01-03">v1.7.0 (2019-01-03)</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id44">Added</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id45">Added</a></li>
 </ul>
 </li>
 </ul>

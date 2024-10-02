@@ -2,6 +2,16 @@
 Release History
 ***************
 
+v1.22.0 (2024-10-02)
+====================
+
+Changed
+-------
+* Added a `NX_class` field as a `PerObjectHint` to the `EventDescriptor` document.
+* Removed `Optional` on `DataKey` fields `precision`, `choices`, and `units`. These fields can still be left out of the `DataKey`, but if provided they cannot be `None`.
+* Added a `Limits` type for storing EPICS limit data and a `NotRequired[Limits]` `limits` field to `DataKey`.
+* Added a `NotRequired` `dtype_numpy` field to `DataKey` for specifying the numpy dtype of data.
+
 v1.21.0 (2024-05-21)
 ====================
 
