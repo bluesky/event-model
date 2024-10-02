@@ -40,15 +40,15 @@
     "url": "https://bluesky.github.io/event-model/v1.19.3/"
   },
   {
-    "version": "dtype_numpy",
-    "url": "https://bluesky.github.io/event-model/dtype_numpy/"
-  },
-  {
     "version": "fix_search_and_switcher",
     "url": "https://bluesky.github.io/event-model/fix_search_and_switcher/"
   },
   {
     "version": "pkg_resources_dep_v2",
     "url": "https://bluesky.github.io/event-model/pkg_resources_dep_v2/"
+  },
+  {
+    "version": "v1.22.0-release-notes",
+    "url": "https://bluesky.github.io/event-model/v1.22.0-release-notes/"
   }
 ]
