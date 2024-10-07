@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>event_model &#8212; event-model 1.21.1.dev12+g90963dc documentation</title>
+    <title>event_model &#8212; event-model 1.21.1.dev13+gadf40d1 documentation</title>
   
   
   
@@ -38,7 +38,7 @@
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
   <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
-    <script src="../_static/documentation_options.js?v=e4071396"></script>
+    <script src="../_static/documentation_options.js?v=faacb4a8"></script>
     <script src="../_static/doctools.js?v=9a2dae69"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -477,19 +477,21 @@ document.write(`
 <span class="kn">import</span> <span class="nn">numpy</span>
 <span class="kn">from</span> <span class="nn">typing_extensions</span> <span class="kn">import</span> <span class="n">Literal</span>
 
-<span class="kn">from</span> <span class="nn">.documents</span> <span class="kn">import</span> <span class="n">Dtype</span>
 <span class="kn">from</span> <span class="nn">.documents.datum</span> <span class="kn">import</span> <span class="n">Datum</span>
 <span class="kn">from</span> <span class="nn">.documents.datum_page</span> <span class="kn">import</span> <span class="n">DatumPage</span>
-<span class="kn">from</span> <span class="nn">.documents.event</span> <span class="kn">import</span> <span class="n">Event</span>
+<span class="kn">from</span> <span class="nn">.documents.event</span> <span class="kn">import</span> <span class="n">Event</span><span class="p">,</span> <span class="n">PartialEvent</span>
 <span class="kn">from</span> <span class="nn">.documents.event_descriptor</span> <span class="kn">import</span> <span class="p">(</span>
     <span class="n">Configuration</span><span class="p">,</span>
     <span class="n">DataKey</span><span class="p">,</span>
+    <span class="n">Dtype</span><span class="p">,</span>
     <span class="n">EventDescriptor</span><span class="p">,</span>
+    <span class="n">Limits</span><span class="p">,</span>
+    <span class="n">LimitsRange</span><span class="p">,</span>
     <span class="n">PerObjectHint</span><span class="p">,</span>
 <span class="p">)</span>
-<span class="kn">from</span> <span class="nn">.documents.event_page</span> <span class="kn">import</span> <span class="n">EventPage</span>
-<span class="kn">from</span> <span class="nn">.documents.resource</span> <span class="kn">import</span> <span class="n">Resource</span>
-<span class="kn">from</span> <span class="nn">.documents.run_start</span> <span class="kn">import</span> <span class="n">RunStart</span>
+<span class="kn">from</span> <span class="nn">.documents.event_page</span> <span class="kn">import</span> <span class="n">EventPage</span><span class="p">,</span> <span class="n">PartialEventPage</span>
+<span class="kn">from</span> <span class="nn">.documents.resource</span> <span class="kn">import</span> <span class="n">PartialResource</span><span class="p">,</span> <span class="n">Resource</span>
+<span class="kn">from</span> <span class="nn">.documents.run_start</span> <span class="kn">import</span> <span class="n">Calculation</span><span class="p">,</span> <span class="n">Hints</span><span class="p">,</span> <span class="n">Projection</span><span class="p">,</span> <span class="n">Projections</span><span class="p">,</span> <span class="n">RunStart</span>
 <span class="kn">from</span> <span class="nn">.documents.run_stop</span> <span class="kn">import</span> <span class="n">RunStop</span>
 <span class="kn">from</span> <span class="nn">.documents.stream_datum</span> <span class="kn">import</span> <span class="n">StreamDatum</span><span class="p">,</span> <span class="n">StreamRange</span>
 <span class="kn">from</span> <span class="nn">.documents.stream_resource</span> <span class="kn">import</span> <span class="n">StreamResource</span>
@@ -505,7 +507,32 @@ document.write(`
 
 
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="c1"># Document types</span>
+    <span class="s2">&quot;Datum&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;DatumPage&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Event&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;PartialEvent&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Configuration&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;DataKey&quot;</span><span class="p">,</span>
     <span class="s2">&quot;Dtype&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;EventDescriptor&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Limits&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;LimitsRange&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;PerObjectHint&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;EventPage&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;PartialEventPage&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;PartialResource&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Resource&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Calculation&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Hints&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Projection&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Projections&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;RunStart&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;RunStop&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;StreamDatum&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;StreamRange&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;StreamResource&quot;</span><span class="p">,</span>
+    <span class="c1"># Schema and version</span>
     <span class="s2">&quot;DocumentNames&quot;</span><span class="p">,</span>
     <span class="s2">&quot;schemas&quot;</span><span class="p">,</span>
     <span class="s2">&quot;schema_validators&quot;</span><span class="p">,</span>
