@@ -12,6 +12,7 @@ Changed
 * Added a `Limits` type for storing EPICS limit data and a `NotRequired[Limits]` `limits` field to `DataKey`.
 * Added a `NotRequired` `dtype_numpy` field to `DataKey` for specifying the numpy dtype of data.
 * Bumped from `jsonschema 3.*` to `jsonschema 4.*`.
+* Added all documents to `event_model` namespace.
 
 v1.21.0 (2024-05-21)
 ====================
