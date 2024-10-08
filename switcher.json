@@ -4,6 +4,10 @@
     "url": "https://bluesky.github.io/event-model/main/"
   },
   {
+    "version": "v1.22.0",
+    "url": "https://bluesky.github.io/event-model/v1.22.0/"
+  },
+  {
     "version": "v1.21.0",
     "url": "https://bluesky.github.io/event-model/v1.21.0/"
   },
@@ -46,9 +50,5 @@
   {
     "version": "pkg_resources_dep_v2",
     "url": "https://bluesky.github.io/event-model/pkg_resources_dep_v2/"
-  },
-  {
-    "version": "v1.22.0-release-notes",
-    "url": "https://bluesky.github.io/event-model/v1.22.0-release-notes/"
   }
 ]
