@@ -34,19 +34,21 @@ import jsonschema
 import numpy
 from typing_extensions import Literal
 
-from .documents import Dtype
 from .documents.datum import Datum
 from .documents.datum_page import DatumPage
-from .documents.event import Event
+from .documents.event import Event, PartialEvent
 from .documents.event_descriptor import (
     Configuration,
     DataKey,
+    Dtype,
     EventDescriptor,
+    Limits,
+    LimitsRange,
     PerObjectHint,
 )
-from .documents.event_page import EventPage
-from .documents.resource import Resource
-from .documents.run_start import RunStart
+from .documents.event_page import EventPage, PartialEventPage
+from .documents.resource import PartialResource, Resource
+from .documents.run_start import Calculation, Hints, Projection, Projections, RunStart
 from .documents.run_stop import RunStop
 from .documents.stream_datum import StreamDatum, StreamRange
 from .documents.stream_resource import StreamResource
@@ -62,7 +64,32 @@ del importlib_version
 
 
 __all__ = [
+    # Document types
+    "Datum",
+    "DatumPage",
+    "Event",
+    "PartialEvent",
+    "Configuration",
+    "DataKey",
     "Dtype",
+    "EventDescriptor",
+    "Limits",
+    "LimitsRange",
+    "PerObjectHint",
+    "EventPage",
+    "PartialEventPage",
+    "PartialResource",
+    "Resource",
+    "Calculation",
+    "Hints",
+    "Projection",
+    "Projections",
+    "RunStart",
+    "RunStop",
+    "StreamDatum",
+    "StreamRange",
+    "StreamResource",
+    # Schema and version
     "DocumentNames",
     "schemas",
     "schema_validators",
