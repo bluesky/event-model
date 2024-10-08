@@ -4,6 +4,42 @@
     "url": "https://bluesky.github.io/event-model/main/"
   },
   {
+    "version": "v1.21.0",
+    "url": "https://bluesky.github.io/event-model/v1.21.0/"
+  },
+  {
+    "version": "v1.20.0",
+    "url": "https://bluesky.github.io/event-model/v1.20.0/"
+  },
+  {
+    "version": "v1.19.9",
+    "url": "https://bluesky.github.io/event-model/v1.19.9/"
+  },
+  {
+    "version": "v1.19.8",
+    "url": "https://bluesky.github.io/event-model/v1.19.8/"
+  },
+  {
+    "version": "v1.19.7",
+    "url": "https://bluesky.github.io/event-model/v1.19.7/"
+  },
+  {
+    "version": "v1.19.6",
+    "url": "https://bluesky.github.io/event-model/v1.19.6/"
+  },
+  {
+    "version": "v1.19.5",
+    "url": "https://bluesky.github.io/event-model/v1.19.5/"
+  },
+  {
+    "version": "v1.19.4",
+    "url": "https://bluesky.github.io/event-model/v1.19.4/"
+  },
+  {
+    "version": "v1.19.3",
+    "url": "https://bluesky.github.io/event-model/v1.19.3/"
+  },
+  {
     "version": "fix_search_and_switcher",
     "url": "https://bluesky.github.io/event-model/fix_search_and_switcher/"
   },
@@ -12,39 +48,7 @@
     "url": "https://bluesky.github.io/event-model/pkg_resources_dep_v2/"
   },
   {
-    "version": "v1.19.3",
-    "url": "https://bluesky.github.io/event-model/v1.19.3/"
-  },
-  {
-    "version": "v1.19.4",
-    "url": "https://bluesky.github.io/event-model/v1.19.4/"
-  },
-  {
-    "version": "v1.19.5",
-    "url": "https://bluesky.github.io/event-model/v1.19.5/"
-  },
-  {
-    "version": "v1.19.6",
-    "url": "https://bluesky.github.io/event-model/v1.19.6/"
-  },
-  {
-    "version": "v1.19.7",
-    "url": "https://bluesky.github.io/event-model/v1.19.7/"
-  },
-  {
-    "version": "v1.19.8",
-    "url": "https://bluesky.github.io/event-model/v1.19.8/"
-  },
-  {
-    "version": "v1.19.9",
-    "url": "https://bluesky.github.io/event-model/v1.19.9/"
-  },
-  {
-    "version": "v1.20.0",
-    "url": "https://bluesky.github.io/event-model/v1.20.0/"
-  },
-  {
-    "version": "v1.21.0",
-    "url": "https://bluesky.github.io/event-model/v1.21.0/"
+    "version": "v1.22.0-release-notes",
+    "url": "https://bluesky.github.io/event-model/v1.22.0-release-notes/"
   }
 ]
