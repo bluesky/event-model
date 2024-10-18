@@ -1,30 +1,24 @@
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v4.4.0
+    rev: v4.5.0
     hooks:
       - id: check-added-large-files
       - id: check-yaml
       - id: check-merge-conflict
+      - id: end-of-file-fixer
 
   - repo: local
     hooks:
-      - id: black
-        name: Run black
-        stages: [commit]
+      - id: ruff
+        name: lint with ruff
         language: system
-        entry: black --check --diff
+        entry: ruff check --force-exclude
         types: [python]
+        require_serial: true
 
-      - id: flake8
-        name: Run flake8
-        stages: [commit]
+      - id: ruff-format
+        name: format with ruff
         language: system
-        entry: flake8
+        entry: ruff format --force-exclude
         types: [python]
-
-      - id: mypy
-        name: Run mypy
-        stages: [commit] 
-        language: system
-        entry: mypy --install-types --non-interactive
-        types: [python]
+        require_serial: true
