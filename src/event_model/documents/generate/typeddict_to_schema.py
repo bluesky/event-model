@@ -15,7 +15,7 @@ from event_model.documents.generate.type_wrapper import (
 def sort_alphabetically(schema: Dict) -> Dict:
     """Sorts the schema alphabetically by key name, exchanging the
     properties dicts for OrderedDicts"""
-    schema = OrderedDict(sorted(list(schema.items()), key=lambda x: x[0]))
+    schema = OrderedDict(sorted(schema.items(), key=lambda x: x[0]))
 
     return schema
 
@@ -36,7 +36,7 @@ def sort_schema(document_schema: Dict) -> Dict:
     assert isinstance(document_schema, dict)
     document_schema = OrderedDict(
         sorted(
-            list(document_schema.items()),
+            document_schema.items(),
             key=lambda x: SortOrder.get(x[0], len(SortOrder)),
         )
     )

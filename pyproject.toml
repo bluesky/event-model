@@ -73,7 +73,7 @@ ignore_missing_imports = true # Ignore missing stubs in imported modules
 # Run pytest with all our checkers, and don't spam us with massive tracebacks on error
 addopts = """
     --tb=native -vv
-    --cov=event_model --cov-report term --cov-report xml:cov.xml
+    --cov=src/event_model --cov-report term --cov-report xml:cov.xml
     """
 # https://iscinumpy.gitlab.io/post/bound-version-constraints/#watch-for-warnings
 filterwarnings = "error"
@@ -106,8 +106,8 @@ allowlist_externals =
     sphinx-autobuild
 commands =
     pre-commit: pre-commit run --all-files --show-diff-on-failure {posargs}
-    type-checking: mypy event_model {posargs}
-    tests: pytest --cov=event_model --cov-report term --cov-report xml:cov.xml {posargs}
+    type-checking: mypy src/event_model {posargs}
+    tests: pytest --cov=src/event_model --cov-report term --cov-report xml:cov.xml {posargs}
     docs: sphinx-{posargs:build -E --keep-going} -T docs build/html
 """
 
@@ -128,5 +128,4 @@ lint.select = [
 [tool.ruff.lint.per-file-ignores]
 # By default, private member access is allowed in tests
 # See https://github.com/DiamondLightSource/python-copier-template/issues/154
-# Remove this line to forbid private member access in tests
-"tests/**/*" = ["SLF001"]
+"src/event_model/tests/**" = ["SLF001"]

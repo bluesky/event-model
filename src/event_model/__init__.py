@@ -148,10 +148,10 @@ class DocumentRouter:
             try:
                 # Does this function accept two positional arguments?
                 sig.bind(None, None)
-            except TypeError:
+            except TypeError as error:
                 raise ValueError(
                     "emit must accept two positional arguments, name and doc"
-                )
+                ) from error
             # Stash a weak reference to `emit`.
             if inspect.ismethod(emit):
                 self._emit_ref = weakref.WeakMethod(emit)
@@ -295,7 +295,8 @@ class DocumentRouter:
         # Do not modify this in a subclass. Use event_page.
         warnings.warn(
             "The document type 'bulk_events' has been deprecated in favor of "
-            "'event_page', whose structure is a transpose of 'bulk_events'."
+            "'event_page', whose structure is a transpose of 'bulk_events'.",
+            stacklevel=2,
         )
         for page in bulk_events_to_event_pages(doc):
             self.event_page(page)
@@ -304,7 +305,8 @@ class DocumentRouter:
         # Do not modify this in a subclass. Use event_page.
         warnings.warn(
             "The document type 'bulk_datum' has been deprecated in favor of "
-            "'datum_page', whose structure is a transpose of 'bulk_datum'."
+            "'datum_page', whose structure is a transpose of 'bulk_datum'.",
+            stacklevel=2,
         )
         self.datum_page(bulk_datum_to_datum_page(doc))
 
@@ -317,7 +319,7 @@ class SingleRunDocumentRouter(DocumentRouter):
     def __init__(self) -> None:
         super().__init__()
         self._start_doc: Optional[dict] = None
-        self._descriptors: dict = dict()
+        self._descriptors: dict = {}
 
     def __call__(
         self, name: str, doc: dict, validate: bool = False
@@ -653,26 +655,29 @@ class Filler(DocumentRouter):
         stream_resource_cache: Optional[dict] = None,
         stream_datum_cache: Optional[dict] = None,
         inplace: Optional[bool] = None,
-        retry_intervals: List = [
-            0.001,
-            0.002,
-            0.004,
-            0.008,
-            0.016,
-            0.032,
-            0.064,
-            0.128,
-            0.256,
-            0.512,
-            1.024,
-        ],
+        retry_intervals: Optional[List[float]] = None,
     ) -> None:
+        if retry_intervals is None:
+            retry_intervals = [
+                0.001,
+                0.002,
+                0.004,
+                0.008,
+                0.016,
+                0.032,
+                0.064,
+                0.128,
+                0.256,
+                0.512,
+                1.024,
+            ]
         if inplace is None:
             self._inplace = True
             warnings.warn(
                 "'inplace' argument not specified. It is recommended to "
                 "specify True or False. In future releases, 'inplace' "
-                "will default to False."
+                "will default to False.",
+                stacklevel=2,
             )
         else:
             self._inplace = inplace
@@ -685,11 +690,11 @@ class Filler(DocumentRouter):
             )
         try:
             self._coercion_func = _coercion_registry[coerce]
-        except KeyError:
+        except KeyError as error:
             raise EventModelKeyError(
                 f"The option coerce={coerce!r} was given to event_model.Filler. "
                 f"The valid options are {set(_coercion_registry)}."
-            )
+            ) from error
         self._coerce = coerce
 
         # See comments on coerision functions above for the use of
@@ -706,6 +711,7 @@ class Filler(DocumentRouter):
                 "In a future release of event-model, the argument `include` "
                 "will be removed from Filler.",
                 DeprecationWarning,
+                stacklevel=2,
             )
         self.include = include
         if exclude is not None:
@@ -713,6 +719,7 @@ class Filler(DocumentRouter):
                 "In a future release of event-model, the argument `exclude` "
                 "will be removed from Filler.",
                 DeprecationWarning,
+                stacklevel=2,
             )
         self.exclude = exclude
         self.root_map = root_map or {}
@@ -757,21 +764,21 @@ class Filler(DocumentRouter):
         )
 
     def __getstate__(self) -> dict:
-        return dict(
-            inplace=self._inplace,
-            coercion_func=self._coerce,
-            handler_registry=self._unpatched_handler_registry,
-            include=self.include,
-            exclude=self.exclude,
-            root_map=self.root_map,
-            handler_cache=self._handler_cache,
-            resource_cache=self._resource_cache,
-            datum_cache=self._datum_cache,
-            descriptor_cache=self._descriptor_cache,
-            stream_resource_cache=self._stream_resource_cache,
-            stream_datum_cache=self._stream_datum_cache,
-            retry_intervals=self.retry_intervals,
-        )
+        return {
+            "inplace": self._inplace,
+            "coercion_func": self._coerce,
+            "handler_registry": self._unpatched_handler_registry,
+            "include": self.include,
+            "exclude": self.exclude,
+            "root_map": self.root_map,
+            "handler_cache": self._handler_cache,
+            "resource_cache": self._resource_cache,
+            "datum_cache": self._datum_cache,
+            "descriptor_cache": self._descriptor_cache,
+            "stream_resource_cache": self._stream_resource_cache,
+            "stream_datum_cache": self._stream_datum_cache,
+            "retry_intervals": self.retry_intervals,
+        }
 
     def __setstate__(self, d: dict) -> None:
         self._inplace = d["inplace"]
@@ -1513,7 +1520,7 @@ class RunRouter(DocumentRouter):
 
         # Map RunStart UID to RunStart document. This is used to send
         # RunStart documents to subfactory callbacks.
-        self._start_to_start_doc: dict = dict()
+        self._start_to_start_doc: dict = {}
 
         # Map RunStart UID to the list EventDescriptor. This is used to
         # facilitate efficient cleanup of the caches above.
@@ -1573,7 +1580,8 @@ class RunRouter(DocumentRouter):
                     warnings.warn(
                         DOCS_PASSED_IN_1_14_0_WARNING.format(
                             callback=callback, name="start", err=err
-                        )
+                        ),
+                        stacklevel=2,
                     )
                     raise err
             self._factory_cbs_by_start[uid].extend(callbacks)
@@ -1609,7 +1617,8 @@ class RunRouter(DocumentRouter):
                     warnings.warn(
                         DOCS_PASSED_IN_1_14_0_WARNING.format(
                             callback=callback, name="start", err=err
-                        )
+                        ),
+                        stacklevel=2,
                     )
                     raise err
                 try:
@@ -1618,7 +1627,8 @@ class RunRouter(DocumentRouter):
                     warnings.warn(
                         DOCS_PASSED_IN_1_14_0_WARNING.format(
                             callback=callback, name="descriptor", err=err
-                        )
+                        ),
+                        stacklevel=2,
                     )
                     raise err
 
@@ -1639,12 +1649,12 @@ class RunRouter(DocumentRouter):
         resource_uid = doc["resource"]
         try:
             start_uid = self._resources[resource_uid]
-        except KeyError:
+        except KeyError as error:
             if resource_uid not in self._unlabeled_resources:
                 raise UnresolvableForeignKeyError(
                     resource_uid,
                     f"DatumPage refers to unknown Resource uid {resource_uid}",
-                )
+                ) from error
             # Old Resources do not have a reference to a RunStart document,
             # so in turn we cannot immediately tell which run these datum
             # documents belong to.
@@ -1855,7 +1865,7 @@ class ComposeDatum:
         doc = Datum(
             resource=resource_uid,
             datum_kwargs=datum_kwargs,
-            datum_id="{}/{}".format(resource_uid, next(self.counter)),
+            datum_id=f"{resource_uid}/{next(self.counter)}",
         )
         if validate:
             schema_validators[DocumentNames.datum].validate(doc)
@@ -1887,9 +1897,7 @@ class ComposeDatumPage:
         doc = DatumPage(
             resource=resource_uid,
             datum_kwargs=datum_kwargs,
-            datum_id=[
-                "{}/{}".format(resource_uid, next(self.counter)) for _ in range(N)
-            ],
+            datum_id=[f"{resource_uid}/{next(self.counter)}" for _ in range(N)],
         )
         if validate:
             schema_validators[DocumentNames.datum_page].validate(doc)
@@ -2045,6 +2053,7 @@ def compose_stream_datum(
     warnings.warn(
         "compose_stream_datum() will be removed in the minor version.",
         DeprecationWarning,
+        stacklevel=2,
     )
     return ComposeStreamDatum(stream_resource, counter)(
         seq_nums,
@@ -2146,8 +2155,9 @@ class ComposeStop:
     ) -> RunStop:
         if self.poison_pill:
             raise EventModelError(
-                "Already composed a RunStop document for run "
-                "{!r}.".format(self.start["uid"])
+                "Already composed a RunStop document for run " "{!r}.".format(
+                    self.start["uid"]
+                )
             )
         self.poison_pill.append(object())
         if uid is None:
@@ -2190,7 +2200,7 @@ def compose_stop(
 
 def length_of_value(dictionary: Dict[str, List], error_msg: str) -> Optional[int]:
     length = None
-    for k, v in dictionary.items():
+    for _, v in dictionary.items():
         v_len = len(v)
         if length is not None:
             if v_len != length:
@@ -2276,8 +2286,9 @@ class ComposeEventPage:
                 )
             if set(filled) - set(data):
                 raise EventModelValidationError(
-                    "Keys in event['filled'] {} must be a subset of those in "
-                    "event['data'] {}".format(filled.keys(), data.keys())
+                    f"Keys in event['filled'] {filled.keys()} "
+                    "must be a subset of those in "
+                    f"event['data'] {data.keys()}"
                 )
         self.event_counters[self.descriptor["name"]] += len(seq_num)
         return doc
@@ -2378,8 +2389,9 @@ class ComposeEvent:
                 )
             if set(filled) - set(data):
                 raise EventModelValidationError(
-                    "Keys in event['filled'] {} must be a subset of those in "
-                    "event['data'] {}".format(filled.keys(), data.keys())
+                    f"Keys in event['filled'] {filled.keys()} "
+                    "must be a subset of those in "
+                    f"event['data'] {data.keys()}"
                 )
         self.event_counters[self.descriptor["name"]] = seq_num + 1
         return doc
@@ -2468,10 +2480,10 @@ class ComposeDescriptor:
         if validate:
             if name in self.streams and self.streams[name] != set(data_keys):
                 raise EventModelValidationError(
-                    "A descriptor with the name {} has already been composed with "
-                    "data_keys {}. The requested data_keys were {}. All "
-                    "descriptors in a given stream must have the same "
-                    "data_keys.".format(name, self.streams[name], set(data_keys))
+                    f"A descriptor with the name {name} has already been composed with "
+                    f"data_keys {self.streams[name]}. The requested data_keys were "
+                    f"{set(data_keys)}. All descriptors in a given stream must have "
+                    "the same data_keys."
                 )
             schema_validators[DocumentNames.descriptor].validate(doc)
 
@@ -2826,20 +2838,20 @@ def merge_event_pages(event_pages: Iterable[EventPage]) -> EventPage:
     if len(pages) == 1:
         return pages[0]
 
-    doc = dict(
-        descriptor=pages[0]["descriptor"],
-        seq_num=list(
+    doc = {
+        "descriptor": pages[0]["descriptor"],
+        "seq_num": list(
             itertools.chain.from_iterable([page["seq_num"] for page in pages])
         ),
-        time=list(itertools.chain.from_iterable([page["time"] for page in pages])),
-        uid=list(itertools.chain.from_iterable([page["uid"] for page in pages])),
-        data={
+        "time": list(itertools.chain.from_iterable([page["time"] for page in pages])),
+        "uid": list(itertools.chain.from_iterable([page["uid"] for page in pages])),
+        "data": {
             key: list(
                 itertools.chain.from_iterable([page["data"][key] for page in pages])
             )
             for key in pages[0]["data"].keys()
         },
-        timestamps={
+        "timestamps": {
             key: list(
                 itertools.chain.from_iterable(
                     [page["timestamps"][key] for page in pages]
@@ -2847,13 +2859,13 @@ def merge_event_pages(event_pages: Iterable[EventPage]) -> EventPage:
             )
             for key in pages[0]["data"].keys()
         },
-        filled={
+        "filled": {
             key: list(
                 itertools.chain.from_iterable([page["filled"][key] for page in pages])
             )
             for key in pages[0]["filled"].keys()
         },
-    )
+    }
     return cast(EventPage, doc)
 
 
@@ -3001,6 +3013,7 @@ def bulk_datum_to_datum_page(bulk_datum: dict) -> DatumPage:
     Note: There is only one known usage of BulkDatum "in the wild", and the
     BulkDatum layout has been deprecated in favor of DatumPage.
     """
+
     datum_page = DatumPage(
         datum_id=bulk_datum["datum_ids"],
         resource=bulk_datum["resource"],

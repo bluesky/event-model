@@ -51,7 +51,7 @@ extensions = [
     "sphinx_copybutton",
     # For the card element
     "sphinx_design",
-    "sphinx_design", 
+    "sphinx_design",
     "sphinx.ext.autosummary",
     "sphinx.ext.mathjax",
     "sphinx.ext.githubpages",
@@ -59,7 +59,6 @@ extensions = [
     "sphinx_copybutton",
     "IPython.sphinxext.ipython_directive",
     "IPython.sphinxext.ipython_console_highlighting",
-
     # So we can write markdown files
     "myst_parser",
 ]

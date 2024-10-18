@@ -23,10 +23,10 @@ def test_generated_json_matches_typed_dict(typed_dict_class, tmpdir):
     with open(generated_file_path) as generated_file, open(old_file_path) as old_file:
         try:
             assert json.load(generated_file) == json.load(old_file)
-        except AssertionError:
+        except AssertionError as error:
             raise Exception(
                 f"`{typed_dict_class.__name__}` can generate a json schema, but "
                 f"it doesn't match the schema in `{SCHEMA_PATH}`. Did you forget "
                 "to run `python event_model/documents/generate` after changes "
                 f"to `{typed_dict_class.__name__}`?"
-            )
+            ) from error

@@ -340,7 +340,7 @@ def test_subfactory_callback_exception():
     rr("start", start_doc)
 
     descriptor_doc = {"run_start": "abcdef", "uid": "ghijkl"}
-    with pytest.raises(Exception):
+    with pytest.raises(UserWarning):
         rr("descriptor", descriptor_doc)
 
     assert rr._start_to_descriptors["abcdef"] == ["ghijkl"]
