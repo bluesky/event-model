@@ -17,6 +17,10 @@ import event_model
 
 # General information about the project.
 project = "event-model"
+copyright = "2019, Brookhaven National Lab"
+author = "Brookhaven National Lab"
+
+language = "en"
 
 # The full version, including alpha/beta/rc tags.
 release = event_model.__version__
@@ -47,16 +51,27 @@ extensions = [
     "sphinx_copybutton",
     # For the card element
     "sphinx_design",
+    "sphinx_design", 
+    "sphinx.ext.autosummary",
+    "sphinx.ext.mathjax",
+    "sphinx.ext.githubpages",
+    "matplotlib.sphinxext.plot_directive",
+    "sphinx_copybutton",
+    "IPython.sphinxext.ipython_directive",
+    "IPython.sphinxext.ipython_console_highlighting",
+
     # So we can write markdown files
     "myst_parser",
 ]
 
+napoleon_google_docstring = False
+napoleon_numpy_docstring = True
 # So we can use the ::: syntax
 myst_enable_extensions = ["colon_fence"]
 
 # If true, Sphinx will warn about all references where the target cannot
 # be found.
-nitpicky = True
+nitpicky = False
 
 # A list of (type, target) tuples (by default empty) that should be ignored when
 # generating warnings in "nitpicky mode". Note that type should include the
@@ -104,15 +119,36 @@ master_doc = "index"
 # These patterns also affect html_static_path and html_extra_path
 exclude_patterns = ["_build"]
 
+# If true, `todo` and `todoList` produce output, else they produce nothing.
+todo_include_todos = False
+
 # The name of the Pygments (syntax highlighting) style to use.
 pygments_style = "sphinx"
 
 # This means you can link things like `str` and `asyncio` to the relevant
 # docs in the python documentation.
-intersphinx_mapping = {"python": ("https://docs.python.org/3/", None)}
+intersphinx_mapping = {
+    "python": ("https://docs.python.org/3/", None),
+    "cachetools": ("https://cachetools.readthedocs.io/en/stable/", None),
+    "numpy": ("https://docs.scipy.org/doc/numpy/", None),
+    "scipy": ("https://docs.scipy.org/doc/scipy/reference/", None),
+    "pandas": ("https://pandas.pydata.org/pandas-docs/stable", None),
+    "matplotlib": ("https://matplotlib.org", None),
+    "jsonschema": ("https://python-jsonschema.readthedocs.io/en/stable/", None),
+}
 
 # A dictionary of graphviz graph attributes for inheritance diagrams.
 inheritance_graph_attrs = {"rankdir": "TB"}
+
+# Common links that should be available on every page
+rst_epilog = """
+.. _NSLS: https://www.bnl.gov/nsls2
+.. _black: https://github.com/psf/black
+.. _flake8: https://flake8.pycqa.org/en/latest/
+.. _isort: https://github.com/PyCQA/isort
+.. _mypy: http://mypy-lang.org/
+.. _pre-commit: https://pre-commit.com/
+"""
 
 # Ignore localhost links for periodic check that links in docs are valid
 linkcheck_ignore = [r"http://localhost:\d+/"]
@@ -122,6 +158,43 @@ linkcheck_ignore = [r"http://localhost:\d+/"]
 copybutton_prompt_text = r">>> |\.\.\. |\$ |In \[\d*\]: | {2,5}\.\.\.: | {5,8}: "
 copybutton_prompt_is_regexp = True
 
+# -- Options for manual page output ---------------------------------------
+
+# Grouping the document tree into LaTeX files. List of tuples
+# (source start file, target name, title,
+#  author, documentclass [howto, manual, or own class]).
+latex_documents = [
+    (
+        master_doc,
+        "event-model.tex",
+        "Bluesky Event Model Documentation",
+        "Contributors",
+        "manual",
+    ),
+]
+
+
+# One entry per manual page. List of tuples
+# (source start file, name, description, authors, manual section).
+man_pages = [
+    (master_doc, "event-model", "Bluesky Event Model Documentation", [author], 1)
+]
+
+# Grouping the document tree into Texinfo files. List of tuples
+# (source start file, target name, title, author,
+#  dir menu entry, description, category)
+texinfo_documents = [
+    (
+        master_doc,
+        "event-model",
+        "Bluesky Event Model Documentation",
+        author,
+        "event-model",
+        "Data model used by the bluesky ecosystem",
+        "Miscellaneous",
+    ),
+]
+
 # -- Options for HTML output -------------------------------------------------
 
 # The theme to use for HTML and HTML Help pages.  See the documentation for
@@ -130,7 +203,7 @@ copybutton_prompt_is_regexp = True
 html_theme = "pydata_sphinx_theme"
 github_repo = "event-model"
 github_user = "bluesky"
-switcher_json = f"https://{github_user}.github.io/{github_repo}/switcher.json"
+switcher_json = f"https://blueskyproject.io/{github_repo}/switcher.json"
 switcher_exists = requests.get(switcher_json).ok
 if not switcher_exists:
     print(
@@ -187,5 +260,5 @@ html_show_sphinx = False
 html_show_copyright = False
 
 # Logo
-html_logo = "images/dls-logo.svg"
+html_logo = "images/event-model-logo.svg"
 html_favicon = html_logo

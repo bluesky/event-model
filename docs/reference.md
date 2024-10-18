@@ -8,5 +8,5 @@ Technical reference material including APIs and release notes.
 
 API <_api/event_model>
 genindex
-Release Notes <https://github.com/bluesky/event-model/releases>
+reference/*
 ```

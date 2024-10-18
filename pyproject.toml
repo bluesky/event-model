@@ -108,7 +108,7 @@ commands =
     pre-commit: pre-commit run --all-files --show-diff-on-failure {posargs}
     type-checking: mypy event_model {posargs}
     tests: pytest --cov=event_model --cov-report term --cov-report xml:cov.xml {posargs}
-    docs: sphinx-{posargs:build -EW --keep-going} -T docs build/html
+    docs: sphinx-{posargs:build -E --keep-going} -T docs build/html
 """
 
 [tool.ruff]
