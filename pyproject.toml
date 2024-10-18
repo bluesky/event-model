@@ -6,21 +6,27 @@ build-backend = "setuptools.build_meta"
 name = "event-model"
 classifiers = [
     "Development Status :: 3 - Alpha",
-    "License :: OSI Approved :: Apache Software License",
+    "License :: OSI Approved :: BSD License",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
 ]
-description = ""
-dependencies = [] # Add project dependencies here, e.g. ["click", "numpy"]
+description = "Data model used by the bluesky ecosystem."
+dependencies = [
+    "importlib-resources",
+    "jsonschema>=4",
+    "numpy",
+    "typing_extensions"
+]
 dynamic = ["version"]
 license.file = "LICENSE"
 readme = "README.md"
-requires-python = ">=3.10"
+requires-python = ">=3.8"
 
 [project.optional-dependencies]
 dev = [
-    "copier",
     "mypy",
     "myst-parser",
     "pipdeptree",
@@ -34,18 +40,28 @@ dev = [
     "sphinx-design",
     "tox-direct",
     "types-mock",
+
+    # Until https://github.com/copier-org/copier/issues/1819 is released.
+    "copier==9.3.1",
+
+    # These are dependencies of various sphinx extensions for documentation.
+    "ipython",
+    "matplotlib",
+    "numpydoc",
+
+    # For schema generation.
+    "pydantic>=2.6",
 ]
 
 [project.scripts]
-event-model = "event_model.__main__:main"
+regenerate-schema = "event_model.documents.generate.__main__:main"
 
 [project.urls]
 GitHub = "https://github.com/bluesky/event-model"
 
 [[project.authors]] # Further authors may be added by duplicating this section
-email = "eva.lott@diamond.ac.uk"
-name = "Eva Lott"
-
+email = "dallan@bnl.gov"
+name = "Brookhaven National Lab"
 
 [tool.setuptools_scm]
 version_file = "src/event_model/_version.py"
@@ -56,12 +72,13 @@ ignore_missing_imports = true # Ignore missing stubs in imported modules
 [tool.pytest.ini_options]
 # Run pytest with all our checkers, and don't spam us with massive tracebacks on error
 addopts = """
-    --tb=native -vv --doctest-modules --doctest-glob="*.rst"
+    --tb=native -vv
+    --cov=event_model --cov-report term --cov-report xml:cov.xml
     """
 # https://iscinumpy.gitlab.io/post/bound-version-constraints/#watch-for-warnings
 filterwarnings = "error"
 # Doctest python code in docs, python code in src docstrings, test functions in tests
-testpaths = "docs src tests"
+testpaths = "src/event_model/tests"
 
 [tool.coverage.run]
 data_file = "/tmp/event_model.coverage"
@@ -89,13 +106,13 @@ allowlist_externals =
     sphinx-autobuild
 commands =
     pre-commit: pre-commit run --all-files --show-diff-on-failure {posargs}
-    type-checking: mypy src tests {posargs}
+    type-checking: mypy event_model {posargs}
     tests: pytest --cov=event_model --cov-report term --cov-report xml:cov.xml {posargs}
     docs: sphinx-{posargs:build -EW --keep-going} -T docs build/html
 """
 
 [tool.ruff]
-src = ["src", "tests"]
+src = ["src"]
 line-length = 88
 lint.select = [
     "B",   # flake8-bugbear - https://docs.astral.sh/ruff/rules/#flake8-bugbear-b

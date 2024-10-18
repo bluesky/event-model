@@ -1,9 +1,9 @@
 # Changes here will be overwritten by Copier
 _commit: 2.3.0
 _src_path: gh:DiamondLightSource/python-copier-template
-author_email: eva.lott@diamond.ac.uk
-author_name: Eva Lott
-description: ''
+author_email: dallan@bnl.gov
+author_name: Brookhaven National Lab
+description: Data model used by the bluesky ecosystem.
 distribution_name: event-model
 docker: false
 docs_type: sphinx
