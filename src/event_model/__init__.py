@@ -1,11 +1,11 @@
-import sys
+"""Top level API.
 
-if sys.version_info < (3, 8):
-    from importlib_metadata import version  # noqa
-else:
-    from importlib.metadata import version  # noqa
+.. data:: __version__
+    :type: str
 
-__version__ = version("event-model")
-del version
+    Version number as calculated by https://github.com/pypa/setuptools_scm
+"""
+
+from ._version import __version__
 
 __all__ = ["__version__"]

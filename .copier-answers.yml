@@ -1,9 +1,8 @@
 # Changes here will be overwritten by Copier
-_commit: 1.0.0
+_commit: 2.3.0
 _src_path: gh:DiamondLightSource/python-copier-template
 author_email: eva.lott@diamond.ac.uk
 author_name: Eva Lott
-component_owner: ''
 description: ''
 distribution_name: event-model
 docker: false
@@ -11,4 +10,6 @@ docs_type: sphinx
 git_platform: github.com
 github_org: bluesky
 package_name: event_model
+pypi: true
 repo_name: event-model
+type_checker: mypy
