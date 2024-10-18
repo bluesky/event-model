@@ -15,13 +15,33 @@ First clone the repository locally using `Git
 Install dependencies
 --------------------
 
-You should install into a `venv` (which requires python 3.8 or later):
-.. code::
+You can choose to either develop on the host machine using a `venv` (which
+requires python 3.8 or later) or to run in a container under `VSCode
+<https://code.visualstudio.com/>`_
 
-    $ cd event-model
-    $ python3 -m venv venv
-    $ source venv/bin/activate
-    $ pip install -e '.[dev]'
+.. tab-set::
+
+    .. tab-item:: Local virtualenv
+
+        .. code::
+
+            $ cd event-model
+            $ python3 -m venv venv
+            $ source venv/bin/activate
+            $ pip install -e '.[dev]'
+
+    .. tab-item:: VSCode devcontainer
+
+        .. code::
+
+            $ code event-model
+            # Click on 'Reopen in Container' when prompted
+            # Open a new terminal
+
+        .. note::
+
+            See the epics-containers_ documentation for more complex
+            use cases, such as integration with podman.
 
 See what was installed
 ----------------------
@@ -43,3 +63,6 @@ This will run in parallel the following checks:
 - `../how-to/run-tests`
 - `../how-to/static-analysis`
 - `../how-to/lint`
+
+
+.. _epics-containers: https://epics-containers.github.io/main/user/tutorials/devcontainer.html

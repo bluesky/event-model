@@ -25,8 +25,7 @@ side-bar.
             :caption: How-to Guides
             :maxdepth: 1
 
-            how-to/use-cases
-
+            how-to/run-container
 
         +++
 
@@ -39,8 +38,6 @@ side-bar.
             :maxdepth: 1
 
             explanations/docs-structure
-            explanations/data-model
-            explanations/external
 
         +++
 
@@ -53,7 +50,6 @@ side-bar.
             :maxdepth: 1
 
             reference/api
-            reference/release-history
             ../genindex
 
         +++

@@ -23,9 +23,6 @@ var/
 *.egg-info/
 .installed.cfg
 *.egg
-*.egg-info/
-.installed.cfg
-*.egg
 **/_version.py
 
 # PyInstaller
@@ -70,17 +67,5 @@ venv*
 # further build artifacts
 lockfiles/
 
-# Editor files
-#mac
-.DS_Store
-*~
-
-#vim
-*.swp
-*.swo
-
-#pycharm
-.idea/*
-
-#vscode
-.vscode/*
+# ruff cache
+.ruff_cache/

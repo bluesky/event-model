@@ -33,6 +33,6 @@ You can view the pages at localhost::
 If you are making changes to source code too, you can tell it to watch
 changes in this directory too::
 
-    $ tox -e docs autobuild -- --watch event_model/
+    $ tox -e docs autobuild -- --watch src
 
 .. _sphinx: https://www.sphinx-doc.org/

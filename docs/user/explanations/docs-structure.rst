@@ -1,4 +1,4 @@
-About The Documentation
+About the documentation
 -----------------------
 
   :material-regular:`format_quote;2em`
