@@ -1,12 +1,12 @@
 <img src="https://raw.githubusercontent.com/bluesky/event-model/refs/heads/main/docs/images/event-model-logo.svg"
-     style="background: none" width="120px" height="120px" align="center">
-
-Data model used by the bluesky ecosystem.
+     style="background: none" width="120px" height="120px" align="center" alt="logo">
 
 [![CI](https://github.com/bluesky/event-model/actions/workflows/ci.yml/badge.svg)](https://github.com/bluesky/event-model/actions/workflows/ci.yml)
 [![Coverage](https://codecov.io/gh/bluesky/event-model/branch/main/graph/badge.svg)](https://codecov.io/gh/bluesky/event-model)
 [![PyPI](https://img.shields.io/pypi/v/event-model.svg)](https://pypi.org/project/event-model)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
+
+Data model used by the bluesky ecosystem.
 
 # Event Model
 
@@ -32,7 +32,6 @@ you should look for / put different kinds of information
 * The shape / data type / units of The Data™  → *Event Descriptor* Document in the *data_keys* entry
 * Anything you read from the controls system that is not device configuration  → *Event* Document
 * Device configuration data  → *Event Descriptor* Document in the *configuration* entry
-
 
 <!-- README only content. Anything below this line won't be included in index.md -->
 
