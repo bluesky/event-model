@@ -51,7 +51,6 @@ extensions = [
     "sphinx_copybutton",
     # For the card element
     "sphinx_design",
-    "sphinx_design",
     "sphinx.ext.autosummary",
     "sphinx.ext.mathjax",
     "sphinx.ext.githubpages",

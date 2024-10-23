@@ -322,9 +322,11 @@ def test_subfactory_callback_exception():
     are updated in the case that a subfactory callback raises an Exception.
     """
 
+    class TestException(Exception): ...
+
     def exception_callback(name, doc):
         """a callback that always raises Exception"""
-        raise Exception()
+        raise TestException
 
     def exception_callback_subfactory(descriptor_doc_name, descriptor_doc):
         """a subfactory that always returns one exception_callback"""
@@ -340,7 +342,13 @@ def test_subfactory_callback_exception():
     rr("start", start_doc)
 
     descriptor_doc = {"run_start": "abcdef", "uid": "ghijkl"}
-    with pytest.raises(UserWarning):
+    with pytest.warns(
+        UserWarning,
+        match=(
+            "Update the factory function. "
+            "In a future release this warning will become an error"
+        ),
+    ), pytest.raises(TestException):
         rr("descriptor", descriptor_doc)
 
     assert rr._start_to_descriptors["abcdef"] == ["ghijkl"]
