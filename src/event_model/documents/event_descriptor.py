@@ -104,7 +104,7 @@ class DataKey(TypedDict):
         str, Field(description="The source (ex piece of hardware) of the data.")
     ]
     units: NotRequired[
-        Annotated[str, Field(description="Engineering units of the value")]
+        Annotated[Optional[str], Field(description="Engineering units of the value")]
     ]
 
 
