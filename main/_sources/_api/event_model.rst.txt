@@ -1,0 +1,69 @@
+﻿``event_model``
+===============
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+
+.. automodule:: event_model
+    :members:
+
+    
+    
+    
+
+    
+    
+    .. rubric:: Members
+
+    .. autosummary::
+        :nosignatures:
+    
+        Datum
+        DatumPage
+        Event
+        PartialEvent
+        Configuration
+        DataKey
+        EventDescriptor
+        Limits
+        LimitsRange
+        PerObjectHint
+        EventPage
+        PartialEventPage
+        PartialResource
+        Resource
+        Calculation
+        Hints
+        Projection
+        Projections
+        RunStart
+        RunStop
+        StreamDatum
+        StreamRange
+        StreamResource
+        DocumentNames
+        compose_run
+    
+    
