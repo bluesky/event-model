@@ -125,7 +125,14 @@
                 "units": {
                     "title": "Units",
                     "description": "Engineering units of the value",
-                    "type": "string"
+                    "anyOf": [
+                        {
+                            "type": "string"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ]
                 }
             },
             "required": [
