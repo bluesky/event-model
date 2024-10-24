@@ -44,8 +44,8 @@
     "url": "https://bluesky.github.io/event-model/v1.19.3/"
   },
   {
-    "version": "fix-linting",
-    "url": "https://bluesky.github.io/event-model/fix-linting/"
+    "version": "321-change-units-to-optional-again",
+    "url": "https://bluesky.github.io/event-model/321-change-units-to-optional-again/"
   },
   {
     "version": "fix_search_and_switcher",
