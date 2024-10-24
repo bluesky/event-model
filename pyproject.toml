@@ -42,7 +42,7 @@ dev = [
     "types-mock",
 
     # Until https://github.com/copier-org/copier/issues/1819 is released.
-    "copier==9.3.1",
+    "copier==9.4.1",
 
     # These are dependencies of various sphinx extensions for documentation.
     "ipython",
