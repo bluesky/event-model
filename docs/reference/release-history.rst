@@ -2,6 +2,15 @@
 Release History
 ***************
 
+v1.22.1 (2024-10-25)
+====================
+
+Changed
+-------
+* Adopted the Diamond Light Source copier template.
+* Added `types-requests` as a dependency to fix linting.
+* Made `units` and `precision` optional again after issues in ophyd and ophyd-async.
+
 v1.22.0 (2024-10-02)
 ====================
 
