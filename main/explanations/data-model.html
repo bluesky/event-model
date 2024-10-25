@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Data Model &#8212; event-model 1.22.1.dev14+g830d59d documentation</title>
+    <title>Data Model &#8212; event-model 1.22.1.dev16+g4715f9c documentation</title>
   
   
   
@@ -42,7 +42,7 @@
   <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549" />
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549" />
 
-    <script src="../_static/documentation_options.js?v=4a19dd05"></script>
+    <script src="../_static/documentation_options.js?v=14a512c3"></script>
     <script src="../_static/doctools.js?v=9bcbadda"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -1139,7 +1139,14 @@ is detailed and takes some time to cover, so we defer it to a
                 <span class="s2">&quot;precision&quot;</span><span class="p">:</span> <span class="p">{</span>
                     <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Precision&quot;</span><span class="p">,</span>
                     <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Number of digits after decimal place if a floating point number&quot;</span><span class="p">,</span>
-                    <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;integer&quot;</span>
+                    <span class="s2">&quot;anyOf&quot;</span><span class="p">:</span> <span class="p">[</span>
+                        <span class="p">{</span>
+                            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;integer&quot;</span>
+                        <span class="p">},</span>
+                        <span class="p">{</span>
+                            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;null&quot;</span>
+                        <span class="p">}</span>
+                    <span class="p">]</span>
                 <span class="p">},</span>
                 <span class="s2">&quot;shape&quot;</span><span class="p">:</span> <span class="p">{</span>
                     <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Shape&quot;</span><span class="p">,</span>
