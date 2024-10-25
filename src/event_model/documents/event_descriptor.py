@@ -89,7 +89,7 @@ class DataKey(TypedDict):
     ]
     precision: NotRequired[
         Annotated[
-            int,
+            Optional[int],
             Field(
                 description="Number of digits after decimal place if "
                 "a floating point number"
