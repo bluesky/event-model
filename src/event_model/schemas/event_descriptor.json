@@ -107,7 +107,14 @@
                 "precision": {
                     "title": "Precision",
                     "description": "Number of digits after decimal place if a floating point number",
-                    "type": "integer"
+                    "anyOf": [
+                        {
+                            "type": "integer"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ]
                 },
                 "shape": {
                     "title": "Shape",
