@@ -4,7 +4,7 @@
 [![CI](https://github.com/bluesky/event-model/actions/workflows/ci.yml/badge.svg)](https://github.com/bluesky/event-model/actions/workflows/ci.yml)
 [![Coverage](https://codecov.io/gh/bluesky/event-model/branch/main/graph/badge.svg)](https://codecov.io/gh/bluesky/event-model)
 [![PyPI](https://img.shields.io/pypi/v/event-model.svg)](https://pypi.org/project/event-model)
-[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://www.apache.org/licenses/LICENSE-2.0)
+[![License](https://img.shields.io/badge/License-BSD_3--Clause-blue.svg)](https://opensource.org/licenses/BSD-3-Clause)
 
 Data model used by the bluesky ecosystem.
 
@@ -35,4 +35,4 @@ you should look for / put different kinds of information
 
 <!-- README only content. Anything below this line won't be included in index.md -->
 
-See https://bluesky.github.io/event-model for more detailed documentation.
+See <https://bluesky.github.io/event-model> for more detailed documentation.
