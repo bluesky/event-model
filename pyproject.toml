@@ -5,20 +5,20 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "event-model"
 classifiers = [
-    "Development Status :: 3 - Alpha",
-    "License :: OSI Approved :: BSD License",
-    "Programming Language :: Python :: 3.8",
-    "Programming Language :: Python :: 3.9",
-    "Programming Language :: Python :: 3.10",
-    "Programming Language :: Python :: 3.11",
-    "Programming Language :: Python :: 3.12",
+  "Development Status :: 3 - Alpha",
+  "License :: OSI Approved :: BSD License",
+  "Programming Language :: Python :: 3.8",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
 ]
 description = "Data model used by the bluesky ecosystem."
 dependencies = [
-    "importlib-resources",
-    "jsonschema>=4",
-    "numpy",
-    "typing_extensions"
+  "importlib-resources",
+  "jsonschema>=4",
+  "numpy",
+  "typing_extensions",
 ]
 dynamic = ["version"]
 license.file = "LICENSE"
@@ -27,30 +27,30 @@ requires-python = ">=3.8"
 
 [project.optional-dependencies]
 dev = [
-    "mypy",
-    "myst-parser",
-    "pipdeptree",
-    "pre-commit",
-    "pydata-sphinx-theme>=0.12",
-    "pytest",
-    "pytest-cov",
-    "ruff",
-    "sphinx-autobuild",
-    "sphinx-copybutton",
-    "sphinx-design",
-    "tox-direct",
-    "types-mock",
+  "mypy",
+  "myst-parser",
+  "pipdeptree",
+  "pre-commit",
+  "pydata-sphinx-theme>=0.12",
+  "pytest",
+  "pytest-cov",
+  "ruff",
+  "sphinx-autobuild",
+  "sphinx-copybutton",
+  "sphinx-design",
+  "tox-direct",
+  "types-mock",
 
-    # Until https://github.com/copier-org/copier/issues/1819 is released.
-    "copier==9.3.1",
+  # For updating the copier template.
+  "copier",
 
-    # These are dependencies of various sphinx extensions for documentation.
-    "ipython",
-    "matplotlib",
-    "numpydoc",
+  # These are dependencies of various sphinx extensions for documentation.
+  "ipython",
+  "matplotlib",
+  "numpydoc",
 
-    # For schema generation.
-    "pydantic>=2.6",
+  # For schema generation.
+  "pydantic>=2.6",
 ]
 
 [project.scripts]
@@ -115,14 +115,14 @@ commands =
 src = ["src"]
 line-length = 88
 lint.select = [
-    "B",   # flake8-bugbear - https://docs.astral.sh/ruff/rules/#flake8-bugbear-b
-    "C4",  # flake8-comprehensions - https://docs.astral.sh/ruff/rules/#flake8-comprehensions-c4
-    "E",   # pycodestyle errors - https://docs.astral.sh/ruff/rules/#error-e
-    "F",   # pyflakes rules - https://docs.astral.sh/ruff/rules/#pyflakes-f
-    "W",   # pycodestyle warnings - https://docs.astral.sh/ruff/rules/#warning-w
-    "I",   # isort - https://docs.astral.sh/ruff/rules/#isort-i
-    "UP",  # pyupgrade - https://docs.astral.sh/ruff/rules/#pyupgrade-up
-    "SLF", # self - https://docs.astral.sh/ruff/settings/#lintflake8-self
+  "B",   # flake8-bugbear - https://docs.astral.sh/ruff/rules/#flake8-bugbear-b
+  "C4",  # flake8-comprehensions - https://docs.astral.sh/ruff/rules/#flake8-comprehensions-c4
+  "E",   # pycodestyle errors - https://docs.astral.sh/ruff/rules/#error-e
+  "F",   # pyflakes rules - https://docs.astral.sh/ruff/rules/#pyflakes-f
+  "W",   # pycodestyle warnings - https://docs.astral.sh/ruff/rules/#warning-w
+  "I",   # isort - https://docs.astral.sh/ruff/rules/#isort-i
+  "UP",  # pyupgrade - https://docs.astral.sh/ruff/rules/#pyupgrade-up
+  "SLF", # self - https://docs.astral.sh/ruff/settings/#lintflake8-self
 ]
 
 [tool.ruff.lint.per-file-ignores]
