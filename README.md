@@ -4,7 +4,7 @@
 [![CI](https://github.com/bluesky/event-model/actions/workflows/ci.yml/badge.svg)](https://github.com/bluesky/event-model/actions/workflows/ci.yml)
 [![Coverage](https://codecov.io/gh/bluesky/event-model/branch/main/graph/badge.svg)](https://codecov.io/gh/bluesky/event-model)
 [![PyPI](https://img.shields.io/pypi/v/event-model.svg)](https://pypi.org/project/event-model)
-[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://www.apache.org/licenses/LICENSE-2.0)
 
 Data model used by the bluesky ecosystem.
 
