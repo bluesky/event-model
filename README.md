@@ -3,7 +3,7 @@
 [![PyPI](https://img.shields.io/pypi/v/event-model.svg)](https://pypi.org/project/event-model)
 [![License](https://img.shields.io/badge/License-BSD_3--Clause-blue.svg)](https://choosealicense.com/licenses/bsd-3-clause)
 
-# ![Event Model](https://raw.githubusercontent.com/bluesky/event-model/readme/docs/images/event-model-logo.svg)
+# ![event-model](https://raw.githubusercontent.com/bluesky/event-model/main/docs/images/event-model-logo.svg)
 
 Data model used by the bluesky ecosystem.
 
