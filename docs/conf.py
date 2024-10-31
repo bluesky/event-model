@@ -222,9 +222,6 @@ if not switcher_exists:
 # will fix the switcher at the end of the docs workflow, but never gets a chance
 # to complete as the docs build warns and fails.
 html_theme_options = {
-    "logo": {
-        "text": project,
-    },
     "use_edit_page_button": True,
     "github_url": f"https://github.com/{github_user}/{github_repo}",
     "icon_links": [
@@ -259,4 +256,4 @@ html_show_copyright = False
 
 # Logo
 html_logo = "images/event-model-logo.svg"
-html_favicon = html_logo
+html_favicon = "images/event-model-favicon.svg"

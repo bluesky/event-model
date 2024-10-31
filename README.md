@@ -1,14 +1,11 @@
-<img src="https://raw.githubusercontent.com/bluesky/event-model/refs/heads/main/docs/images/event-model-logo.svg"
-     style="background: none" width="120px" height="120px" align="center" alt="logo">
-
 [![CI](https://github.com/bluesky/event-model/actions/workflows/ci.yml/badge.svg)](https://github.com/bluesky/event-model/actions/workflows/ci.yml)
 [![Coverage](https://codecov.io/gh/bluesky/event-model/branch/main/graph/badge.svg)](https://codecov.io/gh/bluesky/event-model)
 [![PyPI](https://img.shields.io/pypi/v/event-model.svg)](https://pypi.org/project/event-model)
-[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://www.apache.org/licenses/LICENSE-2.0)
+[![License](https://img.shields.io/badge/License-BSD_3--Clause-blue.svg)](https://choosealicense.com/licenses/bsd-3-clause)
+
+# ![event-model](https://raw.githubusercontent.com/bluesky/event-model/main/docs/images/event-model-logo.svg)
 
 Data model used by the bluesky ecosystem.
-
-# Event Model
 
 A primary design goal of bluesky is to enable better research by recording
 rich metadata alongside measured data for use in later analysis. Documents are
