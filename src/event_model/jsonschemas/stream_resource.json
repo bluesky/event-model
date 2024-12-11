@@ -1,0 +1,45 @@
+{
+    "description": "Document to reference a collection (e.g. file or group of files) of\nexternally-stored data streams",
+    "properties": {
+        "data_key": {
+            "description": "A string to show which data_key of the Descriptor are being streamed",
+            "title": "Data Key",
+            "type": "string"
+        },
+        "parameters": {
+            "description": "Additional keyword arguments to pass to the Handler to read a Stream Resource",
+            "title": "Parameters",
+            "type": "object"
+        },
+        "uri": {
+            "description": "URI for locating this resource",
+            "title": "Uri",
+            "type": "string"
+        },
+        "run_start": {
+            "description": "Globally unique ID to the run_start document this Stream Resource is associated with.",
+            "title": "Run Start",
+            "type": "string"
+        },
+        "mimetype": {
+            "description": "String identifying the format/type of this Stream Resource, used to identify a compatible Handler",
+            "title": "Mimetype",
+            "type": "string"
+        },
+        "uid": {
+            "description": "Globally unique identifier for this Stream Resource",
+            "title": "Uid",
+            "type": "string"
+        }
+    },
+    "required": [
+        "data_key",
+        "parameters",
+        "uri",
+        "run_start",
+        "mimetype",
+        "uid"
+    ],
+    "title": "StreamResource",
+    "type": "object"
+}

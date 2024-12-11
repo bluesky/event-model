@@ -1,0 +1,397 @@
+{
+    "$defs": {
+        "Calculation": {
+            "properties": {
+                "args": {
+                    "anyOf": [
+                        {
+                            "items": {},
+                            "type": "array"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ],
+                    "title": "Args"
+                },
+                "callable": {
+                    "description": "callable function to perform calculation",
+                    "title": "Callable",
+                    "type": "string"
+                },
+                "kwargs": {
+                    "anyOf": [
+                        {
+                            "type": "object"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ],
+                    "default": null,
+                    "description": "kwargs for calcalation callable",
+                    "title": "Kwargs"
+                }
+            },
+            "required": [
+                "args",
+                "callable"
+            ],
+            "title": "Calculation",
+            "type": "object"
+        },
+        "DataType": {
+            "title": "DataType"
+        },
+        "Hints": {
+            "description": "Start-level hints",
+            "properties": {
+                "dimensions": {
+                    "anyOf": [
+                        {
+                            "items": {
+                                "items": {
+                                    "anyOf": [
+                                        {
+                                            "items": {
+                                                "type": "string"
+                                            },
+                                            "type": "array"
+                                        },
+                                        {
+                                            "type": "string"
+                                        }
+                                    ]
+                                },
+                                "type": "array"
+                            },
+                            "type": "array"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ],
+                    "default": null,
+                    "description": "The independent axes of the experiment. Ordered slow to fast",
+                    "title": "Dimensions"
+                }
+            },
+            "title": "Hints",
+            "type": "object"
+        },
+        "Projection": {
+            "description": "Where to get the data from",
+            "properties": {
+                "calculation": {
+                    "anyOf": [
+                        {
+                            "$ref": "#/$defs/Calculation"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ],
+                    "default": null,
+                    "description": "required fields if type is calculated",
+                    "title": "calculation properties"
+                },
+                "config_index": {
+                    "anyOf": [
+                        {
+                            "type": "integer"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ],
+                    "default": null,
+                    "title": "Config Index"
+                },
+                "config_device": {
+                    "anyOf": [
+                        {
+                            "type": "string"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ],
+                    "default": null,
+                    "title": "Config Device"
+                },
+                "field": {
+                    "anyOf": [
+                        {
+                            "type": "string"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ],
+                    "default": null,
+                    "title": "Field"
+                },
+                "location": {
+                    "anyOf": [
+                        {
+                            "enum": [
+                                "start",
+                                "event",
+                                "configuration"
+                            ],
+                            "type": "string"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ],
+                    "default": null,
+                    "description": "start comes from metadata fields in the start document, event comes from event, configuration comes from configuration fields in the event_descriptor document",
+                    "title": "Location"
+                },
+                "stream": {
+                    "anyOf": [
+                        {
+                            "type": "string"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ],
+                    "default": null,
+                    "title": "Stream"
+                },
+                "type": {
+                    "anyOf": [
+                        {
+                            "enum": [
+                                "linked",
+                                "calculated",
+                                "static"
+                            ],
+                            "type": "string"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ],
+                    "default": null,
+                    "description": "linked: a value linked from the data set, calculated: a value that requires calculation, static:  a value defined here in the projection ",
+                    "title": "Type"
+                },
+                "value": {
+                    "anyOf": [
+                        {},
+                        {
+                            "type": "null"
+                        }
+                    ],
+                    "default": null,
+                    "description": "value explicitely defined in the projection when type==static.",
+                    "title": "Value"
+                }
+            },
+            "title": "Projection",
+            "type": "object"
+        },
+        "Projections": {
+            "description": "Describe how to interperet this run as the given projection",
+            "properties": {
+                "configuration": {
+                    "description": "Static information about projection",
+                    "title": "Configuration",
+                    "type": "object"
+                },
+                "name": {
+                    "anyOf": [
+                        {
+                            "type": "string"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ],
+                    "default": null,
+                    "description": "The name of the projection",
+                    "title": "Name"
+                },
+                "projection": {
+                    "additionalProperties": {
+                        "$ref": "#/$defs/Projection"
+                    },
+                    "description": "",
+                    "title": "Projection",
+                    "type": "object"
+                },
+                "version": {
+                    "description": "The version of the projection spec. Can specify the version of an external specification.",
+                    "title": "Version",
+                    "type": "string"
+                }
+            },
+            "required": [
+                "configuration",
+                "projection",
+                "version"
+            ],
+            "title": "Projections",
+            "type": "object"
+        }
+    },
+    "description": "Document created at the start of run. Provides a seach target and\nlater documents link to it",
+    "properties": {
+        "data_groups": {
+            "anyOf": [
+                {
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": "array"
+                },
+                {
+                    "type": "null"
+                }
+            ],
+            "default": null,
+            "description": "An optional list of data access groups that have meaning to some external system. Examples might include facility, beamline, end stations, proposal, safety form.",
+            "title": "Data Groups"
+        },
+        "data_session": {
+            "anyOf": [
+                {
+                    "type": "string"
+                },
+                {
+                    "type": "null"
+                }
+            ],
+            "default": null,
+            "description": "An optional field for grouping runs. The meaning is not mandated, but this is a data management grouping and not a scientific grouping. It is intended to group runs in a visit or set of trials.",
+            "title": "Data Session"
+        },
+        "data_type": {
+            "anyOf": [
+                {
+                    "$ref": "#/$defs/DataType"
+                },
+                {
+                    "type": "null"
+                }
+            ],
+            "default": null,
+            "description": ""
+        },
+        "group": {
+            "anyOf": [
+                {
+                    "type": "string"
+                },
+                {
+                    "type": "null"
+                }
+            ],
+            "default": null,
+            "description": "Unix group to associate this data with",
+            "title": "Group"
+        },
+        "hints": {
+            "anyOf": [
+                {
+                    "$ref": "#/$defs/Hints"
+                },
+                {
+                    "type": "null"
+                }
+            ],
+            "default": null,
+            "description": "Start-level hints"
+        },
+        "owner": {
+            "anyOf": [
+                {
+                    "type": "string"
+                },
+                {
+                    "type": "null"
+                }
+            ],
+            "default": null,
+            "description": "Unix owner to associate this data with",
+            "title": "Owner"
+        },
+        "project": {
+            "anyOf": [
+                {
+                    "type": "string"
+                },
+                {
+                    "type": "null"
+                }
+            ],
+            "default": null,
+            "description": "Name of project that this run is part of",
+            "title": "Project"
+        },
+        "projections": {
+            "anyOf": [
+                {
+                    "items": {
+                        "$ref": "#/$defs/Projections"
+                    },
+                    "type": "array"
+                },
+                {
+                    "type": "null"
+                }
+            ],
+            "default": null,
+            "description": "",
+            "title": "Projections"
+        },
+        "sample": {
+            "anyOf": [
+                {
+                    "type": "object"
+                },
+                {
+                    "type": "string"
+                },
+                {
+                    "type": "null"
+                }
+            ],
+            "default": null,
+            "description": "Information about the sample, may be a UID to another collection",
+            "title": "Sample"
+        },
+        "scan_id": {
+            "anyOf": [
+                {
+                    "type": "integer"
+                },
+                {
+                    "type": "null"
+                }
+            ],
+            "default": null,
+            "description": "Scan ID number, not globally unique",
+            "title": "Scan Id"
+        },
+        "time": {
+            "description": "Time the run started.  Unix epoch time",
+            "title": "Time",
+            "type": "number"
+        },
+        "uid": {
+            "description": "Globally unique ID for this run",
+            "title": "Uid",
+            "type": "string"
+        }
+    },
+    "required": [
+        "time",
+        "uid"
+    ],
+    "title": "RunStart",
+    "type": "object"
+}

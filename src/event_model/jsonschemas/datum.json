@@ -1,21 +1,19 @@
 {
-    "title": "datum",
     "description": "Document to reference a quanta of externally-stored data",
-    "type": "object",
     "properties": {
         "datum_id": {
-            "title": "Datum Id",
             "description": "Globally unique identifier for this Datum (akin to 'uid' for other Document types), typically formatted as '<resource>/<integer>'",
+            "title": "Datum Id",
             "type": "string"
         },
         "datum_kwargs": {
-            "title": "Datum Kwargs",
             "description": "Arguments to pass to the Handler to retrieve one quanta of data",
+            "title": "Datum Kwargs",
             "type": "object"
         },
         "resource": {
-            "title": "Resource",
             "description": "The UID of the Resource to which this Datum belongs",
+            "title": "Resource",
             "type": "string"
         }
     },
@@ -24,5 +22,6 @@
         "datum_kwargs",
         "resource"
     ],
-    "additionalProperties": false
+    "title": "Datum",
+    "type": "object"
 }

@@ -1,61 +1,60 @@
 {
-    "title": "stream_datum",
-    "description": "Document to reference a quanta of an externally-stored stream of data.",
-    "type": "object",
     "$defs": {
         "StreamRange": {
-            "title": "StreamRange",
             "description": "The parameters required to describe a sequence of incrementing integers",
-            "type": "object",
             "properties": {
                 "start": {
-                    "title": "Start",
                     "description": "First number in the range",
+                    "title": "Start",
                     "type": "integer"
                 },
                 "stop": {
-                    "title": "Stop",
                     "description": "Last number in the range is less than this number",
+                    "title": "Stop",
                     "type": "integer"
                 }
             },
             "required": [
                 "start",
                 "stop"
-            ]
+            ],
+            "title": "StreamRange",
+            "type": "object"
         }
     },
+    "description": "Document to reference a quanta of an externally-stored stream of data.",
     "properties": {
         "descriptor": {
-            "title": "Descriptor",
             "description": "UID of the EventDescriptor to which this Datum belongs",
+            "title": "Descriptor",
             "type": "string"
         },
-        "indices": {
-            "description": "A slice object passed to the StreamResource handler so it can hand back data and timestamps",
-            "$ref": "#/$defs/StreamRange"
-        },
-        "seq_nums": {
-            "description": "A slice object showing the Event numbers the resource corresponds to",
-            "$ref": "#/$defs/StreamRange"
-        },
         "stream_resource": {
-            "title": "Stream Resource",
             "description": "The UID of the Stream Resource to which this Datum belongs.",
+            "title": "Stream Resource",
             "type": "string"
         },
         "uid": {
-            "title": "Uid",
             "description": "Globally unique identifier for this Datum. A suggested formatting being '<stream_resource>/<stream_name>/<block_id>",
+            "title": "Uid",
             "type": "string"
+        },
+        "seq_nums": {
+            "$ref": "#/$defs/StreamRange",
+            "description": "A slice object showing the Event numbers the resource corresponds to"
+        },
+        "indices": {
+            "$ref": "#/$defs/StreamRange",
+            "description": "A slice object passed to the StreamResource handler so it can hand back data and timestamps"
         }
     },
     "required": [
         "descriptor",
-        "indices",
-        "seq_nums",
         "stream_resource",
-        "uid"
+        "uid",
+        "seq_nums",
+        "indices"
     ],
-    "additionalProperties": false
+    "title": "StreamDatum",
+    "type": "object"
 }

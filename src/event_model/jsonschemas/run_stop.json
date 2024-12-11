@@ -1,0 +1,84 @@
+{
+    "$defs": {
+        "DataType": {
+            "title": "DataType"
+        }
+    },
+    "description": "Document for the end of a run indicating the success/fail state of the\nrun and the end time",
+    "properties": {
+        "data_type": {
+            "anyOf": [
+                {
+                    "$ref": "#/$defs/DataType"
+                },
+                {
+                    "type": "null"
+                }
+            ],
+            "default": null,
+            "description": "data_type"
+        },
+        "exit_status": {
+            "description": "State of the run when it ended",
+            "enum": [
+                "success",
+                "abort",
+                "fail"
+            ],
+            "title": "Exit Status",
+            "type": "string"
+        },
+        "num_events": {
+            "anyOf": [
+                {
+                    "additionalProperties": {
+                        "type": "integer"
+                    },
+                    "type": "object"
+                },
+                {
+                    "type": "null"
+                }
+            ],
+            "default": null,
+            "description": "Number of Events per named stream",
+            "title": "Num Events"
+        },
+        "reason": {
+            "anyOf": [
+                {
+                    "type": "string"
+                },
+                {
+                    "type": "null"
+                }
+            ],
+            "default": null,
+            "description": "Long-form description of why the run ended",
+            "title": "Reason"
+        },
+        "run_start": {
+            "description": "Reference back to the run_start document that this document is paired with.",
+            "title": "Run Start",
+            "type": "string"
+        },
+        "time": {
+            "description": "The time the run ended. Unix epoch",
+            "title": "Time",
+            "type": "number"
+        },
+        "uid": {
+            "description": "Globally unique ID for this document",
+            "title": "Uid",
+            "type": "string"
+        }
+    },
+    "required": [
+        "exit_status",
+        "run_start",
+        "time",
+        "uid"
+    ],
+    "title": "RunStop",
+    "type": "object"
+}

@@ -1,0 +1,69 @@
+{
+    "description": "Document to reference a collection (e.g. file or group of files) of\nexternally-stored data",
+    "properties": {
+        "spec": {
+            "description": "String identifying the format/type of this Resource, used to identify a compatible Handler",
+            "title": "Spec",
+            "type": "string"
+        },
+        "resource_path": {
+            "description": "Filepath or URI for locating this resource",
+            "title": "Resource Path",
+            "type": "string"
+        },
+        "resource_kwargs": {
+            "description": "Additional argument to pass to the Handler to read a Resource",
+            "title": "Resource Kwargs",
+            "type": "object"
+        },
+        "root": {
+            "description": "Subset of resource_path that is a local detail, not semantic.",
+            "title": "Root",
+            "type": "string"
+        },
+        "uid": {
+            "description": "Globally unique identifier for this Resource",
+            "title": "Uid",
+            "type": "string"
+        },
+        "path_semantics": {
+            "anyOf": [
+                {
+                    "enum": [
+                        "posix",
+                        "windows"
+                    ],
+                    "type": "string"
+                },
+                {
+                    "type": "null"
+                }
+            ],
+            "default": null,
+            "description": "Rules for joining paths",
+            "title": "Path Semantics"
+        },
+        "run_start": {
+            "anyOf": [
+                {
+                    "type": "string"
+                },
+                {
+                    "type": "null"
+                }
+            ],
+            "default": null,
+            "description": "Globally unique ID to the run_start document this resource is associated with.",
+            "title": "Run Start"
+        }
+    },
+    "required": [
+        "spec",
+        "resource_path",
+        "resource_kwargs",
+        "root",
+        "uid"
+    ],
+    "title": "Resource",
+    "type": "object"
+}
