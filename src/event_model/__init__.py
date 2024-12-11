@@ -39,7 +39,6 @@ from .documents.event import Event, PartialEvent
 from .documents.event_descriptor import (
     Configuration,
     DataKey,
-    Dtype,
     EventDescriptor,
     Limits,
     LimitsRange,
@@ -47,7 +46,16 @@ from .documents.event_descriptor import (
 )
 from .documents.event_page import EventPage, PartialEventPage
 from .documents.resource import PartialResource, Resource
-from .documents.run_start import Calculation, Hints, Projection, Projections, RunStart
+from .documents.run_start import (
+    CalculatedEventProjection,
+    Calculation,
+    ConfigurationProjection,
+    Hints,
+    LinkedEventProjection,
+    Projections,
+    RunStart,
+    StaticProjection,
+)
 from .documents.run_stop import RunStop
 from .documents.stream_datum import StreamDatum, StreamRange
 from .documents.stream_resource import StreamResource
@@ -67,7 +75,6 @@ __all__ = [
     "PartialEvent",
     "Configuration",
     "DataKey",
-    "Dtype",
     "EventDescriptor",
     "Limits",
     "LimitsRange",
@@ -78,6 +85,10 @@ __all__ = [
     "Resource",
     "Calculation",
     "Hints",
+    "LinkedEventProjection",
+    "StaticProjection",
+    "CalculatedEventProjection",
+    "ConfigurationProjection",
     "Projection",
     "Projections",
     "RunStart",
@@ -1821,9 +1832,8 @@ SCHEMA_NAMES = {
     DocumentNames.resource: "schemas/resource.json",
     DocumentNames.stream_datum: "schemas/stream_datum.json",
     DocumentNames.stream_resource: "schemas/stream_resource.json",
-    # DEPRECATED:
-    DocumentNames.bulk_events: "schemas/bulk_events.json",
     DocumentNames.bulk_datum: "schemas/bulk_datum.json",
+    DocumentNames.bulk_events: "schemas/bulk_events.json",
 }
 schemas = {}
 for name, filename in SCHEMA_NAMES.items():

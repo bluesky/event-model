@@ -5,30 +5,33 @@
 
 from __future__ import annotations
 
-from typing import TypedDict
+from pydantic import BaseModel, ConfigDict, Field
 
 
-class StreamRange(TypedDict):
+class StreamRange(BaseModel):
     """
     The parameters required to describe a sequence of incrementing integers
     """
 
-    start: int
+    start: int = Field(..., title="Start")
     """
     First number in the range
     """
-    stop: int
+    stop: int = Field(..., title="Stop")
     """
     Last number in the range is less than this number
     """
 
 
-class StreamDatum(TypedDict):
+class StreamDatum(BaseModel):
     """
     Document to reference a quanta of an externally-stored stream of data.
     """
 
-    descriptor: str
+    model_config = ConfigDict(
+        extra="forbid",
+    )
+    descriptor: str = Field(..., title="Descriptor")
     """
     UID of the EventDescriptor to which this Datum belongs
     """
@@ -40,11 +43,11 @@ class StreamDatum(TypedDict):
     """
     A slice object showing the Event numbers the resource corresponds to
     """
-    stream_resource: str
+    stream_resource: str = Field(..., title="Stream Resource")
     """
     The UID of the Stream Resource to which this Datum belongs.
     """
-    uid: str
+    uid: str = Field(..., title="Uid")
     """
     Globally unique identifier for this Datum. A suggested formatting being '<stream_resource>/<stream_name>/<block_id>
     """

@@ -1,0 +1,22 @@
+model_config = ConfigDict(
+{%- for field_name, value in config.dict(exclude_unset=True).items() %}
+    {%- if class_name in ['RunStart', 'EventDescriptor'] and field_name == 'extra'%}
+      extra='allow',
+    {%- else %}
+      {{ field_name }}={{ value }},
+    {%- endif %}
+{%- endfor %}
+)
+
+{%- if class_name in ['RunStart', 'EventDescriptor'] %}
+@model_validator(mode="before")
+def store_extra_values_as_datatype(cls, values):
+    extra_values = {k: v for k, v in values.items() if k not in cls.model_fields}
+    pattern = r"^([^./]+)$"
+    for key, value in extra_values.items():
+        if not re.match(pattern, key):
+            raise ValueError(f"Key '{key}' does not match pattern '{pattern}'")
+        values[key] = DataType(value)
+    return values
+
+{%- endif %}

@@ -16,34 +16,34 @@ from .run_stop import *  # noqa: F403
 from .stream_datum import *  # noqa: F403
 from .stream_resource import *  # noqa: F403
 
-DocumentType = Union[
+BasemodelType = Union[
     Type[BulkDatum],  # noqa: F405,
+    Type[BulkEvents],  # noqa: F405,
     Type[Datum],  # noqa: F405,
     Type[DatumPage],  # noqa: F405,
+    Type[Event],  # noqa: F405,
+    Type[EventDescriptor],  # noqa: F405,
+    Type[EventPage],  # noqa: F405,
+    Type[PartialResource],  # noqa: F405,
+    Type[RunStart],  # noqa: F405,
     Type[RunStop],  # noqa: F405,
     Type[StreamDatum],  # noqa: F405,
     Type[StreamResource],  # noqa: F405,
-    Type[EventPage],  # noqa: F405,
-    Type[Event],  # noqa: F405,
-    Type[EventDescriptor],  # noqa: F405,
-    Type[BulkEvents],  # noqa: F405,
-    Type[RunStart],  # noqa: F405,
-    Type[PartialResource],  # noqa: F405,
     Type[Resource],  # noqa: F405,
 ]
 
-ALL_DOCUMENTS: Tuple[DocumentType, ...] = (
+ALL_BASEMODELS: Tuple[BasemodelType, ...] = (
     BulkDatum,  # noqa: F405
+    BulkEvents,  # noqa: F405
     Datum,  # noqa: F405
     DatumPage,  # noqa: F405
+    Event,  # noqa: F405
+    EventDescriptor,  # noqa: F405
+    EventPage,  # noqa: F405
+    PartialResource,  # noqa: F405
+    RunStart,  # noqa: F405
     RunStop,  # noqa: F405
     StreamDatum,  # noqa: F405
     StreamResource,  # noqa: F405
-    EventPage,  # noqa: F405
-    Event,  # noqa: F405
-    EventDescriptor,  # noqa: F405
-    BulkEvents,  # noqa: F405
-    RunStart,  # noqa: F405
-    PartialResource,  # noqa: F405
     Resource,  # noqa: F405
 )

@@ -2,9 +2,49 @@
     "title": "resource",
     "description": "Document to reference a collection (e.g. file or group of files) of externally-stored data",
     "type": "object",
+    "allOf": [ { "$ref": "#/$defs/PartialResource" } ],
+    "$defs": {
+        "PartialResource": {
+            "title": "partial_resource",
+            "properties": {
+                "spec": {
+                    "title": "spec",
+                    "description": "String identifying the format/type of this Resource, used to identify a compatible Handler",
+                    "type": "string"
+                },
+                "resource_kwargs": {
+                    "title": "resource_kwargs",
+                    "description": "Additional argument to pass to the Handler to read a Resource",
+                    "type": "object"
+                },
+                "resource_path": {
+                    "title": "resource_path",
+                    "description": "Filepath or URI for locating this resource",
+                    "type": "string"
+                },
+                "root": {
+                    "title": "root",
+                    "description": "Subset of resource_path that is a local detail, not semantic.",
+                    "type": "string"
+                },
+                "uid": {
+                    "title": "uid",
+                    "description": "Globally unique identifier for this Resource",
+                    "type": "string"
+                }
+            },
+            "required": [
+                "resource_kwargs",
+                "resource_path",
+                "root",
+                "spec",
+                "uid"
+            ]
+        }
+    },
     "properties": {
         "path_semantics": {
-            "title": "Path Semantics",
+            "title": "path_semantics",
             "description": "Rules for joining paths",
             "type": "string",
             "enum": [
@@ -12,43 +52,11 @@
                 "windows"
             ]
         },
-        "resource_kwargs": {
-            "title": "Resource Kwargs",
-            "description": "Additional argument to pass to the Handler to read a Resource",
-            "type": "object"
-        },
-        "resource_path": {
-            "title": "Resource Path",
-            "description": "Filepath or URI for locating this resource",
-            "type": "string"
-        },
-        "root": {
-            "title": "Root",
-            "description": "Subset of resource_path that is a local detail, not semantic.",
-            "type": "string"
-        },
         "run_start": {
-            "title": "Run Start",
+            "title": "run_start",
             "description": "Globally unique ID to the run_start document this resource is associated with.",
-            "type": "string"
-        },
-        "spec": {
-            "title": "Spec",
-            "description": "String identifying the format/type of this Resource, used to identify a compatible Handler",
-            "type": "string"
-        },
-        "uid": {
-            "title": "Uid",
-            "description": "Globally unique identifier for this Resource",
             "type": "string"
         }
     },
-    "required": [
-        "resource_kwargs",
-        "resource_path",
-        "root",
-        "spec",
-        "uid"
-    ],
-    "additionalProperties": false
+    "unevaluatedProperties": false
 }

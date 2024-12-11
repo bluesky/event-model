@@ -5,23 +5,28 @@
 
 from __future__ import annotations
 
-from typing import Any, Dict, TypedDict
+from typing import Any, Dict
+
+from pydantic import BaseModel, ConfigDict, Field
 
 
-class Datum(TypedDict):
+class Datum(BaseModel):
     """
     Document to reference a quanta of externally-stored data
     """
 
-    datum_id: str
+    model_config = ConfigDict(
+        extra="forbid",
+    )
+    datum_id: str = Field(..., title="Datum Id")
     """
     Globally unique identifier for this Datum (akin to 'uid' for other Document types), typically formatted as '<resource>/<integer>'
     """
-    datum_kwargs: Dict[str, Any]
+    datum_kwargs: Dict[str, Any] = Field(..., title="Datum Kwargs")
     """
     Arguments to pass to the Handler to retrieve one quanta of data
     """
-    resource: str
+    resource: str = Field(..., title="Resource")
     """
     The UID of the Resource to which this Datum belongs
     """

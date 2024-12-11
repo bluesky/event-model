@@ -5,25 +5,32 @@
 
 from __future__ import annotations
 
-from typing import Dict, List, TypedDict
+from typing import Dict, List
 
-DataFrameForDatumPage = List[str]
+from pydantic import BaseModel, ConfigDict, Field, RootModel
 
 
-class DatumPage(TypedDict):
+class DataFrameForDatumPage(RootModel[List[str]]):
+    root: List[str] = Field(..., title="DataFrameForDatumPage")
+
+
+class DatumPage(BaseModel):
     """
     Page of documents to reference a quanta of externally-stored data
     """
 
+    model_config = ConfigDict(
+        extra="forbid",
+    )
     datum_id: DataFrameForDatumPage
     """
     Array unique identifiers for each Datum (akin to 'uid' for other Document types), typically formatted as '<resource>/<integer>'
     """
-    datum_kwargs: Dict[str, List]
+    datum_kwargs: Dict[str, List] = Field(..., title="Datum Kwargs")
     """
     Array of arguments to pass to the Handler to retrieve one quanta of data
     """
-    resource: str
+    resource: str = Field(..., title="Resource")
     """
     The UID of the Resource to which all Datums in the page belong
     """

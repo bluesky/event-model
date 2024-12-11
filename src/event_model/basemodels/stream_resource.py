@@ -5,37 +5,40 @@
 
 from __future__ import annotations
 
-from typing import Any, Dict, TypedDict
+from typing import Any, Dict, Optional
 
-from typing_extensions import NotRequired
+from pydantic import BaseModel, ConfigDict, Field
 
 
-class StreamResource(TypedDict):
+class StreamResource(BaseModel):
     """
     Document to reference a collection (e.g. file or group of files) of externally-stored data streams
     """
 
-    data_key: str
+    model_config = ConfigDict(
+        extra="forbid",
+    )
+    data_key: str = Field(..., title="Data Key")
     """
     A string to show which data_key of the Descriptor are being streamed
     """
-    mimetype: str
+    mimetype: str = Field(..., title="Mimetype")
     """
     String identifying the format/type of this Stream Resource, used to identify a compatible Handler
     """
-    parameters: Dict[str, Any]
+    parameters: Dict[str, Any] = Field(..., title="Parameters")
     """
     Additional keyword arguments to pass to the Handler to read a Stream Resource
     """
-    run_start: NotRequired[str]
+    run_start: Optional[str] = Field(None, title="Run Start")
     """
     Globally unique ID to the run_start document this Stream Resource is associated with.
     """
-    uid: str
+    uid: str = Field(..., title="Uid")
     """
     Globally unique identifier for this Stream Resource
     """
-    uri: str
+    uri: str = Field(..., title="Uri")
     """
     URI for locating this resource
     """

@@ -1,32 +1,54 @@
-# type: ignore
-
-# Test schema generation
-import json
-import os
+from pathlib import Path
 
 import pytest
+from pydantic.warnings import PydanticDeprecatedSince20
 
-import event_model
-from event_model.documents import ALL_DOCUMENTS
-from event_model.documents.generate.typeddict_to_schema import typeddict_to_schema
+from event_model.generate.create_documents import (
+    BASEMODELS,
+    JSONSCHEMA,
+    TYPEDDICTS,
+    generate,
+)
 
-SCHEMA_PATH = event_model.__path__[0] + "/schemas/"
 
+def test_generated_json_matches_typed_dict(tmpdir):
+    tmpdir = Path(tmpdir)
+    tmp_basemodels = tmpdir / "basemodels"
+    tmp_typeddicts = tmpdir / "typeddicts"
+    tmp_basemodels.mkdir()
+    tmp_typeddicts.mkdir()
 
-@pytest.mark.parametrize("typed_dict_class", ALL_DOCUMENTS)
-def test_generated_json_matches_typed_dict(typed_dict_class, tmpdir):
-    typeddict_to_schema(typed_dict_class, schema_dir=tmpdir)
-    file_name = os.listdir(tmpdir)[0]
-    generated_file_path = os.path.join(tmpdir, file_name)
-    old_file_path = os.path.join(SCHEMA_PATH, file_name)
+    with pytest.warns(PydanticDeprecatedSince20):
+        generate(
+            jsonschema_root=JSONSCHEMA,
+            basemodel_root=tmp_basemodels,
+            typeddict_root=tmp_typeddicts,
+        )
 
-    with open(generated_file_path) as generated_file, open(old_file_path) as old_file:
-        try:
-            assert json.load(generated_file) == json.load(old_file)
-        except AssertionError as error:
-            raise Exception(
-                f"`{typed_dict_class.__name__}` can generate a json schema, but "
-                f"it doesn't match the schema in `{SCHEMA_PATH}`. Did you forget "
-                "to run `python event_model/documents/generate` after changes "
-                f"to `{typed_dict_class.__name__}`?"
-            ) from error
+    for new_basemodel in tmp_basemodels.iterdir():
+        if new_basemodel.name == "__init__.py":
+            continue
+        old_basemodel = BASEMODELS / new_basemodel.name
+
+        if (
+            not old_basemodel.exists()
+            or old_basemodel.read_text() != new_basemodel.read_text()
+        ):
+            raise RuntimeError(
+                f"BaseModel {old_basemodel} is out of date with the schema, "
+                "did you forget to run `regenerate-documents`?"
+            )
+
+    for new_typeddict in tmp_typeddicts.iterdir():
+        if new_typeddict.name == "__init__.py":
+            continue
+        old_typeddict = TYPEDDICTS / new_typeddict.name
+
+        if (
+            not old_typeddict.exists()
+            or old_typeddict.read_text() != new_typeddict.read_text()
+        ):
+            raise RuntimeError(
+                f"Document {old_typeddict} is out of date with the schema, "
+                "did you forget to run `regenerate-documents`?"
+            )

@@ -5,26 +5,29 @@
 
 from __future__ import annotations
 
-from typing import Dict, List, Optional, TypedDict, Union
+from typing import Dict, List, Optional, Union
 
-from typing_extensions import NotRequired
-
-DataFrameForEventPage = Optional[Dict[str, List]]
+from pydantic import BaseModel, Field, RootModel
 
 
-DataFrameForFilled = Optional[Dict[str, List[Union[bool, str]]]]
+class DataFrameForEventPage(RootModel[Optional[Dict[str, List]]]):
+    root: Optional[Dict[str, List]] = None
 
 
-class PartialEventPage(TypedDict):
+class DataFrameForFilled(RootModel[Optional[Dict[str, List[Union[bool, str]]]]]):
+    root: Optional[Dict[str, List[Union[bool, str]]]] = None
+
+
+class PartialEventPage(BaseModel):
     data: DataFrameForEventPage
     """
     The actual measurement data
     """
-    filled: NotRequired[DataFrameForFilled]
+    filled: Optional[DataFrameForFilled] = None
     """
     Mapping each of the keys of externally-stored data to an array containing the boolean False, indicating that the data has not been loaded, or to foreign keys (moved here from 'data' when the data was loaded)
     """
-    time: List[float]
+    time: List[float] = Field(..., title="time")
     """
     Array of Event times. This maybe different than the timestamps on each of the data entries
     """
@@ -39,15 +42,15 @@ class EventPage(PartialEventPage):
     Page of documents to record a quanta of collected data
     """
 
-    descriptor: str
+    descriptor: str = Field(..., title="descriptor")
     """
     The UID of the EventDescriptor to which all of the Events in this page belong
     """
-    seq_num: List[int]
+    seq_num: List[int] = Field(..., title="seq_num")
     """
     Array of sequence numbers to identify the location of each Event in the Event stream
     """
-    uid: List[str]
+    uid: List[str] = Field(..., title="uid")
     """
     Array of globally unique identifiers for each Event
     """

@@ -1,4 +1,6 @@
 {
+    "title": "bulk_events",
+    
     "patternProperties": {
         "^.*$": {
             "type": "array",

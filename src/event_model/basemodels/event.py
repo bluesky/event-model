@@ -5,25 +5,25 @@
 
 from __future__ import annotations
 
-from typing import Any, Dict, TypedDict, Union
+from typing import Any, Dict, Optional, Union
 
-from typing_extensions import NotRequired
+from pydantic import BaseModel, Field
 
 
-class PartialEvent(TypedDict):
-    data: Dict[str, Any]
+class PartialEvent(BaseModel):
+    data: Dict[str, Any] = Field(..., title="data")
     """
     The actual measurement data
     """
-    filled: NotRequired[Dict[str, Union[bool, str]]]
+    filled: Optional[Dict[str, Union[bool, str]]] = Field(None, title="filled")
     """
     Mapping each of the keys of externally-stored data to the boolean False, indicating that the data has not been loaded, or to foreign keys (moved here from 'data' when the data was loaded)
     """
-    time: float
+    time: float = Field(..., title="time")
     """
     The event time. This maybe different than the timestamps on each of the data entries.
     """
-    timestamps: Dict[str, Any]
+    timestamps: Dict[str, Any] = Field(..., title="timestamps")
     """
     The timestamps of the individual measurement data
     """
@@ -34,15 +34,15 @@ class Event(PartialEvent):
     Document to record a quanta of collected data
     """
 
-    descriptor: str
+    descriptor: str = Field(..., title="descriptor")
     """
     UID of the EventDescriptor to which this Event belongs
     """
-    seq_num: int
+    seq_num: int = Field(..., title="seq_num")
     """
     Sequence number to identify the location of this Event in the Event stream
     """
-    uid: str
+    uid: str = Field(..., title="uid")
     """
     Globally unique identifier for this Event
     """

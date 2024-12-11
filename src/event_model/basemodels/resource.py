@@ -5,29 +5,39 @@
 
 from __future__ import annotations
 
-from typing import Any, Dict, Literal, TypedDict
+from enum import Enum
+from typing import Any, Dict, Optional
 
-from typing_extensions import NotRequired
+from pydantic import BaseModel, Field
 
 
-class PartialResource(TypedDict):
-    spec: str
+class PathSemantics(Enum):
+    """
+    Rules for joining paths
+    """
+
+    posix = "posix"
+    windows = "windows"
+
+
+class PartialResource(BaseModel):
+    spec: str = Field(..., title="spec")
     """
     String identifying the format/type of this Resource, used to identify a compatible Handler
     """
-    resource_kwargs: Dict[str, Any]
+    resource_kwargs: Dict[str, Any] = Field(..., title="resource_kwargs")
     """
     Additional argument to pass to the Handler to read a Resource
     """
-    resource_path: str
+    resource_path: str = Field(..., title="resource_path")
     """
     Filepath or URI for locating this resource
     """
-    root: str
+    root: str = Field(..., title="root")
     """
     Subset of resource_path that is a local detail, not semantic.
     """
-    uid: str
+    uid: str = Field(..., title="uid")
     """
     Globally unique identifier for this Resource
     """
@@ -38,11 +48,11 @@ class Resource(PartialResource):
     Document to reference a collection (e.g. file or group of files) of externally-stored data
     """
 
-    path_semantics: NotRequired[Literal["posix", "windows"]]
+    path_semantics: Optional[PathSemantics] = Field(None, title="path_semantics")
     """
     Rules for joining paths
     """
-    run_start: NotRequired[str]
+    run_start: Optional[str] = Field(None, title="run_start")
     """
     Globally unique ID to the run_start document this resource is associated with.
     """
