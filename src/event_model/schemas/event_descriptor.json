@@ -1,6 +1,6 @@
 {
-    "title": "event_descriptor",
-    "description": "Document to describe the data captured in the associated event documents",
+    "title": "EventDescriptor",
+    "description": "Document to describe the data captured in the associated event\ndocuments",
     "type": "object",
     "$defs": {
         "Configuration": {
@@ -10,7 +10,8 @@
                 "data": {
                     "title": "Data",
                     "description": "The actual measurement data",
-                    "type": "object"
+                    "type": "object",
+                    "default": {}
                 },
                 "data_keys": {
                     "title": "Data Keys",
@@ -18,14 +19,17 @@
                     "type": "object",
                     "additionalProperties": {
                         "$ref": "#/$defs/DataKey"
-                    }
+                    },
+                    "default": {}
                 },
                 "timestamps": {
                     "title": "Timestamps",
                     "description": "The timestamps of the individual measurement data",
-                    "type": "object"
+                    "type": "object",
+                    "default": {}
                 }
-            }
+            },
+            "additionalProperties": false
         },
         "DataKey": {
             "title": "DataKey",
@@ -36,6 +40,7 @@
                     "title": "Choices",
                     "description": "Choices of enum value.",
                     "type": "array",
+                    "default": [],
                     "items": {
                         "type": "string"
                     }
@@ -44,6 +49,7 @@
                     "title": "Dims",
                     "description": "The names for dimensions of the data. Null or empty list if scalar data",
                     "type": "array",
+                    "default": [],
                     "items": {
                         "type": "string"
                     }
@@ -87,12 +93,14 @@
                             },
                             "type": "array"
                         }
-                    ]
+                    ],
+                    "default": ""
                 },
                 "external": {
                     "title": "External",
                     "description": "Where the data is stored if it is stored external to the events",
                     "type": "string",
+                    "default": "",
                     "pattern": "^[A-Z]+:?"
                 },
                 "limits": {
@@ -102,7 +110,8 @@
                 "object_name": {
                     "title": "Object Name",
                     "description": "The name of the object this key was pulled from.",
-                    "type": "string"
+                    "type": "string",
+                    "default": ""
                 },
                 "precision": {
                     "title": "Precision",
@@ -114,7 +123,8 @@
                         {
                             "type": "null"
                         }
-                    ]
+                    ],
+                    "default": null
                 },
                 "shape": {
                     "title": "Shape",
@@ -132,53 +142,106 @@
                 "units": {
                     "title": "Units",
                     "description": "Engineering units of the value",
-                    "anyOf": [
-                        {
-                            "type": "string"
-                        },
-                        {
-                            "type": "null"
-                        }
-                    ]
+                    "type": "string",
+                    "default": ""
                 }
             },
             "required": [
                 "dtype",
                 "shape",
                 "source"
-            ]
+            ],
+            "additionalProperties": false
+        },
+        "DataType": {
+            "title": "DataType",
+            "patternProperties": {
+                "^([^./]+)$": {
+                    "$ref": "#/$defs/DataType"
+                }
+            },
+            "additionalProperties": false
         },
         "Limits": {
             "title": "Limits",
-            "description": "Epics and tango limits:\nsee 3.4.1 https://epics.anl.gov/base/R3-14/12-docs/AppDevGuide/node4.html\nand\nhttps://tango-controls.readthedocs.io/en/latest/development/device-api/attribute-alarms.html",
+            "description": "Epics limits:\nsee 3.4.1 https://epics.anl.gov/base/R3-14/12-docs/AppDevGuide/node4.html",
             "type": "object",
             "properties": {
                 "alarm": {
                     "description": "Alarm limits.",
-                    "$ref": "#/$defs/LimitsRange"
+                    "anyOf": [
+                        {
+                            "$ref": "#/$defs/LimitsRange"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ],
+                    "default": null
                 },
                 "control": {
                     "description": "Control limits.",
-                    "$ref": "#/$defs/LimitsRange"
+                    "anyOf": [
+                        {
+                            "$ref": "#/$defs/LimitsRange"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ],
+                    "default": null
                 },
                 "display": {
                     "description": "Display limits.",
-                    "$ref": "#/$defs/LimitsRange"
+                    "anyOf": [
+                        {
+                            "$ref": "#/$defs/LimitsRange"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ],
+                    "default": null
                 },
                 "hysteresis": {
                     "title": "Hysteresis",
                     "description": "Hysteresis.",
-                    "type": "number"
+                    "anyOf": [
+                        {
+                            "type": "number"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ],
+                    "default": null
                 },
                 "rds": {
                     "description": "RDS parameters.",
-                    "$ref": "#/$defs/RdsRange"
+                    "anyOf": [
+                        {
+                            "$ref": "#/$defs/RdsRange"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ],
+                    "default": null
                 },
                 "warning": {
                     "description": "Warning limits.",
-                    "$ref": "#/$defs/LimitsRange"
+                    "anyOf": [
+                        {
+                            "$ref": "#/$defs/LimitsRange"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ],
+                    "default": null
                 }
-            }
+            },
+            "additionalProperties": false
         },
         "LimitsRange": {
             "title": "LimitsRange",
@@ -210,7 +273,8 @@
             "required": [
                 "high",
                 "low"
-            ]
+            ],
+            "additionalProperties": false
         },
         "PerObjectHint": {
             "title": "PerObjectHint",
@@ -221,17 +285,20 @@
                     "title": "Nx Class",
                     "description": "The NeXus class definition for this device.",
                     "type": "string",
+                    "default": "",
                     "pattern": "^NX[A-Za-z_]+$"
                 },
                 "fields": {
                     "title": "Fields",
                     "description": "The 'interesting' data keys for this device.",
                     "type": "array",
+                    "default": [],
                     "items": {
                         "type": "string"
                     }
                 }
-            }
+            },
+            "additionalProperties": false
         },
         "RdsRange": {
             "title": "RdsRange",
@@ -250,17 +317,9 @@
                 }
             },
             "required": [
-                "time_difference"
+                "time_difference",
+                "value_difference"
             ]
-        },
-        "DataType": {
-            "title": "DataType",
-            "patternProperties": {
-                "^([^./]+)$": {
-                    "$ref": "#/$defs/DataType"
-                }
-            },
-            "additionalProperties": false
         }
     },
     "properties": {
@@ -270,7 +329,8 @@
             "type": "object",
             "additionalProperties": {
                 "$ref": "#/$defs/Configuration"
-            }
+            },
+            "default": {}
         },
         "data_keys": {
             "title": "data_keys",
@@ -286,12 +346,14 @@
         "name": {
             "title": "Name",
             "description": "A human-friendly name for this data stream, such as 'primary' or 'baseline'.",
-            "type": "string"
+            "type": "string",
+            "default": ""
         },
         "object_keys": {
             "title": "Object Keys",
             "description": "Maps a Device/Signal name to the names of the entries it produces in data_keys.",
-            "type": "object"
+            "type": "object",
+            "default": {}
         },
         "run_start": {
             "title": "Run Start",

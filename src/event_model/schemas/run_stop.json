@@ -1,10 +1,11 @@
 {
-    "title": "run_stop",
-    "description": "Document for the end of a run indicating the success/fail state of the run and the end time",
+    "title": "RunStop",
+    "description": "Document for the end of a run indicating the success/fail state of the\nrun and the end time",
     "type": "object",
     "$defs": {
         "DataType": {
-            "title": "DataType"
+            "title": "DataType",
+            "default": null
         }
     },
     "properties": {
@@ -28,12 +29,14 @@
             "type": "object",
             "additionalProperties": {
                 "type": "integer"
-            }
+            },
+            "default": {}
         },
         "reason": {
             "title": "Reason",
             "description": "Long-form description of why the run ended",
-            "type": "string"
+            "type": "string",
+            "default": ""
         },
         "run_start": {
             "title": "Run Start",

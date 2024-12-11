@@ -1,5 +1,5 @@
 {
-    "title": "datum_page",
+    "title": "DatumPage",
     "description": "Page of documents to reference a quanta of externally-stored data",
     "type": "object",
     "$defs": {

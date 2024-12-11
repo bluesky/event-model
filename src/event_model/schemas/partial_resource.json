@@ -1,18 +1,7 @@
 {
-    "title": "Resource",
-    "description": "Document to reference a collection (e.g. file or group of files) of\nexternally-stored data",
+    "title": "PartialResource",
     "type": "object",
     "properties": {
-        "path_semantics": {
-            "title": "Path Semantics",
-            "description": "Rules for joining paths",
-            "type": "string",
-            "default": "posix",
-            "enum": [
-                "posix",
-                "windows"
-            ]
-        },
         "resource_kwargs": {
             "title": "Resource Kwargs",
             "description": "Additional argument to pass to the Handler to read a Resource",
@@ -27,12 +16,6 @@
             "title": "Root",
             "description": "Subset of resource_path that is a local detail, not semantic.",
             "type": "string"
-        },
-        "run_start": {
-            "title": "Run Start",
-            "description": "Globally unique ID to the run_start document this resource is associated with.",
-            "type": "string",
-            "default": ""
         },
         "spec": {
             "title": "Spec",

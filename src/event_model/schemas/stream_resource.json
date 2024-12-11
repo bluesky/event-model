@@ -1,6 +1,6 @@
 {
-    "title": "stream_resource",
-    "description": "Document to reference a collection (e.g. file or group of files) of externally-stored data streams",
+    "title": "StreamResource",
+    "description": "Document to reference a collection (e.g. file or group of files) of\nexternally-stored data streams",
     "type": "object",
     "properties": {
         "data_key": {
@@ -21,7 +21,8 @@
         "run_start": {
             "title": "Run Start",
             "description": "Globally unique ID to the run_start document this Stream Resource is associated with.",
-            "type": "string"
+            "type": "string",
+            "default": ""
         },
         "uid": {
             "title": "Uid",
@@ -40,6 +41,5 @@
         "parameters",
         "uid",
         "uri"
-    ],
-    "additionalProperties": false
+    ]
 }
