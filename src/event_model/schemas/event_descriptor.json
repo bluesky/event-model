@@ -150,7 +150,7 @@
         },
         "Limits": {
             "title": "Limits",
-            "description": "Epics limits:\nsee 3.4.1 https://epics.anl.gov/base/R3-14/12-docs/AppDevGuide/node4.html",
+            "description": "Epics and tango limits:\nsee 3.4.1 https://epics.anl.gov/base/R3-14/12-docs/AppDevGuide/node4.html\nand\nhttps://tango-controls.readthedocs.io/en/latest/development/device-api/attribute-alarms.html",
             "type": "object",
             "properties": {
                 "alarm": {
@@ -164,6 +164,15 @@
                 "display": {
                     "description": "Display limits.",
                     "$ref": "#/$defs/LimitsRange"
+                },
+                "hysteresis": {
+                    "title": "Hysteresis",
+                    "description": "Hysteresis.",
+                    "type": "number"
+                },
+                "rds": {
+                    "description": "RDS parameters.",
+                    "$ref": "#/$defs/RdsRange"
                 },
                 "warning": {
                     "description": "Warning limits.",
@@ -223,6 +232,26 @@
                     }
                 }
             }
+        },
+        "RdsRange": {
+            "title": "RdsRange",
+            "description": "RDS (Read different than set) parameters range.\n\n\nhttps://tango-controls.readthedocs.io/en/latest/development/device-api/attribute-alarms.html#the-read-different-than-set-rds-alarm",
+            "type": "object",
+            "properties": {
+                "time_difference": {
+                    "title": "Time Difference",
+                    "description": "ms since last update to fail after if set point and read point are not within `value_difference` of each other.",
+                    "type": "number"
+                },
+                "value_difference": {
+                    "title": "Value Difference",
+                    "description": "Allowed difference in value between set point and read point after `time_difference`.",
+                    "type": "number"
+                }
+            },
+            "required": [
+                "time_difference"
+            ]
         },
         "DataType": {
             "title": "DataType",
