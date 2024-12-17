@@ -60,8 +60,8 @@ def sort_schema(document_schema: Dict) -> Dict:
     return document_schema
 
 
-def dump_json(dictionary: Dict):
-    with open(JSONSCHEMA / f"{to_snake(dictionary['title'])}.json", "w") as f:
+def dump_json(dictionary: Dict, directory=JSONSCHEMA):
+    with open(directory / f"{to_snake(dictionary['title'])}.json", "w") as f:
         json.dump(dictionary, f, indent=4)
 
 
@@ -96,22 +96,29 @@ def generate_typeddict(json_schema_path: Path):
     )
 
 
+def generate_json_schema(basemodel: BaseModel, directory=JSONSCHEMA) -> List[BaseModel]:
+    return_basemodels = []
+    dump_json(basemodel.model_json_schema(), directory=directory)  # type: ignore
+    return_basemodels.append(basemodel)
+
+    for parent in [parent for parent in basemodel.__bases__ if parent is not BaseModel]:
+        return_basemodels += generate_json_schema(parent)
+    return return_basemodels
+
+
 def generate():
+    generated_basemodels = []
     for basemodel in ALL_BASEMODELS:
-        dump_json(basemodel.schema())  # type: ignore
+        generated_basemodels += generate_json_schema(basemodel)  # type: ignore
     for schema_path in JSONSCHEMA.iterdir():
         generate_typeddict(schema_path)
 
     init_py_imports = "\n".join(
         [
-            f"from .{to_snake(basemodel.__name__)} import {basemodel.__name__}"
-            for basemodel in ALL_BASEMODELS
+            f"from .{to_snake(basemodel.__name__)} import *"
+            for basemodel in generated_basemodels
         ]
     )
-    init_py_all = "\n\n__all__ = [\n"
-    init_py_all += ",\n".join([f'    "{base.__name__}"' for base in ALL_BASEMODELS])
-    init_py_all += "\n]\n"
 
     with open(DOCUMENTS / "__init__.py", "w") as f:
         f.write(init_py_imports)
-        f.write(init_py_all)

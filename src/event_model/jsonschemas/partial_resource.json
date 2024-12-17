@@ -1,0 +1,38 @@
+{
+    "properties": {
+        "spec": {
+            "description": "String identifying the format/type of this Resource, used to identify a compatible Handler",
+            "title": "Spec",
+            "type": "string"
+        },
+        "resource_path": {
+            "description": "Filepath or URI for locating this resource",
+            "title": "Resource Path",
+            "type": "string"
+        },
+        "resource_kwargs": {
+            "description": "Additional argument to pass to the Handler to read a Resource",
+            "title": "Resource Kwargs",
+            "type": "object"
+        },
+        "root": {
+            "description": "Subset of resource_path that is a local detail, not semantic.",
+            "title": "Root",
+            "type": "string"
+        },
+        "uid": {
+            "description": "Globally unique identifier for this Resource",
+            "title": "Uid",
+            "type": "string"
+        }
+    },
+    "required": [
+        "spec",
+        "resource_path",
+        "resource_kwargs",
+        "root",
+        "uid"
+    ],
+    "title": "PartialResource",
+    "type": "object"
+}

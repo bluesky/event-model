@@ -35,18 +35,20 @@ from typing_extensions import Literal
 
 from .documents.datum import Datum
 from .documents.datum_page import DatumPage
-from .documents.event import Event, PartialEvent
+from .documents.event import Event
 from .documents.event_descriptor import (
     Configuration,
     DataKey,
-    Dtype,
     EventDescriptor,
     Limits,
     LimitsRange,
     PerObjectHint,
 )
-from .documents.event_page import EventPage, PartialEventPage
-from .documents.resource import PartialResource, Resource
+from .documents.event_page import EventPage
+from .documents.partial_event import PartialEvent
+from .documents.partial_event_page import PartialEventPage
+from .documents.partial_resource import PartialResource
+from .documents.resource import Resource
 from .documents.run_start import Calculation, Hints, Projection, Projections, RunStart
 from .documents.run_stop import RunStop
 from .documents.stream_datum import StreamDatum, StreamRange
@@ -67,7 +69,6 @@ __all__ = [
     "PartialEvent",
     "Configuration",
     "DataKey",
-    "Dtype",
     "EventDescriptor",
     "Limits",
     "LimitsRange",
@@ -1811,19 +1812,16 @@ class MismatchedDataKeys(InvalidData):
 
 SCHEMA_PATH = "schemas"
 SCHEMA_NAMES = {
-    DocumentNames.start: "schemas/run_start.json",
-    DocumentNames.stop: "schemas/run_stop.json",
-    DocumentNames.event: "schemas/event.json",
-    DocumentNames.event_page: "schemas/event_page.json",
-    DocumentNames.descriptor: "schemas/event_descriptor.json",
-    DocumentNames.datum: "schemas/datum.json",
-    DocumentNames.datum_page: "schemas/datum_page.json",
-    DocumentNames.resource: "schemas/resource.json",
-    DocumentNames.stream_datum: "schemas/stream_datum.json",
-    DocumentNames.stream_resource: "schemas/stream_resource.json",
-    # DEPRECATED:
-    DocumentNames.bulk_events: "schemas/bulk_events.json",
-    DocumentNames.bulk_datum: "schemas/bulk_datum.json",
+    DocumentNames.start: "jsonschemas/run_start.json",
+    DocumentNames.stop: "jsonschemas/run_stop.json",
+    DocumentNames.event: "jsonschemas/event.json",
+    DocumentNames.event_page: "jsonschemas/event_page.json",
+    DocumentNames.descriptor: "jsonschemas/event_descriptor.json",
+    DocumentNames.datum: "jsonschemas/datum.json",
+    DocumentNames.datum_page: "jsonschemas/datum_page.json",
+    DocumentNames.resource: "jsonschemas/resource.json",
+    DocumentNames.stream_datum: "jsonschemas/stream_datum.json",
+    DocumentNames.stream_resource: "jsonschemas/stream_resource.json",
 }
 schemas = {}
 for name, filename in SCHEMA_NAMES.items():

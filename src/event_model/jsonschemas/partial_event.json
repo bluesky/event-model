@@ -1,0 +1,49 @@
+{
+    "properties": {
+        "data": {
+            "description": "The actual measurement data",
+            "title": "Data",
+            "type": "object"
+        },
+        "filled": {
+            "anyOf": [
+                {
+                    "additionalProperties": {
+                        "anyOf": [
+                            {
+                                "type": "boolean"
+                            },
+                            {
+                                "type": "string"
+                            }
+                        ]
+                    },
+                    "type": "object"
+                },
+                {
+                    "type": "null"
+                }
+            ],
+            "default": null,
+            "description": "Mapping each of the keys of externally-stored data to the boolean False, indicating that the data has not been loaded, or to foreign keys (moved here from 'data' when the data was loaded)",
+            "title": "Filled"
+        },
+        "time": {
+            "description": "The event time. This maybe different than the timestamps on each of the data entries.",
+            "title": "Time",
+            "type": "number"
+        },
+        "timestamps": {
+            "description": "The timestamps of the individual measurement data",
+            "title": "Timestamps",
+            "type": "object"
+        }
+    },
+    "required": [
+        "data",
+        "time",
+        "timestamps"
+    ],
+    "title": "PartialEvent",
+    "type": "object"
+}

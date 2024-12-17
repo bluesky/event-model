@@ -6,19 +6,16 @@ import os
 
 import pytest
 
-import event_model
-from event_model.documents import ALL_DOCUMENTS
-from event_model.documents.generate.typeddict_to_schema import typeddict_to_schema
-
-SCHEMA_PATH = event_model.__path__[0] + "/schemas/"
+from event_model.basemodels import ALL_BASEMODELS
+from event_model.generate.create_documents import JSONSCHEMA, generate_json_schema
 
 
-@pytest.mark.parametrize("typed_dict_class", ALL_DOCUMENTS)
+@pytest.mark.parametrize("typed_dict_class", ALL_BASEMODELS)
 def test_generated_json_matches_typed_dict(typed_dict_class, tmpdir):
-    typeddict_to_schema(typed_dict_class, schema_dir=tmpdir)
+    generate_json_schema(typed_dict_class, directory=tmpdir)
     file_name = os.listdir(tmpdir)[0]
     generated_file_path = os.path.join(tmpdir, file_name)
-    old_file_path = os.path.join(SCHEMA_PATH, file_name)
+    old_file_path = JSONSCHEMA / file_name
 
     with open(generated_file_path) as generated_file, open(old_file_path) as old_file:
         try:
@@ -26,7 +23,7 @@ def test_generated_json_matches_typed_dict(typed_dict_class, tmpdir):
         except AssertionError as error:
             raise Exception(
                 f"`{typed_dict_class.__name__}` can generate a json schema, but "
-                f"it doesn't match the schema in `{SCHEMA_PATH}`. Did you forget "
+                f"it doesn't match the schema in `{JSONSCHEMA}`. Did you forget "
                 "to run `python event_model/documents/generate` after changes "
                 f"to `{typed_dict_class.__name__}`?"
             ) from error
