@@ -1,8 +1,15 @@
 {
+    "title": "EventDescriptor",
+    "description": "Document to describe the data captured in the associated event\ndocuments",
+    "type": "object",
     "$defs": {
         "Configuration": {
+            "title": "Configuration",
+            "type": "object",
             "properties": {
                 "data": {
+                    "title": "Data",
+                    "description": "The actual measurement data",
                     "anyOf": [
                         {
                             "type": "object"
@@ -11,11 +18,11 @@
                             "type": "null"
                         }
                     ],
-                    "default": null,
-                    "description": "The actual measurement data",
-                    "title": "Data"
+                    "default": null
                 },
                 "data_keys": {
+                    "title": "Data Keys",
+                    "description": "This describes the data stored alongside it in this configuration object.",
                     "anyOf": [
                         {
                             "additionalProperties": {
@@ -27,11 +34,11 @@
                             "type": "null"
                         }
                     ],
-                    "default": null,
-                    "description": "This describes the data stored alongside it in this configuration object.",
-                    "title": "Data Keys"
+                    "default": null
                 },
                 "timestamps": {
+                    "title": "Timestamps",
+                    "description": "The timestamps of the individual measurement data",
                     "anyOf": [
                         {
                             "type": "object"
@@ -40,30 +47,19 @@
                             "type": "null"
                         }
                     ],
-                    "default": null,
-                    "description": "The timestamps of the individual measurement data",
-                    "title": "Timestamps"
+                    "default": null
                 }
             },
-            "title": "Configuration",
-            "type": "object"
+            "additionalProperties": false
         },
         "DataKey": {
+            "title": "DataKey",
             "description": "Describes the objects in the data property of Event documents",
+            "type": "object",
             "properties": {
-                "limits": {
-                    "anyOf": [
-                        {
-                            "$ref": "#/$defs/Limits"
-                        },
-                        {
-                            "type": "null"
-                        }
-                    ],
-                    "default": null,
-                    "description": "Epics limits."
-                },
                 "choices": {
+                    "title": "Choices",
+                    "description": "Choices of enum value.",
                     "anyOf": [
                         {
                             "items": {
@@ -75,11 +71,11 @@
                             "type": "null"
                         }
                     ],
-                    "default": null,
-                    "description": "Choices of enum value.",
-                    "title": "Choices"
+                    "default": null
                 },
                 "dims": {
+                    "title": "Dims",
+                    "description": "The names for dimensions of the data. Null or empty list if scalar data",
                     "anyOf": [
                         {
                             "items": {
@@ -91,23 +87,23 @@
                             "type": "null"
                         }
                     ],
-                    "default": null,
-                    "description": "The names for dimensions of the data. Null or empty list if scalar data",
-                    "title": "Dims"
+                    "default": null
                 },
                 "dtype": {
+                    "title": "Dtype",
                     "description": "The type of the data in the event, given as a broad JSON schema type.",
+                    "type": "string",
                     "enum": [
                         "string",
                         "number",
                         "array",
                         "boolean",
                         "integer"
-                    ],
-                    "title": "Dtype",
-                    "type": "string"
+                    ]
                 },
                 "dtype_numpy": {
+                    "title": "Dtype Numpy",
+                    "description": "The type of the data in the event, given as a numpy dtype string (or, for structured dtypes, array).",
                     "anyOf": [
                         {
                             "description": "A numpy dtype e.g `<U9`, `<f16`",
@@ -136,11 +132,11 @@
                             "type": "null"
                         }
                     ],
-                    "default": null,
-                    "description": "The type of the data in the event, given as a numpy dtype string (or, for structured dtypes, array).",
-                    "title": "Dtype Numpy"
+                    "default": null
                 },
                 "external": {
+                    "title": "External",
+                    "description": "Where the data is stored if it is stored external to the events",
                     "anyOf": [
                         {
                             "pattern": "^[A-Z]+:?",
@@ -150,11 +146,23 @@
                             "type": "null"
                         }
                     ],
-                    "default": null,
-                    "description": "Where the data is stored if it is stored external to the events",
-                    "title": "External"
+                    "default": null
+                },
+                "limits": {
+                    "description": "Epics limits.",
+                    "anyOf": [
+                        {
+                            "$ref": "#/$defs/Limits"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ],
+                    "default": null
                 },
                 "object_name": {
+                    "title": "Object Name",
+                    "description": "The name of the object this key was pulled from.",
                     "anyOf": [
                         {
                             "type": "string"
@@ -163,11 +171,11 @@
                             "type": "null"
                         }
                     ],
-                    "default": null,
-                    "description": "The name of the object this key was pulled from.",
-                    "title": "Object Name"
+                    "default": null
                 },
                 "precision": {
+                    "title": "Precision",
+                    "description": "Number of digits after decimal place if a floating point number",
                     "anyOf": [
                         {
                             "type": "integer"
@@ -176,24 +184,24 @@
                             "type": "null"
                         }
                     ],
-                    "default": null,
-                    "description": "Number of digits after decimal place if a floating point number",
-                    "title": "Precision"
+                    "default": null
                 },
                 "shape": {
+                    "title": "Shape",
                     "description": "The shape of the data.  Empty list indicates scalar data.",
+                    "type": "array",
                     "items": {
                         "type": "integer"
-                    },
-                    "title": "Shape",
-                    "type": "array"
+                    }
                 },
                 "source": {
-                    "description": "The source (ex piece of hardware) of the data.",
                     "title": "Source",
+                    "description": "The source (ex piece of hardware) of the data.",
                     "type": "string"
                 },
                 "units": {
+                    "title": "Units",
+                    "description": "Engineering units of the value",
                     "anyOf": [
                         {
                             "type": "string"
@@ -202,9 +210,7 @@
                             "type": "null"
                         }
                     ],
-                    "default": null,
-                    "description": "Engineering units of the value",
-                    "title": "Units"
+                    "default": null
                 }
             },
             "required": [
@@ -212,78 +218,79 @@
                 "shape",
                 "source"
             ],
-            "title": "DataKey",
-            "type": "object"
+            "additionalProperties": false
         },
-        "Limits": {
-            "description": "Epics limits:\nsee 3.4.1 https://epics.anl.gov/base/R3-14/12-docs/AppDevGuide/node4.html",
-            "properties": {
-                "control": {
-                    "anyOf": [
-                        {
-                            "$ref": "#/$defs/LimitsRange"
-                        },
-                        {
-                            "type": "null"
-                        }
-                    ],
-                    "default": null,
-                    "description": "Control limits."
-                },
-                "display": {
-                    "anyOf": [
-                        {
-                            "$ref": "#/$defs/LimitsRange"
-                        },
-                        {
-                            "type": "null"
-                        }
-                    ],
-                    "default": null,
-                    "description": "Display limits."
-                },
-                "warning": {
-                    "anyOf": [
-                        {
-                            "$ref": "#/$defs/LimitsRange"
-                        },
-                        {
-                            "type": "null"
-                        }
-                    ],
-                    "default": null,
-                    "description": "Warning limits."
-                },
-                "alarm": {
-                    "anyOf": [
-                        {
-                            "$ref": "#/$defs/LimitsRange"
-                        },
-                        {
-                            "type": "null"
-                        }
-                    ],
-                    "default": null,
-                    "description": "Alarm limits."
+        "DataType": {
+            "title": "DataType",
+            "patternProperties": {
+                "^([^./]+)$": {
+                    "$ref": "#/$defs/DataType"
                 }
             },
+            "additionalProperties": false
+        },
+        "Limits": {
             "title": "Limits",
-            "type": "object"
+            "description": "Epics limits:\nsee 3.4.1 https://epics.anl.gov/base/R3-14/12-docs/AppDevGuide/node4.html",
+            "type": "object",
+            "properties": {
+                "alarm": {
+                    "description": "Alarm limits.",
+                    "anyOf": [
+                        {
+                            "$ref": "#/$defs/LimitsRange"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ],
+                    "default": null
+                },
+                "control": {
+                    "description": "Control limits.",
+                    "anyOf": [
+                        {
+                            "$ref": "#/$defs/LimitsRange"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ],
+                    "default": null
+                },
+                "display": {
+                    "description": "Display limits.",
+                    "anyOf": [
+                        {
+                            "$ref": "#/$defs/LimitsRange"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ],
+                    "default": null
+                },
+                "warning": {
+                    "description": "Warning limits.",
+                    "anyOf": [
+                        {
+                            "$ref": "#/$defs/LimitsRange"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ],
+                    "default": null
+                }
+            },
+            "additionalProperties": false
         },
         "LimitsRange": {
+            "title": "LimitsRange",
+            "type": "object",
             "properties": {
-                "low": {
-                    "anyOf": [
-                        {
-                            "type": "number"
-                        },
-                        {
-                            "type": "null"
-                        }
-                    ],
-                    "title": "Low"
-                },
                 "high": {
+                    "title": "High",
                     "anyOf": [
                         {
                             "type": "number"
@@ -291,21 +298,48 @@
                         {
                             "type": "null"
                         }
-                    ],
-                    "title": "High"
+                    ]
+                },
+                "low": {
+                    "title": "Low",
+                    "anyOf": [
+                        {
+                            "type": "number"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ]
                 }
             },
             "required": [
-                "low",
-                "high"
+                "high",
+                "low"
             ],
-            "title": "LimitsRange",
-            "type": "object"
+            "additionalProperties": false
         },
         "PerObjectHint": {
+            "title": "PerObjectHint",
             "description": "The 'interesting' data keys for this device.",
+            "type": "object",
             "properties": {
+                "NX_class": {
+                    "title": "Nx Class",
+                    "description": "The NeXus class definition for this device.",
+                    "anyOf": [
+                        {
+                            "pattern": "^NX[A-Za-z_]+$",
+                            "type": "string"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ],
+                    "default": null
+                },
                 "fields": {
+                    "title": "Fields",
+                    "description": "The 'interesting' data keys for this device.",
                     "anyOf": [
                         {
                             "items": {
@@ -317,32 +351,16 @@
                             "type": "null"
                         }
                     ],
-                    "default": null,
-                    "description": "The 'interesting' data keys for this device.",
-                    "title": "Fields"
-                },
-                "NX_class": {
-                    "anyOf": [
-                        {
-                            "pattern": "^NX[A-Za-z_]+$",
-                            "type": "string"
-                        },
-                        {
-                            "type": "null"
-                        }
-                    ],
-                    "default": null,
-                    "description": "The NeXus class definition for this device.",
-                    "title": "Nx Class"
+                    "default": null
                 }
             },
-            "title": "PerObjectHint",
-            "type": "object"
+            "additionalProperties": false
         }
     },
-    "description": "Document to describe the data captured in the associated event\ndocuments",
     "properties": {
         "configuration": {
+            "title": "Configuration",
+            "description": "Readings of configurational fields necessary for interpreting data in the Events.",
             "anyOf": [
                 {
                     "additionalProperties": {
@@ -354,11 +372,11 @@
                     "type": "null"
                 }
             ],
-            "default": null,
-            "description": "Readings of configurational fields necessary for interpreting data in the Events.",
-            "title": "Configuration"
+            "default": null
         },
         "data_keys": {
+            "title": "data_keys",
+            "description": "This describes the data in the Event Documents.",
             "anyOf": [
                 {
                     "additionalProperties": {
@@ -370,9 +388,7 @@
                     "type": "null"
                 }
             ],
-            "default": null,
-            "description": "This describes the data in the Event Documents.",
-            "title": "data_keys"
+            "default": null
         },
         "hints": {
             "anyOf": [
@@ -386,6 +402,8 @@
             "default": null
         },
         "name": {
+            "title": "Name",
+            "description": "A human-friendly name for this data stream, such as 'primary' or 'baseline'.",
             "anyOf": [
                 {
                     "type": "string"
@@ -394,11 +412,11 @@
                     "type": "null"
                 }
             ],
-            "default": null,
-            "description": "A human-friendly name for this data stream, such as 'primary' or 'baseline'.",
-            "title": "Name"
+            "default": null
         },
         "object_keys": {
+            "title": "Object Keys",
+            "description": "Maps a Device/Signal name to the names of the entries it produces in data_keys.",
             "anyOf": [
                 {
                     "type": "object"
@@ -407,23 +425,21 @@
                     "type": "null"
                 }
             ],
-            "default": null,
-            "description": "Maps a Device/Signal name to the names of the entries it produces in data_keys.",
-            "title": "Object Keys"
+            "default": null
         },
         "run_start": {
-            "description": "Globally unique ID of this run's 'start' document.",
             "title": "Run Start",
+            "description": "Globally unique ID of this run's 'start' document.",
             "type": "string"
         },
         "time": {
-            "description": "Creation time of the document as unix epoch time.",
             "title": "Time",
+            "description": "Creation time of the document as unix epoch time.",
             "type": "number"
         },
         "uid": {
-            "description": "Globally unique ID for this event descriptor.",
             "title": "uid",
+            "description": "Globally unique ID for this event descriptor.",
             "type": "string"
         }
     },
@@ -432,6 +448,10 @@
         "time",
         "uid"
     ],
-    "title": "EventDescriptor",
-    "type": "object"
+    "patternProperties": {
+        "^([^./]+)$": {
+            "$ref": "#/$defs/DataType"
+        }
+    },
+    "additionalProperties": false
 }

@@ -1,31 +1,33 @@
 {
+    "title": "DatumPage",
+    "description": "Page of documents to reference a quanta of externally-stored data",
+    "type": "object",
     "$defs": {
         "DataFrameForDatumPage": {
+            "title": "DataFrameForDatumPage",
+            "type": "array",
             "items": {
                 "type": "string"
-            },
-            "title": "DataFrameForDatumPage",
-            "type": "array"
+            }
         }
     },
-    "description": "Page of documents to reference a quanta of externally-stored data",
     "properties": {
         "datum_id": {
-            "$ref": "#/$defs/DataFrameForDatumPage",
-            "description": "Array unique identifiers for each Datum (akin to 'uid' for other Document types), typically formatted as '<resource>/<integer>'"
+            "description": "Array unique identifiers for each Datum (akin to 'uid' for other Document types), typically formatted as '<resource>/<integer>'",
+            "$ref": "#/$defs/DataFrameForDatumPage"
         },
         "datum_kwargs": {
+            "title": "Datum Kwargs",
+            "description": "Array of arguments to pass to the Handler to retrieve one quanta of data",
+            "type": "object",
             "additionalProperties": {
                 "items": {},
                 "type": "array"
-            },
-            "description": "Array of arguments to pass to the Handler to retrieve one quanta of data",
-            "title": "Datum Kwargs",
-            "type": "object"
+            }
         },
         "resource": {
-            "description": "The UID of the Resource to which all Datums in the page belong",
             "title": "Resource",
+            "description": "The UID of the Resource to which all Datums in the page belong",
             "type": "string"
         }
     },
@@ -34,6 +36,5 @@
         "datum_kwargs",
         "resource"
     ],
-    "title": "DatumPage",
-    "type": "object"
+    "additionalProperties": false
 }

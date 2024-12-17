@@ -18,16 +18,16 @@ try:
     # Root models for root definitions:
     # we want some types to reference definitions in the
     # schema
-    model_validator = pydantic.model_validator
-    BaseModel = pydantic.BaseModel
-    ConfigDict = pydantic.ConfigDict
-    Field = pydantic.Field
-    RootModel = pydantic.RootModel
-    TypeAdapter = pydantic.TypeAdapter
-    GenerateJsonSchema = pydantic.json_schema.GenerateJsonSchema
-    from pydantic.alias_generators import to_snake  # noqa
-
-    ValidationError = pydantic.ValidationError
+    from pydantic import (
+        BaseModel,
+        ConfigDict,
+        Field,
+        RootModel,
+        TypeAdapter,
+        ValidationError,
+        model_validator,
+    )
+    from pydantic.alias_generators import to_snake
 
     class DataFrameForDatumPage(RootModel):
         root: List[str] = Field(alias="Dataframe")
@@ -40,6 +40,7 @@ try:
 
     class DataType(RootModel):
         root: Any = Field(alias="DataType")
+
 
 # If pydantic is not installed (e.g the install isn't [dev]),
 # or pydantic v1 is being used, then we expect to be able to
@@ -86,3 +87,19 @@ except (ModuleNotFoundError, ImportError):
     DataFrameForFilled = Dict[str, List[Union[bool, str]]]
 
     class DataType: ...
+
+
+__all__ = [
+    "BaseModel",
+    "ConfigDict",
+    "DataFrameForDatumPage",
+    "DataFrameForEventPage",
+    "DataFrameForFilled",
+    "DataType",
+    "Field",
+    "RootModel",
+    "TypeAdapter",
+    "ValidationError",
+    "model_validator",
+    "to_snake",
+]

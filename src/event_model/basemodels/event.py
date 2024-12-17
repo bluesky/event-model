@@ -2,10 +2,12 @@ from typing import Any, Dict, Union
 
 from typing_extensions import Annotated
 
-from event_model.generate.type_wrapper import BaseModel, Field
+from event_model.generate.type_wrapper import BaseModel, ConfigDict, Field
 
 
 class PartialEvent(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
     data: Annotated[Dict[str, Any], Field(description="The actual measurement data")]
     filled: Annotated[
         Union[Dict[str, Union[bool, str]], None],
@@ -31,6 +33,8 @@ class PartialEvent(BaseModel):
 
 class Event(PartialEvent):
     """Document to record a quanta of collected data"""
+
+    model_config = ConfigDict(extra="forbid")
 
     descriptor: Annotated[
         str, Field(description="UID of the EventDescriptor to which this Event belongs")

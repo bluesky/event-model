@@ -2,11 +2,18 @@ from typing import Any, Dict, List
 
 from typing_extensions import Annotated
 
-from event_model.generate.type_wrapper import BaseModel, DataFrameForDatumPage, Field
+from event_model.generate.type_wrapper import (
+    BaseModel,
+    ConfigDict,
+    DataFrameForDatumPage,
+    Field,
+)
 
 
 class DatumPage(BaseModel):
     """Page of documents to reference a quanta of externally-stored data"""
+
+    model_config = ConfigDict(extra="forbid")
 
     datum_id: Annotated[
         DataFrameForDatumPage,

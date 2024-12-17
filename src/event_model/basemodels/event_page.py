@@ -4,6 +4,7 @@ from typing_extensions import Annotated
 
 from event_model.generate.type_wrapper import (
     BaseModel,
+    ConfigDict,
     DataFrameForEventPage,
     DataFrameForFilled,
     Field,
@@ -11,6 +12,8 @@ from event_model.generate.type_wrapper import (
 
 
 class PartialEventPage(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
     data: Annotated[
         DataFrameForEventPage,
         Field(description="The actual measurement data"),
@@ -40,6 +43,8 @@ class PartialEventPage(BaseModel):
 
 class EventPage(PartialEventPage):
     """Page of documents to record a quanta of collected data"""
+
+    model_config = ConfigDict(extra="forbid")
 
     descriptor: Annotated[
         str,

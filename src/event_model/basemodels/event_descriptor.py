@@ -15,6 +15,8 @@ Dtype = Literal["string", "number", "array", "boolean", "integer"]
 
 
 class LimitsRange(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
     low: Optional[float]
     high: Optional[float]
 
@@ -24,6 +26,8 @@ class Limits(BaseModel):
     Epics limits:
     see 3.4.1 https://epics.anl.gov/base/R3-14/12-docs/AppDevGuide/node4.html
     """
+
+    model_config = ConfigDict(extra="forbid")
 
     control: Annotated[
         Union[LimitsRange, None], Field(default=None, description="Control limits.")
@@ -52,6 +56,8 @@ _ConstrainedDtypeNpStructure = List[Tuple[str, _ConstrainedDtype]]
 
 class DataKey(BaseModel):
     """Describes the objects in the data property of Event documents"""
+
+    model_config = ConfigDict(extra="forbid")
 
     limits: Annotated[
         Union[Limits, None], Field(default=None, description="Epics limits.")
@@ -126,6 +132,8 @@ class DataKey(BaseModel):
 class PerObjectHint(BaseModel):
     """The 'interesting' data keys for this device."""
 
+    model_config = ConfigDict(extra="forbid")
+
     fields: Annotated[
         Union[List[str], None],
         Field(default=None, description="The 'interesting' data keys for this device."),
@@ -141,6 +149,7 @@ class PerObjectHint(BaseModel):
 
 
 class Configuration(BaseModel):
+    model_config = ConfigDict(extra="forbid")
     data: Annotated[
         Union[Dict[str, Any], None],
         Field(default=None, description="The actual measurement data"),
@@ -171,6 +180,7 @@ EVENT_DESCRIPTOR_EXTRA_SCHEMA = {
             "additionalProperties": False,
         },
     },
+    "additionalProperties": False,
 }
 
 
@@ -178,7 +188,7 @@ class EventDescriptor(BaseModel):
     """Document to describe the data captured in the associated event
     documents"""
 
-    __config__ = ConfigDict(
+    model_config = ConfigDict(
         extra="allow", json_schema_extra=EVENT_DESCRIPTOR_EXTRA_SCHEMA
     )
 

@@ -2,10 +2,12 @@ from typing import Any, Dict, Optional
 
 from typing_extensions import Annotated, Literal
 
-from event_model.generate.type_wrapper import BaseModel, Field
+from event_model.generate.type_wrapper import BaseModel, ConfigDict, Field
 
 
 class PartialResource(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
     spec: Annotated[
         str,
         Field(
@@ -39,6 +41,8 @@ class Resource(PartialResource):
     Document to reference a collection (e.g. file or group of files) of
     externally-stored data
     """
+
+    model_config = ConfigDict(extra="forbid")
 
     path_semantics: Annotated[
         Optional[Literal["posix", "windows"]],

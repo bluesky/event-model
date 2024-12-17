@@ -14,6 +14,8 @@ from event_model.generate.type_wrapper import (
 class Hints(BaseModel):
     """Start-level hints"""
 
+    model_config = ConfigDict(extra="forbid")
+
     dimensions: Annotated[
         Optional[List[List[Union[List[str], str]]]],
         Field(
@@ -25,6 +27,8 @@ class Hints(BaseModel):
 
 
 class Calculation(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
     args: Optional[List]
     callable: Annotated[
         str, Field(description="callable function to perform calculation")
@@ -37,6 +41,8 @@ class Calculation(BaseModel):
 
 class Projection(BaseModel):
     """Where to get the data from"""
+
+    model_config = ConfigDict(extra="forbid")
 
     calculation: Annotated[
         Optional[Calculation],
@@ -165,7 +171,7 @@ class RunStart(BaseModel):
     later documents link to it
     """
 
-    __config__ = ConfigDict(extra="allow", json_schema_extra=RUN_START_EXTRA_SCHEMA)
+    model_config = ConfigDict(extra="allow", json_schema_extra=RUN_START_EXTRA_SCHEMA)
 
     data_groups: Annotated[
         Optional[List[str]],

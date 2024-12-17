@@ -1,32 +1,11 @@
 {
+    "title": "Resource",
     "description": "Document to reference a collection (e.g. file or group of files) of\nexternally-stored data",
+    "type": "object",
     "properties": {
-        "spec": {
-            "description": "String identifying the format/type of this Resource, used to identify a compatible Handler",
-            "title": "Spec",
-            "type": "string"
-        },
-        "resource_path": {
-            "description": "Filepath or URI for locating this resource",
-            "title": "Resource Path",
-            "type": "string"
-        },
-        "resource_kwargs": {
-            "description": "Additional argument to pass to the Handler to read a Resource",
-            "title": "Resource Kwargs",
-            "type": "object"
-        },
-        "root": {
-            "description": "Subset of resource_path that is a local detail, not semantic.",
-            "title": "Root",
-            "type": "string"
-        },
-        "uid": {
-            "description": "Globally unique identifier for this Resource",
-            "title": "Uid",
-            "type": "string"
-        },
         "path_semantics": {
+            "title": "Path Semantics",
+            "description": "Rules for joining paths",
             "anyOf": [
                 {
                     "enum": [
@@ -39,11 +18,26 @@
                     "type": "null"
                 }
             ],
-            "default": null,
-            "description": "Rules for joining paths",
-            "title": "Path Semantics"
+            "default": null
+        },
+        "resource_kwargs": {
+            "title": "Resource Kwargs",
+            "description": "Additional argument to pass to the Handler to read a Resource",
+            "type": "object"
+        },
+        "resource_path": {
+            "title": "Resource Path",
+            "description": "Filepath or URI for locating this resource",
+            "type": "string"
+        },
+        "root": {
+            "title": "Root",
+            "description": "Subset of resource_path that is a local detail, not semantic.",
+            "type": "string"
         },
         "run_start": {
+            "title": "Run Start",
+            "description": "Globally unique ID to the run_start document this resource is associated with.",
             "anyOf": [
                 {
                     "type": "string"
@@ -52,18 +46,25 @@
                     "type": "null"
                 }
             ],
-            "default": null,
-            "description": "Globally unique ID to the run_start document this resource is associated with.",
-            "title": "Run Start"
+            "default": null
+        },
+        "spec": {
+            "title": "Spec",
+            "description": "String identifying the format/type of this Resource, used to identify a compatible Handler",
+            "type": "string"
+        },
+        "uid": {
+            "title": "Uid",
+            "description": "Globally unique identifier for this Resource",
+            "type": "string"
         }
     },
     "required": [
-        "spec",
-        "resource_path",
         "resource_kwargs",
+        "resource_path",
         "root",
+        "spec",
         "uid"
     ],
-    "title": "Resource",
-    "type": "object"
+    "additionalProperties": false
 }

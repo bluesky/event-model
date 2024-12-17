@@ -1,12 +1,15 @@
 {
+    "title": "RunStop",
+    "description": "Document for the end of a run indicating the success/fail state of the\nrun and the end time",
+    "type": "object",
     "$defs": {
         "DataType": {
             "title": "DataType"
         }
     },
-    "description": "Document for the end of a run indicating the success/fail state of the\nrun and the end time",
     "properties": {
         "data_type": {
+            "description": "data_type",
             "anyOf": [
                 {
                     "$ref": "#/$defs/DataType"
@@ -15,20 +18,21 @@
                     "type": "null"
                 }
             ],
-            "default": null,
-            "description": "data_type"
+            "default": null
         },
         "exit_status": {
+            "title": "Exit Status",
             "description": "State of the run when it ended",
+            "type": "string",
             "enum": [
                 "success",
                 "abort",
                 "fail"
-            ],
-            "title": "Exit Status",
-            "type": "string"
+            ]
         },
         "num_events": {
+            "title": "Num Events",
+            "description": "Number of Events per named stream",
             "anyOf": [
                 {
                     "additionalProperties": {
@@ -40,11 +44,11 @@
                     "type": "null"
                 }
             ],
-            "default": null,
-            "description": "Number of Events per named stream",
-            "title": "Num Events"
+            "default": null
         },
         "reason": {
+            "title": "Reason",
+            "description": "Long-form description of why the run ended",
             "anyOf": [
                 {
                     "type": "string"
@@ -53,23 +57,21 @@
                     "type": "null"
                 }
             ],
-            "default": null,
-            "description": "Long-form description of why the run ended",
-            "title": "Reason"
+            "default": null
         },
         "run_start": {
-            "description": "Reference back to the run_start document that this document is paired with.",
             "title": "Run Start",
+            "description": "Reference back to the run_start document that this document is paired with.",
             "type": "string"
         },
         "time": {
-            "description": "The time the run ended. Unix epoch",
             "title": "Time",
+            "description": "The time the run ended. Unix epoch",
             "type": "number"
         },
         "uid": {
-            "description": "Globally unique ID for this document",
             "title": "Uid",
+            "description": "Globally unique ID for this document",
             "type": "string"
         }
     },
@@ -79,6 +81,10 @@
         "time",
         "uid"
     ],
-    "title": "RunStop",
-    "type": "object"
+    "patternProperties": {
+        "^([^./]+)$": {
+            "$ref": "#/$defs/DataType"
+        }
+    },
+    "additionalProperties": false
 }

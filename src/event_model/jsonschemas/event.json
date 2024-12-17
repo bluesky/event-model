@@ -1,12 +1,21 @@
 {
+    "title": "Event",
     "description": "Document to record a quanta of collected data",
+    "type": "object",
     "properties": {
         "data": {
-            "description": "The actual measurement data",
             "title": "Data",
+            "description": "The actual measurement data",
             "type": "object"
         },
+        "descriptor": {
+            "title": "Descriptor",
+            "description": "UID of the EventDescriptor to which this Event belongs",
+            "type": "string"
+        },
         "filled": {
+            "title": "Filled",
+            "description": "Mapping each of the keys of externally-stored data to the boolean False, indicating that the data has not been loaded, or to foreign keys (moved here from 'data' when the data was loaded)",
             "anyOf": [
                 {
                     "additionalProperties": {
@@ -25,44 +34,36 @@
                     "type": "null"
                 }
             ],
-            "default": null,
-            "description": "Mapping each of the keys of externally-stored data to the boolean False, indicating that the data has not been loaded, or to foreign keys (moved here from 'data' when the data was loaded)",
-            "title": "Filled"
+            "default": null
+        },
+        "seq_num": {
+            "title": "Seq Num",
+            "description": "Sequence number to identify the location of this Event in the Event stream",
+            "type": "integer"
         },
         "time": {
-            "description": "The event time. This maybe different than the timestamps on each of the data entries.",
             "title": "Time",
+            "description": "The event time. This maybe different than the timestamps on each of the data entries.",
             "type": "number"
         },
         "timestamps": {
-            "description": "The timestamps of the individual measurement data",
             "title": "Timestamps",
+            "description": "The timestamps of the individual measurement data",
             "type": "object"
         },
-        "descriptor": {
-            "description": "UID of the EventDescriptor to which this Event belongs",
-            "title": "Descriptor",
-            "type": "string"
-        },
-        "seq_num": {
-            "description": "Sequence number to identify the location of this Event in the Event stream",
-            "title": "Seq Num",
-            "type": "integer"
-        },
         "uid": {
-            "description": "Globally unique identifier for this Event",
             "title": "Uid",
+            "description": "Globally unique identifier for this Event",
             "type": "string"
         }
     },
     "required": [
         "data",
-        "time",
-        "timestamps",
         "descriptor",
         "seq_num",
+        "time",
+        "timestamps",
         "uid"
     ],
-    "title": "Event",
-    "type": "object"
+    "additionalProperties": false
 }

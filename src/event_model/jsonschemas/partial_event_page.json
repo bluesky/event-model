@@ -1,14 +1,18 @@
 {
+    "title": "PartialEventPage",
+    "type": "object",
     "$defs": {
         "DataFrameForEventPage": {
+            "title": "DataFrameForEventPage",
+            "type": "object",
             "additionalProperties": {
                 "items": {},
                 "type": "array"
-            },
-            "title": "DataFrameForEventPage",
-            "type": "object"
+            }
         },
         "DataFrameForFilled": {
+            "title": "DataFrameForFilled",
+            "type": "object",
             "additionalProperties": {
                 "items": {
                     "anyOf": [
@@ -21,17 +25,16 @@
                     ]
                 },
                 "type": "array"
-            },
-            "title": "DataFrameForFilled",
-            "type": "object"
+            }
         }
     },
     "properties": {
         "data": {
-            "$ref": "#/$defs/DataFrameForEventPage",
-            "description": "The actual measurement data"
+            "description": "The actual measurement data",
+            "$ref": "#/$defs/DataFrameForEventPage"
         },
         "filled": {
+            "description": "Mapping each of the keys of externally-stored data to an array containing the boolean False, indicating that the data has not been loaded, or to foreign keys (moved here from 'data' when the data was loaded)",
             "anyOf": [
                 {
                     "$ref": "#/$defs/DataFrameForFilled"
@@ -40,27 +43,25 @@
                     "type": "null"
                 }
             ],
-            "default": null,
-            "description": "Mapping each of the keys of externally-stored data to an array containing the boolean False, indicating that the data has not been loaded, or to foreign keys (moved here from 'data' when the data was loaded)"
-        },
-        "timestamps": {
-            "$ref": "#/$defs/DataFrameForEventPage",
-            "description": "The timestamps of the individual measurement data"
+            "default": null
         },
         "time": {
+            "title": "Time",
             "description": "Array of Event times. This maybe different than the timestamps on each of the data entries",
+            "type": "array",
             "items": {
                 "type": "number"
-            },
-            "title": "Time",
-            "type": "array"
+            }
+        },
+        "timestamps": {
+            "description": "The timestamps of the individual measurement data",
+            "$ref": "#/$defs/DataFrameForEventPage"
         }
     },
     "required": [
         "data",
-        "timestamps",
-        "time"
+        "time",
+        "timestamps"
     ],
-    "title": "PartialEventPage",
-    "type": "object"
+    "additionalProperties": false
 }

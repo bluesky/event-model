@@ -13,6 +13,7 @@ from event_model.generate.type_wrapper import (
 
 RUN_STOP_EXTRA_SCHEMA = {
     "patternProperties": {"^([^./]+)$": {"$ref": "#/$defs/DataType"}},
+    "additionalProperties": False,
 }
 
 
@@ -22,7 +23,10 @@ class RunStop(BaseModel):
     run and the end time
     """
 
-    __config__ = ConfigDict(extra="allow", json_schema_extra=RUN_STOP_EXTRA_SCHEMA)
+    model_config = ConfigDict(
+        extra="allow",
+        json_schema_extra=RUN_STOP_EXTRA_SCHEMA,
+    )
 
     data_type: Annotated[
         Optional[DataType], Field(description="data_type", default=None)
