@@ -1,15 +1,17 @@
-from typing import Dict, Optional
+from typing import Any, Dict, Optional
 
-from typing_extensions import Annotated, Literal
-
-from event_model.generate.type_wrapper import (
+from pydantic import (
     BaseModel,
     ConfigDict,
-    DataType,
     Field,
-    ValidationError,
-    model_validator,
+    RootModel,
 )
+from typing_extensions import Annotated, Literal
+
+
+class DataType(RootModel):
+    root: Any = Field(alias="DataType")
+
 
 RUN_STOP_EXTRA_SCHEMA = {
     "patternProperties": {"^([^./]+)$": {"$ref": "#/$defs/DataType"}},
@@ -55,13 +57,3 @@ class RunStop(BaseModel):
     ]
     time: Annotated[float, Field(description="The time the run ended. Unix epoch")]
     uid: Annotated[str, Field(description="Globally unique ID for this document")]
-
-    @model_validator(mode="before")
-    def validate_additional_fields(cls, values):
-        for key, value in values.items():
-            if "." not in key and key not in cls.__fields__:
-                try:
-                    DataType(value)
-                except ValidationError as err:
-                    raise ValueError(f"Extra non-datatype {key} received.") from err
-        return values

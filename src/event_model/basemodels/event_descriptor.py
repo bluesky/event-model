@@ -1,17 +1,18 @@
 from typing import Any, Dict, List, Optional, Tuple, Union
 
-from typing_extensions import Annotated, Literal
-
-from event_model.generate.type_wrapper import (
+from pydantic import (
     BaseModel,
     ConfigDict,
-    DataType,
     Field,
-    ValidationError,
-    model_validator,
+    RootModel,
 )
+from typing_extensions import Annotated, Literal
 
 Dtype = Literal["string", "number", "array", "boolean", "integer"]
+
+
+class DataType(RootModel):
+    root: Any = Field(alias="DataType")
 
 
 class LimitsRange(BaseModel):
@@ -235,13 +236,3 @@ class EventDescriptor(BaseModel):
         str,
         Field(description="Globally unique ID for this event descriptor.", title="uid"),
     ]
-
-    @model_validator(mode="before")
-    def validate_additional_fields(cls, values):
-        for key, value in values.items():
-            if "." not in key and key not in cls.__fields__:
-                try:
-                    DataType(value)
-                except ValidationError as err:
-                    raise ValueError(f"Extra non-datatype {key} received.") from err
-        return values

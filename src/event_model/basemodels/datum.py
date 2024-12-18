@@ -1,12 +1,11 @@
 from typing import Any, Dict
 
-from typing_extensions import Annotated
-
-from event_model.generate.type_wrapper import (
+from pydantic import (
     BaseModel,
     ConfigDict,
     Field,
 )
+from typing_extensions import Annotated
 
 
 class Datum(BaseModel):

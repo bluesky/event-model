@@ -1,13 +1,11 @@
 from typing import Any, Dict, List
 
+from pydantic import BaseModel, ConfigDict, Field, RootModel
 from typing_extensions import Annotated
 
-from event_model.generate.type_wrapper import (
-    BaseModel,
-    ConfigDict,
-    DataFrameForDatumPage,
-    Field,
-)
+
+class DataFrameForDatumPage(RootModel):
+    root: List[str] = Field(alias="Dataframe")
 
 
 class DatumPage(BaseModel):

@@ -1,14 +1,20 @@
-from typing import List, Optional
+from typing import Dict, List, Optional, Union
 
-from typing_extensions import Annotated
-
-from event_model.generate.type_wrapper import (
+from pydantic import (
     BaseModel,
     ConfigDict,
-    DataFrameForEventPage,
-    DataFrameForFilled,
     Field,
+    RootModel,
 )
+from typing_extensions import Annotated
+
+
+class DataFrameForFilled(RootModel):
+    root: Dict[str, List[Union[bool, str]]] = Field(alias="DataframeForFilled")
+
+
+class DataFrameForEventPage(RootModel):
+    root: Dict[str, List] = Field(alias="Dataframe")
 
 
 class PartialEventPage(BaseModel):

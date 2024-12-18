@@ -1,8 +1,7 @@
 from typing import Any, Dict, Union
 
+from pydantic import BaseModel, ConfigDict, Field
 from typing_extensions import Annotated
-
-from event_model.generate.type_wrapper import BaseModel, ConfigDict, Field
 
 
 class PartialEvent(BaseModel):

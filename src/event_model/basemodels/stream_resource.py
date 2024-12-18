@@ -1,8 +1,7 @@
 from typing import Any, Dict
 
+from pydantic import BaseModel, Field
 from typing_extensions import Annotated
-
-from event_model.generate.type_wrapper import BaseModel, Field
 
 
 class StreamResource(BaseModel):

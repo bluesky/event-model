@@ -49,7 +49,16 @@ from .documents.partial_event import PartialEvent
 from .documents.partial_event_page import PartialEventPage
 from .documents.partial_resource import PartialResource
 from .documents.resource import Resource
-from .documents.run_start import Calculation, Hints, Projection, Projections, RunStart
+from .documents.run_start import (
+    CalculatedEventProjection,
+    Calculation,
+    ConfigurationProjection,
+    Hints,
+    LinkedEventProjection,
+    Projections,
+    RunStart,
+    StaticProjection,
+)
 from .documents.run_stop import RunStop
 from .documents.stream_datum import StreamDatum, StreamRange
 from .documents.stream_resource import StreamResource
@@ -79,6 +88,10 @@ __all__ = [
     "Resource",
     "Calculation",
     "Hints",
+    "LinkedEventProjection",
+    "StaticProjection",
+    "CalculatedEventProjection",
+    "ConfigurationProjection",
     "Projection",
     "Projections",
     "RunStart",
@@ -1822,6 +1835,8 @@ SCHEMA_NAMES = {
     DocumentNames.resource: "jsonschemas/resource.json",
     DocumentNames.stream_datum: "jsonschemas/stream_datum.json",
     DocumentNames.stream_resource: "jsonschemas/stream_resource.json",
+    DocumentNames.bulk_datum: "jsonschemas/bulk_datum.json",
+    DocumentNames.bulk_events: "jsonschemas/bulk_events.json",
 }
 schemas = {}
 for name, filename in SCHEMA_NAMES.items():

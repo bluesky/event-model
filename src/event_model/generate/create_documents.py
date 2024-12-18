@@ -7,10 +7,10 @@ from pathlib import Path
 from typing import Any, Dict, List, Set, Union, cast
 
 import datamodel_code_generator
+from pydantic import BaseModel
+from pydantic.alias_generators import to_snake
 
 from event_model.basemodels import ALL_BASEMODELS
-
-from .type_wrapper import BaseModel, to_snake
 
 JSONSCHEMA = Path(__file__).parent.parent / "jsonschemas"
 DOCUMENTS = Path(__file__).parent.parent / "documents"

@@ -1,8 +1,7 @@
 from typing import Any, Dict, Optional
 
+from pydantic import BaseModel, ConfigDict, Field
 from typing_extensions import Annotated, Literal
-
-from event_model.generate.type_wrapper import BaseModel, ConfigDict, Field
 
 
 class PartialResource(BaseModel):

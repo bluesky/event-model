@@ -1,6 +1,11 @@
+from typing import Any
+
+from pydantic import BaseModel, Field, RootModel
 from typing_extensions import Annotated
 
-from event_model.generate.type_wrapper import BaseModel, Field
+
+class DataType(RootModel):
+    root: Any = Field(alias="DataType")
 
 
 class StreamRange(BaseModel):

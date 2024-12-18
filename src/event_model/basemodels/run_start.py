@@ -1,14 +1,16 @@
 from typing import Any, Dict, List, Optional, Union
 
-from typing_extensions import Annotated, Literal
-
-from event_model.generate.type_wrapper import (
+from pydantic import (
     BaseModel,
     ConfigDict,
-    DataType,
     Field,
-    model_validator,
+    RootModel,
 )
+from typing_extensions import Annotated, Literal
+
+
+class DataType(RootModel):
+    root: Any = Field(alias="DataType")
 
 
 class Hints(BaseModel):
@@ -29,7 +31,7 @@ class Hints(BaseModel):
 class Calculation(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
-    args: Optional[List]
+    args: Annotated[Optional[List], Field(default=None)]
     callable: Annotated[
         str, Field(description="callable function to perform calculation")
     ]
@@ -39,48 +41,83 @@ class Calculation(BaseModel):
     ]
 
 
-class Projection(BaseModel):
-    """Where to get the data from"""
+class ConfigurationProjection(BaseModel):
+    location: Annotated[
+        Literal["configuration"],
+        Field(
+            description="Projection comes from configuration "
+            "fields in the event_descriptor document",
+        ),
+    ]
 
-    model_config = ConfigDict(extra="forbid")
+    type: Annotated[
+        Literal["linked"],
+        Field(
+            description=(
+                "Projection is of type linked, a value linked from the data set."
+            )
+        ),
+    ]
+    config_index: Annotated[int, Field()]
+    config_device: Annotated[str, Field()]
+    field: Annotated[str, Field()]
+    stream: Annotated[str, Field()]
 
+
+class LinkedEventProjection(BaseModel):
+    location: Annotated[
+        Literal["event"],
+        Field(description="Projection comes and event"),
+    ]
+
+    type: Annotated[
+        Literal["linked"],
+        Field(
+            description=(
+                "Projection is of type linked, a value linked from the data set."
+            )
+        ),
+    ]
+    field: Annotated[str, Field()]
+    stream: Annotated[str, Field()]
+
+
+class CalculatedEventProjection(BaseModel):
+    location: Annotated[
+        Literal["event"],
+        Field(description="Projection comes and event"),
+    ]
+
+    type: Annotated[
+        Literal["calculated"],
+        Field(
+            description=(
+                "Projection is of type calculated, a value that requires calculation."
+            )
+        ),
+    ]
+    field: Annotated[str, Field()]
+    stream: Annotated[str, Field()]
     calculation: Annotated[
-        Optional[Calculation],
+        Calculation,
         Field(
             description="required fields if type is calculated",
             title="calculation properties",
-            default=None,
         ),
     ]
-    config_index: Annotated[Optional[int], Field(default=None)]
-    config_device: Annotated[Optional[str], Field(default=None)]
-    field: Annotated[Optional[str], Field(default=None)]
-    location: Annotated[
-        Optional[Literal["start", "event", "configuration"]],
-        Field(
-            description="start comes from metadata fields in the start document, "
-            "event comes from event, configuration comes from configuration "
-            "fields in the event_descriptor document",
-            default=None,
-        ),
-    ]
-    stream: Annotated[Optional[str], Field(default=None)]
+
+
+class StaticProjection(BaseModel):
     type: Annotated[
-        Optional[Literal["linked", "calculated", "static"]],
+        Literal["static"],
         Field(
-            description="linked: a value linked from the data set, "
-            "calculated: a value that requires calculation, "
-            "static:  a value defined here in the projection ",
-            default=None,
+            description=(
+                "Projection is of type static, a value defined here in the projection"
+            )
         ),
     ]
     value: Annotated[
-        Optional[Any],
-        Field(
-            description="value explicitely defined in the projection "
-            "when type==static.",
-            default=None,
-        ),
+        Any, Field(description="value explicitely defined in the static projection")
     ]
 
 
@@ -89,50 +126,6 @@ RUN_START_EXTRA_SCHEMA = {
         "DataType": {
             "patternProperties": {"^([^./]+)$": {"$ref": "#/$defs/DataType"}},
             "additionalProperties": False,
-        },
-        "Projection": {
-            "allOf": [
-                {
-                    "if": {
-                        "allOf": [
-                            {"properties": {"location": {"enum": ["configuration"]}}},
-                            {"properties": {"type": {"enum": ["linked"]}}},
-                        ]
-                    },
-                    "then": {
-                        "required": [
-                            "type",
-                            "location",
-                            "config_index",
-                            "config_device",
-                            "field",
-                            "stream",
-                        ]
-                    },
-                },
-                {
-                    "if": {
-                        "allOf": [
-                            {"properties": {"location": {"enum": ["event"]}}},
-                            {"properties": {"type": {"enum": ["linked"]}}},
-                        ]
-                    },
-                    "then": {"required": ["type", "location", "field", "stream"]},
-                },
-                {
-                    "if": {
-                        "allOf": [
-                            {"properties": {"location": {"enum": ["event"]}}},
-                            {"properties": {"type": {"enum": ["calculated"]}}},
-                        ]
-                    },
-                    "then": {"required": ["type", "field", "stream", "calculation"]},
-                },
-                {
-                    "if": {"properties": {"type": {"enum": ["static"]}}},
-                    "then": {"required": ["type", "value"]},
-                },
-            ],
         },
     },
     "properties": {
@@ -155,7 +148,18 @@ class Projections(BaseModel):
     name: Annotated[
         Optional[str], Field(description="The name of the projection", default=None)
     ]
-    projection: Annotated[Dict[Any, Projection], Field(description="")]
+    projection: Annotated[
+        Dict[
+            Any,
+            Union[
+                ConfigurationProjection,
+                LinkedEventProjection,
+                CalculatedEventProjection,
+                StaticProjection,
+            ],
+        ],
+        Field(description=""),
+    ]
     version: Annotated[
         str,
         Field(
@@ -225,34 +229,3 @@ class RunStart(BaseModel):
     ]
     time: Annotated[float, Field(description="Time the run started.  Unix epoch time")]
     uid: Annotated[str, Field(description="Globally unique ID for this run")]
-
-    @model_validator(mode="before")
-    def check_required_fields(cls, values):
-        type_ = values.get("type")
-        location = values.get("location")
-
-        if type_ == "linked" and location == "configuration":
-            required_fields = [
-                "type",
-                "location",
-                "config_index",
-                "config_device",
-                "field",
-                "stream",
-            ]
-        elif type_ == "linked" and location == "event":
-            required_fields = ["type", "location", "field", "stream"]
-        elif type_ == "calculated" and location == "event":
-            required_fields = ["type", "field", "stream", "calculation"]
-        elif type_ == "static":
-            required_fields = ["type", "value"]
-        else:
-            required_fields = []
-
-        for field in required_fields:
-            if values.get(field) is None:
-                raise ValueError(
-                    f"{field} is required for type {type_} and location {location}"
-                )
-
-        return values
