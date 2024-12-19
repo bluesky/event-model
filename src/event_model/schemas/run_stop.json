@@ -1,6 +1,6 @@
 {
-    "title": "run_stop",
-    "description": "Document for the end of a run indicating the success/fail state of the run and the end time",
+    "title": "RunStop",
+    "description": "Document for the end of a run indicating the success/fail state of the\nrun and the end time",
     "type": "object",
     "$defs": {
         "DataType": {
@@ -10,7 +10,15 @@
     "properties": {
         "data_type": {
             "description": "data_type",
-            "$ref": "#/$defs/DataType"
+            "anyOf": [
+                {
+                    "$ref": "#/$defs/DataType"
+                },
+                {
+                    "type": "null"
+                }
+            ],
+            "default": null
         },
         "exit_status": {
             "title": "Exit Status",
@@ -25,15 +33,31 @@
         "num_events": {
             "title": "Num Events",
             "description": "Number of Events per named stream",
-            "type": "object",
-            "additionalProperties": {
-                "type": "integer"
-            }
+            "anyOf": [
+                {
+                    "additionalProperties": {
+                        "type": "integer"
+                    },
+                    "type": "object"
+                },
+                {
+                    "type": "null"
+                }
+            ],
+            "default": null
         },
         "reason": {
             "title": "Reason",
             "description": "Long-form description of why the run ended",
-            "type": "string"
+            "anyOf": [
+                {
+                    "type": "string"
+                },
+                {
+                    "type": "null"
+                }
+            ],
+            "default": null
         },
         "run_start": {
             "title": "Run Start",

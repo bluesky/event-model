@@ -2,31 +2,44 @@
 
 # Test schema generation
 import json
-import os
+from pathlib import Path
 
+import pydantic
 import pytest
 
-import event_model
-from event_model.documents import ALL_DOCUMENTS
-from event_model.documents.generate.typeddict_to_schema import typeddict_to_schema
-
-SCHEMA_PATH = event_model.__path__[0] + "/schemas/"
+from event_model.basemodels import ALL_BASEMODELS
+from event_model.generate.create_documents import JSONSCHEMA, generate_jsonschema
 
 
-@pytest.mark.parametrize("typed_dict_class", ALL_DOCUMENTS)
-def test_generated_json_matches_typed_dict(typed_dict_class, tmpdir):
-    typeddict_to_schema(typed_dict_class, schema_dir=tmpdir)
-    file_name = os.listdir(tmpdir)[0]
-    generated_file_path = os.path.join(tmpdir, file_name)
-    old_file_path = os.path.join(SCHEMA_PATH, file_name)
+@pytest.mark.parametrize("basemodel", ALL_BASEMODELS)
+def test_generated_json_matches_typed_dict(basemodel, tmpdir: Path):
+    tmp_documents = Path(tmpdir) / "documents"
+    tmp_documents.mkdir()
+    tmp_jsonschema = Path(tmpdir) / "jsonschema"
+    tmp_jsonschema.mkdir()
 
-    with open(generated_file_path) as generated_file, open(old_file_path) as old_file:
-        try:
-            assert json.load(generated_file) == json.load(old_file)
-        except AssertionError as error:
-            raise Exception(
-                f"`{typed_dict_class.__name__}` can generate a json schema, but "
-                f"it doesn't match the schema in `{SCHEMA_PATH}`. Did you forget "
-                "to run `python event_model/documents/generate` after changes "
-                f"to `{typed_dict_class.__name__}`?"
-            ) from error
+    with pytest.warns(pydantic.warnings.PydanticDeprecatedSince20):
+        generate_jsonschema(
+            basemodel,
+            jsonschema_parent_path=tmp_jsonschema,
+            documents_parent_path=tmp_documents,
+        )
+    for new_jsonschema_path in tmp_jsonschema.iterdir():
+        old_jsonschema_path = JSONSCHEMA / new_jsonschema_path.name
+
+        if not old_jsonschema_path.exists():
+            continue
+
+        with (
+            new_jsonschema_path.open() as generated_file,
+            old_jsonschema_path.open() as old_file,
+        ):
+            try:
+                assert json.load(generated_file) == json.load(old_file)
+            except AssertionError as error:
+                raise Exception(
+                    f"`{basemodel.__name__}` can generate a json schema, but "
+                    f"it doesn't match the schema in `{JSONSCHEMA}`. Did you forget "
+                    "to run `regenerate-documents` after changes "
+                    f"to `{basemodel.__name__}`?"
+                ) from error

@@ -1,5 +1,5 @@
 {
-    "title": "stream_datum",
+    "title": "StreamDatum",
     "description": "Document to reference a quanta of an externally-stored stream of data.",
     "type": "object",
     "$defs": {
@@ -56,6 +56,5 @@
         "seq_nums",
         "stream_resource",
         "uid"
-    ],
-    "additionalProperties": false
+    ]
 }
