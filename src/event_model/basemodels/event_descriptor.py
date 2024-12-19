@@ -6,6 +6,7 @@ from pydantic import (
     Field,
     RootModel,
 )
+from pydantic.config import JsonDict
 from typing_extensions import Annotated, Literal
 
 Dtype = Literal["string", "number", "array", "boolean", "integer"]
@@ -172,7 +173,7 @@ class Configuration(BaseModel):
     ]
 
 
-EVENT_DESCRIPTOR_EXTRA_SCHEMA = {
+EVENT_DESCRIPTOR_EXTRA_SCHEMA: JsonDict = {
     "patternProperties": {"^([^./]+)$": {"$ref": "#/$defs/DataType"}},
     "$defs": {
         "DataType": {
@@ -202,18 +203,17 @@ class EventDescriptor(BaseModel):
         ),
     ]
     data_keys: Annotated[
-        Union[Dict[str, DataKey], None],
+        Dict[str, DataKey],
         Field(
-            default=None,
             description="This describes the data in the Event Documents.",
             title="data_keys",
         ),
     ]
     hints: Annotated[Union[PerObjectHint, None], Field(default=None)]
     name: Annotated[
-        Union[str, None],
+        str,
         Field(
-            default=None,
+            default="",
             description="A human-friendly name for this data stream, such as "
             "'primary' or 'baseline'.",
         ),

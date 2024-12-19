@@ -30,6 +30,7 @@ class StreamResource(BaseModel):
         Field(
             description="Globally unique ID to the run_start document "
             "this Stream Resource is associated with.",
+            default="",
         ),
     ]
     mimetype: Annotated[

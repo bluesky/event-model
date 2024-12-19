@@ -1,11 +1,7 @@
 from typing import Any, Dict, Optional
 
-from pydantic import (
-    BaseModel,
-    ConfigDict,
-    Field,
-    RootModel,
-)
+from pydantic import BaseModel, ConfigDict, Field, RootModel
+from pydantic.config import JsonDict
 from typing_extensions import Annotated, Literal
 
 
@@ -13,7 +9,7 @@ class DataType(RootModel):
     root: Any = Field(alias="DataType")
 
 
-RUN_STOP_EXTRA_SCHEMA = {
+RUN_STOP_EXTRA_SCHEMA: JsonDict = {
     "patternProperties": {"^([^./]+)$": {"$ref": "#/$defs/DataType"}},
     "additionalProperties": False,
 }

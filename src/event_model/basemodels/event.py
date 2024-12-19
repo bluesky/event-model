@@ -9,9 +9,9 @@ class PartialEvent(BaseModel):
 
     data: Annotated[Dict[str, Any], Field(description="The actual measurement data")]
     filled: Annotated[
-        Union[Dict[str, Union[bool, str]], None],
+        Dict[str, Union[bool, str]],
         Field(
-            default=None,
+            default_factory=dict,
             description="Mapping each of the keys of externally-stored data to the "
             "boolean False, indicating that the data has not been loaded, or to "
             "foreign keys (moved here from 'data' when the data was loaded)",

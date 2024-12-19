@@ -377,18 +377,10 @@
         "data_keys": {
             "title": "data_keys",
             "description": "This describes the data in the Event Documents.",
-            "anyOf": [
-                {
-                    "additionalProperties": {
-                        "$ref": "#/$defs/DataKey"
-                    },
-                    "type": "object"
-                },
-                {
-                    "type": "null"
-                }
-            ],
-            "default": null
+            "type": "object",
+            "additionalProperties": {
+                "$ref": "#/$defs/DataKey"
+            }
         },
         "hints": {
             "anyOf": [
@@ -404,15 +396,8 @@
         "name": {
             "title": "Name",
             "description": "A human-friendly name for this data stream, such as 'primary' or 'baseline'.",
-            "anyOf": [
-                {
-                    "type": "string"
-                },
-                {
-                    "type": "null"
-                }
-            ],
-            "default": null
+            "type": "string",
+            "default": ""
         },
         "object_keys": {
             "title": "Object Keys",
@@ -444,6 +429,7 @@
         }
     },
     "required": [
+        "data_keys",
         "run_start",
         "time",
         "uid"

@@ -2,17 +2,24 @@
     "title": "EventPage",
     "description": "Page of documents to record a quanta of collected data",
     "type": "object",
-    "$defs": {
-        "DataFrameForEventPage": {
-            "title": "DataFrameForEventPage",
+    "properties": {
+        "data": {
+            "title": "Data",
+            "description": "The actual measurement data",
             "type": "object",
             "additionalProperties": {
                 "items": {},
                 "type": "array"
             }
         },
-        "DataFrameForFilled": {
-            "title": "DataFrameForFilled",
+        "descriptor": {
+            "title": "Descriptor",
+            "description": "The UID of the EventDescriptor to which all of the Events in this page belong",
+            "type": "string"
+        },
+        "filled": {
+            "title": "Filled",
+            "description": "Mapping each of the keys of externally-stored data to an array containing the boolean False, indicating that the data has not been loaded, or to foreign keys (moved here from 'data' when the data was loaded)",
             "type": "object",
             "additionalProperties": {
                 "items": {
@@ -26,30 +33,8 @@
                     ]
                 },
                 "type": "array"
-            }
-        }
-    },
-    "properties": {
-        "data": {
-            "description": "The actual measurement data",
-            "$ref": "#/$defs/DataFrameForEventPage"
-        },
-        "descriptor": {
-            "title": "Descriptor",
-            "description": "The UID of the EventDescriptor to which all of the Events in this page belong",
-            "type": "string"
-        },
-        "filled": {
-            "description": "Mapping each of the keys of externally-stored data to an array containing the boolean False, indicating that the data has not been loaded, or to foreign keys (moved here from 'data' when the data was loaded)",
-            "anyOf": [
-                {
-                    "$ref": "#/$defs/DataFrameForFilled"
-                },
-                {
-                    "type": "null"
-                }
-            ],
-            "default": null
+            },
+            "default": {}
         },
         "seq_num": {
             "title": "Seq Num",
@@ -68,8 +53,13 @@
             }
         },
         "timestamps": {
+            "title": "Timestamps",
             "description": "The timestamps of the individual measurement data",
-            "$ref": "#/$defs/DataFrameForEventPage"
+            "type": "object",
+            "additionalProperties": {
+                "items": {},
+                "type": "array"
+            }
         },
         "uid": {
             "title": "Uid",

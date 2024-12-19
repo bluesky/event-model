@@ -21,7 +21,8 @@
         "run_start": {
             "title": "Run Start",
             "description": "Globally unique ID to the run_start document this Stream Resource is associated with.",
-            "type": "string"
+            "type": "string",
+            "default": ""
         },
         "uid": {
             "title": "Uid",
@@ -38,7 +39,6 @@
         "data_key",
         "mimetype",
         "parameters",
-        "run_start",
         "uid",
         "uri"
     ]

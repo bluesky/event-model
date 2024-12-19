@@ -1,20 +1,14 @@
-from typing import Dict, List, Optional, Union
+from typing import Dict, List, Union
 
 from pydantic import (
     BaseModel,
     ConfigDict,
     Field,
-    RootModel,
 )
 from typing_extensions import Annotated
 
-
-class DataFrameForFilled(RootModel):
-    root: Dict[str, List[Union[bool, str]]] = Field(alias="DataframeForFilled")
-
-
-class DataFrameForEventPage(RootModel):
-    root: Dict[str, List] = Field(alias="Dataframe")
+DataFrameForFilled = Dict[str, List[Union[bool, str]]]
+DataFrameForEventPage = Dict[str, List]
 
 
 class PartialEventPage(BaseModel):
@@ -25,13 +19,13 @@ class PartialEventPage(BaseModel):
         Field(description="The actual measurement data"),
     ]
     filled: Annotated[
-        Optional[DataFrameForFilled],
+        DataFrameForFilled,
         Field(
             description="Mapping each of the keys of externally-stored data to an "
             "array containing the boolean False, indicating that the data has not "
             "been loaded, or to foreign keys (moved here from 'data' when the data "
             "was loaded)",
-            default=None,
+            default={},
         ),
     ]
     timestamps: Annotated[

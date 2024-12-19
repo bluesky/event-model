@@ -6,6 +6,7 @@ from pydantic import (
     Field,
     RootModel,
 )
+from pydantic.config import JsonDict
 from typing_extensions import Annotated, Literal
 
 
@@ -121,7 +122,7 @@ class StaticProjection(BaseModel):
     ]
 
 
-RUN_START_EXTRA_SCHEMA = {
+RUN_START_EXTRA_SCHEMA: JsonDict = {
     "$defs": {
         "DataType": {
             "patternProperties": {"^([^./]+)$": {"$ref": "#/$defs/DataType"}},

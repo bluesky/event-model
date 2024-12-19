@@ -16,25 +16,17 @@
         "filled": {
             "title": "Filled",
             "description": "Mapping each of the keys of externally-stored data to the boolean False, indicating that the data has not been loaded, or to foreign keys (moved here from 'data' when the data was loaded)",
-            "anyOf": [
-                {
-                    "additionalProperties": {
-                        "anyOf": [
-                            {
-                                "type": "boolean"
-                            },
-                            {
-                                "type": "string"
-                            }
-                        ]
+            "type": "object",
+            "additionalProperties": {
+                "anyOf": [
+                    {
+                        "type": "boolean"
                     },
-                    "type": "object"
-                },
-                {
-                    "type": "null"
-                }
-            ],
-            "default": null
+                    {
+                        "type": "string"
+                    }
+                ]
+            }
         },
         "seq_num": {
             "title": "Seq Num",
