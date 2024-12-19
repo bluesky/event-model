@@ -4,7 +4,7 @@ import inspect
 import json
 from collections import OrderedDict
 from pathlib import Path
-from typing import Any, Dict, List, Set, Union, cast
+from typing import Any, Dict, List, Set, Type, Union, cast
 
 import datamodel_code_generator
 from pydantic import BaseModel
@@ -130,7 +130,7 @@ def jsonschema_differs_from_saved(
     return sort_schema(file_schema) != sort_schema(schema)
 
 
-def import_basemodels(path: Path) -> List[type[BaseModel]]:
+def import_basemodels(path: Path) -> List[Type[BaseModel]]:
     # Dynamically import the module
     module_name = path.stem
     spec = importlib.util.spec_from_file_location(module_name, path)
@@ -155,6 +155,7 @@ def generate_typeddict(jsonschema_path: Path, documents_path=DOCUMENTS):
         input_file_type=datamodel_code_generator.InputFileType.JsonSchema,
         output=output_path,
         output_model_type=datamodel_code_generator.DataModelType.TypingTypedDict,
+        target_python_version=datamodel_code_generator.PythonVersion.PY_38,
         use_schema_description=True,
         use_field_description=True,
         use_annotated=True,
@@ -172,7 +173,7 @@ def get_jsonschema_path(jsonschema: Dict, parent_path=JSONSCHEMA) -> Path:
 
 
 def generate_jsonschema(
-    basemodel: type[BaseModel],
+    basemodel: Type[BaseModel],
     jsonschema_parent_path=JSONSCHEMA,
     documents_parent_path=DOCUMENTS,
 ) -> Set[Path]:

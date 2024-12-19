@@ -30,16 +30,14 @@ def test_generated_json_matches_typed_dict(basemodel, tmpdir: Path):
         if not old_jsonschema_path.exists():
             continue
 
-        with (
-            new_jsonschema_path.open() as generated_file,
-            old_jsonschema_path.open() as old_file,
-        ):
-            try:
-                assert json.load(generated_file) == json.load(old_file)
-            except AssertionError as error:
-                raise Exception(
-                    f"`{basemodel.__name__}` can generate a json schema, but "
-                    f"it doesn't match the schema in `{JSONSCHEMA}`. Did you forget "
-                    "to run `regenerate-documents` after changes "
-                    f"to `{basemodel.__name__}`?"
-                ) from error
+        with new_jsonschema_path.open() as generated_file:
+            with old_jsonschema_path.open() as old_file:
+                try:
+                    assert json.load(generated_file) == json.load(old_file)
+                except AssertionError as error:
+                    raise Exception(
+                        f"`{basemodel.__name__}` can generate a json schema, but "
+                        f"it doesn't match the schema in `{JSONSCHEMA}`. Did you "
+                        "forget to run `regenerate-documents` after changes "
+                        f"to `{basemodel.__name__}`?"
+                    ) from error
