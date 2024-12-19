@@ -1825,18 +1825,18 @@ class MismatchedDataKeys(InvalidData):
 
 SCHEMA_PATH = "schemas"
 SCHEMA_NAMES = {
-    DocumentNames.start: "jsonschemas/run_start.json",
-    DocumentNames.stop: "jsonschemas/run_stop.json",
-    DocumentNames.event: "jsonschemas/event.json",
-    DocumentNames.event_page: "jsonschemas/event_page.json",
-    DocumentNames.descriptor: "jsonschemas/event_descriptor.json",
-    DocumentNames.datum: "jsonschemas/datum.json",
-    DocumentNames.datum_page: "jsonschemas/datum_page.json",
-    DocumentNames.resource: "jsonschemas/resource.json",
-    DocumentNames.stream_datum: "jsonschemas/stream_datum.json",
-    DocumentNames.stream_resource: "jsonschemas/stream_resource.json",
-    DocumentNames.bulk_datum: "jsonschemas/bulk_datum.json",
-    DocumentNames.bulk_events: "jsonschemas/bulk_events.json",
+    DocumentNames.start: "schemas/run_start.json",
+    DocumentNames.stop: "schemas/run_stop.json",
+    DocumentNames.event: "schemas/event.json",
+    DocumentNames.event_page: "schemas/event_page.json",
+    DocumentNames.descriptor: "schemas/event_descriptor.json",
+    DocumentNames.datum: "schemas/datum.json",
+    DocumentNames.datum_page: "schemas/datum_page.json",
+    DocumentNames.resource: "schemas/resource.json",
+    DocumentNames.stream_datum: "schemas/stream_datum.json",
+    DocumentNames.stream_resource: "schemas/stream_resource.json",
+    DocumentNames.bulk_datum: "schemas/bulk_datum.json",
+    DocumentNames.bulk_events: "schemas/bulk_events.json",
 }
 schemas = {}
 for name, filename in SCHEMA_NAMES.items():

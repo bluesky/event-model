@@ -12,7 +12,7 @@ from pydantic.alias_generators import to_snake
 
 from event_model.basemodels import ALL_BASEMODELS
 
-JSONSCHEMA = Path(__file__).parent.parent / "jsonschemas"
+JSONSCHEMA = Path(__file__).parent.parent / "schemas"
 DOCUMENTS = Path(__file__).parent.parent / "documents"
 
 
@@ -85,6 +85,7 @@ def dump_json(schema: Dict[str, Any], jsonschema_path: Path):
     sorted_schema = sort_schema(schema)
     with jsonschema_path.open(mode="w") as f:
         json.dump(sorted_schema, f, indent=4)
+        f.write("\n")
     return True
 
 
@@ -114,7 +115,6 @@ def jsonschema_differs_from_saved(
     """
 
     if not jsonschema_path.exists():
-        print("+++++++++++++++ PATH DOESN@T EXIST", jsonschema_path)
         return True
 
     with jsonschema_path.open("r") as file:
@@ -193,7 +193,7 @@ def generate_jsonschema(
         ignore_schema=schema_extra,
     ):
         print(f"Detected change in {basemodel}, updating schema.")
-        # Dump with the extra schema that we want to leave out of
+        # Dump without the extra schema that we want to leave out of
         # the TypedDict conversion
         dump_json(model_jsonschema, jsonschema_path=jsonschema_path)
         generate_typeddict(jsonschema_path, documents_path=documents_parent_path)

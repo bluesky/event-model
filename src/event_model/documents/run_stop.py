@@ -22,7 +22,7 @@ class RunStop(TypedDict):
     """
     data_type
     """
-    exit_status: Literal['success', 'abort', 'fail']
+    exit_status: Literal["success", "abort", "fail"]
     """
     State of the run when it ended
     """

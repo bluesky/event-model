@@ -16,7 +16,7 @@ class Resource(TypedDict):
     externally-stored data
     """
 
-    path_semantics: NotRequired[Optional[Literal['posix', 'windows']]]
+    path_semantics: NotRequired[Optional[Literal["posix", "windows"]]]
     """
     Rules for joining paths
     """
