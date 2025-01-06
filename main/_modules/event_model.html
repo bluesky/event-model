@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>event_model &#8212; event-model 1.22.2.dev9+gf63fbb4 documentation</title>
+    <title>event_model &#8212; event-model 1.22.2.dev11+g47e8d54 documentation</title>
   
   
   
@@ -15,8 +15,8 @@
     document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
     document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
   </script>
-  <!-- 
-    this give us a css class that will be invisible only if js is disabled 
+  <!--
+    this give us a css class that will be invisible only if js is disabled
   -->
   <noscript>
     <style>
@@ -26,22 +26,22 @@
   </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../_static/styles/theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
-<link href="../_static/styles/pydata-sphinx-theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
+  <link href="../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../_static/graphviz.css?v=4ae1632d" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../_static/plot_directive.css" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
   
   <!-- So that users can add custom icons -->
-  <script src="../_static/scripts/fontawesome.js?digest=26a4bc78f4c0ddb94549"></script>
+  <script src="../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549" />
-<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549" />
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
-    <script src="../_static/documentation_options.js?v=0a7a0d4f"></script>
+    <script src="../_static/documentation_options.js?v=82547f1e"></script>
     <script src="../_static/doctools.js?v=9bcbadda"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -49,10 +49,11 @@
     <script src="../_static/design-tabs.js?v=f930bc37"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = '_modules/event_model';</script>
     <script>
-        DOCUMENTATION_OPTIONS.theme_version = '0.16.0';
+        DOCUMENTATION_OPTIONS.theme_version = '0.16.1';
         DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://blueskyproject.io/event-model/switcher.json';
         DOCUMENTATION_OPTIONS.theme_switcher_version_match = 'main';
-        DOCUMENTATION_OPTIONS.show_version_warning_banner = false;
+        DOCUMENTATION_OPTIONS.show_version_warning_banner =
+            false;
         </script>
     <link rel="icon" href="../_static/event-model-favicon.svg"/>
     <link rel="index" title="Index" href="../genindex.html" />
@@ -125,8 +126,8 @@
       
     
     
-    <img src="../_static/event-model-logo.svg" class="logo__image only-light" alt="event-model 1.22.2.dev9+gf63fbb4 documentation - Home"/>
-    <img src="../_static/event-model-logo.svg" class="logo__image only-dark pst-js-only" alt="event-model 1.22.2.dev9+gf63fbb4 documentation - Home"/>
+    <img src="../_static/event-model-logo.svg" class="logo__image only-light" alt="event-model 1.22.2.dev11+g47e8d54 documentation - Home"/>
+    <img src="../_static/event-model-logo.svg" class="logo__image only-dark pst-js-only" alt="event-model 1.22.2.dev11+g47e8d54 documentation - Home"/>
   
   
 </a></div>
@@ -386,9 +387,14 @@
   
   
   <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
   </div>
-  
-  <div id="rtd-footer-container"></div>
 
 
       </div>
@@ -435,22 +441,22 @@
                 <article class="bd-article">
                   
   <h1>Source code for event_model</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">collections.abc</span>
-<span class="kn">import</span> <span class="nn">copy</span>
-<span class="kn">import</span> <span class="nn">inspect</span>
-<span class="kn">import</span> <span class="nn">itertools</span>
-<span class="kn">import</span> <span class="nn">json</span>
-<span class="kn">import</span> <span class="nn">os</span>
-<span class="kn">import</span> <span class="nn">sys</span>
-<span class="kn">import</span> <span class="nn">threading</span>
-<span class="kn">import</span> <span class="nn">time</span> <span class="k">as</span> <span class="nn">ttime</span>
-<span class="kn">import</span> <span class="nn">uuid</span>
-<span class="kn">import</span> <span class="nn">warnings</span>
-<span class="kn">import</span> <span class="nn">weakref</span>
-<span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">defaultdict</span><span class="p">,</span> <span class="n">deque</span>
-<span class="kn">from</span> <span class="nn">dataclasses</span> <span class="kn">import</span> <span class="n">dataclass</span>
-<span class="kn">from</span> <span class="nn">enum</span> <span class="kn">import</span> <span class="n">Enum</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="p">(</span>
+<span></span><span class="kn">import</span><span class="w"> </span><span class="nn">collections.abc</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">copy</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">inspect</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">itertools</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">threading</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">time</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">ttime</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">uuid</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">warnings</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">weakref</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">collections</span><span class="w"> </span><span class="kn">import</span> <span class="n">defaultdict</span><span class="p">,</span> <span class="n">deque</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">enum</span><span class="w"> </span><span class="kn">import</span> <span class="n">Enum</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
     <span class="n">Any</span><span class="p">,</span>
     <span class="n">Callable</span><span class="p">,</span>
     <span class="n">Dict</span><span class="p">,</span>
@@ -466,14 +472,14 @@
     <span class="n">no_type_check</span><span class="p">,</span>
 <span class="p">)</span>
 
-<span class="kn">import</span> <span class="nn">jsonschema</span>
-<span class="kn">import</span> <span class="nn">numpy</span>
-<span class="kn">from</span> <span class="nn">typing_extensions</span> <span class="kn">import</span> <span class="n">Literal</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">jsonschema</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing_extensions</span><span class="w"> </span><span class="kn">import</span> <span class="n">Literal</span>
 
-<span class="kn">from</span> <span class="nn">.documents.datum</span> <span class="kn">import</span> <span class="n">Datum</span>
-<span class="kn">from</span> <span class="nn">.documents.datum_page</span> <span class="kn">import</span> <span class="n">DatumPage</span>
-<span class="kn">from</span> <span class="nn">.documents.event</span> <span class="kn">import</span> <span class="n">Event</span><span class="p">,</span> <span class="n">PartialEvent</span>
-<span class="kn">from</span> <span class="nn">.documents.event_descriptor</span> <span class="kn">import</span> <span class="p">(</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.documents.datum</span><span class="w"> </span><span class="kn">import</span> <span class="n">Datum</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.documents.datum_page</span><span class="w"> </span><span class="kn">import</span> <span class="n">DatumPage</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.documents.event</span><span class="w"> </span><span class="kn">import</span> <span class="n">Event</span><span class="p">,</span> <span class="n">PartialEvent</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.documents.event_descriptor</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
     <span class="n">Configuration</span><span class="p">,</span>
     <span class="n">DataKey</span><span class="p">,</span>
     <span class="n">Dtype</span><span class="p">,</span>
@@ -482,19 +488,19 @@
     <span class="n">LimitsRange</span><span class="p">,</span>
     <span class="n">PerObjectHint</span><span class="p">,</span>
 <span class="p">)</span>
-<span class="kn">from</span> <span class="nn">.documents.event_page</span> <span class="kn">import</span> <span class="n">EventPage</span><span class="p">,</span> <span class="n">PartialEventPage</span>
-<span class="kn">from</span> <span class="nn">.documents.resource</span> <span class="kn">import</span> <span class="n">PartialResource</span><span class="p">,</span> <span class="n">Resource</span>
-<span class="kn">from</span> <span class="nn">.documents.run_start</span> <span class="kn">import</span> <span class="n">Calculation</span><span class="p">,</span> <span class="n">Hints</span><span class="p">,</span> <span class="n">Projection</span><span class="p">,</span> <span class="n">Projections</span><span class="p">,</span> <span class="n">RunStart</span>
-<span class="kn">from</span> <span class="nn">.documents.run_stop</span> <span class="kn">import</span> <span class="n">RunStop</span>
-<span class="kn">from</span> <span class="nn">.documents.stream_datum</span> <span class="kn">import</span> <span class="n">StreamDatum</span><span class="p">,</span> <span class="n">StreamRange</span>
-<span class="kn">from</span> <span class="nn">.documents.stream_resource</span> <span class="kn">import</span> <span class="n">StreamResource</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.documents.event_page</span><span class="w"> </span><span class="kn">import</span> <span class="n">EventPage</span><span class="p">,</span> <span class="n">PartialEventPage</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.documents.resource</span><span class="w"> </span><span class="kn">import</span> <span class="n">PartialResource</span><span class="p">,</span> <span class="n">Resource</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.documents.run_start</span><span class="w"> </span><span class="kn">import</span> <span class="n">Calculation</span><span class="p">,</span> <span class="n">Hints</span><span class="p">,</span> <span class="n">Projection</span><span class="p">,</span> <span class="n">Projections</span><span class="p">,</span> <span class="n">RunStart</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.documents.run_stop</span><span class="w"> </span><span class="kn">import</span> <span class="n">RunStop</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.documents.stream_datum</span><span class="w"> </span><span class="kn">import</span> <span class="n">StreamDatum</span><span class="p">,</span> <span class="n">StreamRange</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.documents.stream_resource</span><span class="w"> </span><span class="kn">import</span> <span class="n">StreamResource</span>
 
 <span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">version_info</span> <span class="o">&lt;</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">9</span><span class="p">):</span>
-    <span class="kn">import</span> <span class="nn">importlib_resources</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">importlib_resources</span>
 <span class="k">else</span><span class="p">:</span>
-    <span class="kn">import</span> <span class="nn">importlib.resources</span> <span class="k">as</span> <span class="nn">importlib_resources</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">importlib.resources</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">importlib_resources</span>
 
-<span class="kn">from</span> <span class="nn">._version</span> <span class="kn">import</span> <span class="n">__version__</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">._version</span><span class="w"> </span><span class="kn">import</span> <span class="n">__version__</span>
 
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>
     <span class="c1"># Document types</span>
@@ -531,7 +537,7 @@
 <span class="p">]</span>
 
 
-<span class="k">class</span> <span class="nc">DocumentNames</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">DocumentNames</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
     <span class="n">stop</span> <span class="o">=</span> <span class="s2">&quot;stop&quot;</span>
     <span class="n">start</span> <span class="o">=</span> <span class="s2">&quot;start&quot;</span>
     <span class="n">descriptor</span> <span class="o">=</span> <span class="s2">&quot;descriptor&quot;</span>
@@ -546,7 +552,7 @@
     <span class="n">bulk_events</span> <span class="o">=</span> <span class="s2">&quot;bulk_events&quot;</span>  <span class="c1"># deprecated</span>
 
 
-<span class="k">class</span> <span class="nc">DocumentRouter</span><span class="p">:</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">DocumentRouter</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Route each document by type to a corresponding method.</span>
 
@@ -572,7 +578,7 @@
 <span class="sd">        Expected signature ``f(name, doc)``</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">emit</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Callable</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">emit</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Callable</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="c1"># Put in some extra effort to validate `emit` carefully, because if</span>
         <span class="c1"># this is used incorrectly the resultant errors can be confusing.</span>
 
@@ -588,14 +594,14 @@
             <span class="k">except</span> <span class="ne">TypeError</span> <span class="k">as</span> <span class="n">error</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
                     <span class="s2">&quot;emit must accept two positional arguments, name and doc&quot;</span>
-                <span class="p">)</span> <span class="kn">from</span> <span class="nn">error</span>
+                <span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="nn">error</span>
             <span class="c1"># Stash a weak reference to `emit`.</span>
             <span class="k">if</span> <span class="n">inspect</span><span class="o">.</span><span class="n">ismethod</span><span class="p">(</span><span class="n">emit</span><span class="p">):</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">_emit_ref</span> <span class="o">=</span> <span class="n">weakref</span><span class="o">.</span><span class="n">WeakMethod</span><span class="p">(</span><span class="n">emit</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">_emit_ref</span> <span class="o">=</span> <span class="n">weakref</span><span class="o">.</span><span class="n">ref</span><span class="p">(</span><span class="n">emit</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">emit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">doc</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">emit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">doc</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Emit to the callable provided an instantiation time, if any.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -605,7 +611,7 @@
             <span class="k">if</span> <span class="n">emit</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="n">emit</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">doc</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">doc</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">validate</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">dict</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
@@ -627,7 +633,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dispatch</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">doc</span><span class="p">,</span> <span class="n">validate</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">_dispatch</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">doc</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">validate</span><span class="p">:</span> <span class="nb">bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">dict</span><span class="p">]:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_dispatch</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">doc</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">validate</span><span class="p">:</span> <span class="nb">bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">dict</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Dispatch to the method corresponding to the `name`.</span>
 
@@ -698,37 +704,37 @@
     <span class="c1"># to how Python uses NotImplemented in arithmetic operations, as described</span>
     <span class="c1"># in the documentation.</span>
 
-    <span class="k">def</span> <span class="nf">start</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">doc</span><span class="p">:</span> <span class="n">RunStart</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">RunStart</span><span class="p">]:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">start</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">doc</span><span class="p">:</span> <span class="n">RunStart</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">RunStart</span><span class="p">]:</span>
         <span class="k">return</span> <span class="bp">NotImplemented</span>
 
-    <span class="k">def</span> <span class="nf">stop</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">doc</span><span class="p">:</span> <span class="n">RunStop</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">RunStop</span><span class="p">]:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">stop</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">doc</span><span class="p">:</span> <span class="n">RunStop</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">RunStop</span><span class="p">]:</span>
         <span class="k">return</span> <span class="bp">NotImplemented</span>
 
-    <span class="k">def</span> <span class="nf">descriptor</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">doc</span><span class="p">:</span> <span class="n">EventDescriptor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">EventDescriptor</span><span class="p">]:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">descriptor</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">doc</span><span class="p">:</span> <span class="n">EventDescriptor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">EventDescriptor</span><span class="p">]:</span>
         <span class="k">return</span> <span class="bp">NotImplemented</span>
 
-    <span class="k">def</span> <span class="nf">resource</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">doc</span><span class="p">:</span> <span class="n">Resource</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Resource</span><span class="p">]:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">resource</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">doc</span><span class="p">:</span> <span class="n">Resource</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Resource</span><span class="p">]:</span>
         <span class="k">return</span> <span class="bp">NotImplemented</span>
 
-    <span class="k">def</span> <span class="nf">event</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">doc</span><span class="p">:</span> <span class="n">Event</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Event</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">event</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">doc</span><span class="p">:</span> <span class="n">Event</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Event</span><span class="p">:</span>
         <span class="k">return</span> <span class="bp">NotImplemented</span>
 
-    <span class="k">def</span> <span class="nf">datum</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">doc</span><span class="p">:</span> <span class="n">Datum</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Datum</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">datum</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">doc</span><span class="p">:</span> <span class="n">Datum</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Datum</span><span class="p">:</span>
         <span class="k">return</span> <span class="bp">NotImplemented</span>
 
-    <span class="k">def</span> <span class="nf">event_page</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">doc</span><span class="p">:</span> <span class="n">EventPage</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">EventPage</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">event_page</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">doc</span><span class="p">:</span> <span class="n">EventPage</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">EventPage</span><span class="p">:</span>
         <span class="k">return</span> <span class="bp">NotImplemented</span>
 
-    <span class="k">def</span> <span class="nf">datum_page</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">doc</span><span class="p">:</span> <span class="n">DatumPage</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">DatumPage</span><span class="p">]:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">datum_page</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">doc</span><span class="p">:</span> <span class="n">DatumPage</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">DatumPage</span><span class="p">]:</span>
         <span class="k">return</span> <span class="bp">NotImplemented</span>
 
-    <span class="k">def</span> <span class="nf">stream_datum</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">doc</span><span class="p">:</span> <span class="n">StreamDatum</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">StreamDatum</span><span class="p">]:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">stream_datum</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">doc</span><span class="p">:</span> <span class="n">StreamDatum</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">StreamDatum</span><span class="p">]:</span>
         <span class="k">return</span> <span class="bp">NotImplemented</span>
 
-    <span class="k">def</span> <span class="nf">stream_resource</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">doc</span><span class="p">:</span> <span class="n">StreamResource</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">StreamResource</span><span class="p">]:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">stream_resource</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">doc</span><span class="p">:</span> <span class="n">StreamResource</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">StreamResource</span><span class="p">]:</span>
         <span class="k">return</span> <span class="bp">NotImplemented</span>
 
-    <span class="k">def</span> <span class="nf">bulk_events</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">doc</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">bulk_events</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">doc</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="c1"># Do not modify this in a subclass. Use event_page.</span>
         <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
             <span class="s2">&quot;The document type &#39;bulk_events&#39; has been deprecated in favor of &quot;</span>
@@ -738,7 +744,7 @@
         <span class="k">for</span> <span class="n">page</span> <span class="ow">in</span> <span class="n">bulk_events_to_event_pages</span><span class="p">(</span><span class="n">doc</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">event_page</span><span class="p">(</span><span class="n">page</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">bulk_datum</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">doc</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">bulk_datum</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">doc</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="c1"># Do not modify this in a subclass. Use event_page.</span>
         <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
             <span class="s2">&quot;The document type &#39;bulk_datum&#39; has been deprecated in favor of &quot;</span>
@@ -748,17 +754,17 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">datum_page</span><span class="p">(</span><span class="n">bulk_datum_to_datum_page</span><span class="p">(</span><span class="n">doc</span><span class="p">))</span>
 
 
-<span class="k">class</span> <span class="nc">SingleRunDocumentRouter</span><span class="p">(</span><span class="n">DocumentRouter</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">SingleRunDocumentRouter</span><span class="p">(</span><span class="n">DocumentRouter</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    A DocumentRouter intended to process events from exactly one run.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_start_doc</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">dict</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_descriptors</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="p">{}</span>
 
-    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">doc</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">validate</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">dict</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
@@ -804,7 +810,7 @@
         <span class="c1"># Defer to superclass for dispatch/processing.</span>
         <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__call__</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">doc</span><span class="p">,</span> <span class="n">validate</span><span class="o">=</span><span class="n">validate</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">get_start</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_start</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Convenience method returning the start document for the associated run.</span>
 
 <span class="sd">        If no start document has been processed EventModelError will be raised.</span>
@@ -820,7 +826,7 @@
 
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_start_doc</span>
 
-    <span class="k">def</span> <span class="nf">get_descriptor</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">doc</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">EventDescriptor</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_descriptor</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">doc</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">EventDescriptor</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Convenience method returning the descriptor associated with the</span>
 <span class="sd">        specified document.</span>
 
@@ -845,7 +851,7 @@
 
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_descriptors</span><span class="p">[</span><span class="n">doc</span><span class="p">[</span><span class="s2">&quot;descriptor&quot;</span><span class="p">]]</span>
 
-    <span class="k">def</span> <span class="nf">get_stream_name</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">doc</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_stream_name</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">doc</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Convenience method returning the name of the stream for the</span>
 <span class="sd">        specified document.</span>
 
@@ -861,29 +867,29 @@
         <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_descriptor</span><span class="p">(</span><span class="n">doc</span><span class="p">)</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;name&quot;</span><span class="p">))</span>
 
 
-<span class="k">class</span> <span class="nc">HandlerRegistryView</span><span class="p">(</span><span class="n">collections</span><span class="o">.</span><span class="n">abc</span><span class="o">.</span><span class="n">Mapping</span><span class="p">):</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">handler_registry</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">HandlerRegistryView</span><span class="p">(</span><span class="n">collections</span><span class="o">.</span><span class="n">abc</span><span class="o">.</span><span class="n">Mapping</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">handler_registry</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_handler_registry</span> <span class="o">=</span> <span class="n">handler_registry</span>
 
-    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
         <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;HandlerRegistryView(</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_handler_registry</span><span class="si">!r}</span><span class="s2">)&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_handler_registry</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
 
-    <span class="k">def</span> <span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Generator</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Generator</span><span class="p">:</span>
         <span class="k">yield from</span> <span class="bp">self</span><span class="o">.</span><span class="n">_handler_registry</span>
 
-    <span class="k">def</span> <span class="fm">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
         <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_handler_registry</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="fm">__setitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">val</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__setitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">val</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">raise</span> <span class="n">EventModelTypeError</span><span class="p">(</span>
             <span class="s2">&quot;The handler registry cannot be edited directly. &quot;</span>
             <span class="s2">&quot;Instead, use the method Filler.register_handler.&quot;</span>
         <span class="p">)</span>
 
-    <span class="k">def</span> <span class="fm">__delitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__delitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">raise</span> <span class="n">EventModelTypeError</span><span class="p">(</span>
             <span class="s2">&quot;The handler registry cannot be edited directly. &quot;</span>
             <span class="s2">&quot;Instead, use the method Filler.deregister_handler.&quot;</span>
@@ -919,17 +925,17 @@
 <span class="c1"># delayed-computation framework (e.g. dask) in event-model itself.</span>
 
 
-<span class="k">def</span> <span class="nf">as_is</span><span class="p">(</span><span class="n">handler_class</span><span class="p">,</span> <span class="n">filler_state</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Type</span><span class="p">:</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">as_is</span><span class="p">(</span><span class="n">handler_class</span><span class="p">,</span> <span class="n">filler_state</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Type</span><span class="p">:</span>
     <span class="s2">&quot;A no-op coercion function that returns handler_class unchanged.&quot;</span>
     <span class="k">return</span> <span class="n">handler_class</span>
 
 
 <span class="nd">@no_type_check</span>
-<span class="k">def</span> <span class="nf">force_numpy</span><span class="p">(</span><span class="n">handler_class</span><span class="p">:</span> <span class="n">Type</span><span class="p">,</span> <span class="n">filler_state</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">force_numpy</span><span class="p">(</span><span class="n">handler_class</span><span class="p">:</span> <span class="n">Type</span><span class="p">,</span> <span class="n">filler_state</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
     <span class="s2">&quot;A coercion that makes handler_class.__call__ return actual numpy.ndarray.&quot;</span>
 
-    <span class="k">class</span> <span class="nc">Subclass</span><span class="p">(</span><span class="n">handler_class</span><span class="p">):</span>
-        <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">class</span><span class="w"> </span><span class="nc">Subclass</span><span class="p">(</span><span class="n">handler_class</span><span class="p">):</span>
+        <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
             <span class="n">raw_result</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__call__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
             <span class="n">result_as_array</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">raw_result</span><span class="p">)</span>
             <span class="k">return</span> <span class="n">result_as_array</span>
@@ -943,7 +949,7 @@
 <span class="n">_coercion_registry</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;as_is&quot;</span><span class="p">:</span> <span class="n">as_is</span><span class="p">,</span> <span class="s2">&quot;force_numpy&quot;</span><span class="p">:</span> <span class="n">force_numpy</span><span class="p">}</span>
 
 
-<span class="k">def</span> <span class="nf">register_coercion</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">func</span><span class="p">:</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">overwrite</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">register_coercion</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">func</span><span class="p">:</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">overwrite</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Register a new option for :class:`Filler`&#39;s ``coerce`` argument.</span>
 
@@ -978,7 +984,7 @@
 <span class="n">register_coersion</span> <span class="o">=</span> <span class="n">register_coercion</span>  <span class="c1"># back-compat for a spelling mistake</span>
 
 
-<span class="k">class</span> <span class="nc">Filler</span><span class="p">(</span><span class="n">DocumentRouter</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">Filler</span><span class="p">(</span><span class="n">DocumentRouter</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Pass documents through, loading any externally-referenced data.</span>
 
 <span class="sd">    It is recommended to use the Filler as a context manager.  Because the</span>
@@ -1077,7 +1083,7 @@
 <span class="sd">    &gt;&gt;&gt; del filler  # Free up memory from potentially large caches.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">handler_registry</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span>
         <span class="o">*</span><span class="p">,</span>
@@ -1131,7 +1137,7 @@
             <span class="k">raise</span> <span class="n">EventModelKeyError</span><span class="p">(</span>
                 <span class="sa">f</span><span class="s2">&quot;The option coerce=</span><span class="si">{</span><span class="n">coerce</span><span class="si">!r}</span><span class="s2"> was given to event_model.Filler. &quot;</span>
                 <span class="sa">f</span><span class="s2">&quot;The valid options are </span><span class="si">{</span><span class="nb">set</span><span class="p">(</span><span class="n">_coercion_registry</span><span class="p">)</span><span class="si">}</span><span class="s2">.&quot;</span>
-            <span class="p">)</span> <span class="kn">from</span> <span class="nn">error</span>
+            <span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="nn">error</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_coerce</span> <span class="o">=</span> <span class="n">coerce</span>
 
         <span class="c1"># See comments on coerision functions above for the use of</span>
@@ -1183,7 +1189,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">retry_intervals</span> <span class="o">=</span> <span class="n">retry_intervals</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_closed</span> <span class="o">=</span> <span class="kc">False</span>
 
-    <span class="k">def</span> <span class="fm">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
         <span class="k">return</span> <span class="p">(</span>
             <span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="ow">is</span> <span class="nb">type</span><span class="p">(</span><span class="n">other</span><span class="p">)</span>
             <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">inplace</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">inplace</span>
@@ -1200,7 +1206,7 @@
             <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">retry_intervals</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">retry_intervals</span>
         <span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">__getstate__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">__getstate__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
         <span class="k">return</span> <span class="p">{</span>
             <span class="s2">&quot;inplace&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_inplace</span><span class="p">,</span>
             <span class="s2">&quot;coercion_func&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_coerce</span><span class="p">,</span>
@@ -1217,7 +1223,7 @@
             <span class="s2">&quot;retry_intervals&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">retry_intervals</span><span class="p">,</span>
         <span class="p">}</span>
 
-    <span class="k">def</span> <span class="nf">__setstate__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">d</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">__setstate__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">d</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_inplace</span> <span class="o">=</span> <span class="n">d</span><span class="p">[</span><span class="s2">&quot;inplace&quot;</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_coerce</span> <span class="o">=</span> <span class="n">d</span><span class="p">[</span><span class="s2">&quot;coercion_func&quot;</span><span class="p">]</span>
 
@@ -1246,45 +1252,45 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_closed</span> <span class="o">=</span> <span class="kc">False</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">retry_intervals</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">retry_intervals</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">:</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_retry_intervals</span>
 
     <span class="nd">@retry_intervals</span><span class="o">.</span><span class="n">setter</span>
-    <span class="k">def</span> <span class="nf">retry_intervals</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">retry_intervals</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_retry_intervals</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
         <span class="k">return</span> <span class="s2">&quot;&lt;Filler&gt;&quot;</span> <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_closed</span> <span class="k">else</span> <span class="s2">&quot;&lt;Closed Filler&gt;&quot;</span>
 
     <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">get_default_resource_cache</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_default_resource_cache</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
         <span class="k">return</span> <span class="p">{}</span>
 
     <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">get_default_descriptor_cache</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_default_descriptor_cache</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
         <span class="k">return</span> <span class="p">{}</span>
 
     <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">get_default_datum_cache</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_default_datum_cache</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
         <span class="k">return</span> <span class="p">{}</span>
 
     <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">get_default_handler_cache</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_default_handler_cache</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
         <span class="k">return</span> <span class="p">{}</span>
 
     <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">get_default_stream_datum_cache</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_default_stream_datum_cache</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
         <span class="k">return</span> <span class="p">{}</span>
 
     <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">get_default_stream_resource_cache</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_default_stream_resource_cache</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
         <span class="k">return</span> <span class="p">{}</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">inplace</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">inplace</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_inplace</span>
 
-    <span class="k">def</span> <span class="nf">clone</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">clone</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">handler_registry</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">dict</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="o">*</span><span class="p">,</span>
@@ -1332,7 +1338,7 @@
             <span class="n">retry_intervals</span><span class="o">=</span><span class="n">retry_intervals</span><span class="p">,</span>
         <span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">register_handler</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">register_handler</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">spec</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">handler</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">overwrite</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
@@ -1370,7 +1376,7 @@
         <span class="c1"># wants to.</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_handler_registry</span><span class="p">[</span><span class="n">spec</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_coercion_func</span><span class="p">(</span><span class="n">handler</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_current_state</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">deregister_handler</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">spec</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">deregister_handler</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">spec</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Deregister a handler.</span>
 
@@ -1396,7 +1402,7 @@
                     <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">_handler_cache</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
         <span class="k">return</span> <span class="n">handler</span>
 
-    <span class="k">def</span> <span class="nf">resource</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">doc</span><span class="p">:</span> <span class="n">Resource</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Resource</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">resource</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">doc</span><span class="p">:</span> <span class="n">Resource</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Resource</span><span class="p">:</span>
         <span class="c1"># Defer creating the handler instance until we actually need it, when</span>
         <span class="c1"># we fill the first Event field that requires this Resource.</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_resource_cache</span><span class="p">[</span><span class="n">doc</span><span class="p">[</span><span class="s2">&quot;uid&quot;</span><span class="p">]]</span> <span class="o">=</span> <span class="n">doc</span>
@@ -1405,25 +1411,25 @@
     <span class="c1"># Handlers operate document-wise, so we&#39;ll explode pages into individual</span>
     <span class="c1"># documents.</span>
 
-    <span class="k">def</span> <span class="nf">datum_page</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">doc</span><span class="p">:</span> <span class="n">DatumPage</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">DatumPage</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">datum_page</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">doc</span><span class="p">:</span> <span class="n">DatumPage</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">DatumPage</span><span class="p">:</span>
         <span class="n">datum</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">datum</span>  <span class="c1"># Avoid attribute lookup in hot loop.</span>
         <span class="k">for</span> <span class="n">datum_doc</span> <span class="ow">in</span> <span class="n">unpack_datum_page</span><span class="p">(</span><span class="n">doc</span><span class="p">):</span>
             <span class="n">datum</span><span class="p">(</span><span class="n">datum_doc</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">doc</span>
 
-    <span class="k">def</span> <span class="nf">datum</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">doc</span><span class="p">:</span> <span class="n">Datum</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Datum</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">datum</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">doc</span><span class="p">:</span> <span class="n">Datum</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Datum</span><span class="p">:</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_datum_cache</span><span class="p">[</span><span class="n">doc</span><span class="p">[</span><span class="s2">&quot;datum_id&quot;</span><span class="p">]]</span> <span class="o">=</span> <span class="n">doc</span>
         <span class="k">return</span> <span class="n">doc</span>
 
-    <span class="k">def</span> <span class="nf">stream_resource</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">doc</span><span class="p">:</span> <span class="n">StreamResource</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">StreamResource</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">stream_resource</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">doc</span><span class="p">:</span> <span class="n">StreamResource</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">StreamResource</span><span class="p">:</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_stream_resource_cache</span><span class="p">[</span><span class="n">doc</span><span class="p">[</span><span class="s2">&quot;uid&quot;</span><span class="p">]]</span> <span class="o">=</span> <span class="n">doc</span>
         <span class="k">return</span> <span class="n">doc</span>
 
-    <span class="k">def</span> <span class="nf">stream_datum</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">doc</span><span class="p">:</span> <span class="n">StreamDatum</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">StreamDatum</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">stream_datum</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">doc</span><span class="p">:</span> <span class="n">StreamDatum</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">StreamDatum</span><span class="p">:</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_stream_datum_cache</span><span class="p">[</span><span class="n">doc</span><span class="p">[</span><span class="s2">&quot;uid&quot;</span><span class="p">]]</span> <span class="o">=</span> <span class="n">doc</span>
         <span class="k">return</span> <span class="n">doc</span>
 
-    <span class="k">def</span> <span class="nf">event_page</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">doc</span><span class="p">:</span> <span class="n">EventPage</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">EventPage</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">event_page</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">doc</span><span class="p">:</span> <span class="n">EventPage</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">EventPage</span><span class="p">:</span>
         <span class="c1"># TODO We may be able to fill a page in place, and that may be more</span>
         <span class="c1"># efficient than unpacking the page in to Events, filling them, and the</span>
         <span class="c1"># re-packing a new page. But that seems tricky in general since the</span>
@@ -1433,11 +1439,11 @@
         <span class="p">)</span>
         <span class="k">return</span> <span class="n">filled_doc</span>
 
-    <span class="k">def</span> <span class="nf">event</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">doc</span><span class="p">:</span> <span class="n">Event</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Event</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">event</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">doc</span><span class="p">:</span> <span class="n">Event</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Event</span><span class="p">:</span>
         <span class="n">filled_doc</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fill_event</span><span class="p">(</span><span class="n">doc</span><span class="p">,</span> <span class="n">include</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">include</span><span class="p">,</span> <span class="n">exclude</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">exclude</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">filled_doc</span>
 
-    <span class="k">def</span> <span class="nf">fill_event_page</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">fill_event_page</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">doc</span><span class="p">:</span> <span class="n">EventPage</span><span class="p">,</span>
         <span class="n">include</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Iterable</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
@@ -1461,7 +1467,7 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">filled_doc</span>
 
-    <span class="k">def</span> <span class="nf">get_handler</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">resource</span><span class="p">:</span> <span class="n">Resource</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_handler</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">resource</span><span class="p">:</span> <span class="n">Resource</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Return a new Handler instance for this Resource.</span>
 
@@ -1485,7 +1491,7 @@
                 <span class="sa">f</span><span class="s2">&quot;refers to spec </span><span class="si">{</span><span class="n">resource</span><span class="p">[</span><span class="s1">&#39;spec&#39;</span><span class="p">]</span><span class="si">!r}</span><span class="s2"> which is &quot;</span>
                 <span class="sa">f</span><span class="s2">&quot;not defined in the Filler&#39;s &quot;</span>
                 <span class="sa">f</span><span class="s2">&quot;handler registry.&quot;</span>
-            <span class="p">)</span> <span class="kn">from</span> <span class="nn">err</span>
+            <span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="nn">err</span>
         <span class="c1"># Apply root_map.</span>
         <span class="n">resource_path</span> <span class="o">=</span> <span class="n">resource</span><span class="p">[</span><span class="s2">&quot;resource_path&quot;</span><span class="p">]</span>
         <span class="n">original_root</span> <span class="o">=</span> <span class="n">resource</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;root&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
@@ -1517,7 +1523,7 @@
         <span class="p">)</span>
         <span class="k">return</span> <span class="n">handler</span>
 
-    <span class="k">def</span> <span class="nf">_get_handler_maybe_cached</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">resource</span><span class="p">:</span> <span class="n">Resource</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_get_handler_maybe_cached</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">resource</span><span class="p">:</span> <span class="n">Resource</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
         <span class="s2">&quot;Get a cached handler for this resource or make one and cache it.&quot;</span>
         <span class="n">key</span> <span class="o">=</span> <span class="p">(</span><span class="n">resource</span><span class="p">[</span><span class="s2">&quot;uid&quot;</span><span class="p">],</span> <span class="n">resource</span><span class="p">[</span><span class="s2">&quot;spec&quot;</span><span class="p">])</span>
         <span class="k">try</span><span class="p">:</span>
@@ -1527,7 +1533,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">_handler_cache</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">handler</span>
         <span class="k">return</span> <span class="n">handler</span>
 
-    <span class="k">def</span> <span class="nf">fill_event</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">fill_event</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">doc</span><span class="p">,</span>
         <span class="n">include</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Iterable</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
@@ -1571,7 +1577,7 @@
                         <span class="sa">f</span><span class="s2">&quot;event[&#39;data&#39;].keys(): </span><span class="si">{</span><span class="n">doc</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span><span class="si">}</span><span class="s2">, &quot;</span>
                         <span class="s2">&quot;descriptor[&#39;data_keys&#39;].keys(): &quot;</span>
                         <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">descriptor</span><span class="p">[</span><span class="s1">&#39;data_keys&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span>
-                    <span class="p">)</span> <span class="kn">from</span> <span class="nn">err</span>
+                    <span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="nn">err</span>
                 <span class="k">else</span><span class="p">:</span>
                     <span class="k">raise</span> <span class="n">MismatchedDataKeys</span><span class="p">(</span>
                         <span class="s2">&quot;The documents are not valid.  Either because they &quot;</span>
@@ -1582,7 +1588,7 @@
                         <span class="sa">f</span><span class="s2">&quot;event[&#39;data&#39;].keys(): </span><span class="si">{</span><span class="n">doc</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span><span class="si">}</span><span class="s2">, &quot;</span>
                         <span class="s2">&quot;event[&#39;filled&#39;].keys(): &quot;</span>
                         <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">doc</span><span class="p">[</span><span class="s1">&#39;filled&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span>
-                    <span class="p">)</span> <span class="kn">from</span> <span class="nn">err</span>
+                    <span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="nn">err</span>
             <span class="c1"># Look up the cached Datum doc.</span>
             <span class="k">try</span><span class="p">:</span>
                 <span class="n">datum_doc</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_datum_cache</span><span class="p">[</span><span class="n">datum_id</span><span class="p">]</span>
@@ -1591,7 +1597,7 @@
                     <span class="n">datum_id</span><span class="p">,</span>
                     <span class="sa">f</span><span class="s2">&quot;Event with uid </span><span class="si">{</span><span class="n">doc</span><span class="p">[</span><span class="s1">&#39;uid&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2"> refers to unknown Datum &quot;</span>
                     <span class="sa">f</span><span class="s2">&quot;datum_id </span><span class="si">{</span><span class="n">datum_id</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
-                <span class="p">)</span> <span class="kn">from</span> <span class="nn">err</span>
+                <span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="nn">err</span>
             <span class="n">resource_uid</span> <span class="o">=</span> <span class="n">datum_doc</span><span class="p">[</span><span class="s2">&quot;resource&quot;</span><span class="p">]</span>
             <span class="c1"># Look up the cached Resource.</span>
             <span class="k">try</span><span class="p">:</span>
@@ -1601,7 +1607,7 @@
                     <span class="n">resource_uid</span><span class="p">,</span>
                     <span class="sa">f</span><span class="s2">&quot;Datum with id </span><span class="si">{</span><span class="n">datum_id</span><span class="si">}</span><span class="s2"> refers to unknown Resource &quot;</span>
                     <span class="sa">f</span><span class="s2">&quot;uid </span><span class="si">{</span><span class="n">resource_uid</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
-                <span class="p">)</span> <span class="kn">from</span> <span class="nn">err</span>
+                <span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="nn">err</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_current_state</span><span class="o">.</span><span class="n">resource</span> <span class="o">=</span> <span class="n">resource</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_current_state</span><span class="o">.</span><span class="n">datum</span> <span class="o">=</span> <span class="n">datum_doc</span>
             <span class="n">handler</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_handler_maybe_cached</span><span class="p">(</span><span class="n">resource</span><span class="p">)</span>
@@ -1627,15 +1633,15 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_current_state</span><span class="o">.</span><span class="n">datum</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="k">return</span> <span class="n">filled_doc</span>
 
-    <span class="k">def</span> <span class="nf">descriptor</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">doc</span><span class="p">:</span> <span class="n">EventDescriptor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">EventDescriptor</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">descriptor</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">doc</span><span class="p">:</span> <span class="n">EventDescriptor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">EventDescriptor</span><span class="p">:</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_descriptor_cache</span><span class="p">[</span><span class="n">doc</span><span class="p">[</span><span class="s2">&quot;uid&quot;</span><span class="p">]]</span> <span class="o">=</span> <span class="n">doc</span>
         <span class="k">return</span> <span class="n">doc</span>
 
-    <span class="k">def</span> <span class="fm">__enter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__enter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span>
 
     <span class="nd">@no_type_check</span>
-    <span class="k">def</span> <span class="nf">close</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">close</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Drop cached documents and handlers.</span>
 
@@ -1653,10 +1659,10 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_descriptor_cache</span> <span class="o">=</span> <span class="kc">None</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">closed</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">closed</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_closed</span>
 
-    <span class="k">def</span> <span class="nf">clear_handler_cache</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">clear_handler_cache</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Clear any cached handler instances.</span>
 
@@ -1665,7 +1671,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_handler_cache</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
 
-    <span class="k">def</span> <span class="nf">clear_document_caches</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">clear_document_caches</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Clear any cached documents.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -1673,10 +1679,10 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_descriptor_cache</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_datum_cache</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
 
-    <span class="k">def</span> <span class="fm">__exit__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">exc_details</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__exit__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">exc_details</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 
-    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">doc</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">validate</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">dict</span><span class="p">]:</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_closed</span><span class="p">:</span>
@@ -1686,10 +1692,10 @@
         <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__call__</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">doc</span><span class="p">,</span> <span class="n">validate</span><span class="p">)</span>
 
 
-<span class="k">class</span> <span class="nc">EventModelError</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span> <span class="o">...</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">EventModelError</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span> <span class="o">...</span>
 
 
-<span class="k">def</span> <span class="nf">_attempt_with_retries</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_attempt_with_retries</span><span class="p">(</span>
     <span class="n">func</span><span class="p">,</span>
     <span class="n">args</span><span class="p">,</span>
     <span class="n">kwargs</span><span class="p">,</span>
@@ -1723,10 +1729,10 @@
     <span class="k">else</span><span class="p">:</span>
         <span class="c1"># We have used up all our attempts. There seems to be an</span>
         <span class="c1"># actual problem. Raise specified error from the error stashed above.</span>
-        <span class="k">raise</span> <span class="n">error_to_raise</span> <span class="kn">from</span> <span class="nn">error</span>
+        <span class="k">raise</span> <span class="n">error_to_raise</span> <span class="kn">from</span><span class="w"> </span><span class="nn">error</span>
 
 
-<span class="k">class</span> <span class="nc">NoFiller</span><span class="p">(</span><span class="n">Filler</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">NoFiller</span><span class="p">(</span><span class="n">Filler</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    This does not fill the documents; it merely validates them.</span>
 
@@ -1736,13 +1742,13 @@
 <span class="sd">    the information that we will need when that computation occurs.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="c1"># Do not make Filler make copies because we are not going to alter the</span>
         <span class="c1"># documents anyway.</span>
         <span class="n">kwargs</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s2">&quot;inplace&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">fill_event_page</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">fill_event_page</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">doc</span><span class="p">:</span> <span class="n">EventPage</span><span class="p">,</span>
         <span class="n">include</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Iterable</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
@@ -1759,7 +1765,7 @@
         <span class="n">filled_doc</span> <span class="o">=</span> <span class="n">pack_event_page</span><span class="p">(</span><span class="o">*</span><span class="n">filled_events</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">filled_doc</span>
 
-    <span class="k">def</span> <span class="nf">fill_event</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">fill_event</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">doc</span><span class="p">:</span> <span class="n">Event</span><span class="p">,</span>
         <span class="n">include</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Iterable</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
@@ -1795,7 +1801,7 @@
                         <span class="sa">f</span><span class="s2">&quot;event[&#39;data&#39;].keys(): </span><span class="si">{</span><span class="n">doc</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span><span class="si">}</span><span class="s2">, &quot;</span>
                         <span class="s2">&quot;descriptor[&#39;data_keys&#39;].keys(): &quot;</span>
                         <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">descriptor</span><span class="p">[</span><span class="s1">&#39;data_keys&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span>
-                    <span class="p">)</span> <span class="kn">from</span> <span class="nn">err</span>
+                    <span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="nn">err</span>
                 <span class="k">else</span><span class="p">:</span>
                     <span class="k">raise</span> <span class="n">MismatchedDataKeys</span><span class="p">(</span>
                         <span class="s2">&quot;The documents are not valid.  Either because they &quot;</span>
@@ -1806,7 +1812,7 @@
                         <span class="sa">f</span><span class="s2">&quot;event[&#39;data&#39;].keys(): </span><span class="si">{</span><span class="n">doc</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span><span class="si">}</span><span class="s2">, &quot;</span>
                         <span class="s2">&quot;event[&#39;filled&#39;].keys(): &quot;</span>
                         <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">doc</span><span class="p">[</span><span class="s1">&#39;filled&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span>
-                    <span class="p">)</span> <span class="kn">from</span> <span class="nn">err</span>
+                    <span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="nn">err</span>
             <span class="c1"># Look up the cached Datum doc.</span>
             <span class="k">try</span><span class="p">:</span>
                 <span class="n">datum_doc</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_datum_cache</span><span class="p">[</span><span class="n">datum_id</span><span class="p">]</span>
@@ -1817,7 +1823,7 @@
                     <span class="sa">f</span><span class="s2">&quot;datum_id </span><span class="si">{</span><span class="n">datum_id</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
                 <span class="p">)</span>
                 <span class="n">err_with_key</span><span class="o">.</span><span class="n">key</span> <span class="o">=</span> <span class="n">datum_id</span>
-                <span class="k">raise</span> <span class="n">err_with_key</span> <span class="kn">from</span> <span class="nn">err</span>
+                <span class="k">raise</span> <span class="n">err_with_key</span> <span class="kn">from</span><span class="w"> </span><span class="nn">err</span>
             <span class="n">resource_uid</span> <span class="o">=</span> <span class="n">datum_doc</span><span class="p">[</span><span class="s2">&quot;resource&quot;</span><span class="p">]</span>
             <span class="c1"># Look up the cached Resource.</span>
             <span class="k">try</span><span class="p">:</span>
@@ -1827,7 +1833,7 @@
                     <span class="n">datum_id</span><span class="p">,</span>
                     <span class="sa">f</span><span class="s2">&quot;Datum with id </span><span class="si">{</span><span class="n">datum_id</span><span class="si">}</span><span class="s2"> refers to unknown Resource &quot;</span>
                     <span class="sa">f</span><span class="s2">&quot;uid </span><span class="si">{</span><span class="n">resource_uid</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
-                <span class="p">)</span> <span class="kn">from</span> <span class="nn">err</span>
+                <span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="nn">err</span>
         <span class="k">return</span> <span class="n">doc</span>
 
 
@@ -1844,7 +1850,7 @@
 <span class="p">)</span>
 
 
-<span class="k">class</span> <span class="nc">RunRouter</span><span class="p">(</span><span class="n">DocumentRouter</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">RunRouter</span><span class="p">(</span><span class="n">DocumentRouter</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Routes documents, by run, to callbacks it creates from factory functions.</span>
 
@@ -1920,7 +1926,7 @@
 <span class="sd">        ``UndefinedAssetSpecification`` if some unknown spec is encountered.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">factories</span><span class="p">,</span>
         <span class="n">handler_registry</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">dict</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
@@ -1977,14 +1983,14 @@
         <span class="c1"># Map Runstart UID to instances of self.filler_class.</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_fillers</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="p">{}</span>
 
-    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="p">(</span>
             <span class="s2">&quot;RunRouter([</span><span class="se">\n</span><span class="s2">&quot;</span>
             <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;    </span><span class="si">{</span><span class="n">factory</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">for</span> <span class="n">factory</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">factories</span><span class="p">)</span>
             <span class="o">+</span> <span class="s2">&quot;])&quot;</span>
         <span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">start</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">start_doc</span><span class="p">:</span> <span class="n">RunStart</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">start</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">start_doc</span><span class="p">:</span> <span class="n">RunStart</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">uid</span> <span class="o">=</span> <span class="n">start_doc</span><span class="p">[</span><span class="s2">&quot;uid&quot;</span><span class="p">]</span>
         <span class="c1"># If we get the same uid twice, weird things will happen, so check for</span>
         <span class="c1"># that and give a nice error message.</span>
@@ -2024,7 +2030,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">_factory_cbs_by_start</span><span class="p">[</span><span class="n">uid</span><span class="p">]</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">callbacks</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_subfactories</span><span class="p">[</span><span class="n">uid</span><span class="p">]</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">subfactories</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">descriptor</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">descriptor_doc</span><span class="p">:</span> <span class="n">EventDescriptor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">descriptor</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">descriptor_doc</span><span class="p">:</span> <span class="n">EventDescriptor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">descriptor_uid</span> <span class="o">=</span> <span class="n">descriptor_doc</span><span class="p">[</span><span class="s2">&quot;uid&quot;</span><span class="p">]</span>
         <span class="n">start_uid</span> <span class="o">=</span> <span class="n">descriptor_doc</span><span class="p">[</span><span class="s2">&quot;run_start&quot;</span><span class="p">]</span>
 
@@ -2069,7 +2075,7 @@
                     <span class="p">)</span>
                     <span class="k">raise</span> <span class="n">err</span>
 
-    <span class="k">def</span> <span class="nf">event_page</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">doc</span><span class="p">:</span> <span class="n">EventPage</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">event_page</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">doc</span><span class="p">:</span> <span class="n">EventPage</span><span class="p">):</span>
         <span class="n">descriptor_uid</span> <span class="o">=</span> <span class="n">doc</span><span class="p">[</span><span class="s2">&quot;descriptor&quot;</span><span class="p">]</span>
         <span class="n">start_uid</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_descriptor_to_start</span><span class="p">[</span><span class="n">descriptor_uid</span><span class="p">]</span>
         <span class="k">try</span><span class="p">:</span>
@@ -2082,7 +2088,7 @@
         <span class="k">for</span> <span class="n">callback</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_subfactory_cbs_by_descriptor</span><span class="p">[</span><span class="n">descriptor_uid</span><span class="p">]:</span>
             <span class="n">callback</span><span class="p">(</span><span class="s2">&quot;event_page&quot;</span><span class="p">,</span> <span class="n">doc</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">datum_page</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">doc</span><span class="p">:</span> <span class="n">DatumPage</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">datum_page</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">doc</span><span class="p">:</span> <span class="n">DatumPage</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">resource_uid</span> <span class="o">=</span> <span class="n">doc</span><span class="p">[</span><span class="s2">&quot;resource&quot;</span><span class="p">]</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="n">start_uid</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_resources</span><span class="p">[</span><span class="n">resource_uid</span><span class="p">]</span>
@@ -2091,7 +2097,7 @@
                 <span class="k">raise</span> <span class="n">UnresolvableForeignKeyError</span><span class="p">(</span>
                     <span class="n">resource_uid</span><span class="p">,</span>
                     <span class="sa">f</span><span class="s2">&quot;DatumPage refers to unknown Resource uid </span><span class="si">{</span><span class="n">resource_uid</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
-                <span class="p">)</span> <span class="kn">from</span> <span class="nn">error</span>
+                <span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="nn">error</span>
             <span class="c1"># Old Resources do not have a reference to a RunStart document,</span>
             <span class="c1"># so in turn we cannot immediately tell which run these datum</span>
             <span class="c1"># documents belong to.</span>
@@ -2113,7 +2119,7 @@
             <span class="k">for</span> <span class="n">callback</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_subfactory_cbs_by_start</span><span class="p">[</span><span class="n">start_uid</span><span class="p">]:</span>
                 <span class="n">callback</span><span class="p">(</span><span class="s2">&quot;datum_page&quot;</span><span class="p">,</span> <span class="n">doc</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">stream_datum</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">doc</span><span class="p">:</span> <span class="n">StreamDatum</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">stream_datum</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">doc</span><span class="p">:</span> <span class="n">StreamDatum</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">resource_uid</span> <span class="o">=</span> <span class="n">doc</span><span class="p">[</span><span class="s2">&quot;stream_resource&quot;</span><span class="p">]</span>
         <span class="n">start_uid</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_stream_resources</span><span class="p">[</span><span class="n">resource_uid</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_fillers</span><span class="p">[</span><span class="n">start_uid</span><span class="p">]</span><span class="o">.</span><span class="n">stream_datum</span><span class="p">(</span><span class="n">doc</span><span class="p">)</span>
@@ -2122,7 +2128,7 @@
         <span class="k">for</span> <span class="n">callback</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_subfactory_cbs_by_start</span><span class="p">[</span><span class="n">start_uid</span><span class="p">]:</span>
             <span class="n">callback</span><span class="p">(</span><span class="s2">&quot;stream_datum&quot;</span><span class="p">,</span> <span class="n">doc</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">resource</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">doc</span><span class="p">:</span> <span class="n">Resource</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">resource</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">doc</span><span class="p">:</span> <span class="n">Resource</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="n">start_uid</span> <span class="o">=</span> <span class="n">doc</span><span class="p">[</span><span class="s2">&quot;run_start&quot;</span><span class="p">]</span>
         <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
@@ -2147,7 +2153,7 @@
             <span class="k">for</span> <span class="n">callback</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_subfactory_cbs_by_start</span><span class="p">[</span><span class="n">start_uid</span><span class="p">]:</span>
                 <span class="n">callback</span><span class="p">(</span><span class="s2">&quot;resource&quot;</span><span class="p">,</span> <span class="n">doc</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">stream_resource</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">doc</span><span class="p">:</span> <span class="n">StreamResource</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">stream_resource</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">doc</span><span class="p">:</span> <span class="n">StreamResource</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">start_uid</span> <span class="o">=</span> <span class="n">doc</span><span class="p">[</span><span class="s2">&quot;run_start&quot;</span><span class="p">]</span>  <span class="c1"># No need for Try</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_fillers</span><span class="p">[</span><span class="n">start_uid</span><span class="p">]</span><span class="o">.</span><span class="n">stream_resource</span><span class="p">(</span><span class="n">doc</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_stream_resources</span><span class="p">[</span><span class="n">doc</span><span class="p">[</span><span class="s2">&quot;uid&quot;</span><span class="p">]]</span> <span class="o">=</span> <span class="n">doc</span><span class="p">[</span><span class="s2">&quot;run_start&quot;</span><span class="p">]</span>
@@ -2156,7 +2162,7 @@
         <span class="k">for</span> <span class="n">callback</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_subfactory_cbs_by_start</span><span class="p">[</span><span class="n">start_uid</span><span class="p">]:</span>
             <span class="n">callback</span><span class="p">(</span><span class="s2">&quot;stream_resource&quot;</span><span class="p">,</span> <span class="n">doc</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">stop</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">doc</span><span class="p">:</span> <span class="n">RunStop</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">stop</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">doc</span><span class="p">:</span> <span class="n">RunStop</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">start_uid</span> <span class="o">=</span> <span class="n">doc</span><span class="p">[</span><span class="s2">&quot;run_start&quot;</span><span class="p">]</span>
         <span class="k">for</span> <span class="n">callback</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_factory_cbs_by_start</span><span class="p">[</span><span class="n">start_uid</span><span class="p">]:</span>
             <span class="n">callback</span><span class="p">(</span><span class="s2">&quot;stop&quot;</span><span class="p">,</span> <span class="n">doc</span><span class="p">)</span>
@@ -2183,60 +2189,60 @@
 <span class="c1"># useful for higher-level libraries and for debugging.</span>
 
 
-<span class="k">class</span> <span class="nc">EventModelKeyError</span><span class="p">(</span><span class="n">EventModelError</span><span class="p">,</span> <span class="ne">KeyError</span><span class="p">):</span> <span class="o">...</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">EventModelKeyError</span><span class="p">(</span><span class="n">EventModelError</span><span class="p">,</span> <span class="ne">KeyError</span><span class="p">):</span> <span class="o">...</span>
 
 
-<span class="k">class</span> <span class="nc">EventModelValueError</span><span class="p">(</span><span class="n">EventModelError</span><span class="p">,</span> <span class="ne">ValueError</span><span class="p">):</span> <span class="o">...</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">EventModelValueError</span><span class="p">(</span><span class="n">EventModelError</span><span class="p">,</span> <span class="ne">ValueError</span><span class="p">):</span> <span class="o">...</span>
 
 
-<span class="k">class</span> <span class="nc">EventModelRuntimeError</span><span class="p">(</span><span class="n">EventModelError</span><span class="p">,</span> <span class="ne">RuntimeError</span><span class="p">):</span> <span class="o">...</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">EventModelRuntimeError</span><span class="p">(</span><span class="n">EventModelError</span><span class="p">,</span> <span class="ne">RuntimeError</span><span class="p">):</span> <span class="o">...</span>
 
 
-<span class="k">class</span> <span class="nc">EventModelTypeError</span><span class="p">(</span><span class="n">EventModelError</span><span class="p">,</span> <span class="ne">TypeError</span><span class="p">):</span> <span class="o">...</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">EventModelTypeError</span><span class="p">(</span><span class="n">EventModelError</span><span class="p">,</span> <span class="ne">TypeError</span><span class="p">):</span> <span class="o">...</span>
 
 
-<span class="k">class</span> <span class="nc">EventModelValidationError</span><span class="p">(</span><span class="n">EventModelError</span><span class="p">):</span> <span class="o">...</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">EventModelValidationError</span><span class="p">(</span><span class="n">EventModelError</span><span class="p">):</span> <span class="o">...</span>
 
 
-<span class="k">class</span> <span class="nc">UnfilledData</span><span class="p">(</span><span class="n">EventModelError</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">UnfilledData</span><span class="p">(</span><span class="n">EventModelError</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;raised when unfilled data is found&quot;&quot;&quot;</span>
 
     <span class="o">...</span>
 
 
-<span class="k">class</span> <span class="nc">UndefinedAssetSpecification</span><span class="p">(</span><span class="n">EventModelKeyError</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">UndefinedAssetSpecification</span><span class="p">(</span><span class="n">EventModelKeyError</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;raised when a resource spec is missing from the handler registry&quot;&quot;&quot;</span>
 
     <span class="o">...</span>
 
 
-<span class="k">class</span> <span class="nc">DataNotAccessible</span><span class="p">(</span><span class="n">EventModelError</span><span class="p">,</span> <span class="ne">IOError</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">DataNotAccessible</span><span class="p">(</span><span class="n">EventModelError</span><span class="p">,</span> <span class="ne">IOError</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;raised when attempts to load data referenced by Datum document fail&quot;&quot;&quot;</span>
 
     <span class="o">...</span>
 
 
-<span class="k">class</span> <span class="nc">UnresolvableForeignKeyError</span><span class="p">(</span><span class="n">EventModelValueError</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">UnresolvableForeignKeyError</span><span class="p">(</span><span class="n">EventModelValueError</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;when we see a foreign before we see the thing to which it refers&quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">message</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">message</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">key</span> <span class="o">=</span> <span class="n">key</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">message</span> <span class="o">=</span> <span class="n">message</span>
 
 
-<span class="k">class</span> <span class="nc">DuplicateHandler</span><span class="p">(</span><span class="n">EventModelRuntimeError</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">DuplicateHandler</span><span class="p">(</span><span class="n">EventModelRuntimeError</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;raised when a handler is already registered for a given spec&quot;&quot;&quot;</span>
 
     <span class="o">...</span>
 
 
-<span class="k">class</span> <span class="nc">InvalidData</span><span class="p">(</span><span class="n">EventModelError</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">InvalidData</span><span class="p">(</span><span class="n">EventModelError</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;raised when the data is invalid&quot;&quot;&quot;</span>
 
     <span class="o">...</span>
 
 
-<span class="k">class</span> <span class="nc">MismatchedDataKeys</span><span class="p">(</span><span class="n">InvalidData</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">MismatchedDataKeys</span><span class="p">(</span><span class="n">InvalidData</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Raised when any data keys structures are out of sync. This includes,</span>
 <span class="sd">    event[&#39;data&#39;].keys(), descriptor[&#39;data_keys&#39;].keys(),</span>
@@ -2269,7 +2275,7 @@
         <span class="n">schemas</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
 
 
-<span class="k">def</span> <span class="nf">_is_array</span><span class="p">(</span><span class="n">checker</span><span class="p">,</span> <span class="n">instance</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_is_array</span><span class="p">(</span><span class="n">checker</span><span class="p">,</span> <span class="n">instance</span><span class="p">):</span>
     <span class="k">return</span> <span class="p">(</span>
         <span class="n">jsonschema</span><span class="o">.</span><span class="n">validators</span><span class="o">.</span><span class="n">Draft202012Validator</span><span class="o">.</span><span class="n">TYPE_CHECKER</span><span class="o">.</span><span class="n">is_type</span><span class="p">(</span>
             <span class="n">instance</span><span class="p">,</span> <span class="s2">&quot;array&quot;</span>
@@ -2293,11 +2299,11 @@
 
 
 <span class="nd">@dataclass</span>
-<span class="k">class</span> <span class="nc">ComposeDatum</span><span class="p">:</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">ComposeDatum</span><span class="p">:</span>
     <span class="n">resource</span><span class="p">:</span> <span class="n">Resource</span>
     <span class="n">counter</span><span class="p">:</span> <span class="n">Iterator</span>
 
-    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">datum_kwargs</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="n">validate</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Datum</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">datum_kwargs</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="n">validate</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Datum</span><span class="p">:</span>
         <span class="n">resource_uid</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">resource</span><span class="p">[</span><span class="s2">&quot;uid&quot;</span><span class="p">]</span>
         <span class="n">doc</span> <span class="o">=</span> <span class="n">Datum</span><span class="p">(</span>
             <span class="n">resource</span><span class="o">=</span><span class="n">resource_uid</span><span class="p">,</span>
@@ -2309,7 +2315,7 @@
         <span class="k">return</span> <span class="n">doc</span>
 
 
-<span class="k">def</span> <span class="nf">compose_datum</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">compose_datum</span><span class="p">(</span>
     <span class="o">*</span><span class="p">,</span>
     <span class="n">resource</span><span class="p">:</span> <span class="n">Resource</span><span class="p">,</span>
     <span class="n">counter</span><span class="p">:</span> <span class="n">Iterator</span><span class="p">,</span>
@@ -2323,11 +2329,11 @@
 
 
 <span class="nd">@dataclass</span>
-<span class="k">class</span> <span class="nc">ComposeDatumPage</span><span class="p">:</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">ComposeDatumPage</span><span class="p">:</span>
     <span class="n">resource</span><span class="p">:</span> <span class="n">Resource</span>
     <span class="n">counter</span><span class="p">:</span> <span class="n">Iterator</span>
 
-    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">datum_kwargs</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">validate</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">DatumPage</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">datum_kwargs</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">validate</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">DatumPage</span><span class="p">:</span>
         <span class="n">resource_uid</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">resource</span><span class="p">[</span><span class="s2">&quot;uid&quot;</span><span class="p">]</span>
         <span class="n">any_column</span><span class="p">,</span> <span class="o">*</span><span class="n">_</span> <span class="o">=</span> <span class="n">datum_kwargs</span><span class="o">.</span><span class="n">values</span><span class="p">()</span>
         <span class="n">N</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">any_column</span><span class="p">)</span>
@@ -2341,7 +2347,7 @@
         <span class="k">return</span> <span class="n">doc</span>
 
 
-<span class="k">def</span> <span class="nf">compose_datum_page</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">compose_datum_page</span><span class="p">(</span>
     <span class="o">*</span><span class="p">,</span>
     <span class="n">resource</span><span class="p">:</span> <span class="n">Resource</span><span class="p">,</span>
     <span class="n">counter</span><span class="p">:</span> <span class="n">Iterator</span><span class="p">,</span>
@@ -2355,13 +2361,13 @@
 
 
 <span class="nd">@dataclass</span>
-<span class="k">class</span> <span class="nc">ComposeResourceBundle</span><span class="p">:</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">ComposeResourceBundle</span><span class="p">:</span>
     <span class="n">resource_doc</span><span class="p">:</span> <span class="n">Resource</span>
     <span class="n">compose_datum</span><span class="p">:</span> <span class="n">ComposeDatum</span>
     <span class="n">compose_datum_page</span><span class="p">:</span> <span class="n">ComposeDatumPage</span>
 
     <span class="c1"># iter for backwards compatibility</span>
-    <span class="k">def</span> <span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterator</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterator</span><span class="p">:</span>
         <span class="k">return</span> <span class="nb">iter</span><span class="p">(</span>
             <span class="p">(</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">resource_doc</span><span class="p">,</span>
@@ -2379,10 +2385,10 @@
 
 
 <span class="nd">@dataclass</span>
-<span class="k">class</span> <span class="nc">ComposeResource</span><span class="p">:</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">ComposeResource</span><span class="p">:</span>
     <span class="n">start</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">RunStart</span><span class="p">]</span>
 
-    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">spec</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
         <span class="n">root</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
@@ -2418,7 +2424,7 @@
         <span class="p">)</span>
 
 
-<span class="k">def</span> <span class="nf">compose_resource</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">compose_resource</span><span class="p">(</span>
     <span class="o">*</span><span class="p">,</span>
     <span class="n">spec</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="n">root</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
@@ -2444,11 +2450,11 @@
 
 
 <span class="nd">@dataclass</span>
-<span class="k">class</span> <span class="nc">ComposeStreamDatum</span><span class="p">:</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">ComposeStreamDatum</span><span class="p">:</span>
     <span class="n">stream_resource</span><span class="p">:</span> <span class="n">StreamResource</span>
     <span class="n">counter</span><span class="p">:</span> <span class="n">Iterator</span>
 
-    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">indices</span><span class="p">:</span> <span class="n">StreamRange</span><span class="p">,</span>
         <span class="n">seq_nums</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">StreamRange</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
@@ -2476,7 +2482,7 @@
         <span class="k">return</span> <span class="n">doc</span>
 
 
-<span class="k">def</span> <span class="nf">compose_stream_datum</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">compose_stream_datum</span><span class="p">(</span>
     <span class="o">*</span><span class="p">,</span>
     <span class="n">stream_resource</span><span class="p">:</span> <span class="n">StreamResource</span><span class="p">,</span>
     <span class="n">counter</span><span class="p">:</span> <span class="n">Iterator</span><span class="p">,</span>
@@ -2500,12 +2506,12 @@
 
 
 <span class="nd">@dataclass</span>
-<span class="k">class</span> <span class="nc">ComposeStreamResourceBundle</span><span class="p">:</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">ComposeStreamResourceBundle</span><span class="p">:</span>
     <span class="n">stream_resource_doc</span><span class="p">:</span> <span class="n">StreamResource</span>
     <span class="n">compose_stream_datum</span><span class="p">:</span> <span class="n">ComposeStreamDatum</span>
 
     <span class="c1"># iter for backwards compatibility</span>
-    <span class="k">def</span> <span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterator</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterator</span><span class="p">:</span>
         <span class="k">return</span> <span class="nb">iter</span><span class="p">(</span>
             <span class="p">(</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">stream_resource_doc</span><span class="p">,</span>
@@ -2515,10 +2521,10 @@
 
 
 <span class="nd">@dataclass</span>
-<span class="k">class</span> <span class="nc">ComposeStreamResource</span><span class="p">:</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">ComposeStreamResource</span><span class="p">:</span>
     <span class="n">start</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">RunStart</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
 
-    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">mimetype</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
         <span class="n">uri</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
@@ -2553,7 +2559,7 @@
         <span class="p">)</span>
 
 
-<span class="k">def</span> <span class="nf">compose_stream_resource</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">compose_stream_resource</span><span class="p">(</span>
     <span class="o">*</span><span class="p">,</span>
     <span class="n">mimetype</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="n">uri</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
@@ -2577,12 +2583,12 @@
 
 
 <span class="nd">@dataclass</span>
-<span class="k">class</span> <span class="nc">ComposeStop</span><span class="p">:</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">ComposeStop</span><span class="p">:</span>
     <span class="n">start</span><span class="p">:</span> <span class="n">RunStart</span>
     <span class="n">event_counters</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span>
     <span class="n">poison_pill</span><span class="p">:</span> <span class="n">List</span>
 
-    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">exit_status</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;success&quot;</span><span class="p">,</span> <span class="s2">&quot;abort&quot;</span><span class="p">,</span> <span class="s2">&quot;fail&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;success&quot;</span><span class="p">,</span>
         <span class="n">reason</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
@@ -2614,7 +2620,7 @@
         <span class="k">return</span> <span class="n">doc</span>
 
 
-<span class="k">def</span> <span class="nf">compose_stop</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">compose_stop</span><span class="p">(</span>
     <span class="o">*</span><span class="p">,</span>
     <span class="n">start</span><span class="p">:</span> <span class="n">RunStart</span><span class="p">,</span>
     <span class="n">event_counters</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">],</span>
@@ -2635,7 +2641,7 @@
     <span class="p">)(</span><span class="n">exit_status</span><span class="o">=</span><span class="n">exit_status</span><span class="p">,</span> <span class="n">reason</span><span class="o">=</span><span class="n">reason</span><span class="p">,</span> <span class="n">uid</span><span class="o">=</span><span class="n">uid</span><span class="p">,</span> <span class="n">time</span><span class="o">=</span><span class="n">time</span><span class="p">,</span> <span class="n">validate</span><span class="o">=</span><span class="n">validate</span><span class="p">)</span>
 
 
-<span class="k">def</span> <span class="nf">length_of_value</span><span class="p">(</span><span class="n">dictionary</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">List</span><span class="p">],</span> <span class="n">error_msg</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]:</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">length_of_value</span><span class="p">(</span><span class="n">dictionary</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">List</span><span class="p">],</span> <span class="n">error_msg</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]:</span>
     <span class="n">length</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">dictionary</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
         <span class="n">v_len</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
@@ -2647,11 +2653,11 @@
 
 
 <span class="nd">@dataclass</span>
-<span class="k">class</span> <span class="nc">ComposeEventPage</span><span class="p">:</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">ComposeEventPage</span><span class="p">:</span>
     <span class="n">descriptor</span><span class="p">:</span> <span class="n">EventDescriptor</span>
     <span class="n">event_counters</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span>
 
-    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">data</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">List</span><span class="p">],</span>
         <span class="n">timestamps</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span>
@@ -2731,7 +2737,7 @@
         <span class="k">return</span> <span class="n">doc</span>
 
 
-<span class="k">def</span> <span class="nf">compose_event_page</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">compose_event_page</span><span class="p">(</span>
     <span class="o">*</span><span class="p">,</span>
     <span class="n">descriptor</span><span class="p">:</span> <span class="n">EventDescriptor</span><span class="p">,</span>
     <span class="n">event_counters</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">],</span>
@@ -2757,7 +2763,7 @@
     <span class="p">)</span>
 
 
-<span class="k">def</span> <span class="nf">keys_without_stream_keys</span><span class="p">(</span><span class="n">dictionary</span><span class="p">,</span> <span class="n">descriptor_data_keys</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">keys_without_stream_keys</span><span class="p">(</span><span class="n">dictionary</span><span class="p">,</span> <span class="n">descriptor_data_keys</span><span class="p">):</span>
     <span class="k">return</span> <span class="p">[</span>
         <span class="n">key</span>
         <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">dictionary</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
@@ -2769,11 +2775,11 @@
 
 
 <span class="nd">@dataclass</span>
-<span class="k">class</span> <span class="nc">ComposeEvent</span><span class="p">:</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">ComposeEvent</span><span class="p">:</span>
     <span class="n">descriptor</span><span class="p">:</span> <span class="n">EventDescriptor</span>
     <span class="n">event_counters</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span>
 
-    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">data</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span>
         <span class="n">timestamps</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span>
@@ -2834,7 +2840,7 @@
         <span class="k">return</span> <span class="n">doc</span>
 
 
-<span class="k">def</span> <span class="nf">compose_event</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">compose_event</span><span class="p">(</span>
     <span class="o">*</span><span class="p">,</span>
     <span class="n">descriptor</span><span class="p">:</span> <span class="n">EventDescriptor</span><span class="p">,</span>
     <span class="n">event_counters</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">],</span>
@@ -2861,12 +2867,12 @@
 
 
 <span class="nd">@dataclass</span>
-<span class="k">class</span> <span class="nc">ComposeDescriptorBundle</span><span class="p">:</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">ComposeDescriptorBundle</span><span class="p">:</span>
     <span class="n">descriptor_doc</span><span class="p">:</span> <span class="n">EventDescriptor</span>
     <span class="n">compose_event</span><span class="p">:</span> <span class="n">ComposeEvent</span>
     <span class="n">compose_event_page</span><span class="p">:</span> <span class="n">ComposeEventPage</span>
 
-    <span class="k">def</span> <span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterator</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterator</span><span class="p">:</span>
         <span class="k">return</span> <span class="nb">iter</span><span class="p">(</span>
             <span class="p">(</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">descriptor_doc</span><span class="p">,</span>
@@ -2877,12 +2883,12 @@
 
 
 <span class="nd">@dataclass</span>
-<span class="k">class</span> <span class="nc">ComposeDescriptor</span><span class="p">:</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">ComposeDescriptor</span><span class="p">:</span>
     <span class="n">start</span><span class="p">:</span> <span class="n">RunStart</span>
     <span class="n">streams</span><span class="p">:</span> <span class="nb">dict</span>
     <span class="n">event_counters</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span>
 
-    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">name</span><span class="p">,</span>
         <span class="n">data_keys</span><span class="p">,</span>
@@ -2939,7 +2945,7 @@
         <span class="p">)</span>
 
 
-<span class="k">def</span> <span class="nf">compose_descriptor</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">compose_descriptor</span><span class="p">(</span>
     <span class="o">*</span><span class="p">,</span>
     <span class="n">start</span><span class="p">:</span> <span class="n">RunStart</span><span class="p">,</span>
     <span class="n">streams</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">],</span>
@@ -2969,7 +2975,7 @@
 
 
 <span class="nd">@dataclass</span>
-<span class="k">class</span> <span class="nc">ComposeRunBundle</span><span class="p">:</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">ComposeRunBundle</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Extensible compose run bundle. This maintains backward compatibility</span>
 <span class="sd">    by unpacking into a basic run bundle</span>
 <span class="sd">    (start, compose_descriptor, compose_resource, stop).</span>
@@ -2984,7 +2990,7 @@
     <span class="n">compose_stream_resource</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">ComposeStreamResource</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
 
     <span class="c1"># iter for backwards compatibility</span>
-    <span class="k">def</span> <span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterator</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterator</span><span class="p">:</span>
         <span class="k">return</span> <span class="nb">iter</span><span class="p">(</span>
             <span class="p">(</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">start_doc</span><span class="p">,</span>
@@ -2997,7 +3003,7 @@
 
 <div class="viewcode-block" id="compose_run">
 <a class="viewcode-back" href="../_api/event_model.html#event_model.compose_run">[docs]</a>
-<span class="k">def</span> <span class="nf">compose_run</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">compose_run</span><span class="p">(</span>
     <span class="o">*</span><span class="p">,</span>
     <span class="n">uid</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">time</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
@@ -3064,7 +3070,7 @@
 
 
 
-<span class="k">def</span> <span class="nf">pack_event_page</span><span class="p">(</span><span class="o">*</span><span class="n">events</span><span class="p">:</span> <span class="n">Event</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">EventPage</span><span class="p">:</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">pack_event_page</span><span class="p">(</span><span class="o">*</span><span class="n">events</span><span class="p">:</span> <span class="n">Event</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">EventPage</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Transform one or more Event documents into an EventPage document.</span>
 
@@ -3108,7 +3114,7 @@
     <span class="k">return</span> <span class="n">event_page</span>
 
 
-<span class="k">def</span> <span class="nf">unpack_event_page</span><span class="p">(</span><span class="n">event_page</span><span class="p">:</span> <span class="n">EventPage</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Generator</span><span class="p">:</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">unpack_event_page</span><span class="p">(</span><span class="n">event_page</span><span class="p">:</span> <span class="n">EventPage</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Generator</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Transform an EventPage document into individual Event documents.</span>
 
@@ -3144,7 +3150,7 @@
         <span class="p">)</span>
 
 
-<span class="k">def</span> <span class="nf">pack_datum_page</span><span class="p">(</span><span class="o">*</span><span class="n">datum</span><span class="p">:</span> <span class="n">Datum</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">DatumPage</span><span class="p">:</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">pack_datum_page</span><span class="p">(</span><span class="o">*</span><span class="n">datum</span><span class="p">:</span> <span class="n">Datum</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">DatumPage</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Transform one or more Datum documents into a DatumPage document.</span>
 
@@ -3176,7 +3182,7 @@
     <span class="k">return</span> <span class="n">datum_page</span>
 
 
-<span class="k">def</span> <span class="nf">unpack_datum_page</span><span class="p">(</span><span class="n">datum_page</span><span class="p">:</span> <span class="n">DatumPage</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Generator</span><span class="p">:</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">unpack_datum_page</span><span class="p">(</span><span class="n">datum_page</span><span class="p">:</span> <span class="n">DatumPage</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Generator</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Transform a DatumPage document into individual Datum documents.</span>
 
@@ -3198,7 +3204,7 @@
         <span class="k">yield</span> <span class="n">Datum</span><span class="p">(</span><span class="n">datum_id</span><span class="o">=</span><span class="n">datum_id</span><span class="p">,</span> <span class="n">datum_kwargs</span><span class="o">=</span><span class="n">datum_kwargs</span><span class="p">,</span> <span class="n">resource</span><span class="o">=</span><span class="n">resource</span><span class="p">)</span>
 
 
-<span class="k">def</span> <span class="nf">rechunk_event_pages</span><span class="p">(</span><span class="n">event_pages</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">,</span> <span class="n">chunk_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Generator</span><span class="p">:</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">rechunk_event_pages</span><span class="p">(</span><span class="n">event_pages</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">,</span> <span class="n">chunk_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Generator</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Resizes the event_pages in a iterable of event_pages.</span>
 
@@ -3216,7 +3222,7 @@
     <span class="n">remainder</span> <span class="o">=</span> <span class="n">chunk_size</span>
     <span class="n">chunk_list</span> <span class="o">=</span> <span class="p">[]</span>
 
-    <span class="k">def</span> <span class="nf">page_chunks</span><span class="p">(</span><span class="n">page</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">chunk_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">remainder</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Generator</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">page_chunks</span><span class="p">(</span><span class="n">page</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">chunk_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">remainder</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Generator</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Yields chunks of a event_page.</span>
 <span class="sd">        The first chunk will be of size remainder, the following chunks will be</span>
@@ -3261,7 +3267,7 @@
         <span class="k">yield</span> <span class="n">merge_event_pages</span><span class="p">(</span><span class="n">chunk_list</span><span class="p">)</span>
 
 
-<span class="k">def</span> <span class="nf">merge_event_pages</span><span class="p">(</span><span class="n">event_pages</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">EventPage</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">EventPage</span><span class="p">:</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">merge_event_pages</span><span class="p">(</span><span class="n">event_pages</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">EventPage</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">EventPage</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Combines a iterable of event_pages to a single event_page.</span>
 
@@ -3309,7 +3315,7 @@
     <span class="k">return</span> <span class="n">cast</span><span class="p">(</span><span class="n">EventPage</span><span class="p">,</span> <span class="n">doc</span><span class="p">)</span>
 
 
-<span class="k">def</span> <span class="nf">rechunk_datum_pages</span><span class="p">(</span><span class="n">datum_pages</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">,</span> <span class="n">chunk_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Generator</span><span class="p">:</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">rechunk_datum_pages</span><span class="p">(</span><span class="n">datum_pages</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">,</span> <span class="n">chunk_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Generator</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Resizes the datum_pages in a iterable of event_pages.</span>
 
@@ -3327,7 +3333,7 @@
     <span class="n">remainder</span> <span class="o">=</span> <span class="n">chunk_size</span>
     <span class="n">chunk_list</span> <span class="o">=</span> <span class="p">[]</span>
 
-    <span class="k">def</span> <span class="nf">page_chunks</span><span class="p">(</span><span class="n">page</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">chunk_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">remainder</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Generator</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">page_chunks</span><span class="p">(</span><span class="n">page</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">chunk_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">remainder</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Generator</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Yields chunks of a datum_page.</span>
 <span class="sd">        The first chunk will be of size remainder, the following chunks will be</span>
@@ -3366,7 +3372,7 @@
         <span class="k">yield</span> <span class="n">merge_datum_pages</span><span class="p">(</span><span class="n">chunk_list</span><span class="p">)</span>
 
 
-<span class="k">def</span> <span class="nf">merge_datum_pages</span><span class="p">(</span><span class="n">datum_pages</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">DatumPage</span><span class="p">:</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">merge_datum_pages</span><span class="p">(</span><span class="n">datum_pages</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">DatumPage</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Combines a iterable of datum_pages to a single datum_page.</span>
 
@@ -3403,7 +3409,7 @@
     <span class="k">return</span> <span class="n">cast</span><span class="p">(</span><span class="n">DatumPage</span><span class="p">,</span> <span class="n">doc</span><span class="p">)</span>
 
 
-<span class="k">def</span> <span class="nf">bulk_events_to_event_pages</span><span class="p">(</span><span class="n">bulk_events</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">bulk_events_to_event_pages</span><span class="p">(</span><span class="n">bulk_events</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Transform a BulkEvents document into a list of EventPage documents.</span>
 
@@ -3446,7 +3452,7 @@
     <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="n">event_pages</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
 
 
-<span class="k">def</span> <span class="nf">bulk_datum_to_datum_page</span><span class="p">(</span><span class="n">bulk_datum</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">DatumPage</span><span class="p">:</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">bulk_datum_to_datum_page</span><span class="p">(</span><span class="n">bulk_datum</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">DatumPage</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Transform one BulkDatum into one DatumPage.</span>
 
@@ -3462,7 +3468,7 @@
     <span class="k">return</span> <span class="n">datum_page</span>
 
 
-<span class="k">def</span> <span class="nf">_transpose_list_of_dicts</span><span class="p">(</span><span class="n">list_of_dicts</span><span class="p">:</span> <span class="nb">list</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_transpose_list_of_dicts</span><span class="p">(</span><span class="n">list_of_dicts</span><span class="p">:</span> <span class="nb">list</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
     <span class="s2">&quot;Transform list-of-dicts into dict-of-lists (i.e. DataFrame-like).&quot;</span>
     <span class="n">dict_of_lists</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span><span class="nb">list</span><span class="p">)</span>
     <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">list_of_dicts</span><span class="p">:</span>
@@ -3471,7 +3477,7 @@
     <span class="k">return</span> <span class="nb">dict</span><span class="p">(</span><span class="n">dict_of_lists</span><span class="p">)</span>
 
 
-<span class="k">def</span> <span class="nf">_transpose_dict_of_lists</span><span class="p">(</span><span class="n">dict_of_lists</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_transpose_dict_of_lists</span><span class="p">(</span><span class="n">dict_of_lists</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
     <span class="s2">&quot;Transform dict-of-lists (i.e. DataFrame-like) into list-of-dicts.&quot;</span>
     <span class="n">list_of_dicts</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="n">keys</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">dict_of_lists</span><span class="p">)</span>
@@ -3480,7 +3486,7 @@
     <span class="k">return</span> <span class="n">list_of_dicts</span>
 
 
-<span class="k">def</span> <span class="nf">verify_filled</span><span class="p">(</span><span class="n">event_page</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">verify_filled</span><span class="p">(</span><span class="n">event_page</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Take an event_page document and verify that it is completely filled.</span>
 
 <span class="sd">    Parameters</span>
@@ -3507,7 +3513,7 @@
                 <span class="p">)</span>
 
 
-<span class="k">def</span> <span class="nf">sanitize_doc</span><span class="p">(</span><span class="n">doc</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">sanitize_doc</span><span class="p">(</span><span class="n">doc</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Return a copy with any numpy objects converted to built-in Python types.</span>
 
 <span class="sd">    This function takes in an event-model document and returns a copy with any</span>
@@ -3529,7 +3535,7 @@
     <span class="k">return</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">doc</span><span class="p">,</span> <span class="bp">cls</span><span class="o">=</span><span class="n">NumpyEncoder</span><span class="p">))</span>
 
 
-<span class="k">class</span> <span class="nc">NumpyEncoder</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">JSONEncoder</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">NumpyEncoder</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">JSONEncoder</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    A json.JSONEncoder for encoding numpy objects using built-in Python types.</span>
 
@@ -3543,9 +3549,9 @@
 
     <span class="c1"># Credit: https://stackoverflow.com/a/47626762/1221924</span>
     <span class="nd">@no_type_check</span>
-    <span class="k">def</span> <span class="nf">default</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj</span><span class="p">:</span> <span class="nb">object</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">default</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj</span><span class="p">:</span> <span class="nb">object</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
         <span class="k">try</span><span class="p">:</span>
-            <span class="kn">import</span> <span class="nn">dask.array</span>
+            <span class="kn">import</span><span class="w"> </span><span class="nn">dask.array</span>
 
             <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">dask</span><span class="o">.</span><span class="n">array</span><span class="o">.</span><span class="n">Array</span><span class="p">):</span>
                 <span class="n">obj</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
@@ -3585,8 +3591,8 @@
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="../_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549"></script>
-<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549"></script>
+  <script defer src="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">
@@ -3597,7 +3603,8 @@
       
         <div class="footer-item">
 <p class="theme-version">
-  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.0.
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.1.
 </p></div>
       
     </div>
