@@ -15,6 +15,12 @@ This repository contains the formal schemas for bluesky's streaming data model
 and some Python tooling for composing, validating, and transforming documents
 in the model.
 
+Source          | <https://github.com/bluesky/event-model>
+:---:           | :---:
+PyPI            | `pip install event-model`
+Documentation   | <https://bluesky.github.io/event-model>
+Releases        | <https://github.com/bluesky/event-model/releases>
+
 ## Where is my data?
 
 For the full details and schema please see the `data_model` section.  This is a very quick guide to where
@@ -32,4 +38,4 @@ you should look for / put different kinds of information
 
 <!-- README only content. Anything below this line won't be included in index.md -->
 
-See https://bluesky.github.io/event-model for more detailed documentation.
+See <https://bluesky.github.io/event-model> for more detailed documentation.

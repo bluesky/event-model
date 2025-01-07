@@ -75,4 +75,4 @@ Hints to make the integration of your changes easy (and happen faster):
 * All algorithms need documentation, don't forget the .rst file
 * Don't take changes requests to change your code personally
 
-For more information on common tasks like setting up a developer environment, running the tests, and setting a pre-commit hook, see the template's [How-to guides](https://diamondlightsource.github.io/python-copier-template/2.4.0/how-to.html).
+For more information on common tasks like setting up a developer environment, running the tests, and setting a pre-commit hook, see the template's [How-to guides](https://diamondlightsource.github.io/python-copier-template/2.6.0/how-to.html).
