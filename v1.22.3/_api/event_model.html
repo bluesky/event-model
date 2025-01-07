@@ -1,0 +1,809 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>event_model &#8212; event-model 1.22.3 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../_static/graphviz.css?v=4ae1632d" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/plot_directive.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="../_static/documentation_options.js?v=fe3ceb2f"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=30646c52"></script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '_api/event_model';</script>
+    <script>
+        DOCUMENTATION_OPTIONS.theme_version = '0.16.1';
+        DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://blueskyproject.io/event-model/switcher.json';
+        DOCUMENTATION_OPTIONS.theme_switcher_version_match = '1.22.3';
+        DOCUMENTATION_OPTIONS.show_version_warning_banner =
+            false;
+        </script>
+    <link rel="icon" href="../_static/event-model-favicon.svg"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Index" href="../genindex.html" />
+    <link rel="prev" title="Reference" href="../reference.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="1.22.3" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/event-model-logo.svg" class="logo__image only-light" alt="event-model 1.22.3 documentation - Home"/>
+    <img src="../_static/event-model-logo.svg" class="logo__image only-dark pst-js-only" alt="event-model 1.22.3 documentation - Home"/>
+  
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../tutorials.html">
+    Tutorials
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../how-to.html">
+    How-to Guides
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../explanations.html">
+    Explanations
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../reference.html">
+    Reference
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/bluesky/event-model" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://pypi.org/project/event-model" title="PyPI" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fas fa-cube fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">PyPI</span></a>
+        </li>
+</ul></div>
+      
+        <div class="navbar-item">
+<div class="version-switcher__container dropdown pst-js-only">
+  <button id="pst-version-switcher-button-2"
+    type="button"
+    class="version-switcher__button btn btn-sm dropdown-toggle"
+    data-bs-toggle="dropdown"
+    aria-haspopup="listbox"
+    aria-controls="pst-version-switcher-list-2"
+    aria-label="Version switcher list"
+  >
+    Choose version  <!-- this text may get changed later by javascript -->
+    <span class="caret"></span>
+  </button>
+  <div id="pst-version-switcher-list-2"
+    class="version-switcher__menu dropdown-menu list-group-flush py-0"
+    role="listbox" aria-labelledby="pst-version-switcher-button-2">
+    <!-- dropdown will be populated by javascript on page load -->
+  </div>
+</div></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../tutorials.html">
+    Tutorials
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../how-to.html">
+    How-to Guides
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../explanations.html">
+    Explanations
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../reference.html">
+    Reference
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/bluesky/event-model" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://pypi.org/project/event-model" title="PyPI" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fas fa-cube fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">PyPI</span></a>
+        </li>
+</ul></div>
+        
+          <div class="navbar-item">
+<div class="version-switcher__container dropdown pst-js-only">
+  <button id="pst-version-switcher-button-3"
+    type="button"
+    class="version-switcher__button btn btn-sm dropdown-toggle"
+    data-bs-toggle="dropdown"
+    aria-haspopup="listbox"
+    aria-controls="pst-version-switcher-list-3"
+    aria-label="Version switcher list"
+  >
+    Choose version  <!-- this text may get changed later by javascript -->
+    <span class="caret"></span>
+  </button>
+  <div id="pst-version-switcher-list-3"
+    class="version-switcher__menu dropdown-menu list-group-flush py-0"
+    role="listbox" aria-labelledby="pst-version-switcher-button-3">
+    <!-- dropdown will be populated by javascript on page load -->
+  </div>
+</div></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+<nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../genindex.html">Index</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference/release-history.html">Release History</a></li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../reference.html" class="nav-link">Reference</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis"><code class="docutils literal notranslate"><span class="pre">event_model</span></code></span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="module-event_model">
+<span id="event-model"></span><h1><code class="docutils literal notranslate"><span class="pre">event_model</span></code><a class="headerlink" href="#module-event_model" title="Link to this heading">#</a></h1>
+<p class="rubric">Members</p>
+<div class="pst-scrollable-table-container"><table class="autosummary longtable table autosummary">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#event_model.Datum" title="event_model.Datum"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Datum</span></code></a></p></td>
+<td><p>Document to reference a quanta of externally-stored data</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#event_model.DatumPage" title="event_model.DatumPage"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DatumPage</span></code></a></p></td>
+<td><p>Page of documents to reference a quanta of externally-stored data</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#event_model.Event" title="event_model.Event"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Event</span></code></a></p></td>
+<td><p>Document to record a quanta of collected data</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">PartialEvent</span></code></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">Configuration</span></code></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#event_model.DataKey" title="event_model.DataKey"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DataKey</span></code></a></p></td>
+<td><p>Describes the objects in the data property of Event documents</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#event_model.EventDescriptor" title="event_model.EventDescriptor"><code class="xref py py-obj docutils literal notranslate"><span class="pre">EventDescriptor</span></code></a></p></td>
+<td><p>Document to describe the data captured in the associated event documents</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#event_model.Limits" title="event_model.Limits"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Limits</span></code></a></p></td>
+<td><p>Epics and tango limits: see 3.4.1 <a class="reference external" href="https://epics.anl.gov/base/R3-14/12-docs/AppDevGuide/node4.html">https://epics.anl.gov/base/R3-14/12-docs/AppDevGuide/node4.html</a> and <a class="reference external" href="https://tango-controls.readthedocs.io/en/latest/development/device-api/attribute-alarms.html">https://tango-controls.readthedocs.io/en/latest/development/device-api/attribute-alarms.html</a></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">LimitsRange</span></code></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#event_model.PerObjectHint" title="event_model.PerObjectHint"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PerObjectHint</span></code></a></p></td>
+<td><p>The 'interesting' data keys for this device.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#event_model.EventPage" title="event_model.EventPage"><code class="xref py py-obj docutils literal notranslate"><span class="pre">EventPage</span></code></a></p></td>
+<td><p>Page of documents to record a quanta of collected data</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">PartialEventPage</span></code></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">PartialResource</span></code></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#event_model.Resource" title="event_model.Resource"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Resource</span></code></a></p></td>
+<td><p>Document to reference a collection (e.g. file or group of files) of externally-stored data.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">Calculation</span></code></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#event_model.Hints" title="event_model.Hints"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Hints</span></code></a></p></td>
+<td><p>Start-level hints</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#event_model.Projection" title="event_model.Projection"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Projection</span></code></a></p></td>
+<td><p>Where to get the data from</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#event_model.Projections" title="event_model.Projections"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Projections</span></code></a></p></td>
+<td><p>Describe how to interperet this run as the given projection</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#event_model.RunStart" title="event_model.RunStart"><code class="xref py py-obj docutils literal notranslate"><span class="pre">RunStart</span></code></a></p></td>
+<td><p>Document created at the start of run.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#event_model.RunStop" title="event_model.RunStop"><code class="xref py py-obj docutils literal notranslate"><span class="pre">RunStop</span></code></a></p></td>
+<td><p>Document for the end of a run indicating the success/fail state of the run and the end time</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#event_model.StreamDatum" title="event_model.StreamDatum"><code class="xref py py-obj docutils literal notranslate"><span class="pre">StreamDatum</span></code></a></p></td>
+<td><p>Document to reference a quanta of an externally-stored stream of data.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#event_model.StreamRange" title="event_model.StreamRange"><code class="xref py py-obj docutils literal notranslate"><span class="pre">StreamRange</span></code></a></p></td>
+<td><p>The parameters required to describe a sequence of incrementing integers</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#event_model.StreamResource" title="event_model.StreamResource"><code class="xref py py-obj docutils literal notranslate"><span class="pre">StreamResource</span></code></a></p></td>
+<td><p>Document to reference a collection (e.g. file or group of files) of externally-stored data streams.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">DocumentNames</span></code></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#event_model.compose_run" title="event_model.compose_run"><code class="xref py py-obj docutils literal notranslate"><span class="pre">compose_run</span></code></a></p></td>
+<td><p>Compose a RunStart document and factory functions for related documents.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<dl class="py class">
+<dt class="sig sig-object py" id="event_model.Datum">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">event_model.</span></span><span class="sig-name descname"><span class="pre">Datum</span></span><a class="reference internal" href="../_modules/event_model/documents/datum.html#Datum"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#event_model.Datum" title="Link to this definition">#</a></dt>
+<dd><p>Document to reference a quanta of externally-stored data</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="event_model.DatumPage">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">event_model.</span></span><span class="sig-name descname"><span class="pre">DatumPage</span></span><a class="reference internal" href="../_modules/event_model/documents/datum_page.html#DatumPage"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#event_model.DatumPage" title="Link to this definition">#</a></dt>
+<dd><p>Page of documents to reference a quanta of externally-stored data</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="event_model.Event">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">event_model.</span></span><span class="sig-name descname"><span class="pre">Event</span></span><a class="reference internal" href="../_modules/event_model/documents/event.html#Event"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#event_model.Event" title="Link to this definition">#</a></dt>
+<dd><p>Document to record a quanta of collected data</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="event_model.DataKey">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">event_model.</span></span><span class="sig-name descname"><span class="pre">DataKey</span></span><a class="reference internal" href="../_modules/event_model/documents/event_descriptor.html#DataKey"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#event_model.DataKey" title="Link to this definition">#</a></dt>
+<dd><p>Describes the objects in the data property of Event documents</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="event_model.EventDescriptor">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">event_model.</span></span><span class="sig-name descname"><span class="pre">EventDescriptor</span></span><a class="reference internal" href="../_modules/event_model/documents/event_descriptor.html#EventDescriptor"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#event_model.EventDescriptor" title="Link to this definition">#</a></dt>
+<dd><p>Document to describe the data captured in the associated event
+documents</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="event_model.Limits">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">event_model.</span></span><span class="sig-name descname"><span class="pre">Limits</span></span><a class="reference internal" href="../_modules/event_model/documents/event_descriptor.html#Limits"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#event_model.Limits" title="Link to this definition">#</a></dt>
+<dd><p>Epics and tango limits:
+see 3.4.1 <a class="reference external" href="https://epics.anl.gov/base/R3-14/12-docs/AppDevGuide/node4.html">https://epics.anl.gov/base/R3-14/12-docs/AppDevGuide/node4.html</a>
+and
+<a class="reference external" href="https://tango-controls.readthedocs.io/en/latest/development/device-api/attribute-alarms.html">https://tango-controls.readthedocs.io/en/latest/development/device-api/attribute-alarms.html</a></p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="event_model.PerObjectHint">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">event_model.</span></span><span class="sig-name descname"><span class="pre">PerObjectHint</span></span><a class="reference internal" href="../_modules/event_model/documents/event_descriptor.html#PerObjectHint"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#event_model.PerObjectHint" title="Link to this definition">#</a></dt>
+<dd><p>The ‘interesting’ data keys for this device.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="event_model.EventPage">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">event_model.</span></span><span class="sig-name descname"><span class="pre">EventPage</span></span><a class="reference internal" href="../_modules/event_model/documents/event_page.html#EventPage"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#event_model.EventPage" title="Link to this definition">#</a></dt>
+<dd><p>Page of documents to record a quanta of collected data</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="event_model.Resource">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">event_model.</span></span><span class="sig-name descname"><span class="pre">Resource</span></span><a class="reference internal" href="../_modules/event_model/documents/resource.html#Resource"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#event_model.Resource" title="Link to this definition">#</a></dt>
+<dd><p>Document to reference a collection (e.g. file or group of files) of
+externally-stored data</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="event_model.Hints">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">event_model.</span></span><span class="sig-name descname"><span class="pre">Hints</span></span><a class="reference internal" href="../_modules/event_model/documents/run_start.html#Hints"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#event_model.Hints" title="Link to this definition">#</a></dt>
+<dd><p>Start-level hints</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="event_model.Projection">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">event_model.</span></span><span class="sig-name descname"><span class="pre">Projection</span></span><a class="reference internal" href="../_modules/event_model/documents/run_start.html#Projection"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#event_model.Projection" title="Link to this definition">#</a></dt>
+<dd><p>Where to get the data from</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="event_model.Projections">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">event_model.</span></span><span class="sig-name descname"><span class="pre">Projections</span></span><a class="reference internal" href="../_modules/event_model/documents/run_start.html#Projections"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#event_model.Projections" title="Link to this definition">#</a></dt>
+<dd><p>Describe how to interperet this run as the given projection</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="event_model.RunStart">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">event_model.</span></span><span class="sig-name descname"><span class="pre">RunStart</span></span><a class="reference internal" href="../_modules/event_model/documents/run_start.html#RunStart"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#event_model.RunStart" title="Link to this definition">#</a></dt>
+<dd><p>Document created at the start of run. Provides a seach target and
+later documents link to it</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="event_model.RunStop">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">event_model.</span></span><span class="sig-name descname"><span class="pre">RunStop</span></span><a class="reference internal" href="../_modules/event_model/documents/run_stop.html#RunStop"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#event_model.RunStop" title="Link to this definition">#</a></dt>
+<dd><p>Document for the end of a run indicating the success/fail state of the
+run and the end time</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="event_model.StreamDatum">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">event_model.</span></span><span class="sig-name descname"><span class="pre">StreamDatum</span></span><a class="reference internal" href="../_modules/event_model/documents/stream_datum.html#StreamDatum"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#event_model.StreamDatum" title="Link to this definition">#</a></dt>
+<dd><p>Document to reference a quanta of an externally-stored stream of data.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="event_model.StreamRange">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">event_model.</span></span><span class="sig-name descname"><span class="pre">StreamRange</span></span><a class="reference internal" href="../_modules/event_model/documents/stream_datum.html#StreamRange"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#event_model.StreamRange" title="Link to this definition">#</a></dt>
+<dd><p>The parameters required to describe a sequence of incrementing integers</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="event_model.StreamResource">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">event_model.</span></span><span class="sig-name descname"><span class="pre">StreamResource</span></span><a class="reference internal" href="../_modules/event_model/documents/stream_resource.html#StreamResource"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#event_model.StreamResource" title="Link to this definition">#</a></dt>
+<dd><p>Document to reference a collection (e.g. file or group of files) of
+externally-stored data streams</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="event_model.compose_run">
+<span class="sig-prename descclassname"><span class="pre">event_model.</span></span><span class="sig-name descname"><span class="pre">compose_run</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">uid</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><span class="pre">float</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metadata</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.13)"><span class="pre">Dict</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">validate</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">event_counters</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.13)"><span class="pre">Dict</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><span class="pre">int</span></a><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ComposeRunBundle</span></span></span><a class="reference internal" href="../_modules/event_model.html#compose_run"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#event_model.compose_run" title="Link to this definition">#</a></dt>
+<dd><p>Compose a RunStart document and factory functions for related documents.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>uid</strong> (<em>string</em><em>, </em><em>optional</em>) – Unique identifier for this run, conventionally a UUID4. If None is
+given, a UUID4 will be generated.</p></li>
+<li><p><strong>time</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><em>float</em></a><em>, </em><em>optional</em>) – UNIX epoch time of start of this run. If None is given, the current
+time will be used.</p></li>
+<li><p><strong>metadata</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.13)"><em>dict</em></a><em>, </em><em>optional</em>) – Additional metadata include the document</p></li>
+<li><p><strong>validate</strong> (<em>boolean</em><em>, </em><em>optional</em>) – Validate this document conforms to the schema.</p></li>
+<li><p><strong>event_counters</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.13)"><em>dict</em></a><em>, </em><em>optional</em>) – A dict for counting events, when an event is composed by any of the
+descriptors composed by this run, the element in this dict with the key of the
+descriptor name will be increased by 1.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>ComposeRunBundle</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="../reference.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Reference</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="../genindex.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Index</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#event_model.Datum"><code class="docutils literal notranslate"><span class="pre">Datum</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#event_model.DatumPage"><code class="docutils literal notranslate"><span class="pre">DatumPage</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#event_model.Event"><code class="docutils literal notranslate"><span class="pre">Event</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#event_model.DataKey"><code class="docutils literal notranslate"><span class="pre">DataKey</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#event_model.EventDescriptor"><code class="docutils literal notranslate"><span class="pre">EventDescriptor</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#event_model.Limits"><code class="docutils literal notranslate"><span class="pre">Limits</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#event_model.PerObjectHint"><code class="docutils literal notranslate"><span class="pre">PerObjectHint</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#event_model.EventPage"><code class="docutils literal notranslate"><span class="pre">EventPage</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#event_model.Resource"><code class="docutils literal notranslate"><span class="pre">Resource</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#event_model.Hints"><code class="docutils literal notranslate"><span class="pre">Hints</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#event_model.Projection"><code class="docutils literal notranslate"><span class="pre">Projection</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#event_model.Projections"><code class="docutils literal notranslate"><span class="pre">Projections</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#event_model.RunStart"><code class="docutils literal notranslate"><span class="pre">RunStart</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#event_model.RunStop"><code class="docutils literal notranslate"><span class="pre">RunStop</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#event_model.StreamDatum"><code class="docutils literal notranslate"><span class="pre">StreamDatum</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#event_model.StreamRange"><code class="docutils literal notranslate"><span class="pre">StreamRange</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#event_model.StreamResource"><code class="docutils literal notranslate"><span class="pre">StreamResource</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#event_model.compose_run"><code class="docutils literal notranslate"><span class="pre">compose_run()</span></code></a></li>
+</ul>
+  </nav></div>
+
+  <div class="sidebar-secondary-item">
+
+  
+  <div class="tocsection editthispage">
+    <a href="https://github.com/bluesky/event-model/edit/1.22.3/docs/_api/event_model.rst">
+      <i class="fa-solid fa-pencil"></i>
+      
+      
+        
+          Edit on GitHub
+        
+      
+    </a>
+  </div>
+</div>
+
+  <div class="sidebar-secondary-item">
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/_api/event_model.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.1.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>
