@@ -64,8 +64,7 @@ from typing import Tuple, Type, Union
 
 ALL_{3}: Tuple[{1}Type, ...] = (
 {4}
-)
-"""
+)"""
 
 
 def generate_init_py(output_root: Path):

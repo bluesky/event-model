@@ -240,6 +240,7 @@
                         ]
                     }
                 },
+                "additionalProperties": false,
                 "version": {
                     "title": "Version",
                     "description": "The version of the projection spec. Can specify the version of an external specification.",

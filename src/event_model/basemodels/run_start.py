@@ -134,6 +134,7 @@ class Projections(BaseModel):
             StaticProjection,
         ],
     ] = Field(..., title="Projection")
+    additionalProperties: Optional[Any] = None
     version: str = Field(..., title="Version")
     """
     The version of the projection spec. Can specify the version of an external specification.

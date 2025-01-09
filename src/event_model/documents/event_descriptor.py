@@ -15,35 +15,6 @@ DtypeNumpy = str
 DtypeNumpyItem = List
 
 
-class RdsRange(TypedDict):
-    """RDS (Read different than set) parameters range.
-
-
-    https://tango-controls.readthedocs.io/en/latest/development/device-api/attribute-alarms.html#the-read-different-than-set-rds-alarm
-    """
-
-    time_difference: Annotated[
-        float,
-        Field(
-            description=(
-                "ms since last update to fail after if set point and "
-                "read point are not within `value_difference` of each other."
-            )
-        ),
-    ]
-    value_difference: NotRequired[
-        Annotated[
-            float,
-            Field(
-                description=(
-                    "Allowed difference in value between set point and read point "
-                    "after `time_difference`."
-                )
-            ),
-        ]
-    ]
-
-
 class LimitsRange(TypedDict):
     high: Optional[float]
     low: Optional[float]
@@ -93,23 +64,30 @@ class Limits(TypedDict):
     https://tango-controls.readthedocs.io/en/latest/development/device-api/attribute-alarms.html
     """
 
-    control: NotRequired[Annotated[LimitsRange, Field(description="Control limits.")]]
-    display: NotRequired[Annotated[LimitsRange, Field(description="Display limits.")]]
-    warning: NotRequired[Annotated[LimitsRange, Field(description="Warning limits.")]]
-    alarm: NotRequired[Annotated[LimitsRange, Field(description="Alarm limits.")]]
-    hysteresis: NotRequired[Annotated[float, Field(description="Hysteresis.")]]
-    rds: NotRequired[Annotated[RdsRange, Field(description="RDS parameters.")]]
-
-
-_ConstrainedDtype = Annotated[
-    str,
-    Field(
-        description="A numpy dtype e.g `<U9`, `<f16`",
-        pattern="[|<>][tbiufcmMOSUV][0-9]+",
-    ),
-]
-
-_ConstrainedDtypeNpStructure = List[Tuple[str, _ConstrainedDtype]]
+    alarm: NotRequired[LimitsRange]
+    """
+    Alarm limits.
+    """
+    control: NotRequired[LimitsRange]
+    """
+    Control limits.
+    """
+    display: NotRequired[LimitsRange]
+    """
+    Display limits.
+    """
+    hysteresis: NotRequired[float]
+    """
+    Hysteresis.
+    """
+    rds: NotRequired[RdsRange]
+    """
+    RDS parameters.
+    """
+    warning: NotRequired[LimitsRange]
+    """
+    Warning limits.
+    """
 
 
 class DataKey(TypedDict):

@@ -114,6 +114,7 @@ class Projections(TypedDict):
             StaticProjection,
         ],
     ]
+    additionalProperties: NotRequired[Any]
     version: str
     """
     The version of the projection spec. Can specify the version of an external specification.
