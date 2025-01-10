@@ -15,7 +15,7 @@ After changing any of the documents it's necessary to regenerate the schemas. Th
 
 .. code-block:: bash
 
-   regenerate-schema
+   python -m event_model.generate
 
 which is a python environment script in a dev install of event-model.
 

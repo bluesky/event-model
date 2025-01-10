@@ -25,8 +25,9 @@ def test_generated_json_matches_typed_dict(tmpdir: Path):
             or new_jsonschema_path.read_text() != old_jsonschema_path.read_text()
         ):
             raise Exception(
-                f"{str(old_jsonschema_path)} does not match {str(new_jsonschema_path)}."
-                " Did you forget to run `regenerate-documents` after changes ?"
+                f"{str(old_jsonschema_path)} does not match "
+                f"{str(new_jsonschema_path)}. Did you forget to run "
+                "`python -m event_model.generate` after changes?"
             )
 
     for new_document_path in tmp_documents.iterdir():
@@ -37,6 +38,7 @@ def test_generated_json_matches_typed_dict(tmpdir: Path):
             or new_document_path.read_text() != old_document_path.read_text()
         ):
             raise Exception(
-                f"{str(old_document_path)} does not match {str(new_document_path)}."
-                " Did you forget to run `regenerate-documents` after changes ?"
+                f"{str(old_document_path)} does not match "
+                f"{str(new_document_path)}. Did you forget to run "
+                "`python -m event_model.generate` after changes?"
             )

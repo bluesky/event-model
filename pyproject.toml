@@ -54,9 +54,6 @@ dev = [
   "datamodel-code-generator",
 ]
 
-[project.scripts]
-regenerate-documents = "event_model.generate.__main__:generate"
-
 [project.urls]
 GitHub = "https://github.com/bluesky/event-model"
 
