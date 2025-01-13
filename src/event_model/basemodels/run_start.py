@@ -35,7 +35,7 @@ class DataType(RootModel):
 class Hints(BaseModel):
     """Start-level hints"""
 
-    model_config = ConfigDict(extra="forbid")
+    model_config = ConfigDict(extra="allow")
 
     dimensions: Annotated[
         List[List[Union[List[str], str]]],
@@ -48,7 +48,7 @@ class Hints(BaseModel):
 
 
 class Calculation(BaseModel):
-    model_config = ConfigDict(extra="forbid")
+    model_config = ConfigDict(extra="allow")
 
     args: Annotated[List, Field(default=[])]
     callable: Annotated[
@@ -192,9 +192,7 @@ class RunStart(BaseModel):
     later documents link to it
     """
 
-    model_config = ConfigDict(
-        title="run_start", extra="allow", json_schema_extra=RUN_START_EXTRA_SCHEMA
-    )
+    model_config = ConfigDict(extra="allow", json_schema_extra=RUN_START_EXTRA_SCHEMA)
 
     data_groups: Annotated[
         List[str],

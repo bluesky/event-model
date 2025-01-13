@@ -11,7 +11,6 @@ class StreamResource(BaseModel):
     """
 
     model_config = ConfigDict(
-        title="stream_resource",
         extra="allow",
     )
 

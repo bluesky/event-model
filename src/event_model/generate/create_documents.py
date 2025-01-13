@@ -6,12 +6,27 @@ from typing import Any, Dict, Type, cast
 import datamodel_code_generator
 from pydantic import BaseModel
 from pydantic.alias_generators import to_snake
+from pydantic.json_schema import GenerateJsonSchema
 
 from event_model.basemodels import ALL_BASEMODELS
 
 JSONSCHEMA = Path(__file__).parent.parent / "schemas"
 TYPEDDICTS = Path(__file__).parent.parent / "documents"
 TEMPLATES = Path(__file__).parent / "templates"
+
+
+class SnakeCaseTitleField(GenerateJsonSchema):
+    def generate(self, schema, mode="validation"):
+        jsonschema = super().generate(schema, mode=mode)
+        jsonschema["title"] = to_snake(jsonschema["title"])
+
+        for key, property in jsonschema.get("properties", {}).items():
+            property["title"] = to_snake(key)
+        for definition in jsonschema.get("$defs", {}).values():
+            definition["title"] = to_snake(definition["title"])
+            for key, property in definition.get("properties", {}).items():
+                property["title"] = to_snake(key)
+        return jsonschema
 
 
 def snake_to_title(snake: str) -> str:
@@ -121,18 +136,18 @@ def get_jsonschema_path(jsonschema: Dict, root=JSONSCHEMA) -> Path:
     return root / f"{to_snake(jsonschema['title'])}.json"
 
 
-def generate_basemodel_schema(
+def _generate_jsonschema(
     basemodel: Type[BaseModel],
     jsonschema_root=JSONSCHEMA,
     is_parent: bool = False,
-) -> dict[str, Any]:
+) -> Dict[str, Any]:
     refs = []
 
     for parent in [parent for parent in basemodel.__bases__ if parent is not BaseModel]:
         assert issubclass(
             parent, BaseModel
         )  # Parents of BaseModel's can only be other BaseModel
-        parent_jsonschema = generate_basemodel_schema(
+        parent_jsonschema = _generate_jsonschema(
             parent,
             jsonschema_root=jsonschema_root,
             is_parent=True,
@@ -142,30 +157,34 @@ def generate_basemodel_schema(
     schema_extra: Dict[str, Any] = cast(
         Dict[str, Any], basemodel.model_config.pop("json_schema_extra", {})
     )
-    model_jsonschema = basemodel.model_json_schema()
+    model_jsonschema = basemodel.model_json_schema(schema_generator=SnakeCaseTitleField)
     model_jsonschema = merge_dicts(model_jsonschema, schema_extra)
 
-    if is_parent or refs:
-        additional_properties = model_jsonschema.pop("additionalProperties", None)
+    additional_properties = (
+        model_jsonschema.pop("additionalProperties", None)
+        if is_parent or refs
+        else None
+    )
+
+    if refs:
         if additional_properties is not None and not is_parent:
             model_jsonschema["unevaluatedProperties"] = additional_properties
 
-    if refs:
-        all_of_refs = []
         for ref in refs:
             for property in ref["properties"]:
                 model_jsonschema["properties"].pop(property, None)
             if model_jsonschema.get("$defs", None) is None:
                 model_jsonschema["$defs"] = {}
             model_jsonschema["$defs"][snake_to_title(ref["title"])] = ref
-            all_of_refs.append({"$ref": f"#/$defs/{snake_to_title(ref['title'])}"})
 
             if model_jsonschema.get("required", None) is not None:
                 for ref_property in ref["properties"]:
                     if ref_property in model_jsonschema["required"]:
                         model_jsonschema["required"].remove(ref_property)
 
-        model_jsonschema["allOf"] = all_of_refs
+        model_jsonschema["allOf"] = [
+            {"$ref": f"#/$defs/{snake_to_title(ref['title'])}"} for ref in refs
+        ]
 
     return model_jsonschema
 
@@ -174,9 +193,7 @@ def generate_jsonschema(
     basemodel: Type[BaseModel],
     jsonschema_root=JSONSCHEMA,
 ) -> Path:
-    model_jsonschema = generate_basemodel_schema(
-        basemodel, jsonschema_root=jsonschema_root
-    )
+    model_jsonschema = _generate_jsonschema(basemodel, jsonschema_root=jsonschema_root)
     jsonschema_path = get_jsonschema_path(model_jsonschema, root=jsonschema_root)
     dump_json(model_jsonschema, jsonschema_path)
 

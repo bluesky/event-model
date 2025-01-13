@@ -11,7 +11,7 @@ class DataFrameForDatumPage(RootModel):
 class DatumPage(BaseModel):
     """Page of documents to reference a quanta of externally-stored data"""
 
-    model_config = ConfigDict(title="datum_page", extra="forbid")
+    model_config = ConfigDict(extra="forbid")
 
     datum_id: Annotated[
         DataFrameForDatumPage,

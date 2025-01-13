@@ -4,30 +4,30 @@
     "type": "object",
     "$defs": {
         "CalculatedEventProjection": {
-            "title": "CalculatedEventProjection",
+            "title": "calculated_event_projection",
             "type": "object",
             "properties": {
                 "calculation": {
-                    "title": "calculation properties",
+                    "title": "calculation",
                     "description": "required fields if type is calculated",
                     "$ref": "#/$defs/Calculation"
                 },
                 "field": {
-                    "title": "Field",
+                    "title": "field",
                     "type": "string"
                 },
                 "location": {
-                    "title": "Location",
+                    "title": "location",
                     "description": "Projection comes and event",
                     "type": "string",
                     "const": "event"
                 },
                 "stream": {
-                    "title": "Stream",
+                    "title": "stream",
                     "type": "string"
                 },
                 "type": {
-                    "title": "Type",
+                    "title": "type",
                     "description": "Projection is of type calculated, a value that requires calculation.",
                     "type": "string",
                     "const": "calculated"
@@ -42,22 +42,22 @@
             ]
         },
         "Calculation": {
-            "title": "Calculation",
+            "title": "calculation",
             "type": "object",
             "properties": {
                 "args": {
-                    "title": "Args",
+                    "title": "args",
                     "type": "array",
                     "default": [],
                     "items": {}
                 },
                 "callable": {
-                    "title": "Callable",
+                    "title": "callable",
                     "description": "callable function to perform calculation",
                     "type": "string"
                 },
                 "kwargs": {
-                    "title": "Kwargs",
+                    "title": "kwargs",
                     "description": "kwargs for calcalation callable",
                     "type": "object",
                     "default": {}
@@ -66,36 +66,36 @@
             "required": [
                 "callable"
             ],
-            "additionalProperties": false
+            "additionalProperties": true
         },
         "ConfigurationProjection": {
-            "title": "ConfigurationProjection",
+            "title": "configuration_projection",
             "type": "object",
             "properties": {
                 "config_device": {
-                    "title": "Config Device",
+                    "title": "config_device",
                     "type": "string"
                 },
                 "config_index": {
-                    "title": "Config Index",
+                    "title": "config_index",
                     "type": "integer"
                 },
                 "field": {
-                    "title": "Field",
+                    "title": "field",
                     "type": "string"
                 },
                 "location": {
-                    "title": "Location",
+                    "title": "location",
                     "description": "Projection comes from configuration fields in the event_descriptor document",
                     "type": "string",
                     "const": "configuration"
                 },
                 "stream": {
-                    "title": "Stream",
+                    "title": "stream",
                     "type": "string"
                 },
                 "type": {
-                    "title": "Type",
+                    "title": "type",
                     "description": "Projection is of type linked, a value linked from the data set.",
                     "type": "string",
                     "const": "linked"
@@ -111,7 +111,7 @@
             ]
         },
         "DataType": {
-            "title": "DataType",
+            "title": "data_type",
             "patternProperties": {
                 "^([^./]+)$": {
                     "$ref": "#/$defs/DataType"
@@ -121,12 +121,12 @@
             "default": null
         },
         "Hints": {
-            "title": "Hints",
+            "title": "hints",
             "description": "Start-level hints",
             "type": "object",
             "properties": {
                 "dimensions": {
-                    "title": "Dimensions",
+                    "title": "dimensions",
                     "description": "The independent axes of the experiment. Ordered slow to fast",
                     "type": "array",
                     "default": [],
@@ -148,28 +148,28 @@
                     }
                 }
             },
-            "additionalProperties": false
+            "additionalProperties": true
         },
         "LinkedEventProjection": {
-            "title": "LinkedEventProjection",
+            "title": "linked_event_projection",
             "type": "object",
             "properties": {
                 "field": {
-                    "title": "Field",
+                    "title": "field",
                     "type": "string"
                 },
                 "location": {
-                    "title": "Location",
+                    "title": "location",
                     "description": "Projection comes and event",
                     "type": "string",
                     "const": "event"
                 },
                 "stream": {
-                    "title": "Stream",
+                    "title": "stream",
                     "type": "string"
                 },
                 "type": {
-                    "title": "Type",
+                    "title": "type",
                     "description": "Projection is of type linked, a value linked from the data set.",
                     "type": "string",
                     "const": "linked"
@@ -183,23 +183,23 @@
             ]
         },
         "Projections": {
-            "title": "Projections",
+            "title": "projections",
             "description": "Describe how to interperet this run as the given projection",
             "type": "object",
             "properties": {
                 "configuration": {
-                    "title": "Configuration",
+                    "title": "configuration",
                     "description": "Static information about projection",
                     "type": "object"
                 },
                 "name": {
-                    "title": "Name",
+                    "title": "name",
                     "description": "The name of the projection",
                     "type": "string",
                     "default": ""
                 },
                 "projection": {
-                    "title": "Projection",
+                    "title": "projection",
                     "description": "",
                     "type": "object",
                     "additionalProperties": {
@@ -220,7 +220,7 @@
                     }
                 },
                 "version": {
-                    "title": "Version",
+                    "title": "version",
                     "description": "The version of the projection spec. Can specify the version of an external specification.",
                     "type": "string"
                 }
@@ -232,17 +232,17 @@
             ]
         },
         "StaticProjection": {
-            "title": "StaticProjection",
+            "title": "static_projection",
             "type": "object",
             "properties": {
                 "type": {
-                    "title": "Type",
+                    "title": "type",
                     "description": "Projection is of type static, a value defined here in the projection",
                     "type": "string",
                     "const": "static"
                 },
                 "value": {
-                    "title": "Value",
+                    "title": "value",
                     "description": "value explicitely defined in the static projection"
                 }
             },
@@ -254,7 +254,7 @@
     },
     "properties": {
         "data_groups": {
-            "title": "Data Groups",
+            "title": "data_groups",
             "description": "An optional list of data access groups that have meaning to some external system. Examples might include facility, beamline, end stations, proposal, safety form.",
             "type": "array",
             "default": [],
@@ -263,22 +263,24 @@
             }
         },
         "data_session": {
-            "title": "Data Session",
+            "title": "data_session",
             "description": "An optional field for grouping runs. The meaning is not mandated, but this is a data management grouping and not a scientific grouping. It is intended to group runs in a visit or set of trials.",
             "type": "string",
             "default": ""
         },
         "data_type": {
+            "title": "data_type",
             "description": "",
             "$ref": "#/$defs/DataType"
         },
         "group": {
-            "title": "Group",
+            "title": "group",
             "description": "Unix group to associate this data with",
             "type": "string",
             "default": ""
         },
         "hints": {
+            "title": "hints",
             "patternProperties": {
                 "^([^.]+)$": {
                     "$ref": "#/$defs/DataType"
@@ -288,19 +290,19 @@
             "$ref": "#/$defs/Hints"
         },
         "owner": {
-            "title": "Owner",
+            "title": "owner",
             "description": "Unix owner to associate this data with",
             "type": "string",
             "default": ""
         },
         "project": {
-            "title": "Project",
+            "title": "project",
             "description": "Name of project that this run is part of",
             "type": "string",
             "default": ""
         },
         "projections": {
-            "title": "Projections",
+            "title": "projections",
             "description": "",
             "type": "array",
             "default": [],
@@ -309,7 +311,7 @@
             }
         },
         "sample": {
-            "title": "Sample",
+            "title": "sample",
             "description": "Information about the sample, may be a UID to another collection",
             "anyOf": [
                 {
@@ -322,18 +324,18 @@
             "default": ""
         },
         "scan_id": {
-            "title": "Scan Id",
+            "title": "scan_id",
             "description": "Scan ID number, not globally unique",
             "type": "integer",
             "default": 0
         },
         "time": {
-            "title": "Time",
+            "title": "time",
             "description": "Time the run started.  Unix epoch time",
             "type": "number"
         },
         "uid": {
-            "title": "Uid",
+            "title": "uid",
             "description": "Globally unique ID for this run",
             "type": "string"
         }

@@ -25,7 +25,6 @@ class StreamDatum(BaseModel):
     """Document to reference a quanta of an externally-stored stream of data."""
 
     model_config = ConfigDict(
-        title="stream_datum",
         extra="allow",
     )
 

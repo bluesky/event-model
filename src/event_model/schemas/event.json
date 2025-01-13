@@ -13,12 +13,12 @@
             "type": "object",
             "properties": {
                 "data": {
-                    "title": "Data",
+                    "title": "data",
                     "description": "The actual measurement data",
                     "type": "object"
                 },
                 "filled": {
-                    "title": "Filled",
+                    "title": "filled",
                     "description": "Mapping each of the keys of externally-stored data to the boolean False, indicating that the data has not been loaded, or to foreign keys (moved here from 'data' when the data was loaded)",
                     "type": "object",
                     "additionalProperties": {
@@ -33,12 +33,12 @@
                     }
                 },
                 "time": {
-                    "title": "Time",
+                    "title": "time",
                     "description": "The event time. This maybe different than the timestamps on each of the data entries.",
                     "type": "number"
                 },
                 "timestamps": {
-                    "title": "Timestamps",
+                    "title": "timestamps",
                     "description": "The timestamps of the individual measurement data",
                     "type": "object"
                 }
@@ -52,17 +52,17 @@
     },
     "properties": {
         "descriptor": {
-            "title": "Descriptor",
+            "title": "descriptor",
             "description": "UID of the EventDescriptor to which this Event belongs",
             "type": "string"
         },
         "seq_num": {
-            "title": "Seq Num",
+            "title": "seq_num",
             "description": "Sequence number to identify the location of this Event in the Event stream",
             "type": "integer"
         },
         "uid": {
-            "title": "Uid",
+            "title": "uid",
             "description": "Globally unique identifier for this Event",
             "type": "string"
         }

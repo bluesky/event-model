@@ -17,6 +17,9 @@ DtypeNumpyItem = List
 DataType = Any
 
 
+Dtype = Literal["string", "number", "array", "boolean", "integer"]
+
+
 class LimitsRange(TypedDict):
     high: Optional[float]
     low: Optional[float]
@@ -100,7 +103,7 @@ class DataKey(TypedDict):
     """
     The names for dimensions of the data. Null or empty list if scalar data
     """
-    dtype: Literal["string", "number", "array", "boolean", "integer"]
+    dtype: Dtype
     """
     The type of the data in the event, given as a broad JSON schema type.
     """

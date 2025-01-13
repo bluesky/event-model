@@ -5,7 +5,7 @@ from typing_extensions import Annotated
 
 
 class PartialEvent(BaseModel):
-    model_config = ConfigDict(title="partial_event", extra="forbid")
+    model_config = ConfigDict(extra="forbid")
 
     data: Annotated[Dict[str, Any], Field(description="The actual measurement data")]
     filled: Annotated[
@@ -33,7 +33,7 @@ class PartialEvent(BaseModel):
 class Event(PartialEvent):
     """Document to record a quanta of collected data"""
 
-    model_config = ConfigDict(title="event", extra="forbid")
+    model_config = ConfigDict(extra="forbid")
 
     descriptor: Annotated[
         str, Field(description="UID of the EventDescriptor to which this Event belongs")

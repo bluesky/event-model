@@ -12,7 +12,9 @@ from pydantic import (
 from pydantic.config import JsonDict
 from typing_extensions import Annotated, Literal
 
-Dtype = Literal["string", "number", "array", "boolean", "integer"]
+
+class Dtype(RootModel):
+    root: Literal["string", "number", "array", "boolean", "integer"]
 
 
 NO_DOTS_PATTERN = r"^([^./]+)$"
@@ -112,7 +114,7 @@ _ConstrainedDtypeNpStructure = List[Tuple[str, _ConstrainedDtype]]
 class DataKey(BaseModel):
     """Describes the objects in the data property of Event documents"""
 
-    model_config = ConfigDict(extra="forbid")
+    model_config = ConfigDict(extra="allow")
 
     limits: Annotated[
         Limits,
@@ -199,7 +201,7 @@ class DataKey(BaseModel):
 class PerObjectHint(BaseModel):
     """The 'interesting' data keys for this device."""
 
-    model_config = ConfigDict(extra="forbid")
+    model_config = ConfigDict(extra="allow")
 
     fields: Annotated[
         List[str],
@@ -216,7 +218,7 @@ class PerObjectHint(BaseModel):
 
 
 class Configuration(BaseModel):
-    model_config = ConfigDict(extra="forbid")
+    model_config = ConfigDict(extra="allow")
     data: Annotated[
         Dict[str, Any],
         Field(default={}, description="The actual measurement data"),
@@ -256,7 +258,6 @@ class EventDescriptor(BaseModel):
     documents"""
 
     model_config = ConfigDict(
-        title="event_descriptor",
         extra="allow",
         json_schema_extra=EVENT_DESCRIPTOR_EXTRA_SCHEMA,
     )

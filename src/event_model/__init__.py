@@ -39,6 +39,7 @@ from .documents.event import Event, PartialEvent
 from .documents.event_descriptor import (
     Configuration,
     DataKey,
+    Dtype,
     EventDescriptor,
     Limits,
     LimitsRange,
@@ -75,6 +76,7 @@ __all__ = [
     "PartialEvent",
     "Configuration",
     "DataKey",
+    "Dtype",
     "EventDescriptor",
     "Limits",
     "LimitsRange",
@@ -89,7 +91,6 @@ __all__ = [
     "StaticProjection",
     "CalculatedEventProjection",
     "ConfigurationProjection",
-    "Projection",
     "Projections",
     "RunStart",
     "RunStop",

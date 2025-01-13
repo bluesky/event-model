@@ -4,17 +4,18 @@
     "type": "object",
     "$defs": {
         "DataType": {
-            "title": "DataType",
+            "title": "data_type",
             "default": null
         }
     },
     "properties": {
         "data_type": {
+            "title": "data_type",
             "description": "data_type",
             "$ref": "#/$defs/DataType"
         },
         "exit_status": {
-            "title": "Exit Status",
+            "title": "exit_status",
             "description": "State of the run when it ended",
             "type": "string",
             "enum": [
@@ -24,7 +25,7 @@
             ]
         },
         "num_events": {
-            "title": "Num Events",
+            "title": "num_events",
             "description": "Number of Events per named stream",
             "type": "object",
             "additionalProperties": {
@@ -33,23 +34,23 @@
             "default": {}
         },
         "reason": {
-            "title": "Reason",
+            "title": "reason",
             "description": "Long-form description of why the run ended",
             "type": "string",
             "default": ""
         },
         "run_start": {
-            "title": "Run Start",
+            "title": "run_start",
             "description": "Reference back to the run_start document that this document is paired with.",
             "type": "string"
         },
         "time": {
-            "title": "Time",
+            "title": "time",
             "description": "The time the run ended. Unix epoch",
             "type": "number"
         },
         "uid": {
-            "title": "Uid",
+            "title": "uid",
             "description": "Globally unique ID for this document",
             "type": "string"
         }

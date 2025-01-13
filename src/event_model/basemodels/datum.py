@@ -11,7 +11,7 @@ from typing_extensions import Annotated
 class Datum(BaseModel):
     """Document to reference a quanta of externally-stored data"""
 
-    model_config = ConfigDict(title="datum", extra="forbid")
+    model_config = ConfigDict(extra="forbid")
 
     datum_id: Annotated[
         str,
