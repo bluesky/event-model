@@ -18,32 +18,32 @@ from .stream_resource import *  # noqa: F403
 
 DocumentType = Union[
     Type[Datum],  # noqa: F405,
+    Type[DatumPage],  # noqa: F405,
     Type[Event],  # noqa: F405,
     Type[EventDescriptor],  # noqa: F405,
     Type[EventPage],  # noqa: F405,
+    Type[PartialEvent],  # noqa: F405,
     Type[PartialEventPage],  # noqa: F405,
+    Type[PartialResource],  # noqa: F405,
     Type[Resource],  # noqa: F405,
     Type[RunStart],  # noqa: F405,
     Type[RunStop],  # noqa: F405,
-    Type[StreamResource],  # noqa: F405,
-    Type[DatumPage],  # noqa: F405,
-    Type[PartialEvent],  # noqa: F405,
-    Type[PartialResource],  # noqa: F405,
     Type[StreamDatum],  # noqa: F405,
+    Type[StreamResource],  # noqa: F405,
 ]
 
 ALL_DOCUMENTS: Tuple[DocumentType, ...] = (
     Datum,  # noqa: F405
+    DatumPage,  # noqa: F405
     Event,  # noqa: F405
     EventDescriptor,  # noqa: F405
     EventPage,  # noqa: F405
+    PartialEvent,  # noqa: F405
     PartialEventPage,  # noqa: F405
+    PartialResource,  # noqa: F405
     Resource,  # noqa: F405
     RunStart,  # noqa: F405
     RunStop,  # noqa: F405
-    StreamResource,  # noqa: F405
-    DatumPage,  # noqa: F405
-    PartialEvent,  # noqa: F405
-    PartialResource,  # noqa: F405
     StreamDatum,  # noqa: F405
+    StreamResource,  # noqa: F405
 )

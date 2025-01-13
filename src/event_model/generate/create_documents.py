@@ -160,11 +160,13 @@ ALL_{3}: Tuple[{1}Type, ...] = (
 
 
 def generate_init_py(output_root: Path):
-    document_names = [
-        file.stem
-        for file in output_root.iterdir()
-        if file.stem != "__init__" and file.suffix == ".py"
-    ]
+    document_names = sorted(
+        [
+            file.stem
+            for file in output_root.iterdir()
+            if file.stem != "__init__" and file.suffix == ".py"
+        ]
+    )
 
     document_class_names = [
         f"{document_name.title().replace('_', '')}" for document_name in document_names
