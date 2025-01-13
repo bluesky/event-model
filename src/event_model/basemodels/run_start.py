@@ -192,7 +192,9 @@ class RunStart(BaseModel):
     later documents link to it
     """
 
-    model_config = ConfigDict(extra="allow", json_schema_extra=RUN_START_EXTRA_SCHEMA)
+    model_config = ConfigDict(
+        title="run_start", extra="allow", json_schema_extra=RUN_START_EXTRA_SCHEMA
+    )
 
     data_groups: Annotated[
         List[str],

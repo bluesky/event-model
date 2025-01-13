@@ -118,7 +118,12 @@ class DataKey(BaseModel):
         Limits,
         Field(
             default_factory=lambda: Limits(
-                control=None, display=None, warning=None, alarm=None
+                control=None,
+                display=None,
+                warning=None,
+                alarm=None,
+                hysteresis=None,
+                rds=None,
             ),
             description="Epics limits.",
         ),
@@ -251,7 +256,9 @@ class EventDescriptor(BaseModel):
     documents"""
 
     model_config = ConfigDict(
-        extra="allow", json_schema_extra=EVENT_DESCRIPTOR_EXTRA_SCHEMA
+        title="event_descriptor",
+        extra="allow",
+        json_schema_extra=EVENT_DESCRIPTOR_EXTRA_SCHEMA,
     )
 
     configuration: Annotated[

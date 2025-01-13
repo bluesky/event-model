@@ -7,9 +7,6 @@ from .datum_page import *  # noqa: F403
 from .event import *  # noqa: F403
 from .event_descriptor import *  # noqa: F403
 from .event_page import *  # noqa: F403
-from .partial_event import *  # noqa: F403
-from .partial_event_page import *  # noqa: F403
-from .partial_resource import *  # noqa: F403
 from .resource import *  # noqa: F403
 from .run_start import *  # noqa: F403
 from .run_stop import *  # noqa: F403
@@ -22,9 +19,6 @@ DocumentType = Union[
     Type[Event],  # noqa: F405,
     Type[EventDescriptor],  # noqa: F405,
     Type[EventPage],  # noqa: F405,
-    Type[PartialEvent],  # noqa: F405,
-    Type[PartialEventPage],  # noqa: F405,
-    Type[PartialResource],  # noqa: F405,
     Type[Resource],  # noqa: F405,
     Type[RunStart],  # noqa: F405,
     Type[RunStop],  # noqa: F405,
@@ -38,9 +32,6 @@ ALL_DOCUMENTS: Tuple[DocumentType, ...] = (
     Event,  # noqa: F405
     EventDescriptor,  # noqa: F405
     EventPage,  # noqa: F405
-    PartialEvent,  # noqa: F405
-    PartialEventPage,  # noqa: F405
-    PartialResource,  # noqa: F405
     Resource,  # noqa: F405
     RunStart,  # noqa: F405
     RunStop,  # noqa: F405

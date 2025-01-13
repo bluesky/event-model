@@ -1,5 +1,5 @@
 {
-    "title": "RunStart",
+    "title": "run_start",
     "description": "Document created at the start of run. Provides a seach target and\nlater documents link to it",
     "type": "object",
     "$defs": {

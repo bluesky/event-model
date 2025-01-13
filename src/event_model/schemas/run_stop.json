@@ -1,5 +1,5 @@
 {
-    "title": "RunStop",
+    "title": "run_stop",
     "description": "Document for the end of a run indicating the success/fail state of the\nrun and the end time",
     "type": "object",
     "$defs": {

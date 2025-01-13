@@ -12,7 +12,7 @@ DataFrameForEventPage = Dict[str, List]
 
 
 class PartialEventPage(BaseModel):
-    model_config = ConfigDict(extra="forbid")
+    model_config = ConfigDict(title="partial_event_page", extra="forbid")
 
     data: Annotated[
         DataFrameForEventPage,
@@ -44,7 +44,7 @@ class PartialEventPage(BaseModel):
 class EventPage(PartialEventPage):
     """Page of documents to record a quanta of collected data"""
 
-    model_config = ConfigDict(extra="forbid")
+    model_config = ConfigDict(title="event_page", extra="forbid")
 
     descriptor: Annotated[
         str,

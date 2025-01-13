@@ -45,6 +45,7 @@ class RunStop(BaseModel):
     """
 
     model_config = ConfigDict(
+        title="run_stop",
         extra="allow",
         json_schema_extra=RUN_STOP_EXTRA_SCHEMA,
     )

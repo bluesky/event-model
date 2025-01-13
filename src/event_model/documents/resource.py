@@ -9,16 +9,7 @@ from typing import Any, Dict, Literal, TypedDict
 from typing_extensions import NotRequired
 
 
-class Resource(TypedDict):
-    """
-    Document to reference a collection (e.g. file or group of files) of
-    externally-stored data
-    """
-
-    path_semantics: NotRequired[Literal["posix", "windows"]]
-    """
-    Rules for joining paths
-    """
+class PartialResource(TypedDict):
     resource_kwargs: Dict[str, Any]
     """
     Additional argument to pass to the Handler to read a Resource
@@ -31,10 +22,6 @@ class Resource(TypedDict):
     """
     Subset of resource_path that is a local detail, not semantic.
     """
-    run_start: NotRequired[str]
-    """
-    Globally unique ID to the run_start document this resource is associated with.
-    """
     spec: str
     """
     String identifying the format/type of this Resource, used to identify a compatible Handler
@@ -42,4 +29,20 @@ class Resource(TypedDict):
     uid: str
     """
     Globally unique identifier for this Resource
+    """
+
+
+class Resource(PartialResource):
+    """
+    Document to reference a collection (e.g. file or group of files) of
+    externally-stored data
+    """
+
+    path_semantics: NotRequired[Literal["posix", "windows"]]
+    """
+    Rules for joining paths
+    """
+    run_start: NotRequired[str]
+    """
+    Globally unique ID to the run_start document this resource is associated with.
     """

@@ -9,26 +9,14 @@ from typing import Any, Dict, TypedDict, Union
 from typing_extensions import NotRequired
 
 
-class Event(TypedDict):
-    """
-    Document to record a quanta of collected data
-    """
-
+class PartialEvent(TypedDict):
     data: Dict[str, Any]
     """
     The actual measurement data
     """
-    descriptor: str
-    """
-    UID of the EventDescriptor to which this Event belongs
-    """
     filled: NotRequired[Dict[str, Union[bool, str]]]
     """
     Mapping each of the keys of externally-stored data to the boolean False, indicating that the data has not been loaded, or to foreign keys (moved here from 'data' when the data was loaded)
-    """
-    seq_num: int
-    """
-    Sequence number to identify the location of this Event in the Event stream
     """
     time: float
     """
@@ -37,6 +25,21 @@ class Event(TypedDict):
     timestamps: Dict[str, Any]
     """
     The timestamps of the individual measurement data
+    """
+
+
+class Event(PartialEvent):
+    """
+    Document to record a quanta of collected data
+    """
+
+    descriptor: str
+    """
+    UID of the EventDescriptor to which this Event belongs
+    """
+    seq_num: int
+    """
+    Sequence number to identify the location of this Event in the Event stream
     """
     uid: str
     """

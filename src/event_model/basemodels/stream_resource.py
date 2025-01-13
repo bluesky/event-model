@@ -1,6 +1,6 @@
 from typing import Any, Dict
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, ConfigDict, Field
 from typing_extensions import Annotated
 
 
@@ -9,6 +9,11 @@ class StreamResource(BaseModel):
     Document to reference a collection (e.g. file or group of files) of
     externally-stored data streams
     """
+
+    model_config = ConfigDict(
+        title="stream_resource",
+        extra="allow",
+    )
 
     data_key: Annotated[
         str,

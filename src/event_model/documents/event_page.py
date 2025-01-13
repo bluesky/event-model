@@ -9,26 +9,14 @@ from typing import Dict, List, TypedDict, Union
 from typing_extensions import NotRequired
 
 
-class EventPage(TypedDict):
-    """
-    Page of documents to record a quanta of collected data
-    """
-
+class PartialEventPage(TypedDict):
     data: Dict[str, List]
     """
     The actual measurement data
     """
-    descriptor: str
-    """
-    The UID of the EventDescriptor to which all of the Events in this page belong
-    """
     filled: NotRequired[Dict[str, List[Union[bool, str]]]]
     """
     Mapping each of the keys of externally-stored data to an array containing the boolean False, indicating that the data has not been loaded, or to foreign keys (moved here from 'data' when the data was loaded)
-    """
-    seq_num: List[int]
-    """
-    Array of sequence numbers to identify the location of each Event in the Event stream
     """
     time: List[float]
     """
@@ -37,6 +25,21 @@ class EventPage(TypedDict):
     timestamps: Dict[str, List]
     """
     The timestamps of the individual measurement data
+    """
+
+
+class EventPage(PartialEventPage):
+    """
+    Page of documents to record a quanta of collected data
+    """
+
+    descriptor: str
+    """
+    The UID of the EventDescriptor to which all of the Events in this page belong
+    """
+    seq_num: List[int]
+    """
+    Array of sequence numbers to identify the location of each Event in the Event stream
     """
     uid: List[str]
     """

@@ -1,5 +1,5 @@
 {
-    "title": "EventDescriptor",
+    "title": "event_descriptor",
     "description": "Document to describe the data captured in the associated event\ndocuments",
     "type": "object",
     "$defs": {

@@ -1,6 +1,6 @@
 from typing import Any
 
-from pydantic import BaseModel, Field, RootModel
+from pydantic import BaseModel, ConfigDict, Field, RootModel
 from typing_extensions import Annotated
 
 
@@ -23,6 +23,11 @@ class StreamRange(BaseModel):
 
 class StreamDatum(BaseModel):
     """Document to reference a quanta of an externally-stored stream of data."""
+
+    model_config = ConfigDict(
+        title="stream_datum",
+        extra="allow",
+    )
 
     descriptor: Annotated[
         str,

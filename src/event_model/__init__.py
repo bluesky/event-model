@@ -35,7 +35,7 @@ from typing_extensions import Literal
 
 from .documents.datum import Datum
 from .documents.datum_page import DatumPage
-from .documents.event import Event
+from .documents.event import Event, PartialEvent
 from .documents.event_descriptor import (
     Configuration,
     DataKey,
@@ -44,11 +44,8 @@ from .documents.event_descriptor import (
     LimitsRange,
     PerObjectHint,
 )
-from .documents.event_page import EventPage
-from .documents.partial_event import PartialEvent
-from .documents.partial_event_page import PartialEventPage
-from .documents.partial_resource import PartialResource
-from .documents.resource import Resource
+from .documents.event_page import EventPage, PartialEventPage
+from .documents.resource import PartialResource, Resource
 from .documents.run_start import (
     CalculatedEventProjection,
     Calculation,

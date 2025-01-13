@@ -5,7 +5,7 @@ from typing_extensions import Annotated, Literal
 
 
 class PartialResource(BaseModel):
-    model_config = ConfigDict(extra="forbid")
+    model_config = ConfigDict(title="partial_resource", extra="forbid")
 
     spec: Annotated[
         str,
@@ -41,7 +41,7 @@ class Resource(PartialResource):
     externally-stored data
     """
 
-    model_config = ConfigDict(extra="forbid")
+    model_config = ConfigDict(title="resource", extra="forbid")
 
     path_semantics: Annotated[
         Literal["posix", "windows"],

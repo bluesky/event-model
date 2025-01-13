@@ -1,5 +1,5 @@
 {
-    "title": "Datum",
+    "title": "datum",
     "description": "Document to reference a quanta of externally-stored data",
     "type": "object",
     "properties": {

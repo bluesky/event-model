@@ -1,5 +1,5 @@
 {
-    "title": "StreamResource",
+    "title": "stream_resource",
     "description": "Document to reference a collection (e.g. file or group of files) of\nexternally-stored data streams",
     "type": "object",
     "properties": {
@@ -41,5 +41,6 @@
         "parameters",
         "uid",
         "uri"
-    ]
+    ],
+    "additionalProperties": true
 }
