@@ -50,11 +50,9 @@ dev = [
   "numpydoc",
 
   # For schema generation.
-  "pydantic>=2.6",
+  "pydantic<3",
+  "datamodel-code-generator",
 ]
-
-[project.scripts]
-regenerate-schema = "event_model.documents.generate.__main__:main"
 
 [project.urls]
 GitHub = "https://github.com/bluesky/event-model"

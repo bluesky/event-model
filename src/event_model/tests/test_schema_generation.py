@@ -1,32 +1,44 @@
 # type: ignore
 
-# Test schema generation
-import json
-import os
+from pathlib import Path
 
 import pytest
+from pydantic.warnings import PydanticDeprecatedSince20
 
-import event_model
-from event_model.documents import ALL_DOCUMENTS
-from event_model.documents.generate.typeddict_to_schema import typeddict_to_schema
-
-SCHEMA_PATH = event_model.__path__[0] + "/schemas/"
+from event_model.generate.create_documents import JSONSCHEMA, TYPEDDICTS, generate
 
 
-@pytest.mark.parametrize("typed_dict_class", ALL_DOCUMENTS)
-def test_generated_json_matches_typed_dict(typed_dict_class, tmpdir):
-    typeddict_to_schema(typed_dict_class, schema_dir=tmpdir)
-    file_name = os.listdir(tmpdir)[0]
-    generated_file_path = os.path.join(tmpdir, file_name)
-    old_file_path = os.path.join(SCHEMA_PATH, file_name)
+def test_generated_json_matches_typed_dict(tmpdir: Path):
+    tmp_documents = Path(tmpdir) / "documents"
+    tmp_documents.mkdir()
+    tmp_jsonschema = Path(tmpdir) / "jsonschema"
+    tmp_jsonschema.mkdir()
 
-    with open(generated_file_path) as generated_file, open(old_file_path) as old_file:
-        try:
-            assert json.load(generated_file) == json.load(old_file)
-        except AssertionError as error:
+    with pytest.warns(PydanticDeprecatedSince20):
+        generate(jsonschema_root=tmp_jsonschema, documents_root=tmp_documents)
+
+    for new_jsonschema_path in tmp_jsonschema.iterdir():
+        old_jsonschema_path = JSONSCHEMA / new_jsonschema_path.name
+
+        if (
+            not old_jsonschema_path.exists()
+            or new_jsonschema_path.read_text() != old_jsonschema_path.read_text()
+        ):
             raise Exception(
-                f"`{typed_dict_class.__name__}` can generate a json schema, but "
-                f"it doesn't match the schema in `{SCHEMA_PATH}`. Did you forget "
-                "to run `python event_model/documents/generate` after changes "
-                f"to `{typed_dict_class.__name__}`?"
-            ) from error
+                f"{str(old_jsonschema_path)} does not match "
+                f"{str(new_jsonschema_path)}. Did you forget to run "
+                "`python -m event_model.generate` after changes?"
+            )
+
+    for new_document_path in tmp_documents.iterdir():
+        old_document_path = TYPEDDICTS / new_document_path.name
+
+        if (
+            not old_document_path.exists()
+            or new_document_path.read_text() != old_document_path.read_text()
+        ):
+            raise Exception(
+                f"{str(old_document_path)} does not match "
+                f"{str(new_document_path)}. Did you forget to run "
+                "`python -m event_model.generate` after changes?"
+            )

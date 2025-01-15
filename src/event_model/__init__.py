@@ -47,7 +47,16 @@ from .documents.event_descriptor import (
 )
 from .documents.event_page import EventPage, PartialEventPage
 from .documents.resource import PartialResource, Resource
-from .documents.run_start import Calculation, Hints, Projection, Projections, RunStart
+from .documents.run_start import (
+    CalculatedEventProjection,
+    Calculation,
+    ConfigurationProjection,
+    Hints,
+    LinkedEventProjection,
+    Projections,
+    RunStart,
+    StaticProjection,
+)
 from .documents.run_stop import RunStop
 from .documents.stream_datum import StreamDatum, StreamRange
 from .documents.stream_resource import StreamResource
@@ -78,7 +87,10 @@ __all__ = [
     "Resource",
     "Calculation",
     "Hints",
-    "Projection",
+    "LinkedEventProjection",
+    "StaticProjection",
+    "CalculatedEventProjection",
+    "ConfigurationProjection",
     "Projections",
     "RunStart",
     "RunStop",
@@ -350,8 +362,8 @@ class SingleRunDocumentRouter(DocumentRouter):
             else:
                 raise EventModelValueError(
                     "SingleRunDocumentRouter associated with start document "
-                    f'{self._start_doc["uid"]} '
-                    f'received a second start document with uid {doc["uid"]}'
+                    f"{self._start_doc['uid']} "
+                    f"received a second start document with uid {doc['uid']}"
                 )
         elif name == "descriptor":
             assert isinstance(self._start_doc, dict)
@@ -360,9 +372,9 @@ class SingleRunDocumentRouter(DocumentRouter):
             else:
                 raise EventModelValueError(
                     "SingleRunDocumentRouter associated with start document "
-                    f'{self._start_doc["uid"]} '
-                    f'received a descriptor {doc["uid"]} associated with '
-                    f'start document {doc["run_start"]}'
+                    f"{self._start_doc['uid']} "
+                    f"received a descriptor {doc['uid']} associated with "
+                    f"start document {doc['run_start']}"
                 )
         # Defer to superclass for dispatch/processing.
         return super().__call__(name, doc, validate=validate)
@@ -403,7 +415,7 @@ class SingleRunDocumentRouter(DocumentRouter):
         elif doc["descriptor"] not in self._descriptors:
             raise EventModelValueError(
                 "SingleRunDocumentRouter has not processed a descriptor with "
-                f'uid {doc["descriptor"]}'
+                f"uid {doc['descriptor']}"
             )
 
         return self._descriptors[doc["descriptor"]]
@@ -1066,9 +1078,7 @@ class Filler(DocumentRouter):
                 f"mapped from {original_root} to {root} by root_map."
             )
         else:
-            msg += (
-                f"Its 'root' field {original_root} was " f"*not* modified by root_map."
-            )
+            msg += f"Its 'root' field {original_root} was *not* modified by root_map."
         error_to_raise = EventModelError(msg)
         handler = _attempt_with_retries(
             func=handler_class,
@@ -1554,8 +1564,7 @@ class RunRouter(DocumentRouter):
         if uid in self._start_to_start_doc:
             if self._start_to_start_doc[uid] == start_doc:
                 raise ValueError(
-                    "RunRouter received the same 'start' document twice:\n"
-                    "{start_doc!r}"
+                    "RunRouter received the same 'start' document twice:\n{start_doc!r}"
                 )
             else:
                 raise ValueError(
@@ -1821,9 +1830,8 @@ SCHEMA_NAMES = {
     DocumentNames.resource: "schemas/resource.json",
     DocumentNames.stream_datum: "schemas/stream_datum.json",
     DocumentNames.stream_resource: "schemas/stream_resource.json",
-    # DEPRECATED:
-    DocumentNames.bulk_events: "schemas/bulk_events.json",
     DocumentNames.bulk_datum: "schemas/bulk_datum.json",
+    DocumentNames.bulk_events: "schemas/bulk_events.json",
 }
 schemas = {}
 for name, filename in SCHEMA_NAMES.items():
@@ -2155,7 +2163,7 @@ class ComposeStop:
     ) -> RunStop:
         if self.poison_pill:
             raise EventModelError(
-                "Already composed a RunStop document for run " "{!r}.".format(
+                "Already composed a RunStop document for run {!r}.".format(
                     self.start["uid"]
                 )
             )

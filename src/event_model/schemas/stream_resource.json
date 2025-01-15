@@ -1,35 +1,36 @@
 {
     "title": "stream_resource",
-    "description": "Document to reference a collection (e.g. file or group of files) of externally-stored data streams",
+    "description": "Document to reference a collection (e.g. file or group of files) of\nexternally-stored data streams",
     "type": "object",
     "properties": {
         "data_key": {
-            "title": "Data Key",
+            "title": "data_key",
             "description": "A string to show which data_key of the Descriptor are being streamed",
             "type": "string"
         },
         "mimetype": {
-            "title": "Mimetype",
+            "title": "mimetype",
             "description": "String identifying the format/type of this Stream Resource, used to identify a compatible Handler",
             "type": "string"
         },
         "parameters": {
-            "title": "Parameters",
+            "title": "parameters",
             "description": "Additional keyword arguments to pass to the Handler to read a Stream Resource",
             "type": "object"
         },
         "run_start": {
-            "title": "Run Start",
+            "title": "run_start",
             "description": "Globally unique ID to the run_start document this Stream Resource is associated with.",
-            "type": "string"
+            "type": "string",
+            "default": ""
         },
         "uid": {
-            "title": "Uid",
+            "title": "uid",
             "description": "Globally unique identifier for this Stream Resource",
             "type": "string"
         },
         "uri": {
-            "title": "Uri",
+            "title": "uri",
             "description": "URI for locating this resource",
             "type": "string"
         }
@@ -41,5 +42,5 @@
         "uid",
         "uri"
     ],
-    "additionalProperties": false
+    "additionalProperties": true
 }

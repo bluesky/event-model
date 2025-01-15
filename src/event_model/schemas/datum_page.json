@@ -4,7 +4,7 @@
     "type": "object",
     "$defs": {
         "DataFrameForDatumPage": {
-            "title": "DataFrameForDatumPage",
+            "title": "data_frame_for_datum_page",
             "type": "array",
             "items": {
                 "type": "string"
@@ -13,11 +13,12 @@
     },
     "properties": {
         "datum_id": {
+            "title": "datum_id",
             "description": "Array unique identifiers for each Datum (akin to 'uid' for other Document types), typically formatted as '<resource>/<integer>'",
             "$ref": "#/$defs/DataFrameForDatumPage"
         },
         "datum_kwargs": {
-            "title": "Datum Kwargs",
+            "title": "datum_kwargs",
             "description": "Array of arguments to pass to the Handler to retrieve one quanta of data",
             "type": "object",
             "additionalProperties": {
@@ -26,7 +27,7 @@
             }
         },
         "resource": {
-            "title": "Resource",
+            "title": "resource",
             "description": "The UID of the Resource to which all Datums in the page belong",
             "type": "string"
         }

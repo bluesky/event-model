@@ -1,62 +1,40 @@
+# generated in `event_model/generate`
+
 from typing import Tuple, Type, Union
 
-# flake8: noqa
-from event_model.documents.datum import Datum
-from event_model.documents.datum_page import DatumPage
-from event_model.documents.event import Event
-from event_model.documents.event_descriptor import (
-    Dtype,
-    EventDescriptor,
-    Limits,
-    LimitsRange,
-)
-from event_model.documents.event_page import EventPage
-from event_model.documents.resource import Resource
-from event_model.documents.run_start import RunStart
-from event_model.documents.run_stop import RunStop
-from event_model.documents.stream_datum import StreamDatum
-from event_model.documents.stream_resource import StreamResource
+from .datum import *  # noqa: F403
+from .datum_page import *  # noqa: F403
+from .event import *  # noqa: F403
+from .event_descriptor import *  # noqa: F403
+from .event_page import *  # noqa: F403
+from .resource import *  # noqa: F403
+from .run_start import *  # noqa: F403
+from .run_stop import *  # noqa: F403
+from .stream_datum import *  # noqa: F403
+from .stream_resource import *  # noqa: F403
 
 DocumentType = Union[
-    Type[Datum],
-    Type[DatumPage],
-    Type[Event],
-    Type[EventDescriptor],
-    Type[EventPage],
-    Type[Resource],
-    Type[RunStart],
-    Type[RunStop],
-    Type[StreamDatum],
-    Type[StreamResource],
+    Type[Datum],  # noqa: F405,
+    Type[DatumPage],  # noqa: F405,
+    Type[Event],  # noqa: F405,
+    Type[EventDescriptor],  # noqa: F405,
+    Type[EventPage],  # noqa: F405,
+    Type[Resource],  # noqa: F405,
+    Type[RunStart],  # noqa: F405,
+    Type[RunStop],  # noqa: F405,
+    Type[StreamDatum],  # noqa: F405,
+    Type[StreamResource],  # noqa: F405,
 ]
 
 ALL_DOCUMENTS: Tuple[DocumentType, ...] = (
-    Datum,
-    DatumPage,
-    Event,
-    EventDescriptor,
-    EventPage,
-    Resource,
-    RunStart,
-    RunStop,
-    StreamDatum,
-    StreamResource,
+    Datum,  # noqa: F405
+    DatumPage,  # noqa: F405
+    Event,  # noqa: F405
+    EventDescriptor,  # noqa: F405
+    EventPage,  # noqa: F405
+    Resource,  # noqa: F405
+    RunStart,  # noqa: F405
+    RunStop,  # noqa: F405
+    StreamDatum,  # noqa: F405
+    StreamResource,  # noqa: F405
 )
-
-
-__all__ = [
-    "Datum",
-    "DatumPage",
-    "Dtype",
-    "Event",
-    "EventDescriptor",
-    "EventPage",
-    "Limits",
-    "LimitsRange",
-    "Resource",
-    "RunStart",
-    "RunStop",
-    "StreamDatum",
-    "StreamResource",
-    "DocumentType",
-]

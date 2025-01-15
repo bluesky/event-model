@@ -4,17 +4,17 @@
     "type": "object",
     "properties": {
         "datum_id": {
-            "title": "Datum Id",
+            "title": "datum_id",
             "description": "Globally unique identifier for this Datum (akin to 'uid' for other Document types), typically formatted as '<resource>/<integer>'",
             "type": "string"
         },
         "datum_kwargs": {
-            "title": "Datum Kwargs",
+            "title": "datum_kwargs",
             "description": "Arguments to pass to the Handler to retrieve one quanta of data",
             "type": "object"
         },
         "resource": {
-            "title": "Resource",
+            "title": "resource",
             "description": "The UID of the Resource to which this Datum belongs",
             "type": "string"
         }
