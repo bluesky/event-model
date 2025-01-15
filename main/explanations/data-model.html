@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Data Model &#8212; event-model 1.22.3.dev2+gacd40a9 documentation</title>
+    <title>Data Model &#8212; event-model 1.22.4.dev6+ga8d4575 documentation</title>
   
   
   
@@ -42,7 +42,7 @@
   <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
-    <script src="../_static/documentation_options.js?v=2451b156"></script>
+    <script src="../_static/documentation_options.js?v=225650d7"></script>
     <script src="../_static/doctools.js?v=9bcbadda"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -129,8 +129,8 @@
       
     
     
-    <img src="../_static/event-model-logo.svg" class="logo__image only-light" alt="event-model 1.22.3.dev2+gacd40a9 documentation - Home"/>
-    <img src="../_static/event-model-logo.svg" class="logo__image only-dark pst-js-only" alt="event-model 1.22.3.dev2+gacd40a9 documentation - Home"/>
+    <img src="../_static/event-model-logo.svg" class="logo__image only-light" alt="event-model 1.22.4.dev6+ga8d4575 documentation - Home"/>
+    <img src="../_static/event-model-logo.svg" class="logo__image only-dark pst-js-only" alt="event-model 1.22.4.dev6+ga8d4575 documentation - Home"/>
   
   
 </a></div>
@@ -604,51 +604,136 @@ experimetal and subject to backward-incompatible changes in future releases.</p>
 <p>The run start document formal schema:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
     <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;run_start&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Document created at the start of run. Provides a seach target and later documents link to it&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Document created at the start of run. Provides a seach target and</span><span class="se">\n</span><span class="s2">later documents link to it&quot;</span><span class="p">,</span>
     <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span>
     <span class="s2">&quot;$defs&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;CalculatedEventProjection&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;calculated_event_projection&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;calculation&quot;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;calculation&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;required fields if type is calculated&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;$ref&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/Calculation&quot;</span>
+                <span class="p">},</span>
+                <span class="s2">&quot;field&quot;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;field&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
+                <span class="p">},</span>
+                <span class="s2">&quot;location&quot;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;location&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Projection comes and event&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;const&quot;</span><span class="p">:</span> <span class="s2">&quot;event&quot;</span>
+                <span class="p">},</span>
+                <span class="s2">&quot;stream&quot;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;stream&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
+                <span class="p">},</span>
+                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;type&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Projection is of type calculated, a value that requires calculation.&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;const&quot;</span><span class="p">:</span> <span class="s2">&quot;calculated&quot;</span>
+                <span class="p">}</span>
+            <span class="p">},</span>
+            <span class="s2">&quot;required&quot;</span><span class="p">:</span> <span class="p">[</span>
+                <span class="s2">&quot;calculation&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;field&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;location&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;stream&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;type&quot;</span>
+            <span class="p">]</span>
+        <span class="p">},</span>
         <span class="s2">&quot;Calculation&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Calculation&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;calculation&quot;</span><span class="p">,</span>
             <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span>
             <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span>
                 <span class="s2">&quot;args&quot;</span><span class="p">:</span> <span class="p">{</span>
-                    <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Args&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;args&quot;</span><span class="p">,</span>
                     <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;array&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="p">[],</span>
                     <span class="s2">&quot;items&quot;</span><span class="p">:</span> <span class="p">{}</span>
                 <span class="p">},</span>
                 <span class="s2">&quot;callable&quot;</span><span class="p">:</span> <span class="p">{</span>
-                    <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Callable&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;callable&quot;</span><span class="p">,</span>
                     <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;callable function to perform calculation&quot;</span><span class="p">,</span>
                     <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
                 <span class="p">},</span>
                 <span class="s2">&quot;kwargs&quot;</span><span class="p">:</span> <span class="p">{</span>
-                    <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Kwargs&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;kwargs&quot;</span><span class="p">,</span>
                     <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;kwargs for calcalation callable&quot;</span><span class="p">,</span>
-                    <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span>
+                    <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="p">{}</span>
                 <span class="p">}</span>
             <span class="p">},</span>
             <span class="s2">&quot;required&quot;</span><span class="p">:</span> <span class="p">[</span>
                 <span class="s2">&quot;callable&quot;</span>
+            <span class="p">],</span>
+            <span class="s2">&quot;additionalProperties&quot;</span><span class="p">:</span> <span class="n">true</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;ConfigurationProjection&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;configuration_projection&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;config_device&quot;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;config_device&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
+                <span class="p">},</span>
+                <span class="s2">&quot;config_index&quot;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;config_index&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;integer&quot;</span>
+                <span class="p">},</span>
+                <span class="s2">&quot;field&quot;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;field&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
+                <span class="p">},</span>
+                <span class="s2">&quot;location&quot;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;location&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Projection comes from configuration fields in the event_descriptor document&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;const&quot;</span><span class="p">:</span> <span class="s2">&quot;configuration&quot;</span>
+                <span class="p">},</span>
+                <span class="s2">&quot;stream&quot;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;stream&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
+                <span class="p">},</span>
+                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;type&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Projection is of type linked, a value linked from the data set.&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;const&quot;</span><span class="p">:</span> <span class="s2">&quot;linked&quot;</span>
+                <span class="p">}</span>
+            <span class="p">},</span>
+            <span class="s2">&quot;required&quot;</span><span class="p">:</span> <span class="p">[</span>
+                <span class="s2">&quot;config_device&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;config_index&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;field&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;location&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;stream&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;type&quot;</span>
             <span class="p">]</span>
         <span class="p">},</span>
         <span class="s2">&quot;DataType&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;DataType&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;data_type&quot;</span><span class="p">,</span>
             <span class="s2">&quot;patternProperties&quot;</span><span class="p">:</span> <span class="p">{</span>
                 <span class="s2">&quot;^([^./]+)$&quot;</span><span class="p">:</span> <span class="p">{</span>
                     <span class="s2">&quot;$ref&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/DataType&quot;</span>
                 <span class="p">}</span>
             <span class="p">},</span>
-            <span class="s2">&quot;additionalProperties&quot;</span><span class="p">:</span> <span class="n">false</span>
+            <span class="s2">&quot;additionalProperties&quot;</span><span class="p">:</span> <span class="n">false</span><span class="p">,</span>
+            <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="n">null</span>
         <span class="p">},</span>
         <span class="s2">&quot;Hints&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Hints&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;hints&quot;</span><span class="p">,</span>
             <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Start-level hints&quot;</span><span class="p">,</span>
             <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span>
             <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span>
                 <span class="s2">&quot;dimensions&quot;</span><span class="p">:</span> <span class="p">{</span>
-                    <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Dimensions&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;dimensions&quot;</span><span class="p">,</span>
                     <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;The independent axes of the experiment. Ordered slow to fast&quot;</span><span class="p">,</span>
                     <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;array&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="p">[],</span>
                     <span class="s2">&quot;items&quot;</span><span class="p">:</span> <span class="p">{</span>
                         <span class="s2">&quot;items&quot;</span><span class="p">:</span> <span class="p">{</span>
                             <span class="s2">&quot;anyOf&quot;</span><span class="p">:</span> <span class="p">[</span>
@@ -666,202 +751,80 @@ experimetal and subject to backward-incompatible changes in future releases.</p>
                         <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;array&quot;</span>
                     <span class="p">}</span>
                 <span class="p">}</span>
-            <span class="p">}</span>
+            <span class="p">},</span>
+            <span class="s2">&quot;additionalProperties&quot;</span><span class="p">:</span> <span class="n">true</span>
         <span class="p">},</span>
-        <span class="s2">&quot;Projection&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Projection&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Where to get the data from&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;LinkedEventProjection&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;linked_event_projection&quot;</span><span class="p">,</span>
             <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span>
             <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span>
-                <span class="s2">&quot;calculation&quot;</span><span class="p">:</span> <span class="p">{</span>
-                    <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;calculation properties&quot;</span><span class="p">,</span>
-                    <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;required fields if type is calculated&quot;</span><span class="p">,</span>
-                    <span class="s2">&quot;$ref&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/Calculation&quot;</span>
-                <span class="p">},</span>
-                <span class="s2">&quot;config_device&quot;</span><span class="p">:</span> <span class="p">{</span>
-                    <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Config Device&quot;</span><span class="p">,</span>
-                    <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
-                <span class="p">},</span>
-                <span class="s2">&quot;config_index&quot;</span><span class="p">:</span> <span class="p">{</span>
-                    <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Config Index&quot;</span><span class="p">,</span>
-                    <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;integer&quot;</span>
-                <span class="p">},</span>
                 <span class="s2">&quot;field&quot;</span><span class="p">:</span> <span class="p">{</span>
-                    <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Field&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;field&quot;</span><span class="p">,</span>
                     <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
                 <span class="p">},</span>
                 <span class="s2">&quot;location&quot;</span><span class="p">:</span> <span class="p">{</span>
-                    <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Location&quot;</span><span class="p">,</span>
-                    <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;start comes from metadata fields in the start document, event comes from event, configuration comes from configuration fields in the event_descriptor document&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;location&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Projection comes and event&quot;</span><span class="p">,</span>
                     <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
-                    <span class="s2">&quot;enum&quot;</span><span class="p">:</span> <span class="p">[</span>
-                        <span class="s2">&quot;start&quot;</span><span class="p">,</span>
-                        <span class="s2">&quot;event&quot;</span><span class="p">,</span>
-                        <span class="s2">&quot;configuration&quot;</span>
-                    <span class="p">]</span>
+                    <span class="s2">&quot;const&quot;</span><span class="p">:</span> <span class="s2">&quot;event&quot;</span>
                 <span class="p">},</span>
                 <span class="s2">&quot;stream&quot;</span><span class="p">:</span> <span class="p">{</span>
-                    <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Stream&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;stream&quot;</span><span class="p">,</span>
                     <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
                 <span class="p">},</span>
                 <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="p">{</span>
-                    <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Type&quot;</span><span class="p">,</span>
-                    <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;linked: a value linked from the data set, calculated: a value that requires calculation, static:  a value defined here in the projection &quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;type&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Projection is of type linked, a value linked from the data set.&quot;</span><span class="p">,</span>
                     <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
-                    <span class="s2">&quot;enum&quot;</span><span class="p">:</span> <span class="p">[</span>
-                        <span class="s2">&quot;linked&quot;</span><span class="p">,</span>
-                        <span class="s2">&quot;calculated&quot;</span><span class="p">,</span>
-                        <span class="s2">&quot;static&quot;</span>
-                    <span class="p">]</span>
-                <span class="p">},</span>
-                <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="p">{</span>
-                    <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Value&quot;</span><span class="p">,</span>
-                    <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;value explicitely defined in the projection when type==static.&quot;</span>
+                    <span class="s2">&quot;const&quot;</span><span class="p">:</span> <span class="s2">&quot;linked&quot;</span>
                 <span class="p">}</span>
             <span class="p">},</span>
-            <span class="s2">&quot;allOf&quot;</span><span class="p">:</span> <span class="p">[</span>
-                <span class="p">{</span>
-                    <span class="s2">&quot;if&quot;</span><span class="p">:</span> <span class="p">{</span>
-                        <span class="s2">&quot;allOf&quot;</span><span class="p">:</span> <span class="p">[</span>
-                            <span class="p">{</span>
-                                <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span>
-                                    <span class="s2">&quot;location&quot;</span><span class="p">:</span> <span class="p">{</span>
-                                        <span class="s2">&quot;enum&quot;</span><span class="p">:</span> <span class="p">[</span>
-                                            <span class="s2">&quot;configuration&quot;</span>
-                                        <span class="p">]</span>
-                                    <span class="p">}</span>
-                                <span class="p">}</span>
-                            <span class="p">},</span>
-                            <span class="p">{</span>
-                                <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span>
-                                    <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="p">{</span>
-                                        <span class="s2">&quot;enum&quot;</span><span class="p">:</span> <span class="p">[</span>
-                                            <span class="s2">&quot;linked&quot;</span>
-                                        <span class="p">]</span>
-                                    <span class="p">}</span>
-                                <span class="p">}</span>
-                            <span class="p">}</span>
-                        <span class="p">]</span>
-                    <span class="p">},</span>
-                    <span class="s2">&quot;then&quot;</span><span class="p">:</span> <span class="p">{</span>
-                        <span class="s2">&quot;required&quot;</span><span class="p">:</span> <span class="p">[</span>
-                            <span class="s2">&quot;type&quot;</span><span class="p">,</span>
-                            <span class="s2">&quot;location&quot;</span><span class="p">,</span>
-                            <span class="s2">&quot;config_index&quot;</span><span class="p">,</span>
-                            <span class="s2">&quot;config_device&quot;</span><span class="p">,</span>
-                            <span class="s2">&quot;field&quot;</span><span class="p">,</span>
-                            <span class="s2">&quot;stream&quot;</span>
-                        <span class="p">]</span>
-                    <span class="p">}</span>
-                <span class="p">},</span>
-                <span class="p">{</span>
-                    <span class="s2">&quot;if&quot;</span><span class="p">:</span> <span class="p">{</span>
-                        <span class="s2">&quot;allOf&quot;</span><span class="p">:</span> <span class="p">[</span>
-                            <span class="p">{</span>
-                                <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span>
-                                    <span class="s2">&quot;location&quot;</span><span class="p">:</span> <span class="p">{</span>
-                                        <span class="s2">&quot;enum&quot;</span><span class="p">:</span> <span class="p">[</span>
-                                            <span class="s2">&quot;event&quot;</span>
-                                        <span class="p">]</span>
-                                    <span class="p">}</span>
-                                <span class="p">}</span>
-                            <span class="p">},</span>
-                            <span class="p">{</span>
-                                <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span>
-                                    <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="p">{</span>
-                                        <span class="s2">&quot;enum&quot;</span><span class="p">:</span> <span class="p">[</span>
-                                            <span class="s2">&quot;linked&quot;</span>
-                                        <span class="p">]</span>
-                                    <span class="p">}</span>
-                                <span class="p">}</span>
-                            <span class="p">}</span>
-                        <span class="p">]</span>
-                    <span class="p">},</span>
-                    <span class="s2">&quot;then&quot;</span><span class="p">:</span> <span class="p">{</span>
-                        <span class="s2">&quot;required&quot;</span><span class="p">:</span> <span class="p">[</span>
-                            <span class="s2">&quot;type&quot;</span><span class="p">,</span>
-                            <span class="s2">&quot;location&quot;</span><span class="p">,</span>
-                            <span class="s2">&quot;field&quot;</span><span class="p">,</span>
-                            <span class="s2">&quot;stream&quot;</span>
-                        <span class="p">]</span>
-                    <span class="p">}</span>
-                <span class="p">},</span>
-                <span class="p">{</span>
-                    <span class="s2">&quot;if&quot;</span><span class="p">:</span> <span class="p">{</span>
-                        <span class="s2">&quot;allOf&quot;</span><span class="p">:</span> <span class="p">[</span>
-                            <span class="p">{</span>
-                                <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span>
-                                    <span class="s2">&quot;location&quot;</span><span class="p">:</span> <span class="p">{</span>
-                                        <span class="s2">&quot;enum&quot;</span><span class="p">:</span> <span class="p">[</span>
-                                            <span class="s2">&quot;event&quot;</span>
-                                        <span class="p">]</span>
-                                    <span class="p">}</span>
-                                <span class="p">}</span>
-                            <span class="p">},</span>
-                            <span class="p">{</span>
-                                <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span>
-                                    <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="p">{</span>
-                                        <span class="s2">&quot;enum&quot;</span><span class="p">:</span> <span class="p">[</span>
-                                            <span class="s2">&quot;calculated&quot;</span>
-                                        <span class="p">]</span>
-                                    <span class="p">}</span>
-                                <span class="p">}</span>
-                            <span class="p">}</span>
-                        <span class="p">]</span>
-                    <span class="p">},</span>
-                    <span class="s2">&quot;then&quot;</span><span class="p">:</span> <span class="p">{</span>
-                        <span class="s2">&quot;required&quot;</span><span class="p">:</span> <span class="p">[</span>
-                            <span class="s2">&quot;type&quot;</span><span class="p">,</span>
-                            <span class="s2">&quot;field&quot;</span><span class="p">,</span>
-                            <span class="s2">&quot;stream&quot;</span><span class="p">,</span>
-                            <span class="s2">&quot;calculation&quot;</span>
-                        <span class="p">]</span>
-                    <span class="p">}</span>
-                <span class="p">},</span>
-                <span class="p">{</span>
-                    <span class="s2">&quot;if&quot;</span><span class="p">:</span> <span class="p">{</span>
-                        <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span>
-                            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="p">{</span>
-                                <span class="s2">&quot;enum&quot;</span><span class="p">:</span> <span class="p">[</span>
-                                    <span class="s2">&quot;static&quot;</span>
-                                <span class="p">]</span>
-                            <span class="p">}</span>
-                        <span class="p">}</span>
-                    <span class="p">},</span>
-                    <span class="s2">&quot;then&quot;</span><span class="p">:</span> <span class="p">{</span>
-                        <span class="s2">&quot;required&quot;</span><span class="p">:</span> <span class="p">[</span>
-                            <span class="s2">&quot;type&quot;</span><span class="p">,</span>
-                            <span class="s2">&quot;value&quot;</span>
-                        <span class="p">]</span>
-                    <span class="p">}</span>
-                <span class="p">}</span>
+            <span class="s2">&quot;required&quot;</span><span class="p">:</span> <span class="p">[</span>
+                <span class="s2">&quot;field&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;location&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;stream&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;type&quot;</span>
             <span class="p">]</span>
         <span class="p">},</span>
         <span class="s2">&quot;Projections&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Projections&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;projections&quot;</span><span class="p">,</span>
             <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Describe how to interperet this run as the given projection&quot;</span><span class="p">,</span>
             <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span>
             <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span>
                 <span class="s2">&quot;configuration&quot;</span><span class="p">:</span> <span class="p">{</span>
-                    <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Configuration&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;configuration&quot;</span><span class="p">,</span>
                     <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Static information about projection&quot;</span><span class="p">,</span>
                     <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span>
                 <span class="p">},</span>
                 <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="p">{</span>
-                    <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Name&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;name&quot;</span><span class="p">,</span>
                     <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;The name of the projection&quot;</span><span class="p">,</span>
-                    <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
+                    <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span>
                 <span class="p">},</span>
                 <span class="s2">&quot;projection&quot;</span><span class="p">:</span> <span class="p">{</span>
-                    <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Projection&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;projection&quot;</span><span class="p">,</span>
                     <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
                     <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span>
                     <span class="s2">&quot;additionalProperties&quot;</span><span class="p">:</span> <span class="p">{</span>
-                        <span class="s2">&quot;$ref&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/Projection&quot;</span>
+                        <span class="s2">&quot;anyOf&quot;</span><span class="p">:</span> <span class="p">[</span>
+                            <span class="p">{</span>
+                                <span class="s2">&quot;$ref&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/ConfigurationProjection&quot;</span>
+                            <span class="p">},</span>
+                            <span class="p">{</span>
+                                <span class="s2">&quot;$ref&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/LinkedEventProjection&quot;</span>
+                            <span class="p">},</span>
+                            <span class="p">{</span>
+                                <span class="s2">&quot;$ref&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/CalculatedEventProjection&quot;</span>
+                            <span class="p">},</span>
+                            <span class="p">{</span>
+                                <span class="s2">&quot;$ref&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/StaticProjection&quot;</span>
+                            <span class="p">}</span>
+                        <span class="p">]</span>
                     <span class="p">}</span>
                 <span class="p">},</span>
                 <span class="s2">&quot;version&quot;</span><span class="p">:</span> <span class="p">{</span>
-                    <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Version&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;version&quot;</span><span class="p">,</span>
                     <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;The version of the projection spec. Can specify the version of an external specification.&quot;</span><span class="p">,</span>
                     <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
                 <span class="p">}</span>
@@ -871,60 +834,88 @@ experimetal and subject to backward-incompatible changes in future releases.</p>
                 <span class="s2">&quot;projection&quot;</span><span class="p">,</span>
                 <span class="s2">&quot;version&quot;</span>
             <span class="p">]</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;StaticProjection&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;static_projection&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;type&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Projection is of type static, a value defined here in the projection&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;const&quot;</span><span class="p">:</span> <span class="s2">&quot;static&quot;</span>
+                <span class="p">},</span>
+                <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;value&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;value explicitely defined in the static projection&quot;</span>
+                <span class="p">}</span>
+            <span class="p">},</span>
+            <span class="s2">&quot;required&quot;</span><span class="p">:</span> <span class="p">[</span>
+                <span class="s2">&quot;type&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;value&quot;</span>
+            <span class="p">]</span>
         <span class="p">}</span>
     <span class="p">},</span>
     <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span>
         <span class="s2">&quot;data_groups&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Data Groups&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;data_groups&quot;</span><span class="p">,</span>
             <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;An optional list of data access groups that have meaning to some external system. Examples might include facility, beamline, end stations, proposal, safety form.&quot;</span><span class="p">,</span>
             <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;array&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="p">[],</span>
             <span class="s2">&quot;items&quot;</span><span class="p">:</span> <span class="p">{</span>
                 <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
             <span class="p">}</span>
         <span class="p">},</span>
         <span class="s2">&quot;data_session&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Data Session&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;data_session&quot;</span><span class="p">,</span>
             <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;An optional field for grouping runs. The meaning is not mandated, but this is a data management grouping and not a scientific grouping. It is intended to group runs in a visit or set of trials.&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span>
         <span class="p">},</span>
         <span class="s2">&quot;data_type&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;data_type&quot;</span><span class="p">,</span>
             <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
             <span class="s2">&quot;$ref&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/DataType&quot;</span>
         <span class="p">},</span>
         <span class="s2">&quot;group&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Group&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;group&quot;</span><span class="p">,</span>
             <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Unix group to associate this data with&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span>
         <span class="p">},</span>
         <span class="s2">&quot;hints&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s2">&quot;$ref&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/Hints&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;additionalProperties&quot;</span><span class="p">:</span> <span class="n">false</span><span class="p">,</span>
+            <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;hints&quot;</span><span class="p">,</span>
             <span class="s2">&quot;patternProperties&quot;</span><span class="p">:</span> <span class="p">{</span>
                 <span class="s2">&quot;^([^.]+)$&quot;</span><span class="p">:</span> <span class="p">{</span>
                     <span class="s2">&quot;$ref&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/DataType&quot;</span>
                 <span class="p">}</span>
-            <span class="p">}</span>
+            <span class="p">},</span>
+            <span class="s2">&quot;additionalProperties&quot;</span><span class="p">:</span> <span class="n">false</span><span class="p">,</span>
+            <span class="s2">&quot;$ref&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/Hints&quot;</span>
         <span class="p">},</span>
         <span class="s2">&quot;owner&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Owner&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;owner&quot;</span><span class="p">,</span>
             <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Unix owner to associate this data with&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span>
         <span class="p">},</span>
         <span class="s2">&quot;project&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Project&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;project&quot;</span><span class="p">,</span>
             <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Name of project that this run is part of&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span>
         <span class="p">},</span>
         <span class="s2">&quot;projections&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Projections&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;projections&quot;</span><span class="p">,</span>
             <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
             <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;array&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="p">[],</span>
             <span class="s2">&quot;items&quot;</span><span class="p">:</span> <span class="p">{</span>
                 <span class="s2">&quot;$ref&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/Projections&quot;</span>
             <span class="p">}</span>
         <span class="p">},</span>
         <span class="s2">&quot;sample&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Sample&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;sample&quot;</span><span class="p">,</span>
             <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Information about the sample, may be a UID to another collection&quot;</span><span class="p">,</span>
             <span class="s2">&quot;anyOf&quot;</span><span class="p">:</span> <span class="p">[</span>
                 <span class="p">{</span>
@@ -933,20 +924,22 @@ experimetal and subject to backward-incompatible changes in future releases.</p>
                 <span class="p">{</span>
                     <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
                 <span class="p">}</span>
-            <span class="p">]</span>
+            <span class="p">],</span>
+            <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span>
         <span class="p">},</span>
         <span class="s2">&quot;scan_id&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Scan Id&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;scan_id&quot;</span><span class="p">,</span>
             <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Scan ID number, not globally unique&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;integer&quot;</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;integer&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="mi">0</span>
         <span class="p">},</span>
         <span class="s2">&quot;time&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Time&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;time&quot;</span><span class="p">,</span>
             <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Time the run started.  Unix epoch time&quot;</span><span class="p">,</span>
             <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;number&quot;</span>
         <span class="p">},</span>
         <span class="s2">&quot;uid&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Uid&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;uid&quot;</span><span class="p">,</span>
             <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Globally unique ID for this run&quot;</span><span class="p">,</span>
             <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
         <span class="p">}</span>
@@ -1036,68 +1029,67 @@ is detailed and takes some time to cover, so we defer it to a
 <p>Formal schema:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
     <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;event_descriptor&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Document to describe the data captured in the associated event documents&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Document to describe the data captured in the associated event</span><span class="se">\n</span><span class="s2">documents&quot;</span><span class="p">,</span>
     <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span>
     <span class="s2">&quot;$defs&quot;</span><span class="p">:</span> <span class="p">{</span>
         <span class="s2">&quot;Configuration&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Configuration&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;configuration&quot;</span><span class="p">,</span>
             <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span>
             <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span>
                 <span class="s2">&quot;data&quot;</span><span class="p">:</span> <span class="p">{</span>
-                    <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Data&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;data&quot;</span><span class="p">,</span>
                     <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;The actual measurement data&quot;</span><span class="p">,</span>
-                    <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span>
+                    <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="p">{}</span>
                 <span class="p">},</span>
                 <span class="s2">&quot;data_keys&quot;</span><span class="p">:</span> <span class="p">{</span>
-                    <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Data Keys&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;data_keys&quot;</span><span class="p">,</span>
                     <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;This describes the data stored alongside it in this configuration object.&quot;</span><span class="p">,</span>
                     <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span>
                     <span class="s2">&quot;additionalProperties&quot;</span><span class="p">:</span> <span class="p">{</span>
                         <span class="s2">&quot;$ref&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/DataKey&quot;</span>
-                    <span class="p">}</span>
+                    <span class="p">},</span>
+                    <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="p">{}</span>
                 <span class="p">},</span>
                 <span class="s2">&quot;timestamps&quot;</span><span class="p">:</span> <span class="p">{</span>
-                    <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Timestamps&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;timestamps&quot;</span><span class="p">,</span>
                     <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;The timestamps of the individual measurement data&quot;</span><span class="p">,</span>
-                    <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span>
+                    <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="p">{}</span>
                 <span class="p">}</span>
-            <span class="p">}</span>
+            <span class="p">},</span>
+            <span class="s2">&quot;additionalProperties&quot;</span><span class="p">:</span> <span class="n">true</span>
         <span class="p">},</span>
         <span class="s2">&quot;DataKey&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;DataKey&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;data_key&quot;</span><span class="p">,</span>
             <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Describes the objects in the data property of Event documents&quot;</span><span class="p">,</span>
             <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span>
             <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span>
                 <span class="s2">&quot;choices&quot;</span><span class="p">:</span> <span class="p">{</span>
-                    <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Choices&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;choices&quot;</span><span class="p">,</span>
                     <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Choices of enum value.&quot;</span><span class="p">,</span>
                     <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;array&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="p">[],</span>
                     <span class="s2">&quot;items&quot;</span><span class="p">:</span> <span class="p">{</span>
                         <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
                     <span class="p">}</span>
                 <span class="p">},</span>
                 <span class="s2">&quot;dims&quot;</span><span class="p">:</span> <span class="p">{</span>
-                    <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Dims&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;dims&quot;</span><span class="p">,</span>
                     <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;The names for dimensions of the data. Null or empty list if scalar data&quot;</span><span class="p">,</span>
                     <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;array&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="p">[],</span>
                     <span class="s2">&quot;items&quot;</span><span class="p">:</span> <span class="p">{</span>
                         <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
                     <span class="p">}</span>
                 <span class="p">},</span>
                 <span class="s2">&quot;dtype&quot;</span><span class="p">:</span> <span class="p">{</span>
-                    <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Dtype&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;dtype&quot;</span><span class="p">,</span>
                     <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;The type of the data in the event, given as a broad JSON schema type.&quot;</span><span class="p">,</span>
-                    <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
-                    <span class="s2">&quot;enum&quot;</span><span class="p">:</span> <span class="p">[</span>
-                        <span class="s2">&quot;string&quot;</span><span class="p">,</span>
-                        <span class="s2">&quot;number&quot;</span><span class="p">,</span>
-                        <span class="s2">&quot;array&quot;</span><span class="p">,</span>
-                        <span class="s2">&quot;boolean&quot;</span><span class="p">,</span>
-                        <span class="s2">&quot;integer&quot;</span>
-                    <span class="p">]</span>
+                    <span class="s2">&quot;$ref&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/Dtype&quot;</span>
                 <span class="p">},</span>
                 <span class="s2">&quot;dtype_numpy&quot;</span><span class="p">:</span> <span class="p">{</span>
-                    <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Dtype Numpy&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;dtype_numpy&quot;</span><span class="p">,</span>
                     <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;The type of the data in the event, given as a numpy dtype string (or, for structured dtypes, array).&quot;</span><span class="p">,</span>
                     <span class="s2">&quot;anyOf&quot;</span><span class="p">:</span> <span class="p">[</span>
                         <span class="p">{</span>
@@ -1123,25 +1115,29 @@ is detailed and takes some time to cover, so we defer it to a
                             <span class="p">},</span>
                             <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;array&quot;</span>
                         <span class="p">}</span>
-                    <span class="p">]</span>
+                    <span class="p">],</span>
+                    <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span>
                 <span class="p">},</span>
                 <span class="s2">&quot;external&quot;</span><span class="p">:</span> <span class="p">{</span>
-                    <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;External&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;external&quot;</span><span class="p">,</span>
                     <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Where the data is stored if it is stored external to the events&quot;</span><span class="p">,</span>
                     <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
                     <span class="s2">&quot;pattern&quot;</span><span class="p">:</span> <span class="s2">&quot;^[A-Z]+:?&quot;</span>
                 <span class="p">},</span>
                 <span class="s2">&quot;limits&quot;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;limits&quot;</span><span class="p">,</span>
                     <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Epics limits.&quot;</span><span class="p">,</span>
                     <span class="s2">&quot;$ref&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/Limits&quot;</span>
                 <span class="p">},</span>
                 <span class="s2">&quot;object_name&quot;</span><span class="p">:</span> <span class="p">{</span>
-                    <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Object Name&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;object_name&quot;</span><span class="p">,</span>
                     <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;The name of the object this key was pulled from.&quot;</span><span class="p">,</span>
-                    <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
+                    <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span>
                 <span class="p">},</span>
                 <span class="s2">&quot;precision&quot;</span><span class="p">:</span> <span class="p">{</span>
-                    <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Precision&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;precision&quot;</span><span class="p">,</span>
                     <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Number of digits after decimal place if a floating point number&quot;</span><span class="p">,</span>
                     <span class="s2">&quot;anyOf&quot;</span><span class="p">:</span> <span class="p">[</span>
                         <span class="p">{</span>
@@ -1150,10 +1146,11 @@ is detailed and takes some time to cover, so we defer it to a
                         <span class="p">{</span>
                             <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;null&quot;</span>
                         <span class="p">}</span>
-                    <span class="p">]</span>
+                    <span class="p">],</span>
+                    <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="n">null</span>
                 <span class="p">},</span>
                 <span class="s2">&quot;shape&quot;</span><span class="p">:</span> <span class="p">{</span>
-                    <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Shape&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;shape&quot;</span><span class="p">,</span>
                     <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;The shape of the data.  Empty list indicates scalar data.&quot;</span><span class="p">,</span>
                     <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;array&quot;</span><span class="p">,</span>
                     <span class="s2">&quot;items&quot;</span><span class="p">:</span> <span class="p">{</span>
@@ -1161,67 +1158,136 @@ is detailed and takes some time to cover, so we defer it to a
                     <span class="p">}</span>
                 <span class="p">},</span>
                 <span class="s2">&quot;source&quot;</span><span class="p">:</span> <span class="p">{</span>
-                    <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Source&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;source&quot;</span><span class="p">,</span>
                     <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;The source (ex piece of hardware) of the data.&quot;</span><span class="p">,</span>
                     <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
                 <span class="p">},</span>
                 <span class="s2">&quot;units&quot;</span><span class="p">:</span> <span class="p">{</span>
-                    <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Units&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;units&quot;</span><span class="p">,</span>
                     <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Engineering units of the value&quot;</span><span class="p">,</span>
-                    <span class="s2">&quot;anyOf&quot;</span><span class="p">:</span> <span class="p">[</span>
-                        <span class="p">{</span>
-                            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
-                        <span class="p">},</span>
-                        <span class="p">{</span>
-                            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;null&quot;</span>
-                        <span class="p">}</span>
-                    <span class="p">]</span>
+                    <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span>
                 <span class="p">}</span>
             <span class="p">},</span>
             <span class="s2">&quot;required&quot;</span><span class="p">:</span> <span class="p">[</span>
                 <span class="s2">&quot;dtype&quot;</span><span class="p">,</span>
                 <span class="s2">&quot;shape&quot;</span><span class="p">,</span>
                 <span class="s2">&quot;source&quot;</span>
+            <span class="p">],</span>
+            <span class="s2">&quot;additionalProperties&quot;</span><span class="p">:</span> <span class="n">true</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;DataType&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;DataType&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;patternProperties&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;^([^./]+)$&quot;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s2">&quot;$ref&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/DataType&quot;</span>
+                <span class="p">}</span>
+            <span class="p">},</span>
+            <span class="s2">&quot;additionalProperties&quot;</span><span class="p">:</span> <span class="n">false</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;Dtype&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;dtype&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;enum&quot;</span><span class="p">:</span> <span class="p">[</span>
+                <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;number&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;array&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;boolean&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;integer&quot;</span>
             <span class="p">]</span>
         <span class="p">},</span>
         <span class="s2">&quot;Limits&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Limits&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Epics and tango limits:</span><span class="se">\n</span><span class="s2">see 3.4.1 https://epics.anl.gov/base/R3-14/12-docs/AppDevGuide/node4.html</span><span class="se">\n</span><span class="s2">and</span><span class="se">\n</span><span class="s2">https://tango-controls.readthedocs.io/en/latest/development/device-api/attribute-alarms.html&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;limits&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Epics limits:</span><span class="se">\n</span><span class="s2">see 3.4.1 https://epics.anl.gov/base/R3-14/12-docs/AppDevGuide/node4.html&quot;</span><span class="p">,</span>
             <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span>
             <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span>
                 <span class="s2">&quot;alarm&quot;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;alarm&quot;</span><span class="p">,</span>
                     <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Alarm limits.&quot;</span><span class="p">,</span>
-                    <span class="s2">&quot;$ref&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/LimitsRange&quot;</span>
+                    <span class="s2">&quot;anyOf&quot;</span><span class="p">:</span> <span class="p">[</span>
+                        <span class="p">{</span>
+                            <span class="s2">&quot;$ref&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/LimitsRange&quot;</span>
+                        <span class="p">},</span>
+                        <span class="p">{</span>
+                            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;null&quot;</span>
+                        <span class="p">}</span>
+                    <span class="p">],</span>
+                    <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="n">null</span>
                 <span class="p">},</span>
                 <span class="s2">&quot;control&quot;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;control&quot;</span><span class="p">,</span>
                     <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Control limits.&quot;</span><span class="p">,</span>
-                    <span class="s2">&quot;$ref&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/LimitsRange&quot;</span>
+                    <span class="s2">&quot;anyOf&quot;</span><span class="p">:</span> <span class="p">[</span>
+                        <span class="p">{</span>
+                            <span class="s2">&quot;$ref&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/LimitsRange&quot;</span>
+                        <span class="p">},</span>
+                        <span class="p">{</span>
+                            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;null&quot;</span>
+                        <span class="p">}</span>
+                    <span class="p">],</span>
+                    <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="n">null</span>
                 <span class="p">},</span>
                 <span class="s2">&quot;display&quot;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;display&quot;</span><span class="p">,</span>
                     <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Display limits.&quot;</span><span class="p">,</span>
-                    <span class="s2">&quot;$ref&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/LimitsRange&quot;</span>
+                    <span class="s2">&quot;anyOf&quot;</span><span class="p">:</span> <span class="p">[</span>
+                        <span class="p">{</span>
+                            <span class="s2">&quot;$ref&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/LimitsRange&quot;</span>
+                        <span class="p">},</span>
+                        <span class="p">{</span>
+                            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;null&quot;</span>
+                        <span class="p">}</span>
+                    <span class="p">],</span>
+                    <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="n">null</span>
                 <span class="p">},</span>
                 <span class="s2">&quot;hysteresis&quot;</span><span class="p">:</span> <span class="p">{</span>
-                    <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Hysteresis&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;hysteresis&quot;</span><span class="p">,</span>
                     <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Hysteresis.&quot;</span><span class="p">,</span>
-                    <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;number&quot;</span>
+                    <span class="s2">&quot;anyOf&quot;</span><span class="p">:</span> <span class="p">[</span>
+                        <span class="p">{</span>
+                            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;number&quot;</span>
+                        <span class="p">},</span>
+                        <span class="p">{</span>
+                            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;null&quot;</span>
+                        <span class="p">}</span>
+                    <span class="p">],</span>
+                    <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="n">null</span>
                 <span class="p">},</span>
                 <span class="s2">&quot;rds&quot;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;rds&quot;</span><span class="p">,</span>
                     <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;RDS parameters.&quot;</span><span class="p">,</span>
-                    <span class="s2">&quot;$ref&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/RdsRange&quot;</span>
+                    <span class="s2">&quot;anyOf&quot;</span><span class="p">:</span> <span class="p">[</span>
+                        <span class="p">{</span>
+                            <span class="s2">&quot;$ref&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/RdsRange&quot;</span>
+                        <span class="p">},</span>
+                        <span class="p">{</span>
+                            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;null&quot;</span>
+                        <span class="p">}</span>
+                    <span class="p">],</span>
+                    <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="n">null</span>
                 <span class="p">},</span>
                 <span class="s2">&quot;warning&quot;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;warning&quot;</span><span class="p">,</span>
                     <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Warning limits.&quot;</span><span class="p">,</span>
-                    <span class="s2">&quot;$ref&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/LimitsRange&quot;</span>
+                    <span class="s2">&quot;anyOf&quot;</span><span class="p">:</span> <span class="p">[</span>
+                        <span class="p">{</span>
+                            <span class="s2">&quot;$ref&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/LimitsRange&quot;</span>
+                        <span class="p">},</span>
+                        <span class="p">{</span>
+                            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;null&quot;</span>
+                        <span class="p">}</span>
+                    <span class="p">],</span>
+                    <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="n">null</span>
                 <span class="p">}</span>
-            <span class="p">}</span>
+            <span class="p">},</span>
+            <span class="s2">&quot;additionalProperties&quot;</span><span class="p">:</span> <span class="n">false</span>
         <span class="p">},</span>
         <span class="s2">&quot;LimitsRange&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;LimitsRange&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;limits_range&quot;</span><span class="p">,</span>
             <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span>
             <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span>
                 <span class="s2">&quot;high&quot;</span><span class="p">:</span> <span class="p">{</span>
-                    <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;High&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;high&quot;</span><span class="p">,</span>
                     <span class="s2">&quot;anyOf&quot;</span><span class="p">:</span> <span class="p">[</span>
                         <span class="p">{</span>
                             <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;number&quot;</span>
@@ -1232,7 +1298,7 @@ is detailed and takes some time to cover, so we defer it to a
                     <span class="p">]</span>
                 <span class="p">},</span>
                 <span class="s2">&quot;low&quot;</span><span class="p">:</span> <span class="p">{</span>
-                    <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Low&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;low&quot;</span><span class="p">,</span>
                     <span class="s2">&quot;anyOf&quot;</span><span class="p">:</span> <span class="p">[</span>
                         <span class="p">{</span>
                             <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;number&quot;</span>
@@ -1246,67 +1312,64 @@ is detailed and takes some time to cover, so we defer it to a
             <span class="s2">&quot;required&quot;</span><span class="p">:</span> <span class="p">[</span>
                 <span class="s2">&quot;high&quot;</span><span class="p">,</span>
                 <span class="s2">&quot;low&quot;</span>
-            <span class="p">]</span>
+            <span class="p">],</span>
+            <span class="s2">&quot;additionalProperties&quot;</span><span class="p">:</span> <span class="n">false</span>
         <span class="p">},</span>
         <span class="s2">&quot;PerObjectHint&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;PerObjectHint&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;per_object_hint&quot;</span><span class="p">,</span>
             <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;The &#39;interesting&#39; data keys for this device.&quot;</span><span class="p">,</span>
             <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span>
             <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span>
                 <span class="s2">&quot;NX_class&quot;</span><span class="p">:</span> <span class="p">{</span>
-                    <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Nx Class&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;nx_class&quot;</span><span class="p">,</span>
                     <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;The NeXus class definition for this device.&quot;</span><span class="p">,</span>
                     <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
                     <span class="s2">&quot;pattern&quot;</span><span class="p">:</span> <span class="s2">&quot;^NX[A-Za-z_]+$&quot;</span>
                 <span class="p">},</span>
                 <span class="s2">&quot;fields&quot;</span><span class="p">:</span> <span class="p">{</span>
-                    <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Fields&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;fields&quot;</span><span class="p">,</span>
                     <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;The &#39;interesting&#39; data keys for this device.&quot;</span><span class="p">,</span>
                     <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;array&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="p">[],</span>
                     <span class="s2">&quot;items&quot;</span><span class="p">:</span> <span class="p">{</span>
                         <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
                     <span class="p">}</span>
                 <span class="p">}</span>
-            <span class="p">}</span>
+            <span class="p">},</span>
+            <span class="s2">&quot;additionalProperties&quot;</span><span class="p">:</span> <span class="n">true</span>
         <span class="p">},</span>
         <span class="s2">&quot;RdsRange&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;RdsRange&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;rds_range&quot;</span><span class="p">,</span>
             <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;RDS (Read different than set) parameters range.</span><span class="se">\n\n\n</span><span class="s2">https://tango-controls.readthedocs.io/en/latest/development/device-api/attribute-alarms.html#the-read-different-than-set-rds-alarm&quot;</span><span class="p">,</span>
             <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span>
             <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span>
                 <span class="s2">&quot;time_difference&quot;</span><span class="p">:</span> <span class="p">{</span>
-                    <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Time Difference&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;time_difference&quot;</span><span class="p">,</span>
                     <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;ms since last update to fail after if set point and read point are not within `value_difference` of each other.&quot;</span><span class="p">,</span>
                     <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;number&quot;</span>
                 <span class="p">},</span>
                 <span class="s2">&quot;value_difference&quot;</span><span class="p">:</span> <span class="p">{</span>
-                    <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Value Difference&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;value_difference&quot;</span><span class="p">,</span>
                     <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Allowed difference in value between set point and read point after `time_difference`.&quot;</span><span class="p">,</span>
                     <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;number&quot;</span>
                 <span class="p">}</span>
             <span class="p">},</span>
             <span class="s2">&quot;required&quot;</span><span class="p">:</span> <span class="p">[</span>
-                <span class="s2">&quot;time_difference&quot;</span>
+                <span class="s2">&quot;time_difference&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;value_difference&quot;</span>
             <span class="p">]</span>
-        <span class="p">},</span>
-        <span class="s2">&quot;DataType&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;DataType&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;patternProperties&quot;</span><span class="p">:</span> <span class="p">{</span>
-                <span class="s2">&quot;^([^./]+)$&quot;</span><span class="p">:</span> <span class="p">{</span>
-                    <span class="s2">&quot;$ref&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/DataType&quot;</span>
-                <span class="p">}</span>
-            <span class="p">},</span>
-            <span class="s2">&quot;additionalProperties&quot;</span><span class="p">:</span> <span class="n">false</span>
         <span class="p">}</span>
     <span class="p">},</span>
     <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span>
         <span class="s2">&quot;configuration&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Configuration&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;configuration&quot;</span><span class="p">,</span>
             <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Readings of configurational fields necessary for interpreting data in the Events.&quot;</span><span class="p">,</span>
             <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span>
             <span class="s2">&quot;additionalProperties&quot;</span><span class="p">:</span> <span class="p">{</span>
                 <span class="s2">&quot;$ref&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/Configuration&quot;</span>
-            <span class="p">}</span>
+            <span class="p">},</span>
+            <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="p">{}</span>
         <span class="p">},</span>
         <span class="s2">&quot;data_keys&quot;</span><span class="p">:</span> <span class="p">{</span>
             <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;data_keys&quot;</span><span class="p">,</span>
@@ -1317,25 +1380,28 @@ is detailed and takes some time to cover, so we defer it to a
             <span class="p">}</span>
         <span class="p">},</span>
         <span class="s2">&quot;hints&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;hints&quot;</span><span class="p">,</span>
             <span class="s2">&quot;$ref&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/PerObjectHint&quot;</span>
         <span class="p">},</span>
         <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Name&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;name&quot;</span><span class="p">,</span>
             <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;A human-friendly name for this data stream, such as &#39;primary&#39; or &#39;baseline&#39;.&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span>
         <span class="p">},</span>
         <span class="s2">&quot;object_keys&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Object Keys&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;object_keys&quot;</span><span class="p">,</span>
             <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Maps a Device/Signal name to the names of the entries it produces in data_keys.&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="p">{}</span>
         <span class="p">},</span>
         <span class="s2">&quot;run_start&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Run Start&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;run_start&quot;</span><span class="p">,</span>
             <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Globally unique ID of this run&#39;s &#39;start&#39; document.&quot;</span><span class="p">,</span>
             <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
         <span class="p">},</span>
         <span class="s2">&quot;time&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Time&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;time&quot;</span><span class="p">,</span>
             <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Creation time of the document as unix epoch time.&quot;</span><span class="p">,</span>
             <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;number&quot;</span>
         <span class="p">},</span>
@@ -1408,62 +1474,77 @@ overall event ‘time’ is often more useful.</p>
     <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;event&quot;</span><span class="p">,</span>
     <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Document to record a quanta of collected data&quot;</span><span class="p">,</span>
     <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;allOf&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="p">{</span>
+            <span class="s2">&quot;$ref&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/PartialEvent&quot;</span>
+        <span class="p">}</span>
+    <span class="p">],</span>
+    <span class="s2">&quot;$defs&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;PartialEvent&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;partial_event&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;data&quot;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;data&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;The actual measurement data&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span>
+                <span class="p">},</span>
+                <span class="s2">&quot;filled&quot;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;filled&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Mapping each of the keys of externally-stored data to the boolean False, indicating that the data has not been loaded, or to foreign keys (moved here from &#39;data&#39; when the data was loaded)&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;additionalProperties&quot;</span><span class="p">:</span> <span class="p">{</span>
+                        <span class="s2">&quot;anyOf&quot;</span><span class="p">:</span> <span class="p">[</span>
+                            <span class="p">{</span>
+                                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;boolean&quot;</span>
+                            <span class="p">},</span>
+                            <span class="p">{</span>
+                                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
+                            <span class="p">}</span>
+                        <span class="p">]</span>
+                    <span class="p">}</span>
+                <span class="p">},</span>
+                <span class="s2">&quot;time&quot;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;time&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;The event time. This maybe different than the timestamps on each of the data entries.&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;number&quot;</span>
+                <span class="p">},</span>
+                <span class="s2">&quot;timestamps&quot;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;timestamps&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;The timestamps of the individual measurement data&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span>
+                <span class="p">}</span>
+            <span class="p">},</span>
+            <span class="s2">&quot;required&quot;</span><span class="p">:</span> <span class="p">[</span>
+                <span class="s2">&quot;data&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;time&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;timestamps&quot;</span>
+            <span class="p">]</span>
+        <span class="p">}</span>
+    <span class="p">},</span>
     <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span>
-        <span class="s2">&quot;data&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Data&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;The actual measurement data&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span>
-        <span class="p">},</span>
         <span class="s2">&quot;descriptor&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Descriptor&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;descriptor&quot;</span><span class="p">,</span>
             <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;UID of the EventDescriptor to which this Event belongs&quot;</span><span class="p">,</span>
             <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
         <span class="p">},</span>
-        <span class="s2">&quot;filled&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Filled&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Mapping each of the keys of externally-stored data to the boolean False, indicating that the data has not been loaded, or to foreign keys (moved here from &#39;data&#39; when the data was loaded)&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;additionalProperties&quot;</span><span class="p">:</span> <span class="p">{</span>
-                <span class="s2">&quot;anyOf&quot;</span><span class="p">:</span> <span class="p">[</span>
-                    <span class="p">{</span>
-                        <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;boolean&quot;</span>
-                    <span class="p">},</span>
-                    <span class="p">{</span>
-                        <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
-                    <span class="p">}</span>
-                <span class="p">]</span>
-            <span class="p">}</span>
-        <span class="p">},</span>
         <span class="s2">&quot;seq_num&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Seq Num&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;seq_num&quot;</span><span class="p">,</span>
             <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Sequence number to identify the location of this Event in the Event stream&quot;</span><span class="p">,</span>
             <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;integer&quot;</span>
         <span class="p">},</span>
-        <span class="s2">&quot;time&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Time&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;The event time. This maybe different than the timestamps on each of the data entries.&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;number&quot;</span>
-        <span class="p">},</span>
-        <span class="s2">&quot;timestamps&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Timestamps&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;The timestamps of the individual measurement data&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span>
-        <span class="p">},</span>
         <span class="s2">&quot;uid&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Uid&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;uid&quot;</span><span class="p">,</span>
             <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Globally unique identifier for this Event&quot;</span><span class="p">,</span>
             <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
         <span class="p">}</span>
     <span class="p">},</span>
     <span class="s2">&quot;required&quot;</span><span class="p">:</span> <span class="p">[</span>
-        <span class="s2">&quot;data&quot;</span><span class="p">,</span>
         <span class="s2">&quot;descriptor&quot;</span><span class="p">,</span>
         <span class="s2">&quot;seq_num&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;time&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;timestamps&quot;</span><span class="p">,</span>
         <span class="s2">&quot;uid&quot;</span>
     <span class="p">],</span>
-    <span class="s2">&quot;additionalProperties&quot;</span><span class="p">:</span> <span class="n">false</span>
+    <span class="s2">&quot;unevaluatedProperties&quot;</span><span class="p">:</span> <span class="n">false</span>
 <span class="p">}</span>
 </pre></div>
 </div>
@@ -1492,69 +1573,85 @@ the example Event above structured as an Event Page with a single row:</p>
     <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;event_page&quot;</span><span class="p">,</span>
     <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Page of documents to record a quanta of collected data&quot;</span><span class="p">,</span>
     <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;allOf&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="p">{</span>
+            <span class="s2">&quot;$ref&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/PartialEventPage&quot;</span>
+        <span class="p">}</span>
+    <span class="p">],</span>
     <span class="s2">&quot;$defs&quot;</span><span class="p">:</span> <span class="p">{</span>
-        <span class="s2">&quot;DataFrameForEventPage&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;DataFrameForEventPage&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;PartialEventPage&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;partial_event_page&quot;</span><span class="p">,</span>
             <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;additionalProperties&quot;</span><span class="p">:</span> <span class="p">{</span>
-                <span class="s2">&quot;items&quot;</span><span class="p">:</span> <span class="p">{},</span>
-                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;array&quot;</span>
-            <span class="p">}</span>
-        <span class="p">},</span>
-        <span class="s2">&quot;DataFrameForFilled&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;DataFrameForFilled&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;additionalProperties&quot;</span><span class="p">:</span> <span class="p">{</span>
-                <span class="s2">&quot;items&quot;</span><span class="p">:</span> <span class="p">{</span>
-                    <span class="s2">&quot;anyOf&quot;</span><span class="p">:</span> <span class="p">[</span>
-                        <span class="p">{</span>
-                            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;boolean&quot;</span>
-                        <span class="p">},</span>
-                        <span class="p">{</span>
-                            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
-                        <span class="p">}</span>
-                    <span class="p">]</span>
+            <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;data&quot;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;data&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;The actual measurement data&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;additionalProperties&quot;</span><span class="p">:</span> <span class="p">{</span>
+                        <span class="s2">&quot;items&quot;</span><span class="p">:</span> <span class="p">{},</span>
+                        <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;array&quot;</span>
+                    <span class="p">}</span>
                 <span class="p">},</span>
-                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;array&quot;</span>
-            <span class="p">}</span>
+                <span class="s2">&quot;filled&quot;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;filled&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Mapping each of the keys of externally-stored data to an array containing the boolean False, indicating that the data has not been loaded, or to foreign keys (moved here from &#39;data&#39; when the data was loaded)&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;additionalProperties&quot;</span><span class="p">:</span> <span class="p">{</span>
+                        <span class="s2">&quot;items&quot;</span><span class="p">:</span> <span class="p">{</span>
+                            <span class="s2">&quot;anyOf&quot;</span><span class="p">:</span> <span class="p">[</span>
+                                <span class="p">{</span>
+                                    <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;boolean&quot;</span>
+                                <span class="p">},</span>
+                                <span class="p">{</span>
+                                    <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
+                                <span class="p">}</span>
+                            <span class="p">]</span>
+                        <span class="p">},</span>
+                        <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;array&quot;</span>
+                    <span class="p">},</span>
+                    <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="p">{}</span>
+                <span class="p">},</span>
+                <span class="s2">&quot;time&quot;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;time&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Array of Event times. This maybe different than the timestamps on each of the data entries&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;array&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;items&quot;</span><span class="p">:</span> <span class="p">{</span>
+                        <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;number&quot;</span>
+                    <span class="p">}</span>
+                <span class="p">},</span>
+                <span class="s2">&quot;timestamps&quot;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;timestamps&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;The timestamps of the individual measurement data&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;additionalProperties&quot;</span><span class="p">:</span> <span class="p">{</span>
+                        <span class="s2">&quot;items&quot;</span><span class="p">:</span> <span class="p">{},</span>
+                        <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;array&quot;</span>
+                    <span class="p">}</span>
+                <span class="p">}</span>
+            <span class="p">},</span>
+            <span class="s2">&quot;required&quot;</span><span class="p">:</span> <span class="p">[</span>
+                <span class="s2">&quot;data&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;time&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;timestamps&quot;</span>
+            <span class="p">]</span>
         <span class="p">}</span>
     <span class="p">},</span>
     <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span>
-        <span class="s2">&quot;data&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;The actual measurement data&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;$ref&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/DataFrameForEventPage&quot;</span>
-        <span class="p">},</span>
         <span class="s2">&quot;descriptor&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Descriptor&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;descriptor&quot;</span><span class="p">,</span>
             <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;The UID of the EventDescriptor to which all of the Events in this page belong&quot;</span><span class="p">,</span>
             <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
         <span class="p">},</span>
-        <span class="s2">&quot;filled&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Mapping each of the keys of externally-stored data to an array containing the boolean False, indicating that the data has not been loaded, or to foreign keys (moved here from &#39;data&#39; when the data was loaded)&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;$ref&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/DataFrameForFilled&quot;</span>
-        <span class="p">},</span>
         <span class="s2">&quot;seq_num&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Seq Num&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;seq_num&quot;</span><span class="p">,</span>
             <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Array of sequence numbers to identify the location of each Event in the Event stream&quot;</span><span class="p">,</span>
             <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;array&quot;</span><span class="p">,</span>
             <span class="s2">&quot;items&quot;</span><span class="p">:</span> <span class="p">{</span>
                 <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;integer&quot;</span>
             <span class="p">}</span>
         <span class="p">},</span>
-        <span class="s2">&quot;time&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Time&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Array of Event times. This maybe different than the timestamps on each of the data entries&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;array&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;items&quot;</span><span class="p">:</span> <span class="p">{</span>
-                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;number&quot;</span>
-            <span class="p">}</span>
-        <span class="p">},</span>
-        <span class="s2">&quot;timestamps&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;The timestamps of the individual measurement data&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;$ref&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/DataFrameForEventPage&quot;</span>
-        <span class="p">},</span>
         <span class="s2">&quot;uid&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Uid&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;uid&quot;</span><span class="p">,</span>
             <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Array of globally unique identifiers for each Event&quot;</span><span class="p">,</span>
             <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;array&quot;</span><span class="p">,</span>
             <span class="s2">&quot;items&quot;</span><span class="p">:</span> <span class="p">{</span>
@@ -1563,14 +1660,11 @@ the example Event above structured as an Event Page with a single row:</p>
         <span class="p">}</span>
     <span class="p">},</span>
     <span class="s2">&quot;required&quot;</span><span class="p">:</span> <span class="p">[</span>
-        <span class="s2">&quot;data&quot;</span><span class="p">,</span>
         <span class="s2">&quot;descriptor&quot;</span><span class="p">,</span>
         <span class="s2">&quot;seq_num&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;time&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;timestamps&quot;</span><span class="p">,</span>
         <span class="s2">&quot;uid&quot;</span>
     <span class="p">],</span>
-    <span class="s2">&quot;additionalProperties&quot;</span><span class="p">:</span> <span class="n">false</span>
+    <span class="s2">&quot;unevaluatedProperties&quot;</span><span class="p">:</span> <span class="n">false</span>
 <span class="p">}</span>
 </pre></div>
 </div>
@@ -1613,20 +1707,22 @@ known until the run completes.</p>
 <p>Formal schema:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
     <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;run_stop&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Document for the end of a run indicating the success/fail state of the run and the end time&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Document for the end of a run indicating the success/fail state of the</span><span class="se">\n</span><span class="s2">run and the end time&quot;</span><span class="p">,</span>
     <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span>
     <span class="s2">&quot;$defs&quot;</span><span class="p">:</span> <span class="p">{</span>
         <span class="s2">&quot;DataType&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;DataType&quot;</span>
+            <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;data_type&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="n">null</span>
         <span class="p">}</span>
     <span class="p">},</span>
     <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span>
         <span class="s2">&quot;data_type&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;data_type&quot;</span><span class="p">,</span>
             <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;data_type&quot;</span><span class="p">,</span>
             <span class="s2">&quot;$ref&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/DataType&quot;</span>
         <span class="p">},</span>
         <span class="s2">&quot;exit_status&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Exit Status&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;exit_status&quot;</span><span class="p">,</span>
             <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;State of the run when it ended&quot;</span><span class="p">,</span>
             <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
             <span class="s2">&quot;enum&quot;</span><span class="p">:</span> <span class="p">[</span>
@@ -1636,30 +1732,32 @@ known until the run completes.</p>
             <span class="p">]</span>
         <span class="p">},</span>
         <span class="s2">&quot;num_events&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Num Events&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;num_events&quot;</span><span class="p">,</span>
             <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Number of Events per named stream&quot;</span><span class="p">,</span>
             <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span>
             <span class="s2">&quot;additionalProperties&quot;</span><span class="p">:</span> <span class="p">{</span>
                 <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;integer&quot;</span>
-            <span class="p">}</span>
+            <span class="p">},</span>
+            <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="p">{}</span>
         <span class="p">},</span>
         <span class="s2">&quot;reason&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Reason&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;reason&quot;</span><span class="p">,</span>
             <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Long-form description of why the run ended&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span>
         <span class="p">},</span>
         <span class="s2">&quot;run_start&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Run Start&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;run_start&quot;</span><span class="p">,</span>
             <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Reference back to the run_start document that this document is paired with.&quot;</span><span class="p">,</span>
             <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
         <span class="p">},</span>
         <span class="s2">&quot;time&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Time&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;time&quot;</span><span class="p">,</span>
             <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;The time the run ended. Unix epoch&quot;</span><span class="p">,</span>
             <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;number&quot;</span>
         <span class="p">},</span>
         <span class="s2">&quot;uid&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Uid&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;uid&quot;</span><span class="p">,</span>
             <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Globally unique ID for this document&quot;</span><span class="p">,</span>
             <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
         <span class="p">}</span>
@@ -1709,57 +1807,73 @@ referencing external assets, such as large array data written by detectors.</p>
 <p>Formal schema:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
     <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;resource&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Document to reference a collection (e.g. file or group of files) of externally-stored data&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Document to reference a collection (e.g. file or group of files) of</span><span class="se">\n</span><span class="s2">externally-stored data&quot;</span><span class="p">,</span>
     <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;allOf&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="p">{</span>
+            <span class="s2">&quot;$ref&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/PartialResource&quot;</span>
+        <span class="p">}</span>
+    <span class="p">],</span>
+    <span class="s2">&quot;$defs&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;PartialResource&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;partial_resource&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;resource_kwargs&quot;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;resource_kwargs&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Additional argument to pass to the Handler to read a Resource&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span>
+                <span class="p">},</span>
+                <span class="s2">&quot;resource_path&quot;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;resource_path&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Filepath or URI for locating this resource&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
+                <span class="p">},</span>
+                <span class="s2">&quot;root&quot;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;root&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Subset of resource_path that is a local detail, not semantic.&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
+                <span class="p">},</span>
+                <span class="s2">&quot;spec&quot;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;spec&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;String identifying the format/type of this Resource, used to identify a compatible Handler&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
+                <span class="p">},</span>
+                <span class="s2">&quot;uid&quot;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;uid&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Globally unique identifier for this Resource&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
+                <span class="p">}</span>
+            <span class="p">},</span>
+            <span class="s2">&quot;required&quot;</span><span class="p">:</span> <span class="p">[</span>
+                <span class="s2">&quot;resource_kwargs&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;resource_path&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;root&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;spec&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;uid&quot;</span>
+            <span class="p">]</span>
+        <span class="p">}</span>
+    <span class="p">},</span>
     <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span>
         <span class="s2">&quot;path_semantics&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Path Semantics&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;path_semantics&quot;</span><span class="p">,</span>
             <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Rules for joining paths&quot;</span><span class="p">,</span>
             <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="s2">&quot;posix&quot;</span><span class="p">,</span>
             <span class="s2">&quot;enum&quot;</span><span class="p">:</span> <span class="p">[</span>
                 <span class="s2">&quot;posix&quot;</span><span class="p">,</span>
                 <span class="s2">&quot;windows&quot;</span>
             <span class="p">]</span>
         <span class="p">},</span>
-        <span class="s2">&quot;resource_kwargs&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Resource Kwargs&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Additional argument to pass to the Handler to read a Resource&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span>
-        <span class="p">},</span>
-        <span class="s2">&quot;resource_path&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Resource Path&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Filepath or URI for locating this resource&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
-        <span class="p">},</span>
-        <span class="s2">&quot;root&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Root&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Subset of resource_path that is a local detail, not semantic.&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
-        <span class="p">},</span>
         <span class="s2">&quot;run_start&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Run Start&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;run_start&quot;</span><span class="p">,</span>
             <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Globally unique ID to the run_start document this resource is associated with.&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
-        <span class="p">},</span>
-        <span class="s2">&quot;spec&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Spec&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;String identifying the format/type of this Resource, used to identify a compatible Handler&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
-        <span class="p">},</span>
-        <span class="s2">&quot;uid&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Uid&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Globally unique identifier for this Resource&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span>
         <span class="p">}</span>
     <span class="p">},</span>
-    <span class="s2">&quot;required&quot;</span><span class="p">:</span> <span class="p">[</span>
-        <span class="s2">&quot;resource_kwargs&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;resource_path&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;root&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;spec&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;uid&quot;</span>
-    <span class="p">],</span>
-    <span class="s2">&quot;additionalProperties&quot;</span><span class="p">:</span> <span class="n">false</span>
+    <span class="s2">&quot;required&quot;</span><span class="p">:</span> <span class="p">[],</span>
+    <span class="s2">&quot;unevaluatedProperties&quot;</span><span class="p">:</span> <span class="n">false</span>
 <span class="p">}</span>
 </pre></div>
 </div>
@@ -1791,17 +1905,17 @@ external assets, such as large array data written by detectors.</p>
     <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span>
     <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span>
         <span class="s2">&quot;datum_id&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Datum Id&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;datum_id&quot;</span><span class="p">,</span>
             <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Globally unique identifier for this Datum (akin to &#39;uid&#39; for other Document types), typically formatted as &#39;&lt;resource&gt;/&lt;integer&gt;&#39;&quot;</span><span class="p">,</span>
             <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
         <span class="p">},</span>
         <span class="s2">&quot;datum_kwargs&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Datum Kwargs&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;datum_kwargs&quot;</span><span class="p">,</span>
             <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Arguments to pass to the Handler to retrieve one quanta of data&quot;</span><span class="p">,</span>
             <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span>
         <span class="p">},</span>
         <span class="s2">&quot;resource&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Resource&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;resource&quot;</span><span class="p">,</span>
             <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;The UID of the Resource to which this Datum belongs&quot;</span><span class="p">,</span>
             <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
         <span class="p">}</span>
@@ -1834,7 +1948,7 @@ strucuted as a Datum Page with one row:</p>
     <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span>
     <span class="s2">&quot;$defs&quot;</span><span class="p">:</span> <span class="p">{</span>
         <span class="s2">&quot;DataFrameForDatumPage&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;DataFrameForDatumPage&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;data_frame_for_datum_page&quot;</span><span class="p">,</span>
             <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;array&quot;</span><span class="p">,</span>
             <span class="s2">&quot;items&quot;</span><span class="p">:</span> <span class="p">{</span>
                 <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
@@ -1843,11 +1957,12 @@ strucuted as a Datum Page with one row:</p>
     <span class="p">},</span>
     <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span>
         <span class="s2">&quot;datum_id&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;datum_id&quot;</span><span class="p">,</span>
             <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Array unique identifiers for each Datum (akin to &#39;uid&#39; for other Document types), typically formatted as &#39;&lt;resource&gt;/&lt;integer&gt;&#39;&quot;</span><span class="p">,</span>
             <span class="s2">&quot;$ref&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/DataFrameForDatumPage&quot;</span>
         <span class="p">},</span>
         <span class="s2">&quot;datum_kwargs&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Datum Kwargs&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;datum_kwargs&quot;</span><span class="p">,</span>
             <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Array of arguments to pass to the Handler to retrieve one quanta of data&quot;</span><span class="p">,</span>
             <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span>
             <span class="s2">&quot;additionalProperties&quot;</span><span class="p">:</span> <span class="p">{</span>
@@ -1856,7 +1971,7 @@ strucuted as a Datum Page with one row:</p>
             <span class="p">}</span>
         <span class="p">},</span>
         <span class="s2">&quot;resource&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Resource&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;resource&quot;</span><span class="p">,</span>
             <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;The UID of the Resource to which all Datums in the page belong&quot;</span><span class="p">,</span>
             <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
         <span class="p">}</span>
@@ -1889,36 +2004,37 @@ or assets where there are many relatively small data sets (e.g. scanned fluoresc
 <p>Formal schema:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
     <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;stream_resource&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Document to reference a collection (e.g. file or group of files) of externally-stored data streams&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Document to reference a collection (e.g. file or group of files) of</span><span class="se">\n</span><span class="s2">externally-stored data streams&quot;</span><span class="p">,</span>
     <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span>
     <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span>
         <span class="s2">&quot;data_key&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Data Key&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;data_key&quot;</span><span class="p">,</span>
             <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;A string to show which data_key of the Descriptor are being streamed&quot;</span><span class="p">,</span>
             <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
         <span class="p">},</span>
         <span class="s2">&quot;mimetype&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Mimetype&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;mimetype&quot;</span><span class="p">,</span>
             <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;String identifying the format/type of this Stream Resource, used to identify a compatible Handler&quot;</span><span class="p">,</span>
             <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
         <span class="p">},</span>
         <span class="s2">&quot;parameters&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Parameters&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;parameters&quot;</span><span class="p">,</span>
             <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Additional keyword arguments to pass to the Handler to read a Stream Resource&quot;</span><span class="p">,</span>
             <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span>
         <span class="p">},</span>
         <span class="s2">&quot;run_start&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Run Start&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;run_start&quot;</span><span class="p">,</span>
             <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Globally unique ID to the run_start document this Stream Resource is associated with.&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span>
         <span class="p">},</span>
         <span class="s2">&quot;uid&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Uid&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;uid&quot;</span><span class="p">,</span>
             <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Globally unique identifier for this Stream Resource&quot;</span><span class="p">,</span>
             <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
         <span class="p">},</span>
         <span class="s2">&quot;uri&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Uri&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;uri&quot;</span><span class="p">,</span>
             <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;URI for locating this resource&quot;</span><span class="p">,</span>
             <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
         <span class="p">}</span>
@@ -1930,7 +2046,7 @@ or assets where there are many relatively small data sets (e.g. scanned fluoresc
         <span class="s2">&quot;uid&quot;</span><span class="p">,</span>
         <span class="s2">&quot;uri&quot;</span>
     <span class="p">],</span>
-    <span class="s2">&quot;additionalProperties&quot;</span><span class="p">:</span> <span class="n">false</span>
+    <span class="s2">&quot;additionalProperties&quot;</span><span class="p">:</span> <span class="n">true</span>
 <span class="p">}</span>
 </pre></div>
 </div>
@@ -1957,17 +2073,17 @@ or assets where there are many relatively small data sets (e.g. scanned fluoresc
     <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span>
     <span class="s2">&quot;$defs&quot;</span><span class="p">:</span> <span class="p">{</span>
         <span class="s2">&quot;StreamRange&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;StreamRange&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;stream_range&quot;</span><span class="p">,</span>
             <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;The parameters required to describe a sequence of incrementing integers&quot;</span><span class="p">,</span>
             <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span>
             <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span>
                 <span class="s2">&quot;start&quot;</span><span class="p">:</span> <span class="p">{</span>
-                    <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Start&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;start&quot;</span><span class="p">,</span>
                     <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;First number in the range&quot;</span><span class="p">,</span>
                     <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;integer&quot;</span>
                 <span class="p">},</span>
                 <span class="s2">&quot;stop&quot;</span><span class="p">:</span> <span class="p">{</span>
-                    <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Stop&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;stop&quot;</span><span class="p">,</span>
                     <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Last number in the range is less than this number&quot;</span><span class="p">,</span>
                     <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;integer&quot;</span>
                 <span class="p">}</span>
@@ -1980,25 +2096,27 @@ or assets where there are many relatively small data sets (e.g. scanned fluoresc
     <span class="p">},</span>
     <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span>
         <span class="s2">&quot;descriptor&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Descriptor&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;descriptor&quot;</span><span class="p">,</span>
             <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;UID of the EventDescriptor to which this Datum belongs&quot;</span><span class="p">,</span>
             <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
         <span class="p">},</span>
         <span class="s2">&quot;indices&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;indices&quot;</span><span class="p">,</span>
             <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;A slice object passed to the StreamResource handler so it can hand back data and timestamps&quot;</span><span class="p">,</span>
             <span class="s2">&quot;$ref&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/StreamRange&quot;</span>
         <span class="p">},</span>
         <span class="s2">&quot;seq_nums&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;seq_nums&quot;</span><span class="p">,</span>
             <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;A slice object showing the Event numbers the resource corresponds to&quot;</span><span class="p">,</span>
             <span class="s2">&quot;$ref&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/StreamRange&quot;</span>
         <span class="p">},</span>
         <span class="s2">&quot;stream_resource&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Stream Resource&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;stream_resource&quot;</span><span class="p">,</span>
             <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;The UID of the Stream Resource to which this Datum belongs.&quot;</span><span class="p">,</span>
             <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
         <span class="p">},</span>
         <span class="s2">&quot;uid&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Uid&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;uid&quot;</span><span class="p">,</span>
             <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Globally unique identifier for this Datum. A suggested formatting being &#39;&lt;stream_resource&gt;/&lt;stream_name&gt;/&lt;block_id&gt;&quot;</span><span class="p">,</span>
             <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
         <span class="p">}</span>
@@ -2010,7 +2128,7 @@ or assets where there are many relatively small data sets (e.g. scanned fluoresc
         <span class="s2">&quot;stream_resource&quot;</span><span class="p">,</span>
         <span class="s2">&quot;uid&quot;</span>
     <span class="p">],</span>
-    <span class="s2">&quot;additionalProperties&quot;</span><span class="p">:</span> <span class="n">false</span>
+    <span class="s2">&quot;additionalProperties&quot;</span><span class="p">:</span> <span class="n">true</span>
 <span class="p">}</span>
 </pre></div>
 </div>

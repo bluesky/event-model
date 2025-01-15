@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>event_model &#8212; event-model 1.22.3.dev2+gacd40a9 documentation</title>
+    <title>event_model &#8212; event-model 1.22.4.dev6+ga8d4575 documentation</title>
   
   
   
@@ -41,7 +41,7 @@
   <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
-    <script src="../_static/documentation_options.js?v=2451b156"></script>
+    <script src="../_static/documentation_options.js?v=225650d7"></script>
     <script src="../_static/doctools.js?v=9bcbadda"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -126,8 +126,8 @@
       
     
     
-    <img src="../_static/event-model-logo.svg" class="logo__image only-light" alt="event-model 1.22.3.dev2+gacd40a9 documentation - Home"/>
-    <img src="../_static/event-model-logo.svg" class="logo__image only-dark pst-js-only" alt="event-model 1.22.3.dev2+gacd40a9 documentation - Home"/>
+    <img src="../_static/event-model-logo.svg" class="logo__image only-light" alt="event-model 1.22.4.dev6+ga8d4575 documentation - Home"/>
+    <img src="../_static/event-model-logo.svg" class="logo__image only-dark pst-js-only" alt="event-model 1.22.4.dev6+ga8d4575 documentation - Home"/>
   
   
 </a></div>
@@ -490,7 +490,16 @@
 <span class="p">)</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">.documents.event_page</span><span class="w"> </span><span class="kn">import</span> <span class="n">EventPage</span><span class="p">,</span> <span class="n">PartialEventPage</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">.documents.resource</span><span class="w"> </span><span class="kn">import</span> <span class="n">PartialResource</span><span class="p">,</span> <span class="n">Resource</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">.documents.run_start</span><span class="w"> </span><span class="kn">import</span> <span class="n">Calculation</span><span class="p">,</span> <span class="n">Hints</span><span class="p">,</span> <span class="n">Projection</span><span class="p">,</span> <span class="n">Projections</span><span class="p">,</span> <span class="n">RunStart</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.documents.run_start</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">CalculatedEventProjection</span><span class="p">,</span>
+    <span class="n">Calculation</span><span class="p">,</span>
+    <span class="n">ConfigurationProjection</span><span class="p">,</span>
+    <span class="n">Hints</span><span class="p">,</span>
+    <span class="n">LinkedEventProjection</span><span class="p">,</span>
+    <span class="n">Projections</span><span class="p">,</span>
+    <span class="n">RunStart</span><span class="p">,</span>
+    <span class="n">StaticProjection</span><span class="p">,</span>
+<span class="p">)</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">.documents.run_stop</span><span class="w"> </span><span class="kn">import</span> <span class="n">RunStop</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">.documents.stream_datum</span><span class="w"> </span><span class="kn">import</span> <span class="n">StreamDatum</span><span class="p">,</span> <span class="n">StreamRange</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">.documents.stream_resource</span><span class="w"> </span><span class="kn">import</span> <span class="n">StreamResource</span>
@@ -521,7 +530,10 @@
     <span class="s2">&quot;Resource&quot;</span><span class="p">,</span>
     <span class="s2">&quot;Calculation&quot;</span><span class="p">,</span>
     <span class="s2">&quot;Hints&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;Projection&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;LinkedEventProjection&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;StaticProjection&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;CalculatedEventProjection&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;ConfigurationProjection&quot;</span><span class="p">,</span>
     <span class="s2">&quot;Projections&quot;</span><span class="p">,</span>
     <span class="s2">&quot;RunStart&quot;</span><span class="p">,</span>
     <span class="s2">&quot;RunStop&quot;</span><span class="p">,</span>
@@ -793,8 +805,8 @@
             <span class="k">else</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="n">EventModelValueError</span><span class="p">(</span>
                     <span class="s2">&quot;SingleRunDocumentRouter associated with start document &quot;</span>
-                    <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_start_doc</span><span class="p">[</span><span class="s2">&quot;uid&quot;</span><span class="p">]</span><span class="si">}</span><span class="s1"> &#39;</span>
-                    <span class="sa">f</span><span class="s1">&#39;received a second start document with uid </span><span class="si">{</span><span class="n">doc</span><span class="p">[</span><span class="s2">&quot;uid&quot;</span><span class="p">]</span><span class="si">}</span><span class="s1">&#39;</span>
+                    <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_start_doc</span><span class="p">[</span><span class="s1">&#39;uid&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2"> &quot;</span>
+                    <span class="sa">f</span><span class="s2">&quot;received a second start document with uid </span><span class="si">{</span><span class="n">doc</span><span class="p">[</span><span class="s1">&#39;uid&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span>
                 <span class="p">)</span>
         <span class="k">elif</span> <span class="n">name</span> <span class="o">==</span> <span class="s2">&quot;descriptor&quot;</span><span class="p">:</span>
             <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_start_doc</span><span class="p">,</span> <span class="nb">dict</span><span class="p">)</span>
@@ -803,9 +815,9 @@
             <span class="k">else</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="n">EventModelValueError</span><span class="p">(</span>
                     <span class="s2">&quot;SingleRunDocumentRouter associated with start document &quot;</span>
-                    <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_start_doc</span><span class="p">[</span><span class="s2">&quot;uid&quot;</span><span class="p">]</span><span class="si">}</span><span class="s1"> &#39;</span>
-                    <span class="sa">f</span><span class="s1">&#39;received a descriptor </span><span class="si">{</span><span class="n">doc</span><span class="p">[</span><span class="s2">&quot;uid&quot;</span><span class="p">]</span><span class="si">}</span><span class="s1"> associated with &#39;</span>
-                    <span class="sa">f</span><span class="s1">&#39;start document </span><span class="si">{</span><span class="n">doc</span><span class="p">[</span><span class="s2">&quot;run_start&quot;</span><span class="p">]</span><span class="si">}</span><span class="s1">&#39;</span>
+                    <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_start_doc</span><span class="p">[</span><span class="s1">&#39;uid&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2"> &quot;</span>
+                    <span class="sa">f</span><span class="s2">&quot;received a descriptor </span><span class="si">{</span><span class="n">doc</span><span class="p">[</span><span class="s1">&#39;uid&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2"> associated with &quot;</span>
+                    <span class="sa">f</span><span class="s2">&quot;start document </span><span class="si">{</span><span class="n">doc</span><span class="p">[</span><span class="s1">&#39;run_start&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span>
                 <span class="p">)</span>
         <span class="c1"># Defer to superclass for dispatch/processing.</span>
         <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__call__</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">doc</span><span class="p">,</span> <span class="n">validate</span><span class="o">=</span><span class="n">validate</span><span class="p">)</span>
@@ -846,7 +858,7 @@
         <span class="k">elif</span> <span class="n">doc</span><span class="p">[</span><span class="s2">&quot;descriptor&quot;</span><span class="p">]</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_descriptors</span><span class="p">:</span>
             <span class="k">raise</span> <span class="n">EventModelValueError</span><span class="p">(</span>
                 <span class="s2">&quot;SingleRunDocumentRouter has not processed a descriptor with &quot;</span>
-                <span class="sa">f</span><span class="s1">&#39;uid </span><span class="si">{</span><span class="n">doc</span><span class="p">[</span><span class="s2">&quot;descriptor&quot;</span><span class="p">]</span><span class="si">}</span><span class="s1">&#39;</span>
+                <span class="sa">f</span><span class="s2">&quot;uid </span><span class="si">{</span><span class="n">doc</span><span class="p">[</span><span class="s1">&#39;descriptor&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span>
             <span class="p">)</span>
 
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_descriptors</span><span class="p">[</span><span class="n">doc</span><span class="p">[</span><span class="s2">&quot;descriptor&quot;</span><span class="p">]]</span>
@@ -1509,9 +1521,7 @@
                 <span class="sa">f</span><span class="s2">&quot;mapped from </span><span class="si">{</span><span class="n">original_root</span><span class="si">}</span><span class="s2"> to </span><span class="si">{</span><span class="n">root</span><span class="si">}</span><span class="s2"> by root_map.&quot;</span>
             <span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">msg</span> <span class="o">+=</span> <span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;Its &#39;root&#39; field </span><span class="si">{</span><span class="n">original_root</span><span class="si">}</span><span class="s2"> was &quot;</span> <span class="sa">f</span><span class="s2">&quot;*not* modified by root_map.&quot;</span>
-            <span class="p">)</span>
+            <span class="n">msg</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;Its &#39;root&#39; field </span><span class="si">{</span><span class="n">original_root</span><span class="si">}</span><span class="s2"> was *not* modified by root_map.&quot;</span>
         <span class="n">error_to_raise</span> <span class="o">=</span> <span class="n">EventModelError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
         <span class="n">handler</span> <span class="o">=</span> <span class="n">_attempt_with_retries</span><span class="p">(</span>
             <span class="n">func</span><span class="o">=</span><span class="n">handler_class</span><span class="p">,</span>
@@ -1997,8 +2007,7 @@
         <span class="k">if</span> <span class="n">uid</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_start_to_start_doc</span><span class="p">:</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_start_to_start_doc</span><span class="p">[</span><span class="n">uid</span><span class="p">]</span> <span class="o">==</span> <span class="n">start_doc</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                    <span class="s2">&quot;RunRouter received the same &#39;start&#39; document twice:</span><span class="se">\n</span><span class="s2">&quot;</span>
-                    <span class="s2">&quot;</span><span class="si">{start_doc!r}</span><span class="s2">&quot;</span>
+                    <span class="s2">&quot;RunRouter received the same &#39;start&#39; document twice:</span><span class="se">\n</span><span class="si">{start_doc!r}</span><span class="s2">&quot;</span>
                 <span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
@@ -2264,9 +2273,8 @@
     <span class="n">DocumentNames</span><span class="o">.</span><span class="n">resource</span><span class="p">:</span> <span class="s2">&quot;schemas/resource.json&quot;</span><span class="p">,</span>
     <span class="n">DocumentNames</span><span class="o">.</span><span class="n">stream_datum</span><span class="p">:</span> <span class="s2">&quot;schemas/stream_datum.json&quot;</span><span class="p">,</span>
     <span class="n">DocumentNames</span><span class="o">.</span><span class="n">stream_resource</span><span class="p">:</span> <span class="s2">&quot;schemas/stream_resource.json&quot;</span><span class="p">,</span>
-    <span class="c1"># DEPRECATED:</span>
-    <span class="n">DocumentNames</span><span class="o">.</span><span class="n">bulk_events</span><span class="p">:</span> <span class="s2">&quot;schemas/bulk_events.json&quot;</span><span class="p">,</span>
     <span class="n">DocumentNames</span><span class="o">.</span><span class="n">bulk_datum</span><span class="p">:</span> <span class="s2">&quot;schemas/bulk_datum.json&quot;</span><span class="p">,</span>
+    <span class="n">DocumentNames</span><span class="o">.</span><span class="n">bulk_events</span><span class="p">:</span> <span class="s2">&quot;schemas/bulk_events.json&quot;</span><span class="p">,</span>
 <span class="p">}</span>
 <span class="n">schemas</span> <span class="o">=</span> <span class="p">{}</span>
 <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">filename</span> <span class="ow">in</span> <span class="n">SCHEMA_NAMES</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
@@ -2598,7 +2606,7 @@
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">RunStop</span><span class="p">:</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">poison_pill</span><span class="p">:</span>
             <span class="k">raise</span> <span class="n">EventModelError</span><span class="p">(</span>
-                <span class="s2">&quot;Already composed a RunStop document for run &quot;</span> <span class="s2">&quot;</span><span class="si">{!r}</span><span class="s2">.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                <span class="s2">&quot;Already composed a RunStop document for run </span><span class="si">{!r}</span><span class="s2">.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">start</span><span class="p">[</span><span class="s2">&quot;uid&quot;</span><span class="p">]</span>
                 <span class="p">)</span>
             <span class="p">)</span>
