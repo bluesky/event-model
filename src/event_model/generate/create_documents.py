@@ -115,7 +115,6 @@ def generate_typeddict(jsonschema_path: Path, documents_root=TYPEDDICTS) -> Path
         input_file_type=datamodel_code_generator.InputFileType.JsonSchema,
         output=document_path,
         output_model_type=datamodel_code_generator.DataModelType.TypingTypedDict,
-        target_python_version=datamodel_code_generator.PythonVersion.PY_38,
         use_schema_description=True,
         use_field_description=True,
         use_annotated=True,
