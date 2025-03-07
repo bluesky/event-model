@@ -156,7 +156,7 @@ class Configuration(TypedDict):
     """
 
 
-class EventDescriptor(TypedDict):
+class EventDescriptor(TypedDict, total=False):
     """
     Document to describe the data captured in the associated event
     documents
