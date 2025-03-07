@@ -135,7 +135,7 @@ class DataKey(TypedDict):
     """
     The source (ex piece of hardware) of the data.
     """
-    units: NotRequired[str]
+    units: NotRequired[Optional[str]]
     """
     Engineering units of the value
     """

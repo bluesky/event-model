@@ -193,8 +193,8 @@ class DataKey(BaseModel):
         str, Field(description="The source (ex piece of hardware) of the data.")
     ]
     units: Annotated[
-        str,
-        Field(default="", description="Engineering units of the value"),
+        Optional[str],
+        Field(default=None, description="Engineering units of the value"),
     ]
 
 
