@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Release History &#8212; event-model 1.22.4.dev8+g7cb9543 documentation</title>
+    <title>Release History &#8212; event-model 1.22.4.dev11+g33cdfaf documentation</title>
   
   
   
@@ -42,7 +42,7 @@
   <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
-    <script src="../_static/documentation_options.js?v=f32868ad"></script>
+    <script src="../_static/documentation_options.js?v=74a52f01"></script>
     <script src="../_static/doctools.js?v=9bcbadda"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -128,8 +128,8 @@
       
     
     
-    <img src="../_static/event-model-logo.svg" class="logo__image only-light" alt="event-model 1.22.4.dev8+g7cb9543 documentation - Home"/>
-    <img src="../_static/event-model-logo.svg" class="logo__image only-dark pst-js-only" alt="event-model 1.22.4.dev8+g7cb9543 documentation - Home"/>
+    <img src="../_static/event-model-logo.svg" class="logo__image only-light" alt="event-model 1.22.4.dev11+g33cdfaf documentation - Home"/>
+    <img src="../_static/event-model-logo.svg" class="logo__image only-dark pst-js-only" alt="event-model 1.22.4.dev11+g33cdfaf documentation - Home"/>
   
   
 </a></div>
@@ -477,7 +477,7 @@
 <h3>Changed<a class="headerlink" href="#id1" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Added a <a class="reference internal" href="../_api/event_model.html#event_model.PerObjectHint.NX_class" title="event_model.PerObjectHint.NX_class"><code class="xref any py py-attr docutils literal notranslate"><span class="pre">NX_class</span></code></a> field as a <a class="reference internal" href="../_api/event_model.html#event_model.PerObjectHint" title="event_model.PerObjectHint"><code class="xref any py py-class docutils literal notranslate"><span class="pre">PerObjectHint</span></code></a> to the <a class="reference internal" href="../_api/event_model.html#event_model.EventDescriptor" title="event_model.EventDescriptor"><code class="xref any py py-class docutils literal notranslate"><span class="pre">EventDescriptor</span></code></a> document.</p></li>
-<li><p>Removed <code class="xref any docutils literal notranslate"><span class="pre">Optional</span></code> on <a class="reference internal" href="../_api/event_model.html#event_model.DataKey" title="event_model.DataKey"><code class="xref any py py-class docutils literal notranslate"><span class="pre">DataKey</span></code></a> fields <a class="reference internal" href="../_api/event_model.html#event_model.DataKey.precision" title="event_model.DataKey.precision"><code class="xref any py py-attr docutils literal notranslate"><span class="pre">precision</span></code></a>, <code class="docutils literal notranslate"><span class="pre">choices</span></code>, and <a class="reference internal" href="../_api/event_model.html#event_model.DataKey.units" title="event_model.DataKey.units"><code class="xref any py py-attr docutils literal notranslate"><span class="pre">units</span></code></a>. These fields can still be left out of the <a class="reference internal" href="../_api/event_model.html#event_model.DataKey" title="event_model.DataKey"><code class="xref any py py-class docutils literal notranslate"><span class="pre">DataKey</span></code></a>, but if provided they cannot be <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><code class="xref any docutils literal notranslate"><span class="pre">None</span></code></a>.</p></li>
+<li><p>Removed <code class="xref any docutils literal notranslate"><span class="pre">Optional</span></code> on <a class="reference internal" href="../_api/event_model.html#event_model.DataKey" title="event_model.DataKey"><code class="xref any py py-class docutils literal notranslate"><span class="pre">DataKey</span></code></a> fields <a class="reference internal" href="../_api/event_model.html#event_model.DataKey.precision" title="event_model.DataKey.precision"><code class="xref any py py-attr docutils literal notranslate"><span class="pre">precision</span></code></a>, <code class="docutils literal notranslate"><span class="pre">choices</span></code>, and <a class="reference internal" href="../_api/event_model.html#event_model.DataKey.units" title="event_model.DataKey.units"><code class="xref any py py-attr docutils literal notranslate"><span class="pre">units</span></code></a>. These fields can still be left out of the <a class="reference internal" href="../_api/event_model.html#event_model.DataKey" title="event_model.DataKey"><code class="xref any py py-class docutils literal notranslate"><span class="pre">DataKey</span></code></a>, but if provided they cannot be <code class="xref any docutils literal notranslate"><span class="pre">None</span></code>.</p></li>
 <li><p>Added a <a class="reference internal" href="../_api/event_model.html#event_model.Limits" title="event_model.Limits"><code class="xref any py py-class docutils literal notranslate"><span class="pre">Limits</span></code></a> type for storing EPICS limit data and a <code class="xref any docutils literal notranslate"><span class="pre">NotRequired[Limits]</span></code> <a class="reference internal" href="../_api/event_model.html#event_model.DataKey.limits" title="event_model.DataKey.limits"><code class="xref any py py-attr docutils literal notranslate"><span class="pre">limits</span></code></a> field to <a class="reference internal" href="../_api/event_model.html#event_model.DataKey" title="event_model.DataKey"><code class="xref any py py-class docutils literal notranslate"><span class="pre">DataKey</span></code></a>.</p></li>
 <li><p>Added a <code class="xref any docutils literal notranslate"><span class="pre">NotRequired</span></code> <a class="reference internal" href="../_api/event_model.html#event_model.DataKey.dtype_numpy" title="event_model.DataKey.dtype_numpy"><code class="xref any py py-attr docutils literal notranslate"><span class="pre">dtype_numpy</span></code></a> field to <a class="reference internal" href="../_api/event_model.html#event_model.DataKey" title="event_model.DataKey"><code class="xref any py py-class docutils literal notranslate"><span class="pre">DataKey</span></code></a> for specifying the numpy dtype of data.</p></li>
 <li><p>Bumped from <code class="xref any docutils literal notranslate"><span class="pre">jsonschema</span> <span class="pre">3.*</span></code> to <code class="xref any docutils literal notranslate"><span class="pre">jsonschema</span> <span class="pre">4.*</span></code>.</p></li>

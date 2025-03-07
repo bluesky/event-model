@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>event_model &#8212; event-model 1.22.4.dev8+g7cb9543 documentation</title>
+    <title>event_model &#8212; event-model 1.22.4.dev11+g33cdfaf documentation</title>
   
   
   
@@ -42,7 +42,7 @@
   <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
-    <script src="../_static/documentation_options.js?v=f32868ad"></script>
+    <script src="../_static/documentation_options.js?v=74a52f01"></script>
     <script src="../_static/doctools.js?v=9bcbadda"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -129,8 +129,8 @@
       
     
     
-    <img src="../_static/event-model-logo.svg" class="logo__image only-light" alt="event-model 1.22.4.dev8+g7cb9543 documentation - Home"/>
-    <img src="../_static/event-model-logo.svg" class="logo__image only-dark pst-js-only" alt="event-model 1.22.4.dev8+g7cb9543 documentation - Home"/>
+    <img src="../_static/event-model-logo.svg" class="logo__image only-light" alt="event-model 1.22.4.dev11+g33cdfaf documentation - Home"/>
+    <img src="../_static/event-model-logo.svg" class="logo__image only-dark pst-js-only" alt="event-model 1.22.4.dev11+g33cdfaf documentation - Home"/>
   
   
 </a></div>
@@ -462,7 +462,7 @@
   <section id="module-event_model">
 <span id="event-model"></span><h1><code class="docutils literal notranslate"><span class="pre">event_model</span></code><a class="headerlink" href="#module-event_model" title="Link to this heading">#</a></h1>
 <p class="rubric">Members</p>
-<div class="pst-scrollable-table-container"><table class="autosummary longtable table autosummary">
+<div class="pst-scrollable-table-container"><table class="autosummary longtable table">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="#event_model.Datum" title="event_model.Datum"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Datum</span></code></a></p></td>
 <td><p>Document to reference a quanta of externally-stored data</p></td>
@@ -553,23 +553,23 @@
 </div>
 <dl class="py class">
 <dt class="sig sig-object py" id="event_model.Datum">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">event_model.</span></span><span class="sig-name descname"><span class="pre">Datum</span></span><a class="reference internal" href="../_modules/event_model/documents/datum.html#Datum"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#event_model.Datum" title="Link to this definition">#</a></dt>
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">event_model.</span></span><span class="sig-name descname"><span class="pre">Datum</span></span><a class="reference internal" href="../_modules/event_model/documents/datum.html#Datum"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#event_model.Datum" title="Link to this definition">#</a></dt>
 <dd><p>Document to reference a quanta of externally-stored data</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="event_model.Datum.datum_id">
-<span class="sig-name descname"><span class="pre">datum_id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></em><a class="headerlink" href="#event_model.Datum.datum_id" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">datum_id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#event_model.Datum.datum_id" title="Link to this definition">#</a></dt>
 <dd><p>Globally unique identifier for this Datum (akin to ‘uid’ for other Document types), typically formatted as ‘&lt;resource&gt;/&lt;integer&gt;’</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="event_model.Datum.datum_kwargs">
-<span class="sig-name descname"><span class="pre">datum_kwargs</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.13)"><span class="pre">Dict</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.13)"><span class="pre">Any</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#event_model.Datum.datum_kwargs" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">datum_kwargs</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#event_model.Datum.datum_kwargs" title="Link to this definition">#</a></dt>
 <dd><p>Arguments to pass to the Handler to retrieve one quanta of data</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="event_model.Datum.resource">
-<span class="sig-name descname"><span class="pre">resource</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></em><a class="headerlink" href="#event_model.Datum.resource" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">resource</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#event_model.Datum.resource" title="Link to this definition">#</a></dt>
 <dd><p>The UID of the Resource to which this Datum belongs</p>
 </dd></dl>
 
@@ -577,23 +577,23 @@
 
 <dl class="py class">
 <dt class="sig sig-object py" id="event_model.DatumPage">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">event_model.</span></span><span class="sig-name descname"><span class="pre">DatumPage</span></span><a class="reference internal" href="../_modules/event_model/documents/datum_page.html#DatumPage"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#event_model.DatumPage" title="Link to this definition">#</a></dt>
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">event_model.</span></span><span class="sig-name descname"><span class="pre">DatumPage</span></span><a class="reference internal" href="../_modules/event_model/documents/datum_page.html#DatumPage"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#event_model.DatumPage" title="Link to this definition">#</a></dt>
 <dd><p>Page of documents to reference a quanta of externally-stored data</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="event_model.DatumPage.datum_id">
-<span class="sig-name descname"><span class="pre">datum_id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.13)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#event_model.DatumPage.datum_id" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">datum_id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#event_model.DatumPage.datum_id" title="Link to this definition">#</a></dt>
 <dd><p>Array unique identifiers for each Datum (akin to ‘uid’ for other Document types), typically formatted as ‘&lt;resource&gt;/&lt;integer&gt;’</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="event_model.DatumPage.datum_kwargs">
-<span class="sig-name descname"><span class="pre">datum_kwargs</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.13)"><span class="pre">Dict</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.13)"><span class="pre">List</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#event_model.DatumPage.datum_kwargs" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">datum_kwargs</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#event_model.DatumPage.datum_kwargs" title="Link to this definition">#</a></dt>
 <dd><p>Array of arguments to pass to the Handler to retrieve one quanta of data</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="event_model.DatumPage.resource">
-<span class="sig-name descname"><span class="pre">resource</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></em><a class="headerlink" href="#event_model.DatumPage.resource" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">resource</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#event_model.DatumPage.resource" title="Link to this definition">#</a></dt>
 <dd><p>The UID of the Resource to which all Datums in the page belong</p>
 </dd></dl>
 
@@ -601,23 +601,23 @@
 
 <dl class="py class">
 <dt class="sig sig-object py" id="event_model.Event">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">event_model.</span></span><span class="sig-name descname"><span class="pre">Event</span></span><a class="reference internal" href="../_modules/event_model/documents/event.html#Event"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#event_model.Event" title="Link to this definition">#</a></dt>
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">event_model.</span></span><span class="sig-name descname"><span class="pre">Event</span></span><a class="reference internal" href="../_modules/event_model/documents/event.html#Event"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#event_model.Event" title="Link to this definition">#</a></dt>
 <dd><p>Document to record a quanta of collected data</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="event_model.Event.descriptor">
-<span class="sig-name descname"><span class="pre">descriptor</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></em><a class="headerlink" href="#event_model.Event.descriptor" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">descriptor</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#event_model.Event.descriptor" title="Link to this definition">#</a></dt>
 <dd><p>UID of the EventDescriptor to which this Event belongs</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="event_model.Event.seq_num">
-<span class="sig-name descname"><span class="pre">seq_num</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><span class="pre">int</span></a></em><a class="headerlink" href="#event_model.Event.seq_num" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">seq_num</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#event_model.Event.seq_num" title="Link to this definition">#</a></dt>
 <dd><p>Sequence number to identify the location of this Event in the Event stream</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="event_model.Event.uid">
-<span class="sig-name descname"><span class="pre">uid</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></em><a class="headerlink" href="#event_model.Event.uid" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">uid</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#event_model.Event.uid" title="Link to this definition">#</a></dt>
 <dd><p>Globally unique identifier for this Event</p>
 </dd></dl>
 
@@ -625,71 +625,71 @@
 
 <dl class="py class">
 <dt class="sig sig-object py" id="event_model.DataKey">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">event_model.</span></span><span class="sig-name descname"><span class="pre">DataKey</span></span><a class="reference internal" href="../_modules/event_model/documents/event_descriptor.html#DataKey"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#event_model.DataKey" title="Link to this definition">#</a></dt>
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">event_model.</span></span><span class="sig-name descname"><span class="pre">DataKey</span></span><a class="reference internal" href="../_modules/event_model/documents/event_descriptor.html#DataKey"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#event_model.DataKey" title="Link to this definition">#</a></dt>
 <dd><p>Describes the objects in the data property of Event documents</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="event_model.DataKey.choices">
-<span class="sig-name descname"><span class="pre">choices</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.NotRequired" title="(in Python v3.13)"><span class="pre">NotRequired</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.13)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#event_model.DataKey.choices" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">choices</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">NotRequired</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#event_model.DataKey.choices" title="Link to this definition">#</a></dt>
 <dd><p>Choices of enum value.</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="event_model.DataKey.dims">
-<span class="sig-name descname"><span class="pre">dims</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.NotRequired" title="(in Python v3.13)"><span class="pre">NotRequired</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.13)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#event_model.DataKey.dims" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">dims</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">NotRequired</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#event_model.DataKey.dims" title="Link to this definition">#</a></dt>
 <dd><p>The names for dimensions of the data. Null or empty list if scalar data</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="event_model.DataKey.dtype">
-<span class="sig-name descname"><span class="pre">dtype</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Literal" title="(in Python v3.13)"><span class="pre">Literal</span></a><span class="p"><span class="pre">[</span></span><span class="s"><span class="pre">'string'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'number'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'array'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'boolean'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'integer'</span></span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#event_model.DataKey.dtype" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">dtype</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Literal</span><span class="p"><span class="pre">[</span></span><span class="s"><span class="pre">'string'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'number'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'array'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'boolean'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'integer'</span></span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#event_model.DataKey.dtype" title="Link to this definition">#</a></dt>
 <dd><p>The type of the data in the event, given as a broad JSON schema type.</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="event_model.DataKey.dtype_numpy">
-<span class="sig-name descname"><span class="pre">dtype_numpy</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.NotRequired" title="(in Python v3.13)"><span class="pre">NotRequired</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.13)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.13)"><span class="pre">List</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#event_model.DataKey.dtype_numpy" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">dtype_numpy</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">NotRequired</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#event_model.DataKey.dtype_numpy" title="Link to this definition">#</a></dt>
 <dd><p>The type of the data in the event, given as a numpy dtype string (or, for structured dtypes, array).</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="event_model.DataKey.external">
-<span class="sig-name descname"><span class="pre">external</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.NotRequired" title="(in Python v3.13)"><span class="pre">NotRequired</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#event_model.DataKey.external" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">external</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">NotRequired</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#event_model.DataKey.external" title="Link to this definition">#</a></dt>
 <dd><p>Where the data is stored if it is stored external to the events</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="event_model.DataKey.limits">
-<span class="sig-name descname"><span class="pre">limits</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.NotRequired" title="(in Python v3.13)"><span class="pre">NotRequired</span></a><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#event_model.Limits" title="event_model.documents.event_descriptor.Limits"><span class="pre">Limits</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#event_model.DataKey.limits" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">limits</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">NotRequired</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#event_model.Limits" title="event_model.documents.event_descriptor.Limits"><span class="pre">Limits</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#event_model.DataKey.limits" title="Link to this definition">#</a></dt>
 <dd><p>Epics limits.</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="event_model.DataKey.object_name">
-<span class="sig-name descname"><span class="pre">object_name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.NotRequired" title="(in Python v3.13)"><span class="pre">NotRequired</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#event_model.DataKey.object_name" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">object_name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">NotRequired</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#event_model.DataKey.object_name" title="Link to this definition">#</a></dt>
 <dd><p>The name of the object this key was pulled from.</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="event_model.DataKey.precision">
-<span class="sig-name descname"><span class="pre">precision</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.NotRequired" title="(in Python v3.13)"><span class="pre">NotRequired</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><span class="pre">int</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#event_model.DataKey.precision" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">precision</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">NotRequired</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#event_model.DataKey.precision" title="Link to this definition">#</a></dt>
 <dd><p>Number of digits after decimal place if a floating point number</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="event_model.DataKey.shape">
-<span class="sig-name descname"><span class="pre">shape</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.13)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><span class="pre">int</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#event_model.DataKey.shape" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">shape</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#event_model.DataKey.shape" title="Link to this definition">#</a></dt>
 <dd><p>The shape of the data.  Empty list indicates scalar data.</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="event_model.DataKey.source">
-<span class="sig-name descname"><span class="pre">source</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></em><a class="headerlink" href="#event_model.DataKey.source" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">source</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#event_model.DataKey.source" title="Link to this definition">#</a></dt>
 <dd><p>The source (ex piece of hardware) of the data.</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="event_model.DataKey.units">
-<span class="sig-name descname"><span class="pre">units</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.NotRequired" title="(in Python v3.13)"><span class="pre">NotRequired</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#event_model.DataKey.units" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">units</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">NotRequired</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#event_model.DataKey.units" title="Link to this definition">#</a></dt>
 <dd><p>Engineering units of the value</p>
 </dd></dl>
 
@@ -697,48 +697,48 @@
 
 <dl class="py class">
 <dt class="sig sig-object py" id="event_model.EventDescriptor">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">event_model.</span></span><span class="sig-name descname"><span class="pre">EventDescriptor</span></span><a class="reference internal" href="../_modules/event_model/documents/event_descriptor.html#EventDescriptor"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#event_model.EventDescriptor" title="Link to this definition">#</a></dt>
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">event_model.</span></span><span class="sig-name descname"><span class="pre">EventDescriptor</span></span><a class="reference internal" href="../_modules/event_model/documents/event_descriptor.html#EventDescriptor"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#event_model.EventDescriptor" title="Link to this definition">#</a></dt>
 <dd><p>Document to describe the data captured in the associated event
 documents</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="event_model.EventDescriptor.configuration">
-<span class="sig-name descname"><span class="pre">configuration</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.NotRequired" title="(in Python v3.13)"><span class="pre">NotRequired</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.13)"><span class="pre">Dict</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Configuration</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#event_model.EventDescriptor.configuration" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">configuration</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">NotRequired</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Configuration</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#event_model.EventDescriptor.configuration" title="Link to this definition">#</a></dt>
 <dd><p>Readings of configurational fields necessary for interpreting data in the Events.</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="event_model.EventDescriptor.data_keys">
-<span class="sig-name descname"><span class="pre">data_keys</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.13)"><span class="pre">Dict</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#event_model.DataKey" title="event_model.documents.event_descriptor.DataKey"><span class="pre">DataKey</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#event_model.EventDescriptor.data_keys" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">data_keys</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#event_model.DataKey" title="event_model.documents.event_descriptor.DataKey"><span class="pre">DataKey</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#event_model.EventDescriptor.data_keys" title="Link to this definition">#</a></dt>
 <dd><p>This describes the data in the Event Documents.</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="event_model.EventDescriptor.name">
-<span class="sig-name descname"><span class="pre">name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.NotRequired" title="(in Python v3.13)"><span class="pre">NotRequired</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#event_model.EventDescriptor.name" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">NotRequired</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#event_model.EventDescriptor.name" title="Link to this definition">#</a></dt>
 <dd><p>A human-friendly name for this data stream, such as ‘primary’ or ‘baseline’.</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="event_model.EventDescriptor.object_keys">
-<span class="sig-name descname"><span class="pre">object_keys</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.NotRequired" title="(in Python v3.13)"><span class="pre">NotRequired</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.13)"><span class="pre">Dict</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.13)"><span class="pre">Any</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#event_model.EventDescriptor.object_keys" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">object_keys</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">NotRequired</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#event_model.EventDescriptor.object_keys" title="Link to this definition">#</a></dt>
 <dd><p>Maps a Device/Signal name to the names of the entries it produces in data_keys.</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="event_model.EventDescriptor.run_start">
-<span class="sig-name descname"><span class="pre">run_start</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></em><a class="headerlink" href="#event_model.EventDescriptor.run_start" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">run_start</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#event_model.EventDescriptor.run_start" title="Link to this definition">#</a></dt>
 <dd><p>Globally unique ID of this run’s ‘start’ document.</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="event_model.EventDescriptor.time">
-<span class="sig-name descname"><span class="pre">time</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><span class="pre">float</span></a></em><a class="headerlink" href="#event_model.EventDescriptor.time" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">time</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#event_model.EventDescriptor.time" title="Link to this definition">#</a></dt>
 <dd><p>Creation time of the document as unix epoch time.</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="event_model.EventDescriptor.uid">
-<span class="sig-name descname"><span class="pre">uid</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></em><a class="headerlink" href="#event_model.EventDescriptor.uid" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">uid</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#event_model.EventDescriptor.uid" title="Link to this definition">#</a></dt>
 <dd><p>Globally unique ID for this event descriptor.</p>
 </dd></dl>
 
@@ -746,42 +746,42 @@ documents</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="event_model.Limits">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">event_model.</span></span><span class="sig-name descname"><span class="pre">Limits</span></span><a class="reference internal" href="../_modules/event_model/documents/event_descriptor.html#Limits"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#event_model.Limits" title="Link to this definition">#</a></dt>
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">event_model.</span></span><span class="sig-name descname"><span class="pre">Limits</span></span><a class="reference internal" href="../_modules/event_model/documents/event_descriptor.html#Limits"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#event_model.Limits" title="Link to this definition">#</a></dt>
 <dd><p>Epics limits:
 see 3.4.1 <a class="reference external" href="https://epics.anl.gov/base/R3-14/12-docs/AppDevGuide/node4.html">https://epics.anl.gov/base/R3-14/12-docs/AppDevGuide/node4.html</a></p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="event_model.Limits.alarm">
-<span class="sig-name descname"><span class="pre">alarm</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.NotRequired" title="(in Python v3.13)"><span class="pre">NotRequired</span></a><span class="p"><span class="pre">[</span></span><span class="pre">LimitsRange</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#event_model.Limits.alarm" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">alarm</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">NotRequired</span><span class="p"><span class="pre">[</span></span><span class="pre">LimitsRange</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#event_model.Limits.alarm" title="Link to this definition">#</a></dt>
 <dd><p>Alarm limits.</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="event_model.Limits.control">
-<span class="sig-name descname"><span class="pre">control</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.NotRequired" title="(in Python v3.13)"><span class="pre">NotRequired</span></a><span class="p"><span class="pre">[</span></span><span class="pre">LimitsRange</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#event_model.Limits.control" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">control</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">NotRequired</span><span class="p"><span class="pre">[</span></span><span class="pre">LimitsRange</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#event_model.Limits.control" title="Link to this definition">#</a></dt>
 <dd><p>Control limits.</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="event_model.Limits.display">
-<span class="sig-name descname"><span class="pre">display</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.NotRequired" title="(in Python v3.13)"><span class="pre">NotRequired</span></a><span class="p"><span class="pre">[</span></span><span class="pre">LimitsRange</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#event_model.Limits.display" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">display</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">NotRequired</span><span class="p"><span class="pre">[</span></span><span class="pre">LimitsRange</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#event_model.Limits.display" title="Link to this definition">#</a></dt>
 <dd><p>Display limits.</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="event_model.Limits.hysteresis">
-<span class="sig-name descname"><span class="pre">hysteresis</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.NotRequired" title="(in Python v3.13)"><span class="pre">NotRequired</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><span class="pre">float</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#event_model.Limits.hysteresis" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">hysteresis</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">NotRequired</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#event_model.Limits.hysteresis" title="Link to this definition">#</a></dt>
 <dd><p>Hysteresis.</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="event_model.Limits.rds">
-<span class="sig-name descname"><span class="pre">rds</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.NotRequired" title="(in Python v3.13)"><span class="pre">NotRequired</span></a><span class="p"><span class="pre">[</span></span><span class="pre">RdsRange</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#event_model.Limits.rds" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">rds</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">NotRequired</span><span class="p"><span class="pre">[</span></span><span class="pre">RdsRange</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#event_model.Limits.rds" title="Link to this definition">#</a></dt>
 <dd><p>RDS parameters.</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="event_model.Limits.warning">
-<span class="sig-name descname"><span class="pre">warning</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.NotRequired" title="(in Python v3.13)"><span class="pre">NotRequired</span></a><span class="p"><span class="pre">[</span></span><span class="pre">LimitsRange</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#event_model.Limits.warning" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">warning</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">NotRequired</span><span class="p"><span class="pre">[</span></span><span class="pre">LimitsRange</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#event_model.Limits.warning" title="Link to this definition">#</a></dt>
 <dd><p>Warning limits.</p>
 </dd></dl>
 
@@ -789,17 +789,17 @@ see 3.4.1 <a class="reference external" href="https://epics.anl.gov/base/R3-14/1
 
 <dl class="py class">
 <dt class="sig sig-object py" id="event_model.PerObjectHint">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">event_model.</span></span><span class="sig-name descname"><span class="pre">PerObjectHint</span></span><a class="reference internal" href="../_modules/event_model/documents/event_descriptor.html#PerObjectHint"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#event_model.PerObjectHint" title="Link to this definition">#</a></dt>
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">event_model.</span></span><span class="sig-name descname"><span class="pre">PerObjectHint</span></span><a class="reference internal" href="../_modules/event_model/documents/event_descriptor.html#PerObjectHint"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#event_model.PerObjectHint" title="Link to this definition">#</a></dt>
 <dd><p>The ‘interesting’ data keys for this device.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="event_model.PerObjectHint.NX_class">
-<span class="sig-name descname"><span class="pre">NX_class</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.NotRequired" title="(in Python v3.13)"><span class="pre">NotRequired</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#event_model.PerObjectHint.NX_class" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">NX_class</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">NotRequired</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#event_model.PerObjectHint.NX_class" title="Link to this definition">#</a></dt>
 <dd><p>The NeXus class definition for this device.</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="event_model.PerObjectHint.fields">
-<span class="sig-name descname"><span class="pre">fields</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.NotRequired" title="(in Python v3.13)"><span class="pre">NotRequired</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.13)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#event_model.PerObjectHint.fields" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">fields</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">NotRequired</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#event_model.PerObjectHint.fields" title="Link to this definition">#</a></dt>
 <dd><p>The ‘interesting’ data keys for this device.</p>
 </dd></dl>
 
@@ -807,23 +807,23 @@ see 3.4.1 <a class="reference external" href="https://epics.anl.gov/base/R3-14/1
 
 <dl class="py class">
 <dt class="sig sig-object py" id="event_model.EventPage">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">event_model.</span></span><span class="sig-name descname"><span class="pre">EventPage</span></span><a class="reference internal" href="../_modules/event_model/documents/event_page.html#EventPage"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#event_model.EventPage" title="Link to this definition">#</a></dt>
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">event_model.</span></span><span class="sig-name descname"><span class="pre">EventPage</span></span><a class="reference internal" href="../_modules/event_model/documents/event_page.html#EventPage"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#event_model.EventPage" title="Link to this definition">#</a></dt>
 <dd><p>Page of documents to record a quanta of collected data</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="event_model.EventPage.descriptor">
-<span class="sig-name descname"><span class="pre">descriptor</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></em><a class="headerlink" href="#event_model.EventPage.descriptor" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">descriptor</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#event_model.EventPage.descriptor" title="Link to this definition">#</a></dt>
 <dd><p>The UID of the EventDescriptor to which all of the Events in this page belong</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="event_model.EventPage.seq_num">
-<span class="sig-name descname"><span class="pre">seq_num</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.13)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><span class="pre">int</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#event_model.EventPage.seq_num" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">seq_num</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#event_model.EventPage.seq_num" title="Link to this definition">#</a></dt>
 <dd><p>Array of sequence numbers to identify the location of each Event in the Event stream</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="event_model.EventPage.uid">
-<span class="sig-name descname"><span class="pre">uid</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.13)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#event_model.EventPage.uid" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">uid</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#event_model.EventPage.uid" title="Link to this definition">#</a></dt>
 <dd><p>Array of globally unique identifiers for each Event</p>
 </dd></dl>
 
@@ -831,18 +831,18 @@ see 3.4.1 <a class="reference external" href="https://epics.anl.gov/base/R3-14/1
 
 <dl class="py class">
 <dt class="sig sig-object py" id="event_model.Resource">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">event_model.</span></span><span class="sig-name descname"><span class="pre">Resource</span></span><a class="reference internal" href="../_modules/event_model/documents/resource.html#Resource"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#event_model.Resource" title="Link to this definition">#</a></dt>
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">event_model.</span></span><span class="sig-name descname"><span class="pre">Resource</span></span><a class="reference internal" href="../_modules/event_model/documents/resource.html#Resource"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#event_model.Resource" title="Link to this definition">#</a></dt>
 <dd><p>Document to reference a collection (e.g. file or group of files) of
 externally-stored data</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="event_model.Resource.path_semantics">
-<span class="sig-name descname"><span class="pre">path_semantics</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.NotRequired" title="(in Python v3.13)"><span class="pre">NotRequired</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Literal" title="(in Python v3.13)"><span class="pre">Literal</span></a><span class="p"><span class="pre">[</span></span><span class="s"><span class="pre">'posix'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'windows'</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#event_model.Resource.path_semantics" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">path_semantics</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">NotRequired</span><span class="p"><span class="pre">[</span></span><span class="pre">Literal</span><span class="p"><span class="pre">[</span></span><span class="s"><span class="pre">'posix'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'windows'</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#event_model.Resource.path_semantics" title="Link to this definition">#</a></dt>
 <dd><p>Rules for joining paths</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="event_model.Resource.run_start">
-<span class="sig-name descname"><span class="pre">run_start</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.NotRequired" title="(in Python v3.13)"><span class="pre">NotRequired</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#event_model.Resource.run_start" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">run_start</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">NotRequired</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#event_model.Resource.run_start" title="Link to this definition">#</a></dt>
 <dd><p>Globally unique ID to the run_start document this resource is associated with.</p>
 </dd></dl>
 
@@ -850,11 +850,11 @@ externally-stored data</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="event_model.Hints">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">event_model.</span></span><span class="sig-name descname"><span class="pre">Hints</span></span><a class="reference internal" href="../_modules/event_model/documents/run_start.html#Hints"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#event_model.Hints" title="Link to this definition">#</a></dt>
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">event_model.</span></span><span class="sig-name descname"><span class="pre">Hints</span></span><a class="reference internal" href="../_modules/event_model/documents/run_start.html#Hints"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#event_model.Hints" title="Link to this definition">#</a></dt>
 <dd><p>Start-level hints</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="event_model.Hints.dimensions">
-<span class="sig-name descname"><span class="pre">dimensions</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.NotRequired" title="(in Python v3.13)"><span class="pre">NotRequired</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.13)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.13)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.13)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#event_model.Hints.dimensions" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">dimensions</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">NotRequired</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#event_model.Hints.dimensions" title="Link to this definition">#</a></dt>
 <dd><p>The independent axes of the experiment. Ordered slow to fast</p>
 </dd></dl>
 
@@ -862,23 +862,23 @@ externally-stored data</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="event_model.Projections">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">event_model.</span></span><span class="sig-name descname"><span class="pre">Projections</span></span><a class="reference internal" href="../_modules/event_model/documents/run_start.html#Projections"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#event_model.Projections" title="Link to this definition">#</a></dt>
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">event_model.</span></span><span class="sig-name descname"><span class="pre">Projections</span></span><a class="reference internal" href="../_modules/event_model/documents/run_start.html#Projections"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#event_model.Projections" title="Link to this definition">#</a></dt>
 <dd><p>Describe how to interperet this run as the given projection</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="event_model.Projections.configuration">
-<span class="sig-name descname"><span class="pre">configuration</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.13)"><span class="pre">Dict</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.13)"><span class="pre">Any</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#event_model.Projections.configuration" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">configuration</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#event_model.Projections.configuration" title="Link to this definition">#</a></dt>
 <dd><p>Static information about projection</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="event_model.Projections.name">
-<span class="sig-name descname"><span class="pre">name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.NotRequired" title="(in Python v3.13)"><span class="pre">NotRequired</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#event_model.Projections.name" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">NotRequired</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#event_model.Projections.name" title="Link to this definition">#</a></dt>
 <dd><p>The name of the projection</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="event_model.Projections.version">
-<span class="sig-name descname"><span class="pre">version</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></em><a class="headerlink" href="#event_model.Projections.version" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">version</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#event_model.Projections.version" title="Link to this definition">#</a></dt>
 <dd><p>The version of the projection spec. Can specify the version of an external specification.</p>
 </dd></dl>
 
@@ -886,60 +886,60 @@ externally-stored data</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="event_model.RunStart">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">event_model.</span></span><span class="sig-name descname"><span class="pre">RunStart</span></span><a class="reference internal" href="../_modules/event_model/documents/run_start.html#RunStart"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#event_model.RunStart" title="Link to this definition">#</a></dt>
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">event_model.</span></span><span class="sig-name descname"><span class="pre">RunStart</span></span><a class="reference internal" href="../_modules/event_model/documents/run_start.html#RunStart"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#event_model.RunStart" title="Link to this definition">#</a></dt>
 <dd><p>Document created at the start of run. Provides a seach target and
 later documents link to it</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="event_model.RunStart.data_groups">
-<span class="sig-name descname"><span class="pre">data_groups</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.NotRequired" title="(in Python v3.13)"><span class="pre">NotRequired</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.13)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#event_model.RunStart.data_groups" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">data_groups</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">NotRequired</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#event_model.RunStart.data_groups" title="Link to this definition">#</a></dt>
 <dd><p>An optional list of data access groups that have meaning to some external system. Examples might include facility, beamline, end stations, proposal, safety form.</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="event_model.RunStart.data_session">
-<span class="sig-name descname"><span class="pre">data_session</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.NotRequired" title="(in Python v3.13)"><span class="pre">NotRequired</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#event_model.RunStart.data_session" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">data_session</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">NotRequired</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#event_model.RunStart.data_session" title="Link to this definition">#</a></dt>
 <dd><p>An optional field for grouping runs. The meaning is not mandated, but this is a data management grouping and not a scientific grouping. It is intended to group runs in a visit or set of trials.</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="event_model.RunStart.group">
-<span class="sig-name descname"><span class="pre">group</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.NotRequired" title="(in Python v3.13)"><span class="pre">NotRequired</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#event_model.RunStart.group" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">group</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">NotRequired</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#event_model.RunStart.group" title="Link to this definition">#</a></dt>
 <dd><p>Unix group to associate this data with</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="event_model.RunStart.owner">
-<span class="sig-name descname"><span class="pre">owner</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.NotRequired" title="(in Python v3.13)"><span class="pre">NotRequired</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#event_model.RunStart.owner" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">owner</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">NotRequired</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#event_model.RunStart.owner" title="Link to this definition">#</a></dt>
 <dd><p>Unix owner to associate this data with</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="event_model.RunStart.project">
-<span class="sig-name descname"><span class="pre">project</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.NotRequired" title="(in Python v3.13)"><span class="pre">NotRequired</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#event_model.RunStart.project" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">project</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">NotRequired</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#event_model.RunStart.project" title="Link to this definition">#</a></dt>
 <dd><p>Name of project that this run is part of</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="event_model.RunStart.sample">
-<span class="sig-name descname"><span class="pre">sample</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.NotRequired" title="(in Python v3.13)"><span class="pre">NotRequired</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.13)"><span class="pre">Dict</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.13)"><span class="pre">Any</span></a><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#event_model.RunStart.sample" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">sample</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">NotRequired</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#event_model.RunStart.sample" title="Link to this definition">#</a></dt>
 <dd><p>Information about the sample, may be a UID to another collection</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="event_model.RunStart.scan_id">
-<span class="sig-name descname"><span class="pre">scan_id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.NotRequired" title="(in Python v3.13)"><span class="pre">NotRequired</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><span class="pre">int</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#event_model.RunStart.scan_id" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">scan_id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">NotRequired</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#event_model.RunStart.scan_id" title="Link to this definition">#</a></dt>
 <dd><p>Scan ID number, not globally unique</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="event_model.RunStart.time">
-<span class="sig-name descname"><span class="pre">time</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><span class="pre">float</span></a></em><a class="headerlink" href="#event_model.RunStart.time" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">time</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#event_model.RunStart.time" title="Link to this definition">#</a></dt>
 <dd><p>Time the run started.  Unix epoch time</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="event_model.RunStart.uid">
-<span class="sig-name descname"><span class="pre">uid</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></em><a class="headerlink" href="#event_model.RunStart.uid" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">uid</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#event_model.RunStart.uid" title="Link to this definition">#</a></dt>
 <dd><p>Globally unique ID for this run</p>
 </dd></dl>
 
@@ -947,48 +947,48 @@ later documents link to it</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="event_model.RunStop">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">event_model.</span></span><span class="sig-name descname"><span class="pre">RunStop</span></span><a class="reference internal" href="../_modules/event_model/documents/run_stop.html#RunStop"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#event_model.RunStop" title="Link to this definition">#</a></dt>
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">event_model.</span></span><span class="sig-name descname"><span class="pre">RunStop</span></span><a class="reference internal" href="../_modules/event_model/documents/run_stop.html#RunStop"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#event_model.RunStop" title="Link to this definition">#</a></dt>
 <dd><p>Document for the end of a run indicating the success/fail state of the
 run and the end time</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="event_model.RunStop.data_type">
-<span class="sig-name descname"><span class="pre">data_type</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.NotRequired" title="(in Python v3.13)"><span class="pre">NotRequired</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.13)"><span class="pre">Any</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#event_model.RunStop.data_type" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">data_type</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">NotRequired</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#event_model.RunStop.data_type" title="Link to this definition">#</a></dt>
 <dd><p>data_type</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="event_model.RunStop.exit_status">
-<span class="sig-name descname"><span class="pre">exit_status</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Literal" title="(in Python v3.13)"><span class="pre">Literal</span></a><span class="p"><span class="pre">[</span></span><span class="s"><span class="pre">'success'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'abort'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'fail'</span></span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#event_model.RunStop.exit_status" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">exit_status</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Literal</span><span class="p"><span class="pre">[</span></span><span class="s"><span class="pre">'success'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'abort'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'fail'</span></span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#event_model.RunStop.exit_status" title="Link to this definition">#</a></dt>
 <dd><p>State of the run when it ended</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="event_model.RunStop.num_events">
-<span class="sig-name descname"><span class="pre">num_events</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.NotRequired" title="(in Python v3.13)"><span class="pre">NotRequired</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.13)"><span class="pre">Dict</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><span class="pre">int</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#event_model.RunStop.num_events" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">num_events</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">NotRequired</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#event_model.RunStop.num_events" title="Link to this definition">#</a></dt>
 <dd><p>Number of Events per named stream</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="event_model.RunStop.reason">
-<span class="sig-name descname"><span class="pre">reason</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.NotRequired" title="(in Python v3.13)"><span class="pre">NotRequired</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#event_model.RunStop.reason" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">reason</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">NotRequired</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#event_model.RunStop.reason" title="Link to this definition">#</a></dt>
 <dd><p>Long-form description of why the run ended</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="event_model.RunStop.run_start">
-<span class="sig-name descname"><span class="pre">run_start</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></em><a class="headerlink" href="#event_model.RunStop.run_start" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">run_start</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#event_model.RunStop.run_start" title="Link to this definition">#</a></dt>
 <dd><p>Reference back to the run_start document that this document is paired with.</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="event_model.RunStop.time">
-<span class="sig-name descname"><span class="pre">time</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><span class="pre">float</span></a></em><a class="headerlink" href="#event_model.RunStop.time" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">time</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#event_model.RunStop.time" title="Link to this definition">#</a></dt>
 <dd><p>The time the run ended. Unix epoch</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="event_model.RunStop.uid">
-<span class="sig-name descname"><span class="pre">uid</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></em><a class="headerlink" href="#event_model.RunStop.uid" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">uid</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#event_model.RunStop.uid" title="Link to this definition">#</a></dt>
 <dd><p>Globally unique ID for this document</p>
 </dd></dl>
 
@@ -996,11 +996,11 @@ run and the end time</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="event_model.StreamDatum">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">event_model.</span></span><span class="sig-name descname"><span class="pre">StreamDatum</span></span><a class="reference internal" href="../_modules/event_model/documents/stream_datum.html#StreamDatum"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#event_model.StreamDatum" title="Link to this definition">#</a></dt>
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">event_model.</span></span><span class="sig-name descname"><span class="pre">StreamDatum</span></span><a class="reference internal" href="../_modules/event_model/documents/stream_datum.html#StreamDatum"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#event_model.StreamDatum" title="Link to this definition">#</a></dt>
 <dd><p>Document to reference a quanta of an externally-stored stream of data.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="event_model.StreamDatum.descriptor">
-<span class="sig-name descname"><span class="pre">descriptor</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></em><a class="headerlink" href="#event_model.StreamDatum.descriptor" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">descriptor</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#event_model.StreamDatum.descriptor" title="Link to this definition">#</a></dt>
 <dd><p>UID of the EventDescriptor to which this Datum belongs</p>
 </dd></dl>
 
@@ -1018,13 +1018,13 @@ run and the end time</p>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="event_model.StreamDatum.stream_resource">
-<span class="sig-name descname"><span class="pre">stream_resource</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></em><a class="headerlink" href="#event_model.StreamDatum.stream_resource" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">stream_resource</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#event_model.StreamDatum.stream_resource" title="Link to this definition">#</a></dt>
 <dd><p>The UID of the Stream Resource to which this Datum belongs.</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="event_model.StreamDatum.uid">
-<span class="sig-name descname"><span class="pre">uid</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></em><a class="headerlink" href="#event_model.StreamDatum.uid" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">uid</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#event_model.StreamDatum.uid" title="Link to this definition">#</a></dt>
 <dd><p>Globally unique identifier for this Datum. A suggested formatting being ‘&lt;stream_resource&gt;/&lt;stream_name&gt;/&lt;block_id&gt;</p>
 </dd></dl>
 
@@ -1032,17 +1032,17 @@ run and the end time</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="event_model.StreamRange">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">event_model.</span></span><span class="sig-name descname"><span class="pre">StreamRange</span></span><a class="reference internal" href="../_modules/event_model/documents/stream_datum.html#StreamRange"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#event_model.StreamRange" title="Link to this definition">#</a></dt>
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">event_model.</span></span><span class="sig-name descname"><span class="pre">StreamRange</span></span><a class="reference internal" href="../_modules/event_model/documents/stream_datum.html#StreamRange"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#event_model.StreamRange" title="Link to this definition">#</a></dt>
 <dd><p>The parameters required to describe a sequence of incrementing integers</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="event_model.StreamRange.start">
-<span class="sig-name descname"><span class="pre">start</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><span class="pre">int</span></a></em><a class="headerlink" href="#event_model.StreamRange.start" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">start</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#event_model.StreamRange.start" title="Link to this definition">#</a></dt>
 <dd><p>First number in the range</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="event_model.StreamRange.stop">
-<span class="sig-name descname"><span class="pre">stop</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><span class="pre">int</span></a></em><a class="headerlink" href="#event_model.StreamRange.stop" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">stop</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#event_model.StreamRange.stop" title="Link to this definition">#</a></dt>
 <dd><p>Last number in the range is less than this number</p>
 </dd></dl>
 
@@ -1050,42 +1050,42 @@ run and the end time</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="event_model.StreamResource">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">event_model.</span></span><span class="sig-name descname"><span class="pre">StreamResource</span></span><a class="reference internal" href="../_modules/event_model/documents/stream_resource.html#StreamResource"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#event_model.StreamResource" title="Link to this definition">#</a></dt>
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">event_model.</span></span><span class="sig-name descname"><span class="pre">StreamResource</span></span><a class="reference internal" href="../_modules/event_model/documents/stream_resource.html#StreamResource"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#event_model.StreamResource" title="Link to this definition">#</a></dt>
 <dd><p>Document to reference a collection (e.g. file or group of files) of
 externally-stored data streams</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="event_model.StreamResource.data_key">
-<span class="sig-name descname"><span class="pre">data_key</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></em><a class="headerlink" href="#event_model.StreamResource.data_key" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">data_key</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#event_model.StreamResource.data_key" title="Link to this definition">#</a></dt>
 <dd><p>A string to show which data_key of the Descriptor are being streamed</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="event_model.StreamResource.mimetype">
-<span class="sig-name descname"><span class="pre">mimetype</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></em><a class="headerlink" href="#event_model.StreamResource.mimetype" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">mimetype</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#event_model.StreamResource.mimetype" title="Link to this definition">#</a></dt>
 <dd><p>String identifying the format/type of this Stream Resource, used to identify a compatible Handler</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="event_model.StreamResource.parameters">
-<span class="sig-name descname"><span class="pre">parameters</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.13)"><span class="pre">Dict</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.13)"><span class="pre">Any</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#event_model.StreamResource.parameters" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">parameters</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#event_model.StreamResource.parameters" title="Link to this definition">#</a></dt>
 <dd><p>Additional keyword arguments to pass to the Handler to read a Stream Resource</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="event_model.StreamResource.run_start">
-<span class="sig-name descname"><span class="pre">run_start</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.NotRequired" title="(in Python v3.13)"><span class="pre">NotRequired</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#event_model.StreamResource.run_start" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">run_start</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">NotRequired</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#event_model.StreamResource.run_start" title="Link to this definition">#</a></dt>
 <dd><p>Globally unique ID to the run_start document this Stream Resource is associated with.</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="event_model.StreamResource.uid">
-<span class="sig-name descname"><span class="pre">uid</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></em><a class="headerlink" href="#event_model.StreamResource.uid" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">uid</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#event_model.StreamResource.uid" title="Link to this definition">#</a></dt>
 <dd><p>Globally unique identifier for this Stream Resource</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="event_model.StreamResource.uri">
-<span class="sig-name descname"><span class="pre">uri</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></em><a class="headerlink" href="#event_model.StreamResource.uri" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">uri</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#event_model.StreamResource.uri" title="Link to this definition">#</a></dt>
 <dd><p>URI for locating this resource</p>
 </dd></dl>
 
@@ -1093,18 +1093,18 @@ externally-stored data streams</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="event_model.compose_run">
-<span class="sig-prename descclassname"><span class="pre">event_model.</span></span><span class="sig-name descname"><span class="pre">compose_run</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">uid</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><span class="pre">float</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metadata</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.13)"><span class="pre">Dict</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">validate</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">event_counters</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.13)"><span class="pre">Dict</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><span class="pre">int</span></a><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ComposeRunBundle</span></span></span><a class="reference internal" href="../_modules/event_model.html#compose_run"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#event_model.compose_run" title="Link to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">event_model.</span></span><span class="sig-name descname"><span class="pre">compose_run</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">uid</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metadata</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">validate</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">event_counters</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ComposeRunBundle</span></span></span><a class="reference internal" href="../_modules/event_model.html#compose_run"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#event_model.compose_run" title="Link to this definition">#</a></dt>
 <dd><p>Compose a RunStart document and factory functions for related documents.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>uid</strong> (<em>string</em><em>, </em><em>optional</em>) – Unique identifier for this run, conventionally a UUID4. If None is
 given, a UUID4 will be generated.</p></li>
-<li><p><strong>time</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><em>float</em></a><em>, </em><em>optional</em>) – UNIX epoch time of start of this run. If None is given, the current
+<li><p><strong>time</strong> (<em>float</em><em>, </em><em>optional</em>) – UNIX epoch time of start of this run. If None is given, the current
 time will be used.</p></li>
-<li><p><strong>metadata</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.13)"><em>dict</em></a><em>, </em><em>optional</em>) – Additional metadata include the document</p></li>
+<li><p><strong>metadata</strong> (<em>dict</em><em>, </em><em>optional</em>) – Additional metadata include the document</p></li>
 <li><p><strong>validate</strong> (<em>boolean</em><em>, </em><em>optional</em>) – Validate this document conforms to the schema.</p></li>
-<li><p><strong>event_counters</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.13)"><em>dict</em></a><em>, </em><em>optional</em>) – A dict for counting events, when an event is composed by any of the
+<li><p><strong>event_counters</strong> (<em>dict</em><em>, </em><em>optional</em>) – A dict for counting events, when an event is composed by any of the
 descriptors composed by this run, the element in this dict with the key of the
 descriptor name will be increased by 1.</p></li>
 </ul>
