@@ -119,7 +119,7 @@ class Projections(TypedDict):
     """
 
 
-class RunStart(TypedDict):
+class RunStart(TypedDict, total=False):
     """
     Document created at the start of run. Provides a seach target and
     later documents link to it
