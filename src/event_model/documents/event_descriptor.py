@@ -127,9 +127,9 @@ class DataKey(TypedDict):
     """
     Number of digits after decimal place if a floating point number
     """
-    shape: List[int]
+    shape: List[Optional[int]]
     """
-    The shape of the data.  Empty list indicates scalar data.
+    The shape of the data.  Empty list indicates scalar data. None indicates a dimension with unknown length.
     """
     source: str
     """
