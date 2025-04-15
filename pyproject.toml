@@ -50,7 +50,7 @@ dev = [
   "numpydoc",
 
   # For schema generation.
-  "pydantic<3",
+  "pydantic<2.11",
   "datamodel-code-generator",
 ]
 
