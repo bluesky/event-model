@@ -122,7 +122,7 @@
                 },
                 "shape": {
                     "title": "shape",
-                    "description": "The shape of the data.  Empty list indicates scalar data. None indicates a dimension with unknown length.",
+                    "description": "The shape of the data.  Empty list indicates scalar data. None indicates a dimension with unknown or variable length.",
                     "type": "array",
                     "items": {
                         "anyOf": [

@@ -189,7 +189,7 @@ class DataKey(BaseModel):
         List[Optional[int]],
         Field(
             description="The shape of the data.  Empty list indicates scalar data. "
-            "None indicates a dimension with unknown length."
+            "None indicates a dimension with unknown or variable length."
         ),
     ]
     source: Annotated[

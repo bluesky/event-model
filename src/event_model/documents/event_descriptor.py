@@ -129,7 +129,7 @@ class DataKey(TypedDict):
     """
     shape: List[Optional[int]]
     """
-    The shape of the data.  Empty list indicates scalar data. None indicates a dimension with unknown length.
+    The shape of the data.  Empty list indicates scalar data. None indicates a dimension with unknown or variable length.
     """
     source: str
     """
