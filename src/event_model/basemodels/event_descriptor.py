@@ -186,8 +186,11 @@ class DataKey(BaseModel):
         ),
     ]
     shape: Annotated[
-        List[int],
-        Field(description="The shape of the data.  Empty list indicates scalar data."),
+        List[Optional[int]],
+        Field(
+            description="The shape of the data.  Empty list indicates scalar data. "
+            "None indicates a dimension with unknown or variable length."
+        ),
     ]
     source: Annotated[
         str, Field(description="The source (ex piece of hardware) of the data.")
