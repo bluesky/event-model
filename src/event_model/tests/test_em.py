@@ -1022,5 +1022,6 @@ def test_resource_start_optional():
         spec="TEST", root="/", resource_path="", resource_kwargs={}
     )
 
+
 def test_import_tess():
     import event_model.tests  # noqa: F401
