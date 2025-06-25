@@ -61,7 +61,7 @@ class RdsRange(TypedDict):
 class Limits(TypedDict):
     """
     Epics limits:
-    see 3.4.1 https://epics.anl.gov/base/R3-14/12-docs/AppDevGuide/node4.html
+    https://docs.epics-controls.org/en/latest/getting-started/EPICS_Intro.html#channel-access
     """
 
     alarm: NotRequired[Optional[LimitsRange]]
