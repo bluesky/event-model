@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>External Assets &#8212; event-model 1.22.4.dev17+g18e1168 documentation</title>
+    <title>External Assets &#8212; event-model 1.24.dev3+ge3c72c2 documentation</title>
   
   
   
@@ -42,7 +42,7 @@
   <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
-    <script src="../_static/documentation_options.js?v=480c4c59"></script>
+    <script src="../_static/documentation_options.js?v=8b6956ae"></script>
     <script src="../_static/doctools.js?v=9bcbadda"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -129,8 +129,8 @@
       
     
     
-    <img src="../_static/event-model-logo.svg" class="logo__image only-light" alt="event-model 1.22.4.dev17+g18e1168 documentation - Home"/>
-    <img src="../_static/event-model-logo.svg" class="logo__image only-dark pst-js-only" alt="event-model 1.22.4.dev17+g18e1168 documentation - Home"/>
+    <img src="../_static/event-model-logo.svg" class="logo__image only-light" alt="event-model 1.24.dev3+ge3c72c2 documentation - Home"/>
+    <img src="../_static/event-model-logo.svg" class="logo__image only-dark pst-js-only" alt="event-model 1.24.dev3+ge3c72c2 documentation - Home"/>
   
   
 </a></div>
@@ -717,8 +717,8 @@ context manager, it releases all its handlers which in turn should close any
 resources they have allocated. The caches used by a Filler are injectable: by
 default all relevant documents and handler instances are cached until the
 Filler is closed, but the Filler can be configured to use any custom cache
-object, such as a <a class="reference external" href="https://cachetools.readthedocs.io/en/stable/index.html#cachetools.LRUCache" title="(in cachetools v5.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">cachetools.LRUCache</span></code></a> or
-<a class="reference external" href="https://cachetools.readthedocs.io/en/stable/index.html#cachetools.LFUCache" title="(in cachetools v5.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">cachetools.LFUCache</span></code></a>, to receive a prepopulated cache, or to share
+object, such as a <a class="reference external" href="https://cachetools.readthedocs.io/en/stable/index.html#cachetools.LRUCache" title="(in cachetools v6.1)"><code class="xref py py-class docutils literal notranslate"><span class="pre">cachetools.LRUCache</span></code></a> or
+<a class="reference external" href="https://cachetools.readthedocs.io/en/stable/index.html#cachetools.LFUCache" title="(in cachetools v6.1)"><code class="xref py py-class docutils literal notranslate"><span class="pre">cachetools.LFUCache</span></code></a>, to receive a prepopulated cache, or to share
 caches between Filler instances. This is an implementation detail left entirely
 up to the application. See <code class="xref py py-class docutils literal notranslate"><span class="pre">Filler</span></code> for details on cache
 injection. Here is an example where two Fillers share a global LRU cache:</p>
