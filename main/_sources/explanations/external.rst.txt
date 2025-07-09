@@ -97,7 +97,6 @@ contains path-related details.
     'resource_path': '2020/01/03/8ff08ff9-a2bf-48c3-8ff3-dcac0f309d7d.h5',
     'resource_kwargs': {'frame_per_point': 10},
     'path_semantics': 'posix',
-    'uid': '3b300e6f-b431-4750-a635-5630d15c81a8',
     'run_start': '10bf6945-4afd-43ca-af36-6ad8f3540bcd'}
 
 The ``resource_path`` is a relative path, all of which is semantic and should
@@ -116,7 +115,6 @@ provide any additional parameters for reading it.
     'mimetype': 'application/x-hdf5',
     'uri': 'file://localhost/{path}/GPFS/DATA/Andor/2020/01/03/8ff08ff9.h5',
     'parameters': {'frame_per_point': 10},
-    'uid': '3b300e6f-b431-4750-a635-5630d15c81a8',
     'run_start': '10bf6945-4afd-43ca-af36-6ad8f3540bcd'}
 
 The ``uri`` specifies the location of the data. It may be a path on the local
