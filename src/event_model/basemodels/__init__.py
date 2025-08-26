@@ -29,6 +29,19 @@ DocumentType = Union[
     Type[StreamResource],
 ]
 
+Document = Union[
+    Datum,
+    DatumPage,
+    Event,
+    EventDescriptor,
+    EventPage,
+    Resource,
+    RunStart,
+    RunStop,
+    StreamDatum,
+    StreamResource,
+]
+
 ALL_BASEMODELS: Tuple[DocumentType, ...] = (
     Datum,
     DatumPage,
