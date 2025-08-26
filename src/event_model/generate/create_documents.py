@@ -256,12 +256,12 @@ def generate_init_py(output_root: Path):
     )
 
     init_py = GENERATED_INIT_PY.format(
-        init_py_imports, # 0
-        output_root.name.rstrip("s").title(), # 1
-        document_types, # 2
-        documents, # 3
-        output_root.name.upper(), # 4
-        all_documents, # 5
+        init_py_imports,
+        output_root.name.rstrip("s").title(),
+        document_types,
+        documents,
+        output_root.name.upper(),
+        all_documents,
     )
 
     with open(output_root / "__init__.py", "w") as f:
