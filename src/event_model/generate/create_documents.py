@@ -209,8 +209,12 @@ from typing import Tuple, Type, Union
 {2}
 ]
 
-ALL_{3}: Tuple[{1}Type, ...] = (
-{4}
+{1} = Union[
+{3}
+]
+
+ALL_{4}: Tuple[{1}Type, ...] = (
+{5}
 )"""
 
 
@@ -243,16 +247,21 @@ def generate_init_py(output_root: Path):
         ]
     )
 
+    documents = "\n".join(
+        [f"    {class_name},  # noqa: F405" for class_name in document_class_names]
+    )
+
     all_documents = "\n".join(
         [f"    {class_name},  # noqa: F405" for class_name in document_class_names]
     )
 
     init_py = GENERATED_INIT_PY.format(
-        init_py_imports,
-        output_root.name.rstrip("s").title(),
-        document_types,
-        output_root.name.upper(),
-        all_documents,
+        init_py_imports, # 0
+        output_root.name.rstrip("s").title(), # 1
+        document_types, # 2
+        documents, # 3
+        output_root.name.upper(), # 4
+        all_documents, # 5
     )
 
     with open(output_root / "__init__.py", "w") as f:

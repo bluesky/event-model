@@ -26,6 +26,19 @@ DocumentType = Union[
     Type[StreamResource],  # noqa: F405,
 ]
 
+Document = Union[
+    Datum,  # noqa: F405
+    DatumPage,  # noqa: F405
+    Event,  # noqa: F405
+    EventDescriptor,  # noqa: F405
+    EventPage,  # noqa: F405
+    Resource,  # noqa: F405
+    RunStart,  # noqa: F405
+    RunStop,  # noqa: F405
+    StreamDatum,  # noqa: F405
+    StreamResource,  # noqa: F405
+]
+
 ALL_DOCUMENTS: Tuple[DocumentType, ...] = (
     Datum,  # noqa: F405
     DatumPage,  # noqa: F405
