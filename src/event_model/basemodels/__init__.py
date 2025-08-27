@@ -29,6 +29,7 @@ DocumentType = Union[
     Type[StreamResource],
 ]
 
+
 ALL_BASEMODELS: Tuple[DocumentType, ...] = (
     Datum,
     DatumPage,
@@ -41,6 +42,9 @@ ALL_BASEMODELS: Tuple[DocumentType, ...] = (
     StreamDatum,
     StreamResource,
 )
+
+
+Document = Union[ALL_BASEMODELS]
 
 
 __all__ = [
