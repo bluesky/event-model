@@ -4,6 +4,10 @@
     "url": "https://bluesky.github.io/event-model/main/"
   },
   {
+    "version": "v1.23.1",
+    "url": "https://bluesky.github.io/event-model/v1.23.1/"
+  },
+  {
     "version": "v1.23",
     "url": "https://bluesky.github.io/event-model/v1.23/"
   },
