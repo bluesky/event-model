@@ -2,6 +2,45 @@
 Release History
 ***************
 
+v1.23.1 (2025-08-28)
+====================
+
+Changed
+-------
+
+* Update link in docs.
+* Removed duplicate `uid` key erroneously included.
+* Restored missing `__init__.py` from tests module.
+* Added `Document` union type.
+
+v1.23.0 (2025-06-11)
+====================
+
+Changed
+-------
+
+* Convert from BaseModel to jsonschema + TypedDict
+* Add py.typed file to package
+* Fix EPICS enum signals support
+* Pin pydantic to <2.11, newer versions not supported on Python 3.8
+* Allow `None` in descriptor shape.
+
+v1.22.3 (2025-01-07)
+====================
+
+Changed
+-------
+* Updated from copier template.
+
+v1.22.2 (2025-01-07)
+====================
+
+Changed
+-------
+* Fixed linkcheck by updating copier.
+* Update README.md.
+* Added tango `RDS` alarm parameters and EPICS v4 `hysteresis`.
+
 v1.22.1 (2024-10-25)
 ====================
 
