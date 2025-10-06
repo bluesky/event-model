@@ -1,7 +1,6 @@
-from typing import Any, Dict
+from typing import Annotated, Any, Literal
 
 from pydantic import BaseModel, ConfigDict, Field
-from typing_extensions import Annotated, Literal
 
 
 class PartialResource(BaseModel):
@@ -18,7 +17,7 @@ class PartialResource(BaseModel):
         str, Field(description="Filepath or URI for locating this resource")
     ]
     resource_kwargs: Annotated[
-        Dict[str, Any],
+        dict[str, Any],
         Field(
             description="Additional argument to pass to the Handler to read a Resource"
         ),

@@ -1,5 +1,5 @@
 import re
-from typing import Any, Dict
+from typing import Annotated, Any, Literal
 
 from pydantic import (
     BaseModel,
@@ -10,7 +10,6 @@ from pydantic import (
     model_validator,
 )
 from pydantic.config import JsonDict
-from typing_extensions import Annotated, Literal
 
 NO_DOTS_PATTERN = r"^([^./]+)$"
 
@@ -58,7 +57,7 @@ class RunStop(BaseModel):
         Field(description="State of the run when it ended"),
     ]
     num_events: Annotated[
-        Dict[str, int],
+        dict[str, int],
         Field(
             description="Number of Events per named stream",
             default={},

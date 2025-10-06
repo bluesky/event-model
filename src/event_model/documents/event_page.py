@@ -4,25 +4,25 @@
 
 from __future__ import annotations
 
-from typing import Dict, List, TypedDict, Union
+from typing import Any, TypedDict
 
 from typing_extensions import NotRequired
 
 
 class PartialEventPage(TypedDict):
-    data: Dict[str, List]
+    data: dict[str, list[Any]]
     """
     The actual measurement data
     """
-    filled: NotRequired[Dict[str, List[Union[bool, str]]]]
+    filled: NotRequired[dict[str, list[bool | str]]]
     """
     Mapping each of the keys of externally-stored data to an array containing the boolean False, indicating that the data has not been loaded, or to foreign keys (moved here from 'data' when the data was loaded)
     """
-    time: List[float]
+    time: list[float]
     """
     Array of Event times. This maybe different than the timestamps on each of the data entries
     """
-    timestamps: Dict[str, List]
+    timestamps: dict[str, list[Any]]
     """
     The timestamps of the individual measurement data
     """
@@ -37,11 +37,11 @@ class EventPage(PartialEventPage):
     """
     The UID of the EventDescriptor to which all of the Events in this page belong
     """
-    seq_num: List[int]
+    seq_num: list[int]
     """
     Array of sequence numbers to identify the location of each Event in the Event stream
     """
-    uid: List[str]
+    uid: list[str]
     """
     Array of globally unique identifiers for each Event
     """

@@ -1,11 +1,10 @@
-from typing import Any, Dict, List
+from typing import Annotated, Any
 
 from pydantic import BaseModel, ConfigDict, Field, RootModel
-from typing_extensions import Annotated
 
 
 class DataFrameForDatumPage(RootModel):
-    root: List[str] = Field(alias="Dataframe")
+    root: list[str] = Field(alias="Dataframe")
 
 
 class DatumPage(BaseModel):
@@ -21,7 +20,7 @@ class DatumPage(BaseModel):
         ),
     ]
     datum_kwargs: Annotated[
-        Dict[str, List[Any]],
+        dict[str, list[Any]],
         Field(
             description="Array of arguments to pass to the Handler to "
             "retrieve one quanta of data"

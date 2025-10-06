@@ -342,13 +342,16 @@ def test_subfactory_callback_exception():
     rr("start", start_doc)
 
     descriptor_doc = {"run_start": "abcdef", "uid": "ghijkl"}
-    with pytest.warns(
-        UserWarning,
-        match=(
-            "Update the factory function. "
-            "In a future release this warning will become an error"
+    with (
+        pytest.warns(
+            UserWarning,
+            match=(
+                "Update the factory function. "
+                "In a future release this warning will become an error"
+            ),
         ),
-    ), pytest.raises(TestException):
+        pytest.raises(TestException),
+    ):
         rr("descriptor", descriptor_doc)
 
     assert rr._start_to_descriptors["abcdef"] == ["ghijkl"]

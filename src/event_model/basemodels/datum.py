@@ -1,11 +1,10 @@
-from typing import Any, Dict
+from typing import Annotated, Any
 
 from pydantic import (
     BaseModel,
     ConfigDict,
     Field,
 )
-from typing_extensions import Annotated
 
 
 class Datum(BaseModel):
@@ -21,7 +20,7 @@ class Datum(BaseModel):
         ),
     ]
     datum_kwargs: Annotated[
-        Dict[str, Any],
+        dict[str, Any],
         Field(
             description="Arguments to pass to the Handler to "
             "retrieve one quanta of data",

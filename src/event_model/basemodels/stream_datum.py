@@ -1,7 +1,6 @@
-from typing import Any
+from typing import Annotated, Any
 
 from pydantic import BaseModel, ConfigDict, Field, RootModel
-from typing_extensions import Annotated
 
 
 class DataType(RootModel):

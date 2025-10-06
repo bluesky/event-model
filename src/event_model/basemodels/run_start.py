@@ -1,5 +1,5 @@
 import re
-from typing import Any, Dict, List, Union
+from typing import Annotated, Any, Literal
 
 from pydantic import (
     BaseModel,
@@ -10,7 +10,6 @@ from pydantic import (
     model_validator,
 )
 from pydantic.config import JsonDict
-from typing_extensions import Annotated, Literal
 
 NO_DOTS_PATTERN = r"^([^./]+)$"
 
@@ -38,7 +37,7 @@ class Hints(BaseModel):
     model_config = ConfigDict(extra="allow")
 
     dimensions: Annotated[
-        List[List[Union[List[str], str]]],
+        list[list[list[str] | str]],
         Field(
             description="The independent axes of the experiment. Ordered slow to fast",
             default=[],
@@ -50,12 +49,12 @@ class Hints(BaseModel):
 class Calculation(BaseModel):
     model_config = ConfigDict(extra="allow")
 
-    args: Annotated[List, Field(default=[])]
+    args: Annotated[list, Field(default=[])]
     callable: Annotated[
         str, Field(description="callable function to perform calculation")
     ]
     kwargs: Annotated[
-        Dict[str, Any],
+        dict[str, Any],
         Field(description="kwargs for calcalation callable", default={}),
     ]
 
@@ -162,18 +161,16 @@ class Projections(BaseModel):
     """Describe how to interperet this run as the given projection"""
 
     configuration: Annotated[
-        Dict[str, Any], Field(description="Static information about projection")
+        dict[str, Any], Field(description="Static information about projection")
     ]
     name: Annotated[str, Field(description="The name of the projection", default="")]
     projection: Annotated[
-        Dict[
+        dict[
             Any,
-            Union[
-                ConfigurationProjection,
-                LinkedEventProjection,
-                CalculatedEventProjection,
-                StaticProjection,
-            ],
+            ConfigurationProjection
+            | LinkedEventProjection
+            | CalculatedEventProjection
+            | StaticProjection,
         ],
         Field(description=""),
     ]
@@ -195,7 +192,7 @@ class RunStart(BaseModel):
     model_config = ConfigDict(extra="allow", json_schema_extra=RUN_START_EXTRA_SCHEMA)
 
     data_groups: Annotated[
-        List[str],
+        list[str],
         Field(
             description="An optional list of data access groups that have meaning "
             "to some external system. Examples might include facility, beamline, "
@@ -233,9 +230,9 @@ class RunStart(BaseModel):
         str,
         Field(description="Name of project that this run is part of", default=""),
     ]
-    projections: Annotated[List[Projections], Field(description="", default=[])]
+    projections: Annotated[list[Projections], Field(description="", default=[])]
     sample: Annotated[
-        Union[Dict[str, Any], str],
+        dict[str, Any] | str,
         Field(
             description="Information about the sample, may be a UID to "
             "another collection",

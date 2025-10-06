@@ -1,7 +1,6 @@
-from typing import Any, Dict
+from typing import Annotated, Any
 
 from pydantic import BaseModel, ConfigDict, Field
-from typing_extensions import Annotated
 
 
 class StreamResource(BaseModel):
@@ -22,7 +21,7 @@ class StreamResource(BaseModel):
         ),
     ]
     parameters: Annotated[
-        Dict[str, Any],
+        dict[str, Any],
         Field(
             description="Additional keyword arguments to pass to the Handler to read a "
             "Stream Resource",
