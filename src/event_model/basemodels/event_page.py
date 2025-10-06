@@ -1,14 +1,13 @@
-from typing import Dict, List, Union
+from typing import Annotated
 
 from pydantic import (
     BaseModel,
     ConfigDict,
     Field,
 )
-from typing_extensions import Annotated
 
-DataFrameForFilled = Dict[str, List[Union[bool, str]]]
-DataFrameForEventPage = Dict[str, List]
+DataFrameForFilled = dict[str, list[bool | str]]
+DataFrameForEventPage = dict[str, list]
 
 
 class PartialEventPage(BaseModel):
@@ -33,7 +32,7 @@ class PartialEventPage(BaseModel):
         Field(description="The timestamps of the individual measurement data"),
     ]
     time: Annotated[
-        List[float],
+        list[float],
         Field(
             description="Array of Event times. This maybe different than the "
             "timestamps on each of the data entries"
@@ -55,13 +54,13 @@ class EventPage(PartialEventPage):
     ]
 
     seq_num: Annotated[
-        List[int],
+        list[int],
         Field(
             description="Array of sequence numbers to identify the location of each "
             "Event in the Event stream",
         ),
     ]
     uid: Annotated[
-        List[str],
+        list[str],
         Field(description="Array of globally unique identifiers for each Event"),
     ]

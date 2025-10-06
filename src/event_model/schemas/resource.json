@@ -15,7 +15,8 @@
                 "resource_kwargs": {
                     "title": "resource_kwargs",
                     "description": "Additional argument to pass to the Handler to read a Resource",
-                    "type": "object"
+                    "type": "object",
+                    "additionalProperties": true
                 },
                 "resource_path": {
                     "title": "resource_path",

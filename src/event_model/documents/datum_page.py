@@ -4,9 +4,9 @@
 
 from __future__ import annotations
 
-from typing import Dict, List, TypedDict
+from typing import Any, TypeAlias, TypedDict
 
-DataFrameForDatumPage = List[str]
+DataFrameForDatumPage: TypeAlias = list[str]
 
 
 class DatumPage(TypedDict):
@@ -18,7 +18,7 @@ class DatumPage(TypedDict):
     """
     Array unique identifiers for each Datum (akin to 'uid' for other Document types), typically formatted as '<resource>/<integer>'
     """
-    datum_kwargs: Dict[str, List]
+    datum_kwargs: dict[str, list[Any]]
     """
     Array of arguments to pass to the Handler to retrieve one quanta of data
     """

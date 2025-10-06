@@ -1,38 +1,30 @@
 import collections.abc
 import copy
+import importlib.resources as importlib_resources
 import inspect
 import itertools
 import json
 import os
-import sys
 import threading
 import time as ttime
 import uuid
 import warnings
 import weakref
 from collections import defaultdict, deque
+from collections.abc import Callable, Generator, Iterable, Iterator
 from dataclasses import dataclass
 from enum import Enum
 from typing import (
     Any,
-    Callable,
-    Dict,
-    Generator,
-    Iterable,
-    Iterator,
-    List,
-    Optional,
-    Tuple,
-    Type,
-    Union,
+    Literal,
     cast,
     no_type_check,
 )
 
 import jsonschema
 import numpy
-from typing_extensions import Literal
 
+from ._version import __version__
 from .documents.datum import Datum
 from .documents.datum_page import DatumPage
 from .documents.event import Event, PartialEvent
@@ -60,13 +52,6 @@ from .documents.run_start import (
 from .documents.run_stop import RunStop
 from .documents.stream_datum import StreamDatum, StreamRange
 from .documents.stream_resource import StreamResource
-
-if sys.version_info < (3, 9):
-    import importlib_resources
-else:
-    import importlib.resources as importlib_resources
-
-from ._version import __version__
 
 __all__ = [
     # Document types
@@ -147,11 +132,11 @@ class DocumentRouter:
         Expected signature ``f(name, doc)``
     """
 
-    def __init__(self, *, emit: Optional[Callable] = None) -> None:
+    def __init__(self, *, emit: Callable | None = None) -> None:
         # Put in some extra effort to validate `emit` carefully, because if
         # this is used incorrectly the resultant errors can be confusing.
 
-        self._emit_ref: Optional[Callable] = None
+        self._emit_ref: Callable | None = None
 
         if emit is not None:
             if not callable(emit):
@@ -182,7 +167,7 @@ class DocumentRouter:
 
     def __call__(
         self, name: str, doc: dict, validate: bool = False
-    ) -> Tuple[str, dict]:
+    ) -> tuple[str, dict]:
         """
         Process a document.
 
@@ -202,7 +187,7 @@ class DocumentRouter:
         """
         return self._dispatch(name, doc, validate)
 
-    def _dispatch(self, name: str, doc: dict, validate: bool) -> Tuple[str, dict]:
+    def _dispatch(self, name: str, doc: dict, validate: bool) -> tuple[str, dict]:
         """
         Dispatch to the method corresponding to the `name`.
 
@@ -273,16 +258,16 @@ class DocumentRouter:
     # to how Python uses NotImplemented in arithmetic operations, as described
     # in the documentation.
 
-    def start(self, doc: RunStart) -> Optional[RunStart]:
+    def start(self, doc: RunStart) -> RunStart | None:
         return NotImplemented
 
-    def stop(self, doc: RunStop) -> Optional[RunStop]:
+    def stop(self, doc: RunStop) -> RunStop | None:
         return NotImplemented
 
-    def descriptor(self, doc: EventDescriptor) -> Optional[EventDescriptor]:
+    def descriptor(self, doc: EventDescriptor) -> EventDescriptor | None:
         return NotImplemented
 
-    def resource(self, doc: Resource) -> Optional[Resource]:
+    def resource(self, doc: Resource) -> Resource | None:
         return NotImplemented
 
     def event(self, doc: Event) -> Event:
@@ -294,13 +279,13 @@ class DocumentRouter:
     def event_page(self, doc: EventPage) -> EventPage:
         return NotImplemented
 
-    def datum_page(self, doc: DatumPage) -> Optional[DatumPage]:
+    def datum_page(self, doc: DatumPage) -> DatumPage | None:
         return NotImplemented
 
-    def stream_datum(self, doc: StreamDatum) -> Optional[StreamDatum]:
+    def stream_datum(self, doc: StreamDatum) -> StreamDatum | None:
         return NotImplemented
 
-    def stream_resource(self, doc: StreamResource) -> Optional[StreamResource]:
+    def stream_resource(self, doc: StreamResource) -> StreamResource | None:
         return NotImplemented
 
     def bulk_events(self, doc: dict) -> None:
@@ -330,12 +315,12 @@ class SingleRunDocumentRouter(DocumentRouter):
 
     def __init__(self) -> None:
         super().__init__()
-        self._start_doc: Optional[dict] = None
+        self._start_doc: dict | None = None
         self._descriptors: dict = {}
 
     def __call__(
         self, name: str, doc: dict, validate: bool = False
-    ) -> Tuple[str, dict]:
+    ) -> tuple[str, dict]:
         """
         Process a document.
 
@@ -494,13 +479,13 @@ class HandlerRegistryView(collections.abc.Mapping):
 # delayed-computation framework (e.g. dask) in event-model itself.
 
 
-def as_is(handler_class, filler_state) -> Type:
+def as_is(handler_class, filler_state) -> type:
     "A no-op coercion function that returns handler_class unchanged."
     return handler_class
 
 
 @no_type_check
-def force_numpy(handler_class: Type, filler_state) -> Any:
+def force_numpy(handler_class: type, filler_state) -> Any:
     "A coercion that makes handler_class.__call__ return actual numpy.ndarray."
 
     class Subclass(handler_class):
@@ -656,18 +641,18 @@ class Filler(DocumentRouter):
         self,
         handler_registry: dict,
         *,
-        include: Optional[Iterable] = None,
-        exclude: Optional[Iterable] = None,
-        root_map: Optional[dict] = None,
+        include: Iterable | None = None,
+        exclude: Iterable | None = None,
+        root_map: dict | None = None,
         coerce: str = "as_is",
-        handler_cache: Optional[dict] = None,
-        resource_cache: Optional[dict] = None,
-        datum_cache: Optional[dict] = None,
-        descriptor_cache: Optional[dict] = None,
-        stream_resource_cache: Optional[dict] = None,
-        stream_datum_cache: Optional[dict] = None,
-        inplace: Optional[bool] = None,
-        retry_intervals: Optional[List[float]] = None,
+        handler_cache: dict | None = None,
+        resource_cache: dict | None = None,
+        datum_cache: dict | None = None,
+        descriptor_cache: dict | None = None,
+        stream_resource_cache: dict | None = None,
+        stream_datum_cache: dict | None = None,
+        inplace: bool | None = None,
+        retry_intervals: list[float] | None = None,
     ) -> None:
         if retry_intervals is None:
             retry_intervals = [
@@ -821,7 +806,7 @@ class Filler(DocumentRouter):
         self._closed = False
 
     @property
-    def retry_intervals(self) -> List:
+    def retry_intervals(self) -> list:
         return self._retry_intervals
 
     @retry_intervals.setter
@@ -861,18 +846,18 @@ class Filler(DocumentRouter):
 
     def clone(
         self,
-        handler_registry: Optional[dict] = None,
+        handler_registry: dict | None = None,
         *,
-        root_map: Optional[dict] = None,
-        coerce: Optional[str] = None,
-        handler_cache: Optional[dict] = None,
-        resource_cache: Optional[dict] = None,
-        datum_cache: Optional[dict] = None,
-        descriptor_cache: Optional[dict] = None,
-        stream_resource_cache: Optional[dict] = None,
-        stream_datum_cache: Optional[dict] = None,
-        inplace: Optional[bool] = None,
-        retry_intervals: Optional[List] = None,
+        root_map: dict | None = None,
+        coerce: str | None = None,
+        handler_cache: dict | None = None,
+        resource_cache: dict | None = None,
+        datum_cache: dict | None = None,
+        descriptor_cache: dict | None = None,
+        stream_resource_cache: dict | None = None,
+        stream_datum_cache: dict | None = None,
+        inplace: bool | None = None,
+        retry_intervals: list | None = None,
     ) -> "Filler":
         """
         Create a new Filler instance from this one.
@@ -1015,9 +1000,9 @@ class Filler(DocumentRouter):
     def fill_event_page(
         self,
         doc: EventPage,
-        include: Optional[Iterable] = None,
-        exclude: Optional[Iterable] = None,
-        inplace: Optional[bool] = None,
+        include: Iterable | None = None,
+        exclude: Iterable | None = None,
+        inplace: bool | None = None,
     ) -> EventPage:
         filled_events = []
         for event_doc in unpack_event_page(doc):
@@ -1103,9 +1088,9 @@ class Filler(DocumentRouter):
     def fill_event(
         self,
         doc,
-        include: Optional[Iterable] = None,
-        exclude: Optional[Iterable] = None,
-        inplace: Optional[bool] = None,
+        include: Iterable | None = None,
+        exclude: Iterable | None = None,
+        inplace: bool | None = None,
     ) -> Any:
         if inplace is None:
             inplace = self._inplace
@@ -1251,7 +1236,7 @@ class Filler(DocumentRouter):
 
     def __call__(
         self, name: str, doc: dict, validate: bool = False
-    ) -> Tuple[str, dict]:
+    ) -> tuple[str, dict]:
         if self._closed:
             raise EventModelRuntimeError(
                 "This Filler has been closed and is no longer usable."
@@ -1267,7 +1252,7 @@ def _attempt_with_retries(
     args,
     kwargs,
     intervals: Iterable,
-    error_to_catch: Type[OSError],
+    error_to_catch: type[OSError],
     error_to_raise: EventModelError,
 ) -> Any:
     """
@@ -1318,8 +1303,8 @@ class NoFiller(Filler):
     def fill_event_page(
         self,
         doc: EventPage,
-        include: Optional[Iterable] = None,
-        exclude: Optional[Iterable] = None,
+        include: Iterable | None = None,
+        exclude: Iterable | None = None,
         *kwargs,
     ) -> EventPage:
         filled_events = []
@@ -1335,9 +1320,9 @@ class NoFiller(Filler):
     def fill_event(
         self,
         doc: Event,
-        include: Optional[Iterable] = None,
-        exclude: Optional[Iterable] = None,
-        inplace: Optional[bool] = None,
+        include: Iterable | None = None,
+        exclude: Iterable | None = None,
+        inplace: bool | None = None,
     ) -> Event:
         descriptor = self._descriptor_cache[doc["descriptor"]]
         from_datakeys = False
@@ -1496,10 +1481,10 @@ class RunRouter(DocumentRouter):
     def __init__(
         self,
         factories,
-        handler_registry: Optional[dict] = None,
+        handler_registry: dict | None = None,
         *,
-        root_map: Optional[dict] = None,
-        filler_class: Type[Filler] = Filler,
+        root_map: dict | None = None,
+        filler_class: type[Filler] = Filler,
         fill_or_fail: bool = False,
     ) -> None:
         self.factories = factories
@@ -1868,7 +1853,7 @@ class ComposeDatum:
     resource: Resource
     counter: Iterator
 
-    def __call__(self, datum_kwargs: Dict[str, Any], validate: bool = True) -> Datum:
+    def __call__(self, datum_kwargs: dict[str, Any], validate: bool = True) -> Datum:
         resource_uid = self.resource["uid"]
         doc = Datum(
             resource=resource_uid,
@@ -1884,7 +1869,7 @@ def compose_datum(
     *,
     resource: Resource,
     counter: Iterator,
-    datum_kwargs: Dict[str, Any],
+    datum_kwargs: dict[str, Any],
     validate: bool = True,
 ) -> Datum:
     """
@@ -1916,7 +1901,7 @@ def compose_datum_page(
     *,
     resource: Resource,
     counter: Iterator,
-    datum_kwargs: Dict[str, List[Any]],
+    datum_kwargs: dict[str, list[Any]],
     validate: bool = True,
 ) -> DatumPage:
     """
@@ -1942,7 +1927,7 @@ class ComposeResourceBundle:
         )
 
 
-PATH_SEMANTICS: Dict[str, Literal["posix", "windows"]] = {
+PATH_SEMANTICS: dict[str, Literal["posix", "windows"]] = {
     "posix": "posix",
     "nt": "windows",
 }
@@ -1951,16 +1936,16 @@ default_path_semantics: Literal["posix", "windows"] = PATH_SEMANTICS[os.name]
 
 @dataclass
 class ComposeResource:
-    start: Optional[RunStart]
+    start: RunStart | None
 
     def __call__(
         self,
         spec: str,
         root: str,
         resource_path: str,
-        resource_kwargs: Dict[str, Any],
+        resource_kwargs: dict[str, Any],
         path_semantics: Literal["posix", "windows"] = default_path_semantics,
-        uid: Optional[str] = None,
+        uid: str | None = None,
         validate: bool = True,
     ) -> ComposeResourceBundle:
         if uid is None:
@@ -1994,10 +1979,10 @@ def compose_resource(
     spec: str,
     root: str,
     resource_path: str,
-    resource_kwargs: Dict[str, Any],
+    resource_kwargs: dict[str, Any],
     path_semantics: Literal["posix", "windows"] = default_path_semantics,
-    start: Optional[RunStart] = None,
-    uid: Optional[str] = None,
+    start: RunStart | None = None,
+    uid: str | None = None,
     validate: bool = True,
 ) -> ComposeResourceBundle:
     """
@@ -2022,8 +2007,8 @@ class ComposeStreamDatum:
     def __call__(
         self,
         indices: StreamRange,
-        seq_nums: Optional[StreamRange] = None,
-        descriptor: Optional[EventDescriptor] = None,
+        seq_nums: StreamRange | None = None,
+        descriptor: EventDescriptor | None = None,
         validate: bool = True,
     ) -> StreamDatum:
         resource_uid = self.stream_resource["uid"]
@@ -2087,15 +2072,15 @@ class ComposeStreamResourceBundle:
 
 @dataclass
 class ComposeStreamResource:
-    start: Optional[RunStart] = None
+    start: RunStart | None = None
 
     def __call__(
         self,
         mimetype: str,
         uri: str,
         data_key: str,
-        parameters: Dict[str, Any],
-        uid: Optional[str] = None,
+        parameters: dict[str, Any],
+        uid: str | None = None,
         validate: bool = True,
     ) -> ComposeStreamResourceBundle:
         if uid is None:
@@ -2129,9 +2114,9 @@ def compose_stream_resource(
     mimetype: str,
     uri: str,
     data_key: str,
-    parameters: Dict[str, Any],
-    start: Optional[RunStart] = None,
-    uid: Optional[str] = None,
+    parameters: dict[str, Any],
+    start: RunStart | None = None,
+    uid: str | None = None,
     validate: bool = True,
 ) -> ComposeStreamResourceBundle:
     """
@@ -2150,15 +2135,15 @@ def compose_stream_resource(
 @dataclass
 class ComposeStop:
     start: RunStart
-    event_counters: Dict[str, int]
-    poison_pill: List
+    event_counters: dict[str, int]
+    poison_pill: list
 
     def __call__(
         self,
         exit_status: Literal["success", "abort", "fail"] = "success",
         reason: str = "",
-        uid: Optional[str] = None,
-        time: Optional[float] = None,
+        uid: str | None = None,
+        time: float | None = None,
         validate: bool = True,
     ) -> RunStop:
         if self.poison_pill:
@@ -2188,12 +2173,12 @@ class ComposeStop:
 def compose_stop(
     *,
     start: RunStart,
-    event_counters: Dict[str, int],
-    poison_pill: List,
+    event_counters: dict[str, int],
+    poison_pill: list,
     exit_status: Literal["success", "abort", "fail"] = "success",
     reason: str = "",
-    uid: Optional[str] = None,
-    time: Optional[float] = None,
+    uid: str | None = None,
+    time: float | None = None,
     validate: bool = True,
 ) -> RunStop:
     """
@@ -2206,7 +2191,7 @@ def compose_stop(
     )(exit_status=exit_status, reason=reason, uid=uid, time=time, validate=validate)
 
 
-def length_of_value(dictionary: Dict[str, List], error_msg: str) -> Optional[int]:
+def length_of_value(dictionary: dict[str, list], error_msg: str) -> int | None:
     length = None
     for _, v in dictionary.items():
         v_len = len(v)
@@ -2220,16 +2205,16 @@ def length_of_value(dictionary: Dict[str, List], error_msg: str) -> Optional[int
 @dataclass
 class ComposeEventPage:
     descriptor: EventDescriptor
-    event_counters: Dict[str, int]
+    event_counters: dict[str, int]
 
     def __call__(
         self,
-        data: Dict[str, List],
-        timestamps: Dict[str, Any],
-        seq_num: Optional[List[int]] = None,
-        filled: Optional[Dict[str, List[Union[bool, str]]]] = None,
-        uid: Optional[List] = None,
-        time: Optional[List] = None,
+        data: dict[str, list],
+        timestamps: dict[str, Any],
+        seq_num: list[int] | None = None,
+        filled: dict[str, list[bool | str]] | None = None,
+        uid: list | None = None,
+        time: list | None = None,
         validate: bool = True,
     ) -> EventPage:
         timestamps_length = length_of_value(
@@ -2305,13 +2290,13 @@ class ComposeEventPage:
 def compose_event_page(
     *,
     descriptor: EventDescriptor,
-    event_counters: Dict[str, int],
-    data: Dict[str, List],
-    timestamps: Dict[str, Any],
-    seq_num: List[int],
-    filled: Optional[Dict[str, List[Union[bool, str]]]] = None,
-    uid: Optional[List] = None,
-    time: Optional[List] = None,
+    event_counters: dict[str, int],
+    data: dict[str, list],
+    timestamps: dict[str, Any],
+    seq_num: list[int],
+    filled: dict[str, list[bool | str]] | None = None,
+    uid: list | None = None,
+    time: list | None = None,
     validate: bool = True,
 ) -> EventPage:
     """
@@ -2342,16 +2327,16 @@ def keys_without_stream_keys(dictionary, descriptor_data_keys):
 @dataclass
 class ComposeEvent:
     descriptor: EventDescriptor
-    event_counters: Dict[str, int]
+    event_counters: dict[str, int]
 
     def __call__(
         self,
         data: dict,
         timestamps: dict,
-        seq_num: Optional[int] = None,
-        filled: Optional[Dict[str, Union[bool, str]]] = None,
-        uid: Optional[str] = None,
-        time: Optional[float] = None,
+        seq_num: int | None = None,
+        filled: dict[str, bool | str] | None = None,
+        uid: str | None = None,
+        time: float | None = None,
         validate: bool = True,
     ) -> Event:
         if seq_num is None:
@@ -2408,13 +2393,13 @@ class ComposeEvent:
 def compose_event(
     *,
     descriptor: EventDescriptor,
-    event_counters: Dict[str, int],
-    data: Dict[str, Any],
-    timestamps: Dict[str, Any],
+    event_counters: dict[str, int],
+    data: dict[str, Any],
+    timestamps: dict[str, Any],
     seq_num: int,
-    filled: Optional[Dict[str, Union[bool, str]]] = None,
-    uid: Optional[str] = None,
-    time: Optional[float] = None,
+    filled: dict[str, bool | str] | None = None,
+    uid: str | None = None,
+    time: float | None = None,
     validate: bool = True,
 ) -> Event:
     """
@@ -2451,7 +2436,7 @@ class ComposeDescriptorBundle:
 class ComposeDescriptor:
     start: RunStart
     streams: dict
-    event_counters: Dict[str, int]
+    event_counters: dict[str, int]
 
     def __call__(
         self,
@@ -2513,15 +2498,15 @@ class ComposeDescriptor:
 def compose_descriptor(
     *,
     start: RunStart,
-    streams: Dict[str, Iterable],
-    event_counters: Dict[str, int],
+    streams: dict[str, Iterable],
+    event_counters: dict[str, int],
     name: str,
-    data_keys: Dict[str, DataKey],
-    uid: Optional[str] = None,
-    time: Optional[float] = None,
-    object_keys: Optional[Dict[str, Any]] = None,
-    configuration: Optional[Dict[str, Configuration]] = None,
-    hints: Optional[PerObjectHint] = None,
+    data_keys: dict[str, DataKey],
+    uid: str | None = None,
+    time: float | None = None,
+    object_keys: dict[str, Any] | None = None,
+    configuration: dict[str, Configuration] | None = None,
+    hints: PerObjectHint | None = None,
     validate: bool = True,
 ) -> ComposeDescriptorBundle:
     """
@@ -2552,7 +2537,7 @@ class ComposeRunBundle:
     compose_descriptor: ComposeDescriptor
     compose_resource: ComposeResource
     compose_stop: ComposeStop
-    compose_stream_resource: Optional[ComposeStreamResource] = None
+    compose_stream_resource: ComposeStreamResource | None = None
 
     # iter for backwards compatibility
     def __iter__(self) -> Iterator:
@@ -2568,11 +2553,11 @@ class ComposeRunBundle:
 
 def compose_run(
     *,
-    uid: Optional[str] = None,
-    time: Optional[float] = None,
-    metadata: Optional[Dict] = None,
+    uid: str | None = None,
+    time: float | None = None,
+    metadata: dict | None = None,
     validate: bool = True,
-    event_counters: Optional[Dict[str, int]] = None,
+    event_counters: dict[str, int] | None = None,
 ) -> ComposeRunBundle:
     """
     Compose a RunStart document and factory functions for related documents.
@@ -2607,7 +2592,7 @@ def compose_run(
 
     # Define some mutable state to be shared internally by the closures composed
     # below.
-    streams: Dict[str, Iterable] = {}
+    streams: dict[str, Iterable] = {}
     if event_counters is None:
         event_counters = {}
     poison_pill: list = []
@@ -3043,8 +3028,8 @@ def _transpose_dict_of_lists(dict_of_lists: dict) -> list:
     "Transform dict-of-lists (i.e. DataFrame-like) into list-of-dicts."
     list_of_dicts = []
     keys = list(dict_of_lists)
-    for row in zip(*(dict_of_lists[k] for k in keys)):
-        list_of_dicts.append(dict(zip(keys, row)))
+    for row in zip(*(dict_of_lists[k] for k in keys), strict=False):
+        list_of_dicts.append(dict(zip(keys, row, strict=False)))
     return list_of_dicts
 
 
@@ -3119,7 +3104,7 @@ class NumpyEncoder(json.JSONEncoder):
                 obj = numpy.asarray(obj)
         except ImportError:
             pass
-        if isinstance(obj, (numpy.generic, numpy.ndarray)):
+        if isinstance(obj, numpy.generic | numpy.ndarray):
             if numpy.isscalar(obj):
                 return obj.item()
             return obj.tolist()

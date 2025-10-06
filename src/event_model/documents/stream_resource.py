@@ -4,7 +4,7 @@
 
 from __future__ import annotations
 
-from typing import Any, Dict, TypedDict
+from typing import Any, TypedDict
 
 from typing_extensions import NotRequired
 
@@ -23,7 +23,7 @@ class StreamResource(TypedDict):
     """
     String identifying the format/type of this Stream Resource, used to identify a compatible Handler
     """
-    parameters: Dict[str, Any]
+    parameters: dict[str, Any]
     """
     Additional keyword arguments to pass to the Handler to read a Stream Resource
     """

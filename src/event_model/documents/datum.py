@@ -4,7 +4,7 @@
 
 from __future__ import annotations
 
-from typing import Any, Dict, TypedDict
+from typing import Any, TypedDict
 
 
 class Datum(TypedDict):
@@ -16,7 +16,7 @@ class Datum(TypedDict):
     """
     Globally unique identifier for this Datum (akin to 'uid' for other Document types), typically formatted as '<resource>/<integer>'
     """
-    datum_kwargs: Dict[str, Any]
+    datum_kwargs: dict[str, Any]
     """
     Arguments to pass to the Handler to retrieve one quanta of data
     """

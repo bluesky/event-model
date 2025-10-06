@@ -1,5 +1,5 @@
 import re
-from typing import Any, Dict, List, Optional, Tuple, Union
+from typing import Annotated, Any, Literal
 
 from pydantic import (
     BaseModel,
@@ -10,7 +10,6 @@ from pydantic import (
     model_validator,
 )
 from pydantic.config import JsonDict
-from typing_extensions import Annotated, Literal
 
 
 class Dtype(RootModel):
@@ -40,8 +39,8 @@ class DataType(RootModel):
 class LimitsRange(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
-    low: Optional[float]
-    high: Optional[float]
+    low: float | None
+    high: float | None
 
 
 class RdsRange(BaseModel):
@@ -80,24 +79,20 @@ class Limits(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
     control: Annotated[
-        Optional[LimitsRange], Field(default=None, description="Control limits.")
+        LimitsRange | None, Field(default=None, description="Control limits.")
     ]
     display: Annotated[
-        Optional[LimitsRange], Field(default=None, description="Display limits.")
+        LimitsRange | None, Field(default=None, description="Display limits.")
     ]
     warning: Annotated[
-        Optional[LimitsRange], Field(default=None, description="Warning limits.")
+        LimitsRange | None, Field(default=None, description="Warning limits.")
     ]
     alarm: Annotated[
-        Optional[LimitsRange], Field(default=None, description="Alarm limits.")
+        LimitsRange | None, Field(default=None, description="Alarm limits.")
     ]
 
-    hysteresis: Annotated[
-        Optional[float], Field(default=None, description="Hysteresis.")
-    ]
-    rds: Annotated[
-        Optional[RdsRange], Field(default=None, description="RDS parameters.")
-    ]
+    hysteresis: Annotated[float | None, Field(default=None, description="Hysteresis.")]
+    rds: Annotated[RdsRange | None, Field(default=None, description="RDS parameters.")]
 
 
 _ConstrainedDtype = Annotated[
@@ -108,7 +103,7 @@ _ConstrainedDtype = Annotated[
     ),
 ]
 
-_ConstrainedDtypeNpStructure = List[Tuple[str, _ConstrainedDtype]]
+_ConstrainedDtypeNpStructure = list[tuple[str, _ConstrainedDtype]]
 
 
 class DataKey(BaseModel):
@@ -131,11 +126,11 @@ class DataKey(BaseModel):
         ),
     ]
     choices: Annotated[
-        List[str],
+        list[str],
         Field(default=[], description="Choices of enum value."),
     ]
     dims: Annotated[
-        List[str],
+        list[str],
         Field(
             default=[],
             description="The names for dimensions of the data. Null or empty list "
@@ -151,7 +146,7 @@ class DataKey(BaseModel):
         ),
     ]
     dtype_numpy: Annotated[
-        Union[_ConstrainedDtype, _ConstrainedDtypeNpStructure],
+        _ConstrainedDtype | _ConstrainedDtypeNpStructure,
         Field(
             default="",
             validate_default=False,
@@ -178,7 +173,7 @@ class DataKey(BaseModel):
         ),
     ]
     precision: Annotated[
-        Optional[int],
+        int | None,
         Field(
             default=None,
             description="Number of digits after decimal place if "
@@ -186,7 +181,7 @@ class DataKey(BaseModel):
         ),
     ]
     shape: Annotated[
-        List[Optional[int]],
+        list[int | None],
         Field(
             description="The shape of the data.  Empty list indicates scalar data. "
             "None indicates a dimension with unknown or variable length."
@@ -196,7 +191,7 @@ class DataKey(BaseModel):
         str, Field(description="The source (ex piece of hardware) of the data.")
     ]
     units: Annotated[
-        Optional[str],
+        str | None,
         Field(default=None, description="Engineering units of the value"),
     ]
 
@@ -207,7 +202,7 @@ class PerObjectHint(BaseModel):
     model_config = ConfigDict(extra="allow")
 
     fields: Annotated[
-        List[str],
+        list[str],
         Field(description="The 'interesting' data keys for this device."),
     ] = []
     NX_class: Annotated[
@@ -223,11 +218,11 @@ class PerObjectHint(BaseModel):
 class Configuration(BaseModel):
     model_config = ConfigDict(extra="allow")
     data: Annotated[
-        Dict[str, Any],
+        dict[str, Any],
         Field(default={}, description="The actual measurement data"),
     ]
     data_keys: Annotated[
-        Dict[str, DataKey],
+        dict[str, DataKey],
         Field(
             default={},
             description="This describes the data stored alongside it in this "
@@ -235,7 +230,7 @@ class Configuration(BaseModel):
         ),
     ]
     timestamps: Annotated[
-        Dict[str, Any],
+        dict[str, Any],
         Field(
             default={},
             description="The timestamps of the individual measurement data",
@@ -266,7 +261,7 @@ class EventDescriptor(BaseModel):
     )
 
     configuration: Annotated[
-        Dict[str, Configuration],
+        dict[str, Configuration],
         Field(
             default={},
             description="Readings of configurational fields necessary for "
@@ -274,7 +269,7 @@ class EventDescriptor(BaseModel):
         ),
     ]
     data_keys: Annotated[
-        Dict[str, DataKey],
+        dict[str, DataKey],
         Field(
             description="This describes the data in the Event Documents.",
             title="data_keys",
@@ -290,7 +285,7 @@ class EventDescriptor(BaseModel):
         ),
     ]
     object_keys: Annotated[
-        Dict[str, Any],
+        dict[str, Any],
         Field(
             default={},
             description="Maps a Device/Signal name to the names of the entries "

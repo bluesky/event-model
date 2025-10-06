@@ -4,17 +4,17 @@
 
 from __future__ import annotations
 
-from typing import Any, Dict, TypedDict, Union
+from typing import Any, TypedDict
 
 from typing_extensions import NotRequired
 
 
 class PartialEvent(TypedDict):
-    data: Dict[str, Any]
+    data: dict[str, Any]
     """
     The actual measurement data
     """
-    filled: NotRequired[Dict[str, Union[bool, str]]]
+    filled: NotRequired[dict[str, bool | str]]
     """
     Mapping each of the keys of externally-stored data to the boolean False, indicating that the data has not been loaded, or to foreign keys (moved here from 'data' when the data was loaded)
     """
@@ -22,7 +22,7 @@ class PartialEvent(TypedDict):
     """
     The event time. This maybe different than the timestamps on each of the data entries.
     """
-    timestamps: Dict[str, Any]
+    timestamps: dict[str, Any]
     """
     The timestamps of the individual measurement data
     """

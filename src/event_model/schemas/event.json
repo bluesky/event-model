@@ -15,7 +15,8 @@
                 "data": {
                     "title": "data",
                     "description": "The actual measurement data",
-                    "type": "object"
+                    "type": "object",
+                    "additionalProperties": true
                 },
                 "filled": {
                     "title": "filled",
@@ -40,7 +41,8 @@
                 "timestamps": {
                     "title": "timestamps",
                     "description": "The timestamps of the individual measurement data",
-                    "type": "object"
+                    "type": "object",
+                    "additionalProperties": true
                 }
             },
             "required": [

@@ -4,18 +4,29 @@
 
 from __future__ import annotations
 
-from typing import Any, Dict, List, TypedDict, Union
+from typing import Any, Literal, TypeAlias, TypedDict
 
 from typing_extensions import NotRequired
 
 
+class Hints(TypedDict):
+    """
+    Start-level hints
+    """
+
+    dimensions: NotRequired[list[list[list[str] | str]]]
+    """
+    The independent axes of the experiment. Ordered slow to fast
+    """
+
+
 class Calculation(TypedDict):
-    args: NotRequired[List]
+    args: NotRequired[list[Any]]
     callable: str
     """
     callable function to perform calculation
     """
-    kwargs: NotRequired[Dict[str, Any]]
+    kwargs: NotRequired[dict[str, Any]]
     """
     kwargs for calcalation callable
     """
@@ -25,46 +36,35 @@ class ConfigurationProjection(TypedDict):
     config_device: str
     config_index: int
     field: str
-    location: NotRequired[str]
+    location: Literal["configuration"]
     """
     Projection comes from configuration fields in the event_descriptor document
     """
     stream: str
-    type: NotRequired[str]
+    type: Literal["linked"]
     """
     Projection is of type linked, a value linked from the data set.
     """
 
 
-DataType = Any
-
-
-class Hints(TypedDict):
-    """
-    Start-level hints
-    """
-
-    dimensions: NotRequired[List[List[Union[List[str], str]]]]
-    """
-    The independent axes of the experiment. Ordered slow to fast
-    """
+DataType: TypeAlias = dict[str, "DataType"]
 
 
 class LinkedEventProjection(TypedDict):
     field: str
-    location: NotRequired[str]
+    location: Literal["event"]
     """
     Projection comes and event
     """
     stream: str
-    type: NotRequired[str]
+    type: Literal["linked"]
     """
     Projection is of type linked, a value linked from the data set.
     """
 
 
 class StaticProjection(TypedDict):
-    type: NotRequired[str]
+    type: Literal["static"]
     """
     Projection is of type static, a value defined here in the projection
     """
@@ -80,12 +80,12 @@ class CalculatedEventProjection(TypedDict):
     required fields if type is calculated
     """
     field: str
-    location: NotRequired[str]
+    location: Literal["event"]
     """
     Projection comes and event
     """
     stream: str
-    type: NotRequired[str]
+    type: Literal["calculated"]
     """
     Projection is of type calculated, a value that requires calculation.
     """
@@ -96,7 +96,7 @@ class Projections(TypedDict):
     Describe how to interperet this run as the given projection
     """
 
-    configuration: Dict[str, Any]
+    configuration: dict[str, Any]
     """
     Static information about projection
     """
@@ -104,14 +104,12 @@ class Projections(TypedDict):
     """
     The name of the projection
     """
-    projection: Dict[
+    projection: dict[
         str,
-        Union[
-            ConfigurationProjection,
-            LinkedEventProjection,
-            CalculatedEventProjection,
-            StaticProjection,
-        ],
+        ConfigurationProjection
+        | LinkedEventProjection
+        | CalculatedEventProjection
+        | StaticProjection,
     ]
     version: str
     """
@@ -125,7 +123,7 @@ class RunStart(TypedDict):
     later documents link to it
     """
 
-    data_groups: NotRequired[List[str]]
+    data_groups: NotRequired[list[str]]
     """
     An optional list of data access groups that have meaning to some external system. Examples might include facility, beamline, end stations, proposal, safety form.
     """
@@ -147,8 +145,8 @@ class RunStart(TypedDict):
     """
     Name of project that this run is part of
     """
-    projections: NotRequired[List[Projections]]
-    sample: NotRequired[Union[Dict[str, Any], str]]
+    projections: NotRequired[list[Projections]]
+    sample: NotRequired[dict[str, Any] | str]
     """
     Information about the sample, may be a UID to another collection
     """

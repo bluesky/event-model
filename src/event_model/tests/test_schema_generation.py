@@ -2,9 +2,6 @@
 
 from pathlib import Path
 
-import pytest
-from pydantic.warnings import PydanticDeprecatedSince20
-
 from event_model.generate.create_documents import JSONSCHEMA, TYPEDDICTS, generate
 
 
@@ -14,8 +11,7 @@ def test_generated_json_matches_typed_dict(tmpdir: Path):
     tmp_jsonschema = Path(tmpdir) / "jsonschema"
     tmp_jsonschema.mkdir()
 
-    with pytest.warns(PydanticDeprecatedSince20):
-        generate(jsonschema_root=tmp_jsonschema, documents_root=tmp_documents)
+    generate(jsonschema_root=tmp_jsonschema, documents_root=tmp_documents)
 
     for new_jsonschema_path in tmp_jsonschema.iterdir():
         old_jsonschema_path = JSONSCHEMA / new_jsonschema_path.name

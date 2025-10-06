@@ -4,11 +4,11 @@
 
 from __future__ import annotations
 
-from typing import Any, Dict, Literal, TypedDict
+from typing import Any, Literal, TypeAlias, TypedDict
 
 from typing_extensions import NotRequired
 
-DataType = Any
+DataType: TypeAlias = Any
 
 
 class RunStop(TypedDict):
@@ -25,7 +25,7 @@ class RunStop(TypedDict):
     """
     State of the run when it ended
     """
-    num_events: NotRequired[Dict[str, int]]
+    num_events: NotRequired[dict[str, int]]
     """
     Number of Events per named stream
     """

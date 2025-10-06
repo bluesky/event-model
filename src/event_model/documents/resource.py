@@ -4,13 +4,13 @@
 
 from __future__ import annotations
 
-from typing import Any, Dict, Literal, TypedDict
+from typing import Any, Literal, TypedDict
 
 from typing_extensions import NotRequired
 
 
 class PartialResource(TypedDict):
-    resource_kwargs: Dict[str, Any]
+    resource_kwargs: dict[str, Any]
     """
     Additional argument to pass to the Handler to read a Resource
     """

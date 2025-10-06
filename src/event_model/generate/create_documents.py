@@ -1,7 +1,8 @@
 import json
+import warnings
 from collections import OrderedDict
 from pathlib import Path
-from typing import Any, Dict, Type, cast
+from typing import Any, cast
 
 import datamodel_code_generator
 from pydantic import BaseModel
@@ -53,7 +54,7 @@ def merge_dicts(dict1: dict, dict2: dict) -> dict:
     return return_dict
 
 
-def sort_alphabetically(schema: Dict) -> Dict:
+def sort_alphabetically(schema: dict) -> dict:
     """Sorts the schema alphabetically by key name, exchanging the
     properties dicts for OrderedDicts"""
     schema = OrderedDict(sorted(schema.items(), key=lambda x: x[0]))
@@ -75,7 +76,7 @@ SortOrder = {
 }
 
 
-def sort_schema(document_schema: Dict[str, Any]) -> Dict[str, Any]:
+def sort_schema(document_schema: dict[str, Any]) -> dict[str, Any]:
     assert isinstance(document_schema, dict)
     document_schema = OrderedDict(
         sorted(
@@ -99,7 +100,7 @@ def sort_schema(document_schema: Dict[str, Any]) -> Dict[str, Any]:
     return document_schema
 
 
-def dump_json(schema: Dict[str, Any], jsonschema_path: Path):
+def dump_json(schema: dict[str, Any], jsonschema_path: Path):
     """Returns true if the basemodel had to change, false otherwise"""
     sorted_schema = sort_schema(schema)
     with jsonschema_path.open(mode="w") as f:
@@ -110,20 +111,23 @@ def dump_json(schema: Dict[str, Any], jsonschema_path: Path):
 
 def generate_typeddict(jsonschema_path: Path, documents_root=TYPEDDICTS) -> Path:
     document_path = documents_root / f"{jsonschema_path.stem}.py"
-    datamodel_code_generator.generate(
-        input_=jsonschema_path,
-        input_file_type=datamodel_code_generator.InputFileType.JsonSchema,
-        output=document_path,
-        output_model_type=datamodel_code_generator.DataModelType.TypingTypedDict,
-        use_schema_description=True,
-        use_field_description=True,
-        use_annotated=True,
-        field_constraints=True,
-        wrap_string_literal=True,
-        use_double_quotes=True,
-        disable_timestamp=True,
-        custom_template_dir=TEMPLATES,
-    )
+    with warnings.catch_warnings():
+        warnings.simplefilter("ignore", category=FutureWarning)
+        datamodel_code_generator.generate(
+            input_=jsonschema_path,
+            input_file_type=datamodel_code_generator.InputFileType.JsonSchema,
+            output=document_path,
+            output_model_type=datamodel_code_generator.DataModelType.TypingTypedDict,
+            target_python_version=datamodel_code_generator.PythonVersion.PY_310,
+            use_schema_description=True,
+            use_field_description=True,
+            use_annotated=True,
+            field_constraints=True,
+            wrap_string_literal=True,
+            use_double_quotes=True,
+            disable_timestamp=True,
+            use_closed_typed_dict=False,
+        )
     with document_path.open("r+") as f:
         content = f.read()
         f.seek(0, 0)
@@ -131,15 +135,15 @@ def generate_typeddict(jsonschema_path: Path, documents_root=TYPEDDICTS) -> Path
     return document_path
 
 
-def get_jsonschema_path(jsonschema: Dict, root=JSONSCHEMA) -> Path:
+def get_jsonschema_path(jsonschema: dict, root=JSONSCHEMA) -> Path:
     return root / f"{to_snake(jsonschema['title'])}.json"
 
 
 def _generate_jsonschema(
-    basemodel: Type[BaseModel],
+    basemodel: type[BaseModel],
     jsonschema_root=JSONSCHEMA,
     is_parent: bool = False,
-) -> Dict[str, Any]:
+) -> dict[str, Any]:
     refs = []
 
     for parent in [parent for parent in basemodel.__bases__ if parent is not BaseModel]:
@@ -153,8 +157,8 @@ def _generate_jsonschema(
         )
         refs.append(parent_jsonschema)
 
-    schema_extra: Dict[str, Any] = cast(
-        Dict[str, Any], basemodel.model_config.pop("json_schema_extra", {})
+    schema_extra: dict[str, Any] = cast(
+        dict[str, Any], basemodel.model_config.pop("json_schema_extra", {})
     )
     model_jsonschema = basemodel.model_json_schema(schema_generator=SnakeCaseTitleField)
     model_jsonschema = merge_dicts(model_jsonschema, schema_extra)
@@ -189,7 +193,7 @@ def _generate_jsonschema(
 
 
 def generate_jsonschema(
-    basemodel: Type[BaseModel],
+    basemodel: type[BaseModel],
     jsonschema_root=JSONSCHEMA,
 ) -> Path:
     model_jsonschema = _generate_jsonschema(basemodel, jsonschema_root=jsonschema_root)
@@ -201,19 +205,17 @@ def generate_jsonschema(
 
 GENERATED_INIT_PY = """# generated in `event_model/generate`
 
-from typing import Tuple, Type, Union
-
 {0}
 
-{1}Type = Union[
+{1}Type = (
 {2}
-]
+)
 
-{1} = Union[
+{1} = (
 {3}
-]
+)
 
-ALL_{4}: Tuple[{1}Type, ...] = (
+ALL_{4}: tuple[{1}Type, ...] = (
 {5}
 )"""
 
@@ -240,15 +242,12 @@ def generate_init_py(output_root: Path):
         )
     )
 
-    document_types = "\n".join(
-        [
-            f"    Type[{class_name}],  # noqa: F405,"
-            for class_name in document_class_names
-        ]
+    document_types = "    " + "\n    | ".join(
+        [f"type[{class_name}]  # noqa: F405" for class_name in document_class_names]
     )
 
-    documents = "\n".join(
-        [f"    {class_name},  # noqa: F405" for class_name in document_class_names]
+    documents = "    " + "\n    | ".join(
+        [f"{class_name}  # noqa: F405" for class_name in document_class_names]
     )
 
     all_documents = "\n".join(

@@ -11,6 +11,7 @@
                     "title": "data",
                     "description": "The actual measurement data",
                     "type": "object",
+                    "additionalProperties": true,
                     "default": {}
                 },
                 "data_keys": {
@@ -26,6 +27,7 @@
                     "title": "timestamps",
                     "description": "The timestamps of the individual measurement data",
                     "type": "object",
+                    "additionalProperties": true,
                     "default": {}
                 }
             },
@@ -378,6 +380,7 @@
             "title": "object_keys",
             "description": "Maps a Device/Signal name to the names of the entries it produces in data_keys.",
             "type": "object",
+            "additionalProperties": true,
             "default": {}
         },
         "run_start": {

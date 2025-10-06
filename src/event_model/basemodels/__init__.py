@@ -1,5 +1,3 @@
-from typing import Tuple, Type, Union
-
 from event_model.basemodels.datum import Datum
 from event_model.basemodels.datum_page import DatumPage
 from event_model.basemodels.event import Event
@@ -16,33 +14,33 @@ from event_model.basemodels.run_stop import RunStop
 from event_model.basemodels.stream_datum import StreamDatum
 from event_model.basemodels.stream_resource import StreamResource
 
-DocumentType = Union[
-    Type[Datum],
-    Type[DatumPage],
-    Type[Event],
-    Type[EventDescriptor],
-    Type[EventPage],
-    Type[Resource],
-    Type[RunStart],
-    Type[RunStop],
-    Type[StreamDatum],
-    Type[StreamResource],
-]
+DocumentType = (
+    type[Datum]
+    | type[DatumPage]
+    | type[Event]
+    | type[EventDescriptor]
+    | type[EventPage]
+    | type[Resource]
+    | type[RunStart]
+    | type[RunStop]
+    | type[StreamDatum]
+    | type[StreamResource]
+)
 
-Document = Union[
-    Datum,
-    DatumPage,
-    Event,
-    EventDescriptor,
-    EventPage,
-    Resource,
-    RunStart,
-    RunStop,
-    StreamDatum,
-    StreamResource,
-]
+Document = (
+    Datum
+    | DatumPage
+    | Event
+    | EventDescriptor
+    | EventPage
+    | Resource
+    | RunStart
+    | RunStop
+    | StreamDatum
+    | StreamResource
+)
 
-ALL_BASEMODELS: Tuple[DocumentType, ...] = (
+ALL_BASEMODELS: tuple[DocumentType, ...] = (
     Datum,
     DatumPage,
     Event,

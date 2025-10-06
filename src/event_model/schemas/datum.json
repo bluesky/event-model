@@ -11,7 +11,8 @@
         "datum_kwargs": {
             "title": "datum_kwargs",
             "description": "Arguments to pass to the Handler to retrieve one quanta of data",
-            "type": "object"
+            "type": "object",
+            "additionalProperties": true
         },
         "resource": {
             "title": "resource",

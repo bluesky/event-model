@@ -1,15 +1,14 @@
-from typing import Any, Dict, Union
+from typing import Annotated, Any
 
 from pydantic import BaseModel, ConfigDict, Field
-from typing_extensions import Annotated
 
 
 class PartialEvent(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
-    data: Annotated[Dict[str, Any], Field(description="The actual measurement data")]
+    data: Annotated[dict[str, Any], Field(description="The actual measurement data")]
     filled: Annotated[
-        Dict[str, Union[bool, str]],
+        dict[str, bool | str],
         Field(
             default_factory=dict,
             description="Mapping each of the keys of externally-stored data to the "
@@ -25,7 +24,7 @@ class PartialEvent(BaseModel):
         ),
     ]
     timestamps: Annotated[
-        Dict[str, Any],
+        dict[str, Any],
         Field(description="The timestamps of the individual measurement data"),
     ]
 

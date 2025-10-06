@@ -60,6 +60,7 @@
                     "title": "kwargs",
                     "description": "kwargs for calcalation callable",
                     "type": "object",
+                    "additionalProperties": true,
                     "default": {}
                 }
             },
@@ -190,7 +191,8 @@
                 "configuration": {
                     "title": "configuration",
                     "description": "Static information about projection",
-                    "type": "object"
+                    "type": "object",
+                    "additionalProperties": true
                 },
                 "name": {
                     "title": "name",
@@ -315,6 +317,7 @@
             "description": "Information about the sample, may be a UID to another collection",
             "anyOf": [
                 {
+                    "additionalProperties": true,
                     "type": "object"
                 },
                 {

@@ -4,25 +4,34 @@
 
 from __future__ import annotations
 
-from typing import Any, Dict, List, Literal, Optional, TypedDict, Union
+from typing import Any, Literal, TypeAlias, TypedDict
 
 from typing_extensions import NotRequired
 
-DtypeNumpy = str
+DtypeNumpy: TypeAlias = str
+"""
+A numpy dtype e.g `<U9`, `<f16`
+"""
 
 
-DtypeNumpyItem = List
+DtypeNumpyItemItem: TypeAlias = str
+"""
+A numpy dtype e.g `<U9`, `<f16`
+"""
 
 
-DataType = Any
+DtypeNumpyItem: TypeAlias = tuple[str, DtypeNumpyItemItem]
 
 
-Dtype = Literal["string", "number", "array", "boolean", "integer"]
+DataType: TypeAlias = dict[str, "DataType"]
+
+
+Dtype: TypeAlias = Literal["string", "number", "array", "boolean", "integer"]
 
 
 class LimitsRange(TypedDict):
-    high: Optional[float]
-    low: Optional[float]
+    high: float | None
+    low: float | None
 
 
 class PerObjectHint(TypedDict):
@@ -34,7 +43,7 @@ class PerObjectHint(TypedDict):
     """
     The NeXus class definition for this device.
     """
-    fields: NotRequired[List[str]]
+    fields: NotRequired[list[str]]
     """
     The 'interesting' data keys for this device.
     """
@@ -64,27 +73,27 @@ class Limits(TypedDict):
     https://docs.epics-controls.org/en/latest/getting-started/EPICS_Intro.html#channel-access
     """
 
-    alarm: NotRequired[Optional[LimitsRange]]
+    alarm: NotRequired[LimitsRange | None]
     """
     Alarm limits.
     """
-    control: NotRequired[Optional[LimitsRange]]
+    control: NotRequired[LimitsRange | None]
     """
     Control limits.
     """
-    display: NotRequired[Optional[LimitsRange]]
+    display: NotRequired[LimitsRange | None]
     """
     Display limits.
     """
-    hysteresis: NotRequired[Optional[float]]
+    hysteresis: NotRequired[float | None]
     """
     Hysteresis.
     """
-    rds: NotRequired[Optional[RdsRange]]
+    rds: NotRequired[RdsRange | None]
     """
     RDS parameters.
     """
-    warning: NotRequired[Optional[LimitsRange]]
+    warning: NotRequired[LimitsRange | None]
     """
     Warning limits.
     """
@@ -95,11 +104,11 @@ class DataKey(TypedDict):
     Describes the objects in the data property of Event documents
     """
 
-    choices: NotRequired[List[str]]
+    choices: NotRequired[list[str]]
     """
     Choices of enum value.
     """
-    dims: NotRequired[List[str]]
+    dims: NotRequired[list[str]]
     """
     The names for dimensions of the data. Null or empty list if scalar data
     """
@@ -107,7 +116,7 @@ class DataKey(TypedDict):
     """
     The type of the data in the event, given as a broad JSON schema type.
     """
-    dtype_numpy: NotRequired[Union[DtypeNumpy, List[DtypeNumpyItem]]]
+    dtype_numpy: NotRequired[DtypeNumpy | list[DtypeNumpyItem]]
     """
     The type of the data in the event, given as a numpy dtype string (or, for structured dtypes, array).
     """
@@ -123,11 +132,11 @@ class DataKey(TypedDict):
     """
     The name of the object this key was pulled from.
     """
-    precision: NotRequired[Optional[int]]
+    precision: NotRequired[int | None]
     """
     Number of digits after decimal place if a floating point number
     """
-    shape: List[Optional[int]]
+    shape: list[int | None]
     """
     The shape of the data.  Empty list indicates scalar data. None indicates a dimension with unknown or variable length.
     """
@@ -135,22 +144,22 @@ class DataKey(TypedDict):
     """
     The source (ex piece of hardware) of the data.
     """
-    units: NotRequired[Optional[str]]
+    units: NotRequired[str | None]
     """
     Engineering units of the value
     """
 
 
 class Configuration(TypedDict):
-    data: NotRequired[Dict[str, Any]]
+    data: NotRequired[dict[str, Any]]
     """
     The actual measurement data
     """
-    data_keys: NotRequired[Dict[str, DataKey]]
+    data_keys: NotRequired[dict[str, DataKey]]
     """
     This describes the data stored alongside it in this configuration object.
     """
-    timestamps: NotRequired[Dict[str, Any]]
+    timestamps: NotRequired[dict[str, Any]]
     """
     The timestamps of the individual measurement data
     """
@@ -162,11 +171,11 @@ class EventDescriptor(TypedDict):
     documents
     """
 
-    configuration: NotRequired[Dict[str, Configuration]]
+    configuration: NotRequired[dict[str, Configuration]]
     """
     Readings of configurational fields necessary for interpreting data in the Events.
     """
-    data_keys: Dict[str, DataKey]
+    data_keys: dict[str, DataKey]
     """
     This describes the data in the Event Documents.
     """
@@ -175,7 +184,7 @@ class EventDescriptor(TypedDict):
     """
     A human-friendly name for this data stream, such as 'primary' or 'baseline'.
     """
-    object_keys: NotRequired[Dict[str, Any]]
+    object_keys: NotRequired[dict[str, Any]]
     """
     Maps a Device/Signal name to the names of the entries it produces in data_keys.
     """
