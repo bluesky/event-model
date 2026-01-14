@@ -2,6 +2,19 @@
 Release History
 ***************
 
+Unreleased (2025-??-??)
+=======================
+
+Changed
+-------
+
+* Drop support for Python 3.8 and 3.9.
+
+Added
+-----
+
+* Add support for Python 3.13.
+
 v1.23.1 (2025-08-28)
 ====================
 
@@ -182,7 +195,7 @@ Changed
 -------
 
 * The package requirements have been relaxed to accept jsonschema versions 2 or
-  3. Both are supported.
+  1. Both are supported.
 
 v1.16.1 (2020-10-15)
 ====================

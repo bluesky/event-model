@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Data Model &#8212; event-model 1.24.dev13+gee1fcac96 documentation</title>
+    <title>Data Model &#8212; event-model 1.23.2.dev1+g4c3680b83 documentation</title>
   
   
   
@@ -42,7 +42,7 @@
   <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
-    <script src="../_static/documentation_options.js?v=780ea3bd"></script>
+    <script src="../_static/documentation_options.js?v=545d6b06"></script>
     <script src="../_static/doctools.js?v=9bcbadda"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -129,8 +129,8 @@
       
     
     
-    <img src="../_static/event-model-logo.svg" class="logo__image only-light" alt="event-model 1.24.dev13+gee1fcac96 documentation - Home"/>
-    <img src="../_static/event-model-logo.svg" class="logo__image only-dark pst-js-only" alt="event-model 1.24.dev13+gee1fcac96 documentation - Home"/>
+    <img src="../_static/event-model-logo.svg" class="logo__image only-light" alt="event-model 1.23.2.dev1+g4c3680b83 documentation - Home"/>
+    <img src="../_static/event-model-logo.svg" class="logo__image only-dark pst-js-only" alt="event-model 1.23.2.dev1+g4c3680b83 documentation - Home"/>
   
   
 </a></div>
@@ -664,6 +664,7 @@ experimetal and subject to backward-incompatible changes in future releases.</p>
                     <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;kwargs&quot;</span><span class="p">,</span>
                     <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;kwargs for calcalation callable&quot;</span><span class="p">,</span>
                     <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;additionalProperties&quot;</span><span class="p">:</span> <span class="n">true</span><span class="p">,</span>
                     <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="p">{}</span>
                 <span class="p">}</span>
             <span class="p">},</span>
@@ -794,7 +795,8 @@ experimetal and subject to backward-incompatible changes in future releases.</p>
                 <span class="s2">&quot;configuration&quot;</span><span class="p">:</span> <span class="p">{</span>
                     <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;configuration&quot;</span><span class="p">,</span>
                     <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Static information about projection&quot;</span><span class="p">,</span>
-                    <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span>
+                    <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;additionalProperties&quot;</span><span class="p">:</span> <span class="n">true</span>
                 <span class="p">},</span>
                 <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="p">{</span>
                     <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;name&quot;</span><span class="p">,</span>
@@ -919,6 +921,7 @@ experimetal and subject to backward-incompatible changes in future releases.</p>
             <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Information about the sample, may be a UID to another collection&quot;</span><span class="p">,</span>
             <span class="s2">&quot;anyOf&quot;</span><span class="p">:</span> <span class="p">[</span>
                 <span class="p">{</span>
+                    <span class="s2">&quot;additionalProperties&quot;</span><span class="p">:</span> <span class="n">true</span><span class="p">,</span>
                     <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span>
                 <span class="p">},</span>
                 <span class="p">{</span>
@@ -1040,6 +1043,7 @@ is detailed and takes some time to cover, so we defer it to a
                     <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;data&quot;</span><span class="p">,</span>
                     <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;The actual measurement data&quot;</span><span class="p">,</span>
                     <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;additionalProperties&quot;</span><span class="p">:</span> <span class="n">true</span><span class="p">,</span>
                     <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="p">{}</span>
                 <span class="p">},</span>
                 <span class="s2">&quot;data_keys&quot;</span><span class="p">:</span> <span class="p">{</span>
@@ -1055,6 +1059,7 @@ is detailed and takes some time to cover, so we defer it to a
                     <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;timestamps&quot;</span><span class="p">,</span>
                     <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;The timestamps of the individual measurement data&quot;</span><span class="p">,</span>
                     <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;additionalProperties&quot;</span><span class="p">:</span> <span class="n">true</span><span class="p">,</span>
                     <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="p">{}</span>
                 <span class="p">}</span>
             <span class="p">},</span>
@@ -1407,6 +1412,7 @@ is detailed and takes some time to cover, so we defer it to a
             <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;object_keys&quot;</span><span class="p">,</span>
             <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Maps a Device/Signal name to the names of the entries it produces in data_keys.&quot;</span><span class="p">,</span>
             <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;additionalProperties&quot;</span><span class="p">:</span> <span class="n">true</span><span class="p">,</span>
             <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="p">{}</span>
         <span class="p">},</span>
         <span class="s2">&quot;run_start&quot;</span><span class="p">:</span> <span class="p">{</span>
@@ -1501,7 +1507,8 @@ overall event ‘time’ is often more useful.</p>
                 <span class="s2">&quot;data&quot;</span><span class="p">:</span> <span class="p">{</span>
                     <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;data&quot;</span><span class="p">,</span>
                     <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;The actual measurement data&quot;</span><span class="p">,</span>
-                    <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span>
+                    <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;additionalProperties&quot;</span><span class="p">:</span> <span class="n">true</span>
                 <span class="p">},</span>
                 <span class="s2">&quot;filled&quot;</span><span class="p">:</span> <span class="p">{</span>
                     <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;filled&quot;</span><span class="p">,</span>
@@ -1526,7 +1533,8 @@ overall event ‘time’ is often more useful.</p>
                 <span class="s2">&quot;timestamps&quot;</span><span class="p">:</span> <span class="p">{</span>
                     <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;timestamps&quot;</span><span class="p">,</span>
                     <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;The timestamps of the individual measurement data&quot;</span><span class="p">,</span>
-                    <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span>
+                    <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;additionalProperties&quot;</span><span class="p">:</span> <span class="n">true</span>
                 <span class="p">}</span>
             <span class="p">},</span>
             <span class="s2">&quot;required&quot;</span><span class="p">:</span> <span class="p">[</span>
@@ -1836,7 +1844,8 @@ referencing external assets, such as large array data written by detectors.</p>
                 <span class="s2">&quot;resource_kwargs&quot;</span><span class="p">:</span> <span class="p">{</span>
                     <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;resource_kwargs&quot;</span><span class="p">,</span>
                     <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Additional argument to pass to the Handler to read a Resource&quot;</span><span class="p">,</span>
-                    <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span>
+                    <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;additionalProperties&quot;</span><span class="p">:</span> <span class="n">true</span>
                 <span class="p">},</span>
                 <span class="s2">&quot;resource_path&quot;</span><span class="p">:</span> <span class="p">{</span>
                     <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;resource_path&quot;</span><span class="p">,</span>
@@ -1926,7 +1935,8 @@ external assets, such as large array data written by detectors.</p>
         <span class="s2">&quot;datum_kwargs&quot;</span><span class="p">:</span> <span class="p">{</span>
             <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;datum_kwargs&quot;</span><span class="p">,</span>
             <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Arguments to pass to the Handler to retrieve one quanta of data&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;additionalProperties&quot;</span><span class="p">:</span> <span class="n">true</span>
         <span class="p">},</span>
         <span class="s2">&quot;resource&quot;</span><span class="p">:</span> <span class="p">{</span>
             <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;resource&quot;</span><span class="p">,</span>
@@ -2034,7 +2044,8 @@ or assets where there are many relatively small data sets (e.g. scanned fluoresc
         <span class="s2">&quot;parameters&quot;</span><span class="p">:</span> <span class="p">{</span>
             <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;parameters&quot;</span><span class="p">,</span>
             <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Additional keyword arguments to pass to the Handler to read a Stream Resource&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;additionalProperties&quot;</span><span class="p">:</span> <span class="n">true</span>
         <span class="p">},</span>
         <span class="s2">&quot;run_start&quot;</span><span class="p">:</span> <span class="p">{</span>
             <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;run_start&quot;</span><span class="p">,</span>
