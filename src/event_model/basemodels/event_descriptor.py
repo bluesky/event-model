@@ -279,9 +279,8 @@ class EventDescriptor(BaseModel):
     name: Annotated[
         str,
         Field(
-            default="",
             description="A human-friendly name for this data stream, such as "
-            "'primary' or 'baseline'.",
+            "'primary' or 'baseline'."
         ),
     ]
     object_keys: Annotated[
