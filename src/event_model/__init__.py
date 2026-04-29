@@ -1529,6 +1529,11 @@ class RunRouter(DocumentRouter):
         self._resources: dict = {}
         self._stream_resources: dict = {}
 
+        # Map RunStart UID to the list of Resource UIDs and StreamResource UIDs.
+        # These are used to facilitate efficient cleanup of the caches above.
+        self._start_to_resources: defaultdict = defaultdict(list)
+        self._start_to_stream_resources: defaultdict = defaultdict(list)
+
         # Old-style Resources that do not have a RunStart UID
         self._unlabeled_resources: deque = deque(maxlen=10000)
 
@@ -1699,6 +1704,7 @@ class RunRouter(DocumentRouter):
         else:
             self._fillers[start_uid].resource(doc)
             self._resources[doc["uid"]] = doc["run_start"]
+            self._start_to_resources[start_uid].append(doc["uid"])
             for callback in self._factory_cbs_by_start[start_uid]:
                 callback("resource", doc)
             for callback in self._subfactory_cbs_by_start[start_uid]:
@@ -1708,6 +1714,7 @@ class RunRouter(DocumentRouter):
         start_uid = doc["run_start"]  # No need for Try
         self._fillers[start_uid].stream_resource(doc)
         self._stream_resources[doc["uid"]] = doc["run_start"]
+        self._start_to_stream_resources[start_uid].append(doc["uid"])
         for callback in self._factory_cbs_by_start[start_uid]:
             callback("stream_resource", doc)
         for callback in self._subfactory_cbs_by_start[start_uid]:
@@ -1728,7 +1735,10 @@ class RunRouter(DocumentRouter):
             self._descriptor_to_start.pop(descriptor_uid, None)
             self._factory_cbs_by_descriptor.pop(descriptor_uid, None)
             self._subfactory_cbs_by_descriptor.pop(descriptor_uid, None)
-        self._resources.pop(start_uid, None)
+        for resource_uid in self._start_to_resources.pop(start_uid, ()):
+            self._resources.pop(resource_uid, None)
+        for stream_resource_uid in self._start_to_stream_resources.pop(start_uid, ()):
+            self._stream_resources.pop(stream_resource_uid, None)
         self._start_to_start_doc.pop(start_uid, None)
 
 
