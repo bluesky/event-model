@@ -399,8 +399,6 @@ def test_run_router_resource_cleanup(tmp_path):
     )
 
     # --- Run 2: StreamResource / StreamDatum documents ---
-    from event_model.documents.stream_datum import StreamRange
-
     bundle2 = event_model.compose_run()
     start2 = bundle2.start_doc
     sres_doc, _ = bundle2.compose_stream_resource(
