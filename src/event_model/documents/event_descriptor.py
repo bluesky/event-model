@@ -184,6 +184,10 @@ class EventDescriptor(TypedDict):
     """
     A human-friendly name for this data stream, such as 'primary' or 'baseline'.
     """
+    object_classes: NotRequired[dict[str, str]]
+    """
+    Maps a Device/Signal name to the runengine process' import path with __qualname__ of that object's type.
+    """
     object_keys: NotRequired[dict[str, Any]]
     """
     Maps a Device/Signal name to the names of the entries it produces in data_keys.

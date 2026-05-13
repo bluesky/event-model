@@ -137,6 +137,9 @@ class RunStart(TypedDict):
     Unix group to associate this data with
     """
     hints: NotRequired[Hints]
+    """
+    Start-level hints
+    """
     owner: NotRequired[str]
     """
     Unix owner to associate this data with
