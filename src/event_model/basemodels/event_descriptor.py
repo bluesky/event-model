@@ -292,6 +292,15 @@ class EventDescriptor(BaseModel):
             "it produces in data_keys.",
         ),
     ]
+    object_classes: Annotated[
+        dict[str, str],
+        Field(
+            default={},
+            description="Maps a Device/Signal name to the runengine process' import "
+            "path with __qualname__ of that object's type.",
+        ),
+    ]
+
     run_start: Annotated[
         str, Field(description="Globally unique ID of this run's 'start' document.")
     ]

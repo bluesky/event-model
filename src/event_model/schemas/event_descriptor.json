@@ -376,6 +376,15 @@
             "type": "string",
             "default": ""
         },
+        "object_classes": {
+            "title": "object_classes",
+            "description": "Maps a Device/Signal name to the runengine process' import path with __qualname__ of that object's type.",
+            "type": "object",
+            "additionalProperties": {
+                "type": "string"
+            },
+            "default": {}
+        },
         "object_keys": {
             "title": "object_keys",
             "description": "Maps a Device/Signal name to the names of the entries it produces in data_keys.",

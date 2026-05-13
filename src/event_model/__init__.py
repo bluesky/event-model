@@ -2445,6 +2445,7 @@ class ComposeDescriptor:
         hints=None,
         configuration=None,
         object_keys=None,
+        object_classes=None,
         time=None,
         uid=None,
         validate=True,
@@ -2459,6 +2460,8 @@ class ComposeDescriptor:
             configuration = {}
         if object_keys is None:
             object_keys = {}
+        if object_classes is None:
+            object_classes = {}
 
         doc = EventDescriptor(
             configuration=configuration,
@@ -2468,6 +2471,7 @@ class ComposeDescriptor:
             run_start=self.start["uid"],
             time=time,
             uid=uid,
+            object_classes=object_classes,
             hints=hints,
         )
         if validate:
