@@ -2,8 +2,8 @@
 Release History
 ***************
 
-Unreleased (2025-??-??)
-=======================
+v1.24.0 (2026-03-28)
+====================
 
 Changed
 -------
@@ -14,6 +14,7 @@ Added
 -----
 
 * Add support for Python 3.13.
+* Add `object_classes` field to descriptor document.
 
 v1.23.1 (2025-08-28)
 ====================
