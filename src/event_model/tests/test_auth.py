@@ -48,6 +48,7 @@ def test_dots_not_allowed_in_keys():
         "uid": new_uid(),
         "data_keys": {"a": {"source": "", "dtype": "number", "shape": []}},
         "run_start": new_uid(),
+        "name": "primary",
     }
     schema_validators[DocumentNames.descriptor].validate(doc)
     # Add a legal key.
@@ -130,5 +131,6 @@ def test_good_numpy_datakeys(dtype_numpy):
             }
         },
         "run_start": new_uid(),
+        "name": "primary",
     }
     schema_validators[DocumentNames.descriptor].validate(descriptor)

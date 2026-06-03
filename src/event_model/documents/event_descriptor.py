@@ -180,7 +180,7 @@ class EventDescriptor(TypedDict):
     This describes the data in the Event Documents.
     """
     hints: NotRequired[PerObjectHint]
-    name: NotRequired[str]
+    name: str
     """
     A human-friendly name for this data stream, such as 'primary' or 'baseline'.
     """

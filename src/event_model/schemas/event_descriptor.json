@@ -373,8 +373,7 @@
         "name": {
             "title": "name",
             "description": "A human-friendly name for this data stream, such as 'primary' or 'baseline'.",
-            "type": "string",
-            "default": ""
+            "type": "string"
         },
         "object_classes": {
             "title": "object_classes",
@@ -410,6 +409,7 @@
     },
     "required": [
         "data_keys",
+        "name",
         "run_start",
         "time",
         "uid"
