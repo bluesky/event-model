@@ -2,6 +2,23 @@
 Release History
 ***************
 
+Unreleased
+==========
+
+Changed
+-------
+
+* Vendor StrEnum from backports.strenum
+* Use it as base class for DocumentNames (remove when dropping support for Python 3.10)
+
+Added
+-----
+
+* Add NamedDocuments for easier routing of documents in a callback
+* Route the documents by their name instead of their type
+* Pair each name with its document in a DocWrapper NamedTuple
+* Key each NamedDocument on a DocumentNames member
+
 v1.24.0 (2026-03-28)
 ====================
 

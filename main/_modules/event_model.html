@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>event_model &#8212; event-model 1.24.1.dev4+g017f073df documentation</title>
+    <title>event_model &#8212; event-model 1.24.1.dev7+gdc6cb4d62 documentation</title>
   
   
   
@@ -41,7 +41,7 @@
   <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9" />
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9" />
 
-    <script src="../_static/documentation_options.js?v=f0c0e57a"></script>
+    <script src="../_static/documentation_options.js?v=f0daba58"></script>
     <script src="../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -133,8 +133,8 @@
       
     
     
-    <img src="../_static/event-model-logo.svg" class="logo__image only-light" alt="event-model 1.24.1.dev4+g017f073df documentation - Home"/>
-    <img src="../_static/event-model-logo.svg" class="logo__image only-dark pst-js-only" alt="event-model 1.24.1.dev4+g017f073df documentation - Home"/>
+    <img src="../_static/event-model-logo.svg" class="logo__image only-light" alt="event-model 1.24.1.dev7+gdc6cb4d62 documentation - Home"/>
+    <img src="../_static/event-model-logo.svg" class="logo__image only-dark pst-js-only" alt="event-model 1.24.1.dev7+gdc6cb4d62 documentation - Home"/>
   
   
 </a></div>
@@ -473,7 +473,6 @@
 <span class="kn">from</span><span class="w"> </span><span class="nn">collections</span><span class="w"> </span><span class="kn">import</span> <span class="n">defaultdict</span><span class="p">,</span> <span class="n">deque</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">collections.abc</span><span class="w"> </span><span class="kn">import</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Generator</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">,</span> <span class="n">Iterator</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">enum</span><span class="w"> </span><span class="kn">import</span> <span class="n">Enum</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
     <span class="n">Any</span><span class="p">,</span>
     <span class="n">Literal</span><span class="p">,</span>
@@ -485,6 +484,7 @@
 <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">._version</span><span class="w"> </span><span class="kn">import</span> <span class="n">__version__</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.document_names</span><span class="w"> </span><span class="kn">import</span> <span class="n">DocumentNames</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">.documents.datum</span><span class="w"> </span><span class="kn">import</span> <span class="n">Datum</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">.documents.datum_page</span><span class="w"> </span><span class="kn">import</span> <span class="n">DatumPage</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">.documents.event</span><span class="w"> </span><span class="kn">import</span> <span class="n">Event</span><span class="p">,</span> <span class="n">PartialEvent</span>
@@ -549,21 +549,6 @@
     <span class="s2">&quot;compose_run&quot;</span><span class="p">,</span>
     <span class="s2">&quot;__version__&quot;</span><span class="p">,</span>
 <span class="p">]</span>
-
-
-<span class="k">class</span><span class="w"> </span><span class="nc">DocumentNames</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
-    <span class="n">stop</span> <span class="o">=</span> <span class="s2">&quot;stop&quot;</span>
-    <span class="n">start</span> <span class="o">=</span> <span class="s2">&quot;start&quot;</span>
-    <span class="n">descriptor</span> <span class="o">=</span> <span class="s2">&quot;descriptor&quot;</span>
-    <span class="n">event</span> <span class="o">=</span> <span class="s2">&quot;event&quot;</span>
-    <span class="n">datum</span> <span class="o">=</span> <span class="s2">&quot;datum&quot;</span>
-    <span class="n">resource</span> <span class="o">=</span> <span class="s2">&quot;resource&quot;</span>
-    <span class="n">event_page</span> <span class="o">=</span> <span class="s2">&quot;event_page&quot;</span>
-    <span class="n">datum_page</span> <span class="o">=</span> <span class="s2">&quot;datum_page&quot;</span>
-    <span class="n">stream_resource</span> <span class="o">=</span> <span class="s2">&quot;stream_resource&quot;</span>
-    <span class="n">stream_datum</span> <span class="o">=</span> <span class="s2">&quot;stream_datum&quot;</span>
-    <span class="n">bulk_datum</span> <span class="o">=</span> <span class="s2">&quot;bulk_datum&quot;</span>  <span class="c1"># deprecated</span>
-    <span class="n">bulk_events</span> <span class="o">=</span> <span class="s2">&quot;bulk_events&quot;</span>  <span class="c1"># deprecated</span>
 
 
 <span class="k">class</span><span class="w"> </span><span class="nc">DocumentRouter</span><span class="p">:</span>

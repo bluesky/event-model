@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>event_model &#8212; event-model 1.24.1.dev4+g017f073df documentation</title>
+    <title>event_model &#8212; event-model 1.24.1.dev7+gdc6cb4d62 documentation</title>
   
   
   
@@ -42,7 +42,7 @@
   <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9" />
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9" />
 
-    <script src="../_static/documentation_options.js?v=f0c0e57a"></script>
+    <script src="../_static/documentation_options.js?v=f0daba58"></script>
     <script src="../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -136,8 +136,8 @@
       
     
     
-    <img src="../_static/event-model-logo.svg" class="logo__image only-light" alt="event-model 1.24.1.dev4+g017f073df documentation - Home"/>
-    <img src="../_static/event-model-logo.svg" class="logo__image only-dark pst-js-only" alt="event-model 1.24.1.dev4+g017f073df documentation - Home"/>
+    <img src="../_static/event-model-logo.svg" class="logo__image only-light" alt="event-model 1.24.1.dev7+gdc6cb4d62 documentation - Home"/>
+    <img src="../_static/event-model-logo.svg" class="logo__image only-dark pst-js-only" alt="event-model 1.24.1.dev7+gdc6cb4d62 documentation - Home"/>
   
   
 </a></div>
@@ -567,8 +567,8 @@
 <tr class="row-even"><td><p><a class="reference internal" href="#event_model.StreamResource" title="event_model.StreamResource"><code class="xref py py-obj docutils literal notranslate"><span class="pre">StreamResource</span></code></a></p></td>
 <td><p>Document to reference a collection (e.g. file or group of files) of externally-stored data streams.</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">DocumentNames</span></code></p></td>
-<td><p></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#event_model.DocumentNames" title="event_model.DocumentNames"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DocumentNames</span></code></a></p></td>
+<td><p>StrEnum of the names of all documents in the event model.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#event_model.compose_run" title="event_model.compose_run"><code class="xref py py-obj docutils literal notranslate"><span class="pre">compose_run</span></code></a></p></td>
 <td><p>Compose a RunStart document and factory functions for related documents.</p></td>
@@ -1128,6 +1128,12 @@ externally-stored data streams</p>
 
 </dd></dl>
 
+<dl class="py class">
+<dt class="sig sig-object py" id="event_model.DocumentNames">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">event_model.</span></span><span class="sig-name descname"><span class="pre">DocumentNames</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/event_model/document_names.html#DocumentNames"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#event_model.DocumentNames" title="Link to this definition">#</a></dt>
+<dd><p>StrEnum of the names of all documents in the event model.</p>
+</dd></dl>
+
 <dl class="py function">
 <dt class="sig sig-object py" id="event_model.compose_run">
 <span class="sig-prename descclassname"><span class="pre">event_model.</span></span><span class="sig-name descname"><span class="pre">compose_run</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">uid</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><span class="pre">float</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metadata</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.14)"><span class="pre">dict</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">validate</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">event_counters</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.14)"><span class="pre">dict</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ComposeRunBundle</span></span></span><a class="reference internal" href="../_modules/event_model.html#compose_run"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#event_model.compose_run" title="Link to this definition">#</a></dt>
@@ -1324,6 +1330,7 @@ descriptor name will be increased by 1.</p></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#event_model.StreamResource.uri"><code class="docutils literal notranslate"><span class="pre">StreamResource.uri</span></code></a></li>
 </ul>
 </li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#event_model.DocumentNames"><code class="docutils literal notranslate"><span class="pre">DocumentNames</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#event_model.compose_run"><code class="docutils literal notranslate"><span class="pre">compose_run()</span></code></a></li>
 </ul>
   </nav></div>
