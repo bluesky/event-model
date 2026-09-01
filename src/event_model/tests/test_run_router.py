@@ -359,3 +359,81 @@ def test_subfactory_callback_exception():
 
     event_document = {"descriptor": "ghijkl", "uid": "mnopqr"}
     rr.event(event_document)
+
+
+def test_run_router_resource_cleanup(tmp_path):
+    """Resources and StreamResources must be removed from internal caches after stop.
+
+    Regression test for a bug where _resources was popped using the wrong key
+    (start_uid instead of resource_uid), so all Resource documents from completed
+    runs accumulated in _resources indefinitely.  StreamResource documents were
+    never cleaned up at all.
+    """
+    rr = event_model.RunRouter([])
+
+    # --- Run 1: classic Resource / Datum documents ---
+    bundle1 = event_model.compose_run()
+    start1 = bundle1.start_doc
+    resource_bundle = bundle1.compose_resource(
+        spec="TIFF",
+        root=str(tmp_path),
+        resource_path="stack.tiff",
+        resource_kwargs={},
+    )
+    resource_doc = resource_bundle.resource_doc
+    stop1 = bundle1.compose_stop()
+
+    rr("start", start1)
+    rr("resource", resource_doc)
+    rr("stop", stop1)
+
+    # After stop, neither the resource nor the start should remain in any cache.
+    assert resource_doc["uid"] not in rr._resources, (
+        "_resources still contains the resource uid after stop"
+    )
+    assert start1["uid"] not in rr._start_to_resources, (
+        "_start_to_resources still contains the start uid after stop"
+    )
+    assert start1["uid"] not in rr._start_to_start_doc, (
+        "_start_to_start_doc still contains the start uid after stop"
+    )
+
+    # --- Run 2: StreamResource / StreamDatum documents ---
+    bundle2 = event_model.compose_run()
+    start2 = bundle2.start_doc
+    sres_doc, _ = bundle2.compose_stream_resource(
+        mimetype="image/tiff",
+        data_key="det",
+        uri="file://localhost" + str(tmp_path) + "/frames",
+        parameters={},
+    )
+    stop2 = bundle2.compose_stop()
+
+    rr("start", start2)
+    rr("stream_resource", sres_doc)
+    rr("stop", stop2)
+
+    assert sres_doc["uid"] not in rr._stream_resources, (
+        "_stream_resources still contains the stream_resource uid after stop"
+    )
+    assert start2["uid"] not in rr._start_to_stream_resources, (
+        "_start_to_stream_resources still contains the start uid after stop"
+    )
+
+    # --- Ensure caches stay empty across multiple runs ---
+    for _ in range(3):
+        bundle = event_model.compose_run()
+        sres, _ = bundle.compose_stream_resource(
+            mimetype="image/tiff",
+            data_key="det",
+            uri="file://localhost" + str(tmp_path) + "/frames",
+            parameters={},
+        )
+        rr("start", bundle.start_doc)
+        rr("stream_resource", sres)
+        rr("stop", bundle.compose_stop())
+
+    assert len(rr._resources) == 0
+    assert len(rr._stream_resources) == 0
+    assert len(rr._start_to_resources) == 0
+    assert len(rr._start_to_stream_resources) == 0
