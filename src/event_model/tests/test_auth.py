@@ -85,6 +85,11 @@ def test_dots_not_allowed_in_keys():
         "4i",
         "i>4",
         ">i",
+        # Size is only optional for string/object dtypes, not numeric ones.
+        "<f",
+        # String dtypes still require an endianness/byte-order prefix.
+        "U",
+        "S",
         ("some_str_1", "<u4"),
         [("some_str_1", "<u4"), ("some_str", "Z")],
     ],
@@ -114,8 +119,19 @@ def test_bad_numpy_datakeys(dtype_numpy):
     [
         ">u4",
         "<u4",
+        # String, bytes and object dtypes may omit the size so that the length
+        # can be inferred from the data when it is written.
+        "<U",
+        ">U",
+        "|S",
+        "<U9",
+        "|S5",
+        "O",
+        "|O",
+        "|O8",
         [("some_str_1", "<u4"), ("some_str", "<u4")],
         [("some_str_1", "<u4"), ("some_str", ">u4")],
+        [("some_str_1", "<U"), ("some_str", "O")],
     ],
 )
 def test_good_numpy_datakeys(dtype_numpy):

@@ -10,13 +10,13 @@ from typing_extensions import NotRequired
 
 DtypeNumpy: TypeAlias = str
 """
-A numpy dtype e.g `<U9`, `<f16`
+A numpy dtype e.g `<U9`, `<f16`. The size is optional for string (`<U`, `|S`) and object (`O`) dtypes, letting the length be inferred from the data when it is written.
 """
 
 
 DtypeNumpyItemItem: TypeAlias = str
 """
-A numpy dtype e.g `<U9`, `<f16`
+A numpy dtype e.g `<U9`, `<f16`. The size is optional for string (`<U`, `|S`) and object (`O`) dtypes, letting the length be inferred from the data when it is written.
 """
 
 

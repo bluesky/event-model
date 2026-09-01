@@ -98,8 +98,12 @@ class Limits(BaseModel):
 _ConstrainedDtype = Annotated[
     str,
     Field(
-        description="A numpy dtype e.g `<U9`, `<f16`",
-        pattern="[|<>][tbiufcmMOSUV][0-9]+",
+        description=(
+            "A numpy dtype e.g `<U9`, `<f16`. The size is optional for string "
+            "(`<U`, `|S`) and object (`O`) dtypes, letting the length be inferred "
+            "from the data when it is written."
+        ),
+        pattern=r"^([|<>][tbiufcmMV][0-9]+|[|<>][US][0-9]*|[|<>]?O[0-9]*)$",
     ),
 ]
 
