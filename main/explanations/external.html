@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>External Assets &#8212; event-model 1.24.1.dev7+gdc6cb4d62 documentation</title>
+    <title>External Assets &#8212; event-model 1.24.1.dev9+g79703246e documentation</title>
   
   
   
@@ -27,8 +27,8 @@
   </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../_static/styles/theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
-<link href="../_static/styles/pydata-sphinx-theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+  <link href="../_static/styles/theme.css?digest=cb8930eaaf36d9849b67" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=cb8930eaaf36d9849b67" rel="stylesheet" />
 
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../_static/graphviz.css?v=4ae1632d" />
@@ -37,12 +37,12 @@
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
   
   <!-- So that users can add custom icons -->
-  <script defer src="../_static/scripts/fontawesome.js?digest=90905a2f556bf617f1a9"></script>
+  <script defer src="../_static/scripts/fontawesome.js?digest=cb8930eaaf36d9849b67"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9" />
-<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9" />
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=cb8930eaaf36d9849b67" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=cb8930eaaf36d9849b67" />
 
-    <script src="../_static/documentation_options.js?v=f0daba58"></script>
+    <script src="../_static/documentation_options.js?v=5011d201"></script>
     <script src="../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -50,7 +50,7 @@
     <script src="../_static/design-tabs.js?v=f930bc37"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'explanations/external';</script>
     <script>
-        DOCUMENTATION_OPTIONS.theme_version = '0.20.0';
+        DOCUMENTATION_OPTIONS.theme_version = '0.21.0';
         DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://blueskyproject.io/event-model/switcher.json';
         DOCUMENTATION_OPTIONS.theme_switcher_version_match = 'main';
         DOCUMENTATION_OPTIONS.show_version_warning_banner =
@@ -136,8 +136,8 @@
       
     
     
-    <img src="../_static/event-model-logo.svg" class="logo__image only-light" alt="event-model 1.24.1.dev7+gdc6cb4d62 documentation - Home"/>
-    <img src="../_static/event-model-logo.svg" class="logo__image only-dark pst-js-only" alt="event-model 1.24.1.dev7+gdc6cb4d62 documentation - Home"/>
+    <img src="../_static/event-model-logo.svg" class="logo__image only-light" alt="event-model 1.24.1.dev9+g79703246e documentation - Home"/>
+    <img src="../_static/event-model-logo.svg" class="logo__image only-dark pst-js-only" alt="event-model 1.24.1.dev9+g79703246e documentation - Home"/>
   
   
 </a></div>
@@ -507,10 +507,10 @@ detectors are typically stored externally.</p>
 MongoDB or viewing directly as JSON text—and it allows large assets to be
 loaded only when needed.</p>
 <p>Suppose we have this Event</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># &#39;event&#39; document</span>
-<span class="p">{</span><span class="s1">&#39;data&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;image&#39;</span><span class="p">:</span> <span class="s1">&#39;aa10035d-1d2b-41d9-97e6-03e3fe62fa6c/5&#39;</span><span class="p">,</span>
-          <span class="s1">&#39;temperature&#39;</span><span class="p">:</span> <span class="mf">5.0</span><span class="p">},</span>
- <span class="s1">&#39;descriptor&#39;</span><span class="p">:</span> <span class="s1">&#39;219310e0-faa0-4990-84a0-95b508d4ae35&#39;</span><span class="p">,</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># 'event' document</span>
+<span class="p">{</span><span class="s1">'data'</span><span class="p">:</span> <span class="p">{</span><span class="s1">'image'</span><span class="p">:</span> <span class="s1">'aa10035d-1d2b-41d9-97e6-03e3fe62fa6c/5'</span><span class="p">,</span>
+          <span class="s1">'temperature'</span><span class="p">:</span> <span class="mf">5.0</span><span class="p">},</span>
+ <span class="s1">'descriptor'</span><span class="p">:</span> <span class="s1">'219310e0-faa0-4990-84a0-95b508d4ae35'</span><span class="p">,</span>
  <span class="o">...</span><span class="p">}</span>
 </pre></div>
 </div>
@@ -522,18 +522,18 @@ referenced by this Event.</p>
 like a placeholder, but that wouldn’t help a program.)</p>
 <p>Here is the Event Descriptor that goes with this Event; we can tell that
 because its <code class="docutils literal notranslate"><span class="pre">'uid'</span></code> matches the Event’s <code class="docutils literal notranslate"><span class="pre">'descriptor'</span></code> field.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># &#39;descriptor&#39; document</span>
-<span class="p">{</span><span class="s1">&#39;uid&#39;</span><span class="p">:</span> <span class="s1">&#39;219310e0-faa0-4990-84a0-95b508d4ae35&#39;</span><span class="p">,</span>
- <span class="s1">&#39;data_keys&#39;</span><span class="p">:</span>
-    <span class="p">{</span><span class="s1">&#39;image&#39;</span><span class="p">:</span>
-        <span class="p">{</span><span class="s1">&#39;source&#39;</span><span class="p">:</span> <span class="s1">&#39;...&#39;</span><span class="p">,</span>
-         <span class="s1">&#39;shape&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">512</span><span class="p">,</span> <span class="mi">512</span><span class="p">],</span>
-         <span class="s1">&#39;dtype&#39;</span><span class="p">:</span> <span class="s1">&#39;array&#39;</span><span class="p">,</span>
-         <span class="s1">&#39;external&#39;</span><span class="p">:</span> <span class="s1">&#39;...&#39;</span><span class="p">},</span>
-     <span class="s1">&#39;temperature&#39;</span><span class="p">:</span>
-        <span class="p">{</span><span class="s1">&#39;source&#39;</span><span class="p">:</span> <span class="s1">&#39;...&#39;</span><span class="p">,</span>
-         <span class="s1">&#39;shape&#39;</span><span class="p">:</span> <span class="p">[],</span>
-         <span class="s1">&#39;dtype&#39;</span><span class="p">:</span> <span class="s1">&#39;number&#39;</span><span class="p">}}</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># 'descriptor' document</span>
+<span class="p">{</span><span class="s1">'uid'</span><span class="p">:</span> <span class="s1">'219310e0-faa0-4990-84a0-95b508d4ae35'</span><span class="p">,</span>
+ <span class="s1">'data_keys'</span><span class="p">:</span>
+    <span class="p">{</span><span class="s1">'image'</span><span class="p">:</span>
+        <span class="p">{</span><span class="s1">'source'</span><span class="p">:</span> <span class="s1">'...'</span><span class="p">,</span>
+         <span class="s1">'shape'</span><span class="p">:</span> <span class="p">[</span><span class="mi">512</span><span class="p">,</span> <span class="mi">512</span><span class="p">],</span>
+         <span class="s1">'dtype'</span><span class="p">:</span> <span class="s1">'array'</span><span class="p">,</span>
+         <span class="s1">'external'</span><span class="p">:</span> <span class="s1">'...'</span><span class="p">},</span>
+     <span class="s1">'temperature'</span><span class="p">:</span>
+        <span class="p">{</span><span class="s1">'source'</span><span class="p">:</span> <span class="s1">'...'</span><span class="p">,</span>
+         <span class="s1">'shape'</span><span class="p">:</span> <span class="p">[],</span>
+         <span class="s1">'dtype'</span><span class="p">:</span> <span class="s1">'number'</span><span class="p">}}</span>
  <span class="o">...</span><span class="p">}</span>
 </pre></div>
 </div>
@@ -543,10 +543,10 @@ that key is not currently used by any part of the system; only its existence is
 checked for. The value may be used in the futue as a hook for integration with
 outside systems.)</p>
 <p>Returning to our Event</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># &#39;event&#39; document</span>
-<span class="p">{</span><span class="s1">&#39;data&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;image&#39;</span><span class="p">:</span> <span class="s1">&#39;aa10035d-1d2b-41d9-97e6-03e3fe62fa6c/5&#39;</span><span class="p">,</span>
-          <span class="s1">&#39;temperature&#39;</span><span class="p">:</span> <span class="mf">5.0</span><span class="p">}</span>
- <span class="s1">&#39;descriptor&#39;</span><span class="p">:</span> <span class="s1">&#39;219310e0-faa0-4990-84a0-95b508d4ae35&#39;</span><span class="p">,</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># 'event' document</span>
+<span class="p">{</span><span class="s1">'data'</span><span class="p">:</span> <span class="p">{</span><span class="s1">'image'</span><span class="p">:</span> <span class="s1">'aa10035d-1d2b-41d9-97e6-03e3fe62fa6c/5'</span><span class="p">,</span>
+          <span class="s1">'temperature'</span><span class="p">:</span> <span class="mf">5.0</span><span class="p">}</span>
+ <span class="s1">'descriptor'</span><span class="p">:</span> <span class="s1">'219310e0-faa0-4990-84a0-95b508d4ae35'</span><span class="p">,</span>
  <span class="o">...</span><span class="p">}</span>
 </pre></div>
 </div>
@@ -556,10 +556,10 @@ referencing a Datum document. Here is the matching Datum document. This
 document can be used to retrieve some data that belong in our Event. In our
 example it might be an image or stack of images that were taken at a
 given temperature during a temperature scan.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># &#39;datum&#39; document</span>
-<span class="p">{</span><span class="s1">&#39;datum_id&#39;</span><span class="p">:</span> <span class="s1">&#39;aa10035d-1d2b-41d9-97e6-03e3fe62fa6c/5&#39;</span><span class="p">,</span>
- <span class="s1">&#39;datum_kwargs&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;index&#39;</span><span class="p">:</span> <span class="mi">5</span><span class="p">},</span>
- <span class="s1">&#39;resource&#39;</span><span class="p">:</span> <span class="s1">&#39;aa10035d-1d2b-41d9-97e6-03e3fe62fa6c&#39;</span><span class="p">}</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># 'datum' document</span>
+<span class="p">{</span><span class="s1">'datum_id'</span><span class="p">:</span> <span class="s1">'aa10035d-1d2b-41d9-97e6-03e3fe62fa6c/5'</span><span class="p">,</span>
+ <span class="s1">'datum_kwargs'</span><span class="p">:</span> <span class="p">{</span><span class="s1">'index'</span><span class="p">:</span> <span class="mi">5</span><span class="p">},</span>
+ <span class="s1">'resource'</span><span class="p">:</span> <span class="s1">'aa10035d-1d2b-41d9-97e6-03e3fe62fa6c'</span><span class="p">}</span>
 </pre></div>
 </div>
 <p>You will notice that we still do not have a <em>filepath</em> anywhere here. It is
@@ -569,14 +569,14 @@ information separately and redundantly in each Datum, the Datum documents point
 to a Resource document—the last document type we’ll need here—which
 contains path-related details.</p>
 <blockquote>
-<div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># &#39;resource&#39; document</span>
-<span class="p">{</span><span class="s1">&#39;uid&#39;</span><span class="p">:</span> <span class="s1">&#39;aa10035d-1d2b-41d9-97e6-03e3fe62fa6c&#39;</span><span class="p">,</span>
- <span class="s1">&#39;spec&#39;</span><span class="p">:</span> <span class="s1">&#39;AD_HDF5&#39;</span><span class="p">,</span>
- <span class="s1">&#39;root&#39;</span><span class="p">:</span> <span class="s1">&#39;/GPFS/DATA/Andor/&#39;</span><span class="p">,</span>
- <span class="s1">&#39;resource_path&#39;</span><span class="p">:</span> <span class="s1">&#39;2020/01/03/8ff08ff9-a2bf-48c3-8ff3-dcac0f309d7d.h5&#39;</span><span class="p">,</span>
- <span class="s1">&#39;resource_kwargs&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;frame_per_point&#39;</span><span class="p">:</span> <span class="mi">10</span><span class="p">},</span>
- <span class="s1">&#39;path_semantics&#39;</span><span class="p">:</span> <span class="s1">&#39;posix&#39;</span><span class="p">,</span>
- <span class="s1">&#39;run_start&#39;</span><span class="p">:</span> <span class="s1">&#39;10bf6945-4afd-43ca-af36-6ad8f3540bcd&#39;</span><span class="p">}</span>
+<div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># 'resource' document</span>
+<span class="p">{</span><span class="s1">'uid'</span><span class="p">:</span> <span class="s1">'aa10035d-1d2b-41d9-97e6-03e3fe62fa6c'</span><span class="p">,</span>
+ <span class="s1">'spec'</span><span class="p">:</span> <span class="s1">'AD_HDF5'</span><span class="p">,</span>
+ <span class="s1">'root'</span><span class="p">:</span> <span class="s1">'/GPFS/DATA/Andor/'</span><span class="p">,</span>
+ <span class="s1">'resource_path'</span><span class="p">:</span> <span class="s1">'2020/01/03/8ff08ff9-a2bf-48c3-8ff3-dcac0f309d7d.h5'</span><span class="p">,</span>
+ <span class="s1">'resource_kwargs'</span><span class="p">:</span> <span class="p">{</span><span class="s1">'frame_per_point'</span><span class="p">:</span> <span class="mi">10</span><span class="p">},</span>
+ <span class="s1">'path_semantics'</span><span class="p">:</span> <span class="s1">'posix'</span><span class="p">,</span>
+ <span class="s1">'run_start'</span><span class="p">:</span> <span class="s1">'10bf6945-4afd-43ca-af36-6ad8f3540bcd'</span><span class="p">}</span>
 </pre></div>
 </div>
 </div></blockquote>
@@ -588,12 +588,12 @@ and subject to change (if the data is moved over time).</p>
 file, multiple files, or something more specialized. The <code class="docutils literal notranslate"><span class="pre">resource_kwargs</span></code>
 provide any additional parameters for reading it.</p>
 <blockquote>
-<div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># &#39;Stream Resource&#39; document</span>
-<span class="p">{</span><span class="s1">&#39;uid&#39;</span><span class="p">:</span> <span class="s1">&#39;aa10035d-1d2b-41d9-97e6-03e3fe62fa6c&#39;</span><span class="p">,</span>
- <span class="s1">&#39;mimetype&#39;</span><span class="p">:</span> <span class="s1">&#39;application/x-hdf5&#39;</span><span class="p">,</span>
- <span class="s1">&#39;uri&#39;</span><span class="p">:</span> <span class="s1">&#39;file://localhost/</span><span class="si">{path}</span><span class="s1">/GPFS/DATA/Andor/2020/01/03/8ff08ff9.h5&#39;</span><span class="p">,</span>
- <span class="s1">&#39;parameters&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;frame_per_point&#39;</span><span class="p">:</span> <span class="mi">10</span><span class="p">},</span>
- <span class="s1">&#39;run_start&#39;</span><span class="p">:</span> <span class="s1">&#39;10bf6945-4afd-43ca-af36-6ad8f3540bcd&#39;</span><span class="p">}</span>
+<div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># 'Stream Resource' document</span>
+<span class="p">{</span><span class="s1">'uid'</span><span class="p">:</span> <span class="s1">'aa10035d-1d2b-41d9-97e6-03e3fe62fa6c'</span><span class="p">,</span>
+ <span class="s1">'mimetype'</span><span class="p">:</span> <span class="s1">'application/x-hdf5'</span><span class="p">,</span>
+ <span class="s1">'uri'</span><span class="p">:</span> <span class="s1">'file://localhost/</span><span class="si">{path}</span><span class="s1">/GPFS/DATA/Andor/2020/01/03/8ff08ff9.h5'</span><span class="p">,</span>
+ <span class="s1">'parameters'</span><span class="p">:</span> <span class="p">{</span><span class="s1">'frame_per_point'</span><span class="p">:</span> <span class="mi">10</span><span class="p">},</span>
+ <span class="s1">'run_start'</span><span class="p">:</span> <span class="s1">'10bf6945-4afd-43ca-af36-6ad8f3540bcd'</span><span class="p">}</span>
 </pre></div>
 </div>
 </div></blockquote>
@@ -631,12 +631,12 @@ typically implemented using a class that implements <code class="docutils litera
 <code class="docutils literal notranslate"><span class="pre">__call__</span></code>, with the respective signatures.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">MyHandler</span><span class="p">:</span>
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="o">**</span><span class="n">resource_kwargs</span><span class="p">):</span>
-        <span class="c1"># Consume the path information and the &#39;resource_kwargs&#39; from the</span>
+        <span class="c1"># Consume the path information and the 'resource_kwargs' from the</span>
         <span class="c1"># Resource. Typically stashes some state and/or opens file(s).</span>
         <span class="o">...</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">datum_kwargs</span><span class="p">):</span>
-        <span class="c1"># Consumes the &#39;datum_kwargs&#39; from the datum and uses them to</span>
+        <span class="c1"># Consumes the 'datum_kwargs' from the datum and uses them to</span>
         <span class="c1"># locate a specific unit (slice, chunk, or what you will...) of</span>
         <span class="c1"># data and return it.</span>
         <span class="o">...</span>
@@ -672,15 +672,15 @@ packages for handlers. Thus, its contents will depend on which packages you
 have installed. In this case, we have installed the Python package
 <code class="docutils literal notranslate"><span class="pre">area-detector-handlers</span></code> which includes several handlers for reading the
 files output by area detectors.</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>{&#39;AD_CBF&#39;: &lt;class &#39;area_detector_handlers.handlers.PilatusCBFHandler&#39;&gt;,
- &#39;AD_HDF5&#39;: &lt;class &#39;area_detector_handlers.handlers.AreaDetectorHDF5Handler&#39;&gt;,
- &#39;AD_HDF5_SWMR&#39;: &lt;class &#39;area_detector_handlers.handlers.AreaDetectorHDF5SWMRHandler&#39;&gt;,
- &#39;AD_HDF5_SWMR_TS&#39;: &lt;class &#39;area_detector_handlers.handlers.AreaDetectorHDF5SWMRTimestampHandler&#39;&gt;,
- &#39;AD_HDF5_TS&#39;: &lt;class &#39;area_detector_handlers.handlers.AreaDetectorHDF5TimestampHandler&#39;&gt;,
- &#39;AD_SPE&#39;: &lt;class &#39;area_detector_handlers.handlers.AreaDetectorSPEHandler&#39;&gt;,
- &#39;AD_TIFF&#39;: &lt;class &#39;area_detector_handlers.handlers.AreaDetectorTiffHandler&#39;&gt;,
- &#39;XSP3&#39;: &lt;class &#39;area_detector_handlers._xspress3.Xspress3HDF5Handler&#39;&gt;,
- &#39;XSP3_FLY&#39;: &lt;class &#39;area_detector_handlers._xspress3.BulkXSPRESS&#39;&gt;}
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>{'AD_CBF': &lt;class 'area_detector_handlers.handlers.PilatusCBFHandler'&gt;,
+ 'AD_HDF5': &lt;class 'area_detector_handlers.handlers.AreaDetectorHDF5Handler'&gt;,
+ 'AD_HDF5_SWMR': &lt;class 'area_detector_handlers.handlers.AreaDetectorHDF5SWMRHandler'&gt;,
+ 'AD_HDF5_SWMR_TS': &lt;class 'area_detector_handlers.handlers.AreaDetectorHDF5SWMRTimestampHandler'&gt;,
+ 'AD_HDF5_TS': &lt;class 'area_detector_handlers.handlers.AreaDetectorHDF5TimestampHandler'&gt;,
+ 'AD_SPE': &lt;class 'area_detector_handlers.handlers.AreaDetectorSPEHandler'&gt;,
+ 'AD_TIFF': &lt;class 'area_detector_handlers.handlers.AreaDetectorTiffHandler'&gt;,
+ 'XSP3': &lt;class 'area_detector_handlers._xspress3.Xspress3HDF5Handler'&gt;,
+ 'XSP3_FLY': &lt;class 'area_detector_handlers._xspress3.BulkXSPRESS'&gt;}
 </pre></div>
 </div>
 <p>To hook into this discovery mechanism, see the section <a class="reference internal" href="#handler-packaging"><span class="std std-ref">Handler Packaging</span></a>
@@ -695,20 +695,20 @@ Run, determine which data is external, and create handlers as needed to access
 the external data, and “fill” that external in, moving the <code class="docutils literal notranslate"><span class="pre">datum_id</span></code> to a
 separate field.</p>
 <p>Before filling:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># &#39;event&#39; document before filling</span>
-<span class="p">{</span><span class="s1">&#39;data&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;image&#39;</span><span class="p">:</span> <span class="s1">&#39;aa10035d-1d2b-41d9-97e6-03e3fe62fa6c/5&#39;</span><span class="p">,</span>
-          <span class="s1">&#39;temperature&#39;</span><span class="p">:</span> <span class="mf">5.0</span><span class="p">},</span>
- <span class="s1">&#39;descriptor&#39;</span><span class="p">:</span> <span class="s1">&#39;219310e0-faa0-4990-84a0-95b508d4ae35&#39;</span><span class="p">,</span>
- <span class="s1">&#39;filled&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;image&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">}</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># 'event' document before filling</span>
+<span class="p">{</span><span class="s1">'data'</span><span class="p">:</span> <span class="p">{</span><span class="s1">'image'</span><span class="p">:</span> <span class="s1">'aa10035d-1d2b-41d9-97e6-03e3fe62fa6c/5'</span><span class="p">,</span>
+          <span class="s1">'temperature'</span><span class="p">:</span> <span class="mf">5.0</span><span class="p">},</span>
+ <span class="s1">'descriptor'</span><span class="p">:</span> <span class="s1">'219310e0-faa0-4990-84a0-95b508d4ae35'</span><span class="p">,</span>
+ <span class="s1">'filled'</span><span class="p">:</span> <span class="p">{</span><span class="s1">'image'</span><span class="p">:</span> <span class="kc">False</span><span class="p">}</span>
  <span class="o">...</span><span class="p">}</span>
 </pre></div>
 </div>
 <p>After filling:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># &#39;event&#39; document after filling</span>
-<span class="p">{</span><span class="s1">&#39;data&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;image&#39;</span><span class="p">:,</span> <span class="p">[[</span><span class="o">...</span><span class="p">]]</span>  <span class="c1"># array-like object</span>
-          <span class="s1">&#39;temperature&#39;</span><span class="p">:</span> <span class="mf">5.0</span><span class="p">},</span>
- <span class="s1">&#39;descriptor&#39;</span><span class="p">:</span> <span class="s1">&#39;219310e0-faa0-4990-84a0-95b508d4ae35&#39;</span><span class="p">,</span>
- <span class="s1">&#39;filled&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;image&#39;</span><span class="p">:</span> <span class="s1">&#39;aa10035d-1d2b-41d9-97e6-03e3fe62fa6c/5&#39;</span><span class="p">}</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># 'event' document after filling</span>
+<span class="p">{</span><span class="s1">'data'</span><span class="p">:</span> <span class="p">{</span><span class="s1">'image'</span><span class="p">:,</span> <span class="p">[[</span><span class="o">...</span><span class="p">]]</span>  <span class="c1"># array-like object</span>
+          <span class="s1">'temperature'</span><span class="p">:</span> <span class="mf">5.0</span><span class="p">},</span>
+ <span class="s1">'descriptor'</span><span class="p">:</span> <span class="s1">'219310e0-faa0-4990-84a0-95b508d4ae35'</span><span class="p">,</span>
+ <span class="s1">'filled'</span><span class="p">:</span> <span class="p">{</span><span class="s1">'image'</span><span class="p">:</span> <span class="s1">'aa10035d-1d2b-41d9-97e6-03e3fe62fa6c/5'</span><span class="p">}</span>
  <span class="o">...</span><span class="p">}</span>
 </pre></div>
 </div>
@@ -779,17 +779,17 @@ the <code class="docutils literal notranslate"><span class="pre">setup.py</span>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">setup</span><span class="p">(</span>
     <span class="o">...</span>
     <span class="n">entry_points</span><span class="o">=</span><span class="p">{</span>
-        <span class="s2">&quot;databroker.handlers&quot;</span><span class="p">:</span> <span class="p">[</span>
-            <span class="s2">&quot;AD_SPE = area_detector_handlers.handlers:AreaDetectorSPEHandler&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;AD_TIFF = area_detector_handlers.handlers:AreaDetectorTiffHandler&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;AD_HDF5 = area_detector_handlers.handlers:AreaDetectorHDF5Handler&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;AD_HDF5_SWMR = area_detector_handlers.handlers:AreaDetectorHDF5SWMRHandler&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;AD_HDF5_TS = area_detector_handlers.handlers:AreaDetectorHDF5TimestampHandler&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;AD_HDF5_SWMR_TS = area_detector_handlers.handlers:AreaDetectorHDF5SWMRTimestampHandler&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;XSP3 = area_detector_handlers.handlers:Xspress3HDF5Handler&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;AD_CBF = area_detector_handlers.handlers:PilatusCBFHandler&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;XSP3_FLY = area_detector_handlers.handlers:BulkXSPRESS&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;IMM = area_detector_handlers.handlers:IMMHandler&quot;</span><span class="p">,</span>
+        <span class="s2">"databroker.handlers"</span><span class="p">:</span> <span class="p">[</span>
+            <span class="s2">"AD_SPE = area_detector_handlers.handlers:AreaDetectorSPEHandler"</span><span class="p">,</span>
+            <span class="s2">"AD_TIFF = area_detector_handlers.handlers:AreaDetectorTiffHandler"</span><span class="p">,</span>
+            <span class="s2">"AD_HDF5 = area_detector_handlers.handlers:AreaDetectorHDF5Handler"</span><span class="p">,</span>
+            <span class="s2">"AD_HDF5_SWMR = area_detector_handlers.handlers:AreaDetectorHDF5SWMRHandler"</span><span class="p">,</span>
+            <span class="s2">"AD_HDF5_TS = area_detector_handlers.handlers:AreaDetectorHDF5TimestampHandler"</span><span class="p">,</span>
+            <span class="s2">"AD_HDF5_SWMR_TS = area_detector_handlers.handlers:AreaDetectorHDF5SWMRTimestampHandler"</span><span class="p">,</span>
+            <span class="s2">"XSP3 = area_detector_handlers.handlers:Xspress3HDF5Handler"</span><span class="p">,</span>
+            <span class="s2">"AD_CBF = area_detector_handlers.handlers:PilatusCBFHandler"</span><span class="p">,</span>
+            <span class="s2">"XSP3_FLY = area_detector_handlers.handlers:BulkXSPRESS"</span><span class="p">,</span>
+            <span class="s2">"IMM = area_detector_handlers.handlers:IMMHandler"</span><span class="p">,</span>
         <span class="p">]</span>
     <span class="p">},</span>
     <span class="o">...</span><span class="p">)</span>
@@ -899,8 +899,8 @@ of asset.</p>
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9"></script>
-<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9"></script>
+  <script defer src="../_static/scripts/bootstrap.js?digest=cb8930eaaf36d9849b67"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=cb8930eaaf36d9849b67"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">
@@ -912,7 +912,7 @@ of asset.</p>
         <div class="footer-item">
 <p class="theme-version">
   <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
-  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.20.0.
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.21.0.
 </p></div>
       
     </div>

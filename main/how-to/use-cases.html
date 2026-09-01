@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Event Model Patterns &#8212; event-model 1.24.1.dev7+gdc6cb4d62 documentation</title>
+    <title>Event Model Patterns &#8212; event-model 1.24.1.dev9+g79703246e documentation</title>
   
   
   
@@ -27,8 +27,8 @@
   </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../_static/styles/theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
-<link href="../_static/styles/pydata-sphinx-theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+  <link href="../_static/styles/theme.css?digest=cb8930eaaf36d9849b67" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=cb8930eaaf36d9849b67" rel="stylesheet" />
 
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../_static/graphviz.css?v=4ae1632d" />
@@ -37,12 +37,12 @@
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
   
   <!-- So that users can add custom icons -->
-  <script defer src="../_static/scripts/fontawesome.js?digest=90905a2f556bf617f1a9"></script>
+  <script defer src="../_static/scripts/fontawesome.js?digest=cb8930eaaf36d9849b67"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9" />
-<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9" />
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=cb8930eaaf36d9849b67" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=cb8930eaaf36d9849b67" />
 
-    <script src="../_static/documentation_options.js?v=f0daba58"></script>
+    <script src="../_static/documentation_options.js?v=5011d201"></script>
     <script src="../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -50,7 +50,7 @@
     <script src="../_static/design-tabs.js?v=f930bc37"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'how-to/use-cases';</script>
     <script>
-        DOCUMENTATION_OPTIONS.theme_version = '0.20.0';
+        DOCUMENTATION_OPTIONS.theme_version = '0.21.0';
         DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://blueskyproject.io/event-model/switcher.json';
         DOCUMENTATION_OPTIONS.theme_switcher_version_match = 'main';
         DOCUMENTATION_OPTIONS.show_version_warning_banner =
@@ -136,8 +136,8 @@
       
     
     
-    <img src="../_static/event-model-logo.svg" class="logo__image only-light" alt="event-model 1.24.1.dev7+gdc6cb4d62 documentation - Home"/>
-    <img src="../_static/event-model-logo.svg" class="logo__image only-dark pst-js-only" alt="event-model 1.24.1.dev7+gdc6cb4d62 documentation - Home"/>
+    <img src="../_static/event-model-logo.svg" class="logo__image only-light" alt="event-model 1.24.1.dev9+g79703246e documentation - Home"/>
+    <img src="../_static/event-model-logo.svg" class="logo__image only-dark pst-js-only" alt="event-model 1.24.1.dev9+g79703246e documentation - Home"/>
   
   
 </a></div>
@@ -499,92 +499,92 @@
 <p>With multiple streams, we would assign multiple Descriptor documents to represent each tile:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1">#  Descriptors - one for each tile</span>
 
-<span class="p">{</span><span class="s2">&quot;uid&quot;</span><span class="p">:</span> <span class="s2">&quot;4fa521e7-fcdc-4a68-9171-d4838d1fc9a2&quot;</span><span class="p">,</span>
-<span class="s2">&quot;time&quot;</span><span class="p">:</span> <span class="mf">1600995123.1785965</span><span class="p">,</span>
-<span class="s2">&quot;run_start&quot;</span><span class="p">:</span> <span class="s2">&quot;9b5dd575-b556-439a-ba71-357307caebb9&quot;</span><span class="p">,</span>
+<span class="p">{</span><span class="s2">"uid"</span><span class="p">:</span> <span class="s2">"4fa521e7-fcdc-4a68-9171-d4838d1fc9a2"</span><span class="p">,</span>
+<span class="s2">"time"</span><span class="p">:</span> <span class="mf">1600995123.1785965</span><span class="p">,</span>
+<span class="s2">"run_start"</span><span class="p">:</span> <span class="s2">"9b5dd575-b556-439a-ba71-357307caebb9"</span><span class="p">,</span>
 <span class="o">.</span> <span class="o">.</span> <span class="o">.</span>
-<span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;tile_0&quot;</span><span class="p">}</span>
+<span class="s2">"name"</span><span class="p">:</span> <span class="s2">"tile_0"</span><span class="p">}</span>
 
-<span class="p">{</span><span class="s2">&quot;uid&quot;</span><span class="p">:</span> <span class="s2">&quot;a82a83b0-5959-4ca3-a7ed-7fb1d0f07994&quot;</span><span class="p">,</span>
-<span class="s2">&quot;time&quot;</span><span class="p">:</span> <span class="mf">1600995123.1785965</span><span class="p">,</span>
-<span class="s2">&quot;run_start&quot;</span><span class="p">:</span> <span class="s2">&quot;9b5dd575-b556-439a-ba71-357307caebb9&quot;</span><span class="p">,</span>
+<span class="p">{</span><span class="s2">"uid"</span><span class="p">:</span> <span class="s2">"a82a83b0-5959-4ca3-a7ed-7fb1d0f07994"</span><span class="p">,</span>
+<span class="s2">"time"</span><span class="p">:</span> <span class="mf">1600995123.1785965</span><span class="p">,</span>
+<span class="s2">"run_start"</span><span class="p">:</span> <span class="s2">"9b5dd575-b556-439a-ba71-357307caebb9"</span><span class="p">,</span>
 <span class="o">.</span> <span class="o">.</span> <span class="o">.</span>
-<span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;tile_1&quot;</span><span class="p">}</span>
+<span class="s2">"name"</span><span class="p">:</span> <span class="s2">"tile_1"</span><span class="p">}</span>
 </pre></div>
 </div>
 <p>Then each Event would carry data for the tile. Here we show two events for each of the two tile descriptors:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1">#  Events</span>
 
-<span class="p">{</span><span class="s2">&quot;uid&quot;</span><span class="p">:</span> <span class="s2">&quot;c4aa6916-3d84-446c-850a-95fb71cee6b6&quot;</span><span class="p">,</span>
- <span class="s2">&quot;time&quot;</span><span class="p">:</span> <span class="mf">1600995123.1808913</span><span class="p">,</span>
- <span class="s2">&quot;data&quot;</span><span class="p">:</span> <span class="p">{</span> <span class="o">...</span><span class="p">},</span>
- <span class="s2">&quot;timestamps&quot;</span><span class="p">:</span> <span class="p">{</span> <span class="o">...</span> <span class="p">},</span>
- <span class="s2">&quot;seq_num&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
- <span class="s2">&quot;descriptor&quot;</span><span class="p">:</span> <span class="s2">&quot;4fa521e7-fcdc-4a68-9171-d4838d1fc9a2&quot;</span><span class="p">}</span>
+<span class="p">{</span><span class="s2">"uid"</span><span class="p">:</span> <span class="s2">"c4aa6916-3d84-446c-850a-95fb71cee6b6"</span><span class="p">,</span>
+ <span class="s2">"time"</span><span class="p">:</span> <span class="mf">1600995123.1808913</span><span class="p">,</span>
+ <span class="s2">"data"</span><span class="p">:</span> <span class="p">{</span> <span class="o">...</span><span class="p">},</span>
+ <span class="s2">"timestamps"</span><span class="p">:</span> <span class="p">{</span> <span class="o">...</span> <span class="p">},</span>
+ <span class="s2">"seq_num"</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+ <span class="s2">"descriptor"</span><span class="p">:</span> <span class="s2">"4fa521e7-fcdc-4a68-9171-d4838d1fc9a2"</span><span class="p">}</span>
 
- <span class="p">{</span><span class="s2">&quot;uid&quot;</span><span class="p">:</span> <span class="s2">&quot;c4aa6916-3d84-446c-850a-95fb71cee6b6&quot;</span><span class="p">,</span>
- <span class="s2">&quot;time&quot;</span><span class="p">:</span> <span class="mf">1600995123.1808913</span><span class="p">,</span>
- <span class="s2">&quot;data&quot;</span><span class="p">:</span> <span class="p">{</span> <span class="o">...</span><span class="p">},</span>
- <span class="s2">&quot;timestamps&quot;</span><span class="p">:</span> <span class="p">{</span> <span class="o">...</span> <span class="p">},</span>
- <span class="s2">&quot;seq_num&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
- <span class="s2">&quot;descriptor&quot;</span><span class="p">:</span> <span class="s2">&quot;4fa521e7-fcdc-4a68-9171-d4838d1fc9a2&quot;</span><span class="p">}</span>
+ <span class="p">{</span><span class="s2">"uid"</span><span class="p">:</span> <span class="s2">"c4aa6916-3d84-446c-850a-95fb71cee6b6"</span><span class="p">,</span>
+ <span class="s2">"time"</span><span class="p">:</span> <span class="mf">1600995123.1808913</span><span class="p">,</span>
+ <span class="s2">"data"</span><span class="p">:</span> <span class="p">{</span> <span class="o">...</span><span class="p">},</span>
+ <span class="s2">"timestamps"</span><span class="p">:</span> <span class="p">{</span> <span class="o">...</span> <span class="p">},</span>
+ <span class="s2">"seq_num"</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
+ <span class="s2">"descriptor"</span><span class="p">:</span> <span class="s2">"4fa521e7-fcdc-4a68-9171-d4838d1fc9a2"</span><span class="p">}</span>
 
- <span class="p">{</span><span class="s2">&quot;uid&quot;</span><span class="p">:</span> <span class="s2">&quot;c4aa6916-3d84-446c-850a-95fb71cee6b6&quot;</span><span class="p">,</span>
- <span class="s2">&quot;time&quot;</span><span class="p">:</span> <span class="mf">1600995123.1808913</span><span class="p">,</span>
- <span class="s2">&quot;data&quot;</span><span class="p">:</span> <span class="p">{</span> <span class="o">...</span><span class="p">},</span>
- <span class="s2">&quot;timestamps&quot;</span><span class="p">:</span> <span class="p">{</span> <span class="o">...</span> <span class="p">},</span>
- <span class="s2">&quot;seq_num&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
- <span class="s2">&quot;descriptor&quot;</span><span class="p">:</span> <span class="s2">&quot;a82a83b0-5959-4ca3-a7ed-7fb1d0f07994&quot;</span><span class="p">}</span>
+ <span class="p">{</span><span class="s2">"uid"</span><span class="p">:</span> <span class="s2">"c4aa6916-3d84-446c-850a-95fb71cee6b6"</span><span class="p">,</span>
+ <span class="s2">"time"</span><span class="p">:</span> <span class="mf">1600995123.1808913</span><span class="p">,</span>
+ <span class="s2">"data"</span><span class="p">:</span> <span class="p">{</span> <span class="o">...</span><span class="p">},</span>
+ <span class="s2">"timestamps"</span><span class="p">:</span> <span class="p">{</span> <span class="o">...</span> <span class="p">},</span>
+ <span class="s2">"seq_num"</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+ <span class="s2">"descriptor"</span><span class="p">:</span> <span class="s2">"a82a83b0-5959-4ca3-a7ed-7fb1d0f07994"</span><span class="p">}</span>
 
- <span class="p">{</span><span class="s2">&quot;uid&quot;</span><span class="p">:</span> <span class="s2">&quot;c4aa6916-3d84-446c-850a-95fb71cee6b6&quot;</span><span class="p">,</span>
- <span class="s2">&quot;time&quot;</span><span class="p">:</span> <span class="mf">1600995123.1808913</span><span class="p">,</span>
- <span class="s2">&quot;data&quot;</span><span class="p">:</span> <span class="p">{</span> <span class="o">...</span><span class="p">},</span>
- <span class="s2">&quot;timestamps&quot;</span><span class="p">:</span> <span class="p">{</span> <span class="o">...</span> <span class="p">},</span>
- <span class="s2">&quot;seq_num&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
- <span class="s2">&quot;descriptor&quot;</span><span class="p">:</span> <span class="s2">&quot;a82a83b0-5959-4ca3-a7ed-7fb1d0f07994&quot;</span><span class="p">}</span>
+ <span class="p">{</span><span class="s2">"uid"</span><span class="p">:</span> <span class="s2">"c4aa6916-3d84-446c-850a-95fb71cee6b6"</span><span class="p">,</span>
+ <span class="s2">"time"</span><span class="p">:</span> <span class="mf">1600995123.1808913</span><span class="p">,</span>
+ <span class="s2">"data"</span><span class="p">:</span> <span class="p">{</span> <span class="o">...</span><span class="p">},</span>
+ <span class="s2">"timestamps"</span><span class="p">:</span> <span class="p">{</span> <span class="o">...</span> <span class="p">},</span>
+ <span class="s2">"seq_num"</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
+ <span class="s2">"descriptor"</span><span class="p">:</span> <span class="s2">"a82a83b0-5959-4ca3-a7ed-7fb1d0f07994"</span><span class="p">}</span>
 </pre></div>
 </div>
 <p><strong>Single Stream</strong></p>
 <p>With a single stream, we would create a single descriptor document that all events map to, then each tile would be somehow identified within the Event:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1">#  Descriptor - just one for all tiles</span>
 
-<span class="p">{</span><span class="s2">&quot;uid&quot;</span><span class="p">:</span> <span class="s2">&quot;4fa521e7-fcdc-4a68-9171-d4838d1fc9a2&quot;</span><span class="p">,</span>
-<span class="s2">&quot;time&quot;</span><span class="p">:</span> <span class="mf">1600995123.1785965</span><span class="p">,</span>
-<span class="s2">&quot;run_start&quot;</span><span class="p">:</span> <span class="s2">&quot;9b5dd575-b556-439a-ba71-357307caebb9&quot;</span><span class="p">,</span>
+<span class="p">{</span><span class="s2">"uid"</span><span class="p">:</span> <span class="s2">"4fa521e7-fcdc-4a68-9171-d4838d1fc9a2"</span><span class="p">,</span>
+<span class="s2">"time"</span><span class="p">:</span> <span class="mf">1600995123.1785965</span><span class="p">,</span>
+<span class="s2">"run_start"</span><span class="p">:</span> <span class="s2">"9b5dd575-b556-439a-ba71-357307caebb9"</span><span class="p">,</span>
 <span class="o">.</span> <span class="o">.</span> <span class="o">.</span>
-<span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;primary&quot;</span><span class="p">}</span>
+<span class="s2">"name"</span><span class="p">:</span> <span class="s2">"primary"</span><span class="p">}</span>
 </pre></div>
 </div>
 <p>Then each Event would carry data for the tile. Here we show two events for each of the two tile descriptors. Again, we are showing two tiles and two events per tile:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1">#  Events - events have</span>
 
-<span class="p">{</span><span class="s2">&quot;uid&quot;</span><span class="p">:</span> <span class="s2">&quot;c4aa6916-3d84-446c-850a-95fb71cee6b6&quot;</span><span class="p">,</span>
- <span class="s2">&quot;time&quot;</span><span class="p">:</span> <span class="mf">1600995123.1808913</span><span class="p">,</span>
- <span class="s2">&quot;data&quot;</span><span class="p">:</span> <span class="p">{</span> <span class="s2">&quot;tile_id&quot;</span><span class="p">:</span> <span class="s2">&quot;0&quot;</span><span class="p">,</span>  <span class="o">...</span><span class="p">},</span>
- <span class="s2">&quot;timestamps&quot;</span><span class="p">:</span> <span class="p">{</span> <span class="o">...</span> <span class="p">},</span>
- <span class="s2">&quot;seq_num&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
- <span class="s2">&quot;descriptor&quot;</span><span class="p">:</span> <span class="s2">&quot;4fa521e7-fcdc-4a68-9171-d4838d1fc9a2&quot;</span><span class="p">}</span>
+<span class="p">{</span><span class="s2">"uid"</span><span class="p">:</span> <span class="s2">"c4aa6916-3d84-446c-850a-95fb71cee6b6"</span><span class="p">,</span>
+ <span class="s2">"time"</span><span class="p">:</span> <span class="mf">1600995123.1808913</span><span class="p">,</span>
+ <span class="s2">"data"</span><span class="p">:</span> <span class="p">{</span> <span class="s2">"tile_id"</span><span class="p">:</span> <span class="s2">"0"</span><span class="p">,</span>  <span class="o">...</span><span class="p">},</span>
+ <span class="s2">"timestamps"</span><span class="p">:</span> <span class="p">{</span> <span class="o">...</span> <span class="p">},</span>
+ <span class="s2">"seq_num"</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+ <span class="s2">"descriptor"</span><span class="p">:</span> <span class="s2">"4fa521e7-fcdc-4a68-9171-d4838d1fc9a2"</span><span class="p">}</span>
 
- <span class="p">{</span><span class="s2">&quot;uid&quot;</span><span class="p">:</span> <span class="s2">&quot;c4aa6916-3d84-446c-850a-95fb71cee6b6&quot;</span><span class="p">,</span>
- <span class="s2">&quot;time&quot;</span><span class="p">:</span> <span class="mf">1600995123.1808913</span><span class="p">,</span>
- <span class="s2">&quot;data&quot;</span><span class="p">:</span> <span class="p">{</span> <span class="s2">&quot;tile_id&quot;</span><span class="p">:</span> <span class="s2">&quot;0&quot;</span><span class="p">,</span>  <span class="o">...</span><span class="p">},</span>
- <span class="s2">&quot;timestamps&quot;</span><span class="p">:</span> <span class="p">{</span> <span class="o">...</span> <span class="p">},</span>
- <span class="s2">&quot;seq_num&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
- <span class="s2">&quot;descriptor&quot;</span><span class="p">:</span> <span class="s2">&quot;4fa521e7-fcdc-4a68-9171-d4838d1fc9a2&quot;</span><span class="p">}</span>
+ <span class="p">{</span><span class="s2">"uid"</span><span class="p">:</span> <span class="s2">"c4aa6916-3d84-446c-850a-95fb71cee6b6"</span><span class="p">,</span>
+ <span class="s2">"time"</span><span class="p">:</span> <span class="mf">1600995123.1808913</span><span class="p">,</span>
+ <span class="s2">"data"</span><span class="p">:</span> <span class="p">{</span> <span class="s2">"tile_id"</span><span class="p">:</span> <span class="s2">"0"</span><span class="p">,</span>  <span class="o">...</span><span class="p">},</span>
+ <span class="s2">"timestamps"</span><span class="p">:</span> <span class="p">{</span> <span class="o">...</span> <span class="p">},</span>
+ <span class="s2">"seq_num"</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
+ <span class="s2">"descriptor"</span><span class="p">:</span> <span class="s2">"4fa521e7-fcdc-4a68-9171-d4838d1fc9a2"</span><span class="p">}</span>
 
- <span class="p">{</span><span class="s2">&quot;uid&quot;</span><span class="p">:</span> <span class="s2">&quot;c4aa6916-3d84-446c-850a-95fb71cee6b6&quot;</span><span class="p">,</span>
- <span class="s2">&quot;time&quot;</span><span class="p">:</span> <span class="mf">1600995123.1808913</span><span class="p">,</span>
- <span class="s2">&quot;data&quot;</span><span class="p">:</span> <span class="p">{</span> <span class="s2">&quot;tile_id&quot;</span><span class="p">:</span> <span class="s2">&quot;1&quot;</span><span class="p">,</span>  <span class="o">...</span><span class="p">},</span>
- <span class="s2">&quot;timestamps&quot;</span><span class="p">:</span> <span class="p">{</span> <span class="o">...</span> <span class="p">},</span>
- <span class="s2">&quot;seq_num&quot;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span>
- <span class="s2">&quot;descriptor&quot;</span><span class="p">:</span> <span class="s2">&quot;4fa521e7-fcdc-4a68-9171-d4838d1fc9a2&quot;</span><span class="p">}</span>
+ <span class="p">{</span><span class="s2">"uid"</span><span class="p">:</span> <span class="s2">"c4aa6916-3d84-446c-850a-95fb71cee6b6"</span><span class="p">,</span>
+ <span class="s2">"time"</span><span class="p">:</span> <span class="mf">1600995123.1808913</span><span class="p">,</span>
+ <span class="s2">"data"</span><span class="p">:</span> <span class="p">{</span> <span class="s2">"tile_id"</span><span class="p">:</span> <span class="s2">"1"</span><span class="p">,</span>  <span class="o">...</span><span class="p">},</span>
+ <span class="s2">"timestamps"</span><span class="p">:</span> <span class="p">{</span> <span class="o">...</span> <span class="p">},</span>
+ <span class="s2">"seq_num"</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span>
+ <span class="s2">"descriptor"</span><span class="p">:</span> <span class="s2">"4fa521e7-fcdc-4a68-9171-d4838d1fc9a2"</span><span class="p">}</span>
 
- <span class="p">{</span><span class="s2">&quot;uid&quot;</span><span class="p">:</span> <span class="s2">&quot;c4aa6916-3d84-446c-850a-95fb71cee6b6&quot;</span><span class="p">,</span>
- <span class="s2">&quot;time&quot;</span><span class="p">:</span> <span class="mf">1600995123.1808913</span><span class="p">,</span>
- <span class="s2">&quot;data&quot;</span><span class="p">:</span> <span class="p">{</span> <span class="s2">&quot;tile_id&quot;</span><span class="p">:</span> <span class="s2">&quot;1&quot;</span><span class="p">,</span>  <span class="o">...</span><span class="p">},</span>
- <span class="s2">&quot;timestamps&quot;</span><span class="p">:</span> <span class="p">{</span> <span class="o">...</span> <span class="p">},</span>
- <span class="s2">&quot;seq_num&quot;</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span>
- <span class="s2">&quot;descriptor&quot;</span><span class="p">:</span> <span class="s2">&quot;4fa521e7-fcdc-4a68-9171-d4838d1fc9a2&quot;</span><span class="p">}</span>
+ <span class="p">{</span><span class="s2">"uid"</span><span class="p">:</span> <span class="s2">"c4aa6916-3d84-446c-850a-95fb71cee6b6"</span><span class="p">,</span>
+ <span class="s2">"time"</span><span class="p">:</span> <span class="mf">1600995123.1808913</span><span class="p">,</span>
+ <span class="s2">"data"</span><span class="p">:</span> <span class="p">{</span> <span class="s2">"tile_id"</span><span class="p">:</span> <span class="s2">"1"</span><span class="p">,</span>  <span class="o">...</span><span class="p">},</span>
+ <span class="s2">"timestamps"</span><span class="p">:</span> <span class="p">{</span> <span class="o">...</span> <span class="p">},</span>
+ <span class="s2">"seq_num"</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span>
+ <span class="s2">"descriptor"</span><span class="p">:</span> <span class="s2">"4fa521e7-fcdc-4a68-9171-d4838d1fc9a2"</span><span class="p">}</span>
 </pre></div>
 </div>
 <p><strong>Summary</strong>
@@ -686,8 +686,8 @@ Both layouts carry advantages. The number of tiles can be quite large in tomogra
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9"></script>
-<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9"></script>
+  <script defer src="../_static/scripts/bootstrap.js?digest=cb8930eaaf36d9849b67"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=cb8930eaaf36d9849b67"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">
@@ -699,7 +699,7 @@ Both layouts carry advantages. The number of tiles can be quite large in tomogra
         <div class="footer-item">
 <p class="theme-version">
   <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
-  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.20.0.
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.21.0.
 </p></div>
       
     </div>
