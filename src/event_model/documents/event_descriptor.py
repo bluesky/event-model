@@ -108,6 +108,10 @@ class DataKey(TypedDict):
     """
     Choices of enum value.
     """
+    description: NotRequired[str]
+    """
+    Human-readable description of the value.
+    """
     dims: NotRequired[list[str]]
     """
     The names for dimensions of the data. Null or empty list if scalar data
@@ -123,6 +127,10 @@ class DataKey(TypedDict):
     external: NotRequired[str]
     """
     Where the data is stored if it is stored external to the events
+    """
+    label: NotRequired[str]
+    """
+    A short readable name for display.
     """
     limits: NotRequired[Limits]
     """

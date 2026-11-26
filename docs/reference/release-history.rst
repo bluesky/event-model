@@ -18,6 +18,7 @@ Added
 * Route the documents by their name instead of their type
 * Pair each name with its document in a DocWrapper NamedTuple
 * Key each NamedDocument on a DocumentNames member
+* Add `description` and `label` fields to the data keys of the descriptor document.
 
 v1.24.0 (2026-03-28)
 ====================

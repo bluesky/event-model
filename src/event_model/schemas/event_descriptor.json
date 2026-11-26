@@ -47,6 +47,12 @@
                         "type": "string"
                     }
                 },
+                "description": {
+                    "title": "description",
+                    "description": "Human-readable description of the value.",
+                    "type": "string",
+                    "default": ""
+                },
                 "dims": {
                     "title": "dims",
                     "description": "The names for dimensions of the data. Null or empty list if scalar data",
@@ -97,6 +103,12 @@
                     "type": "string",
                     "default": "",
                     "pattern": "^[A-Z]+:?"
+                },
+                "label": {
+                    "title": "label",
+                    "description": "A short readable name for display.",
+                    "type": "string",
+                    "default": ""
                 },
                 "limits": {
                     "title": "limits",

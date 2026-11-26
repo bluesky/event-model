@@ -150,3 +150,34 @@ def test_good_numpy_datakeys(dtype_numpy):
         "name": "primary",
     }
     schema_validators[DocumentNames.descriptor].validate(descriptor)
+
+
+@pytest.mark.parametrize("field", ["description", "label"])
+def test_data_key_text_fields(field):
+    """Accept a string in a data key's text field and reject anything else."""
+    data_key = {"source": "", "dtype": "number", "shape": []}
+
+    def descriptor(value):
+        return {
+            "time": 0,
+            "uid": new_uid(),
+            "data_keys": {"a": {**data_key, field: value}},
+            "configuration": {
+                "device": {"data_keys": {"b": {**data_key, field: value}}}
+            },
+            "run_start": new_uid(),
+            "name": "primary",
+        }
+
+    schema_validators[DocumentNames.descriptor].validate(descriptor("Some text"))
+    for bad in (5, None, ["Some text"]):
+        doc = descriptor(bad)
+        with pytest.raises(jsonschema.ValidationError):
+            schema_validators[DocumentNames.descriptor].validate(doc)
+        del doc["configuration"]["device"]["data_keys"]["b"][field]
+        with pytest.raises(jsonschema.ValidationError):
+            schema_validators[DocumentNames.descriptor].validate(doc)
+        doc = descriptor(bad)
+        del doc["data_keys"]["a"][field]
+        with pytest.raises(jsonschema.ValidationError):
+            schema_validators[DocumentNames.descriptor].validate(doc)
