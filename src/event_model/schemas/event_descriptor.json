@@ -49,7 +49,7 @@
                 },
                 "description": {
                     "title": "description",
-                    "description": "One line saying what the value is.",
+                    "description": "Human-readable description of the value.",
                     "type": "string",
                     "default": ""
                 },

@@ -110,7 +110,7 @@ class DataKey(TypedDict):
     """
     description: NotRequired[str]
     """
-    One line saying what the value is.
+    Human-readable description of the value.
     """
     dims: NotRequired[list[str]]
     """

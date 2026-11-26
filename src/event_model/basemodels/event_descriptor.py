@@ -139,7 +139,7 @@ class DataKey(BaseModel):
     ]
     description: Annotated[
         str,
-        Field(default="", description="One line saying what the value is."),
+        Field(default="", description="Human-readable description of the value."),
     ]
     dims: Annotated[
         list[str],
