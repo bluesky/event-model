@@ -115,6 +115,10 @@ class DataKey(BaseModel):
 
     model_config = ConfigDict(extra="allow")
 
+    label: Annotated[
+        str,
+        Field(default="", description="A short readable name for display."),
+    ]
     limits: Annotated[
         Limits,
         Field(
@@ -132,6 +136,10 @@ class DataKey(BaseModel):
     choices: Annotated[
         list[str],
         Field(default=[], description="Choices of enum value."),
+    ]
+    description: Annotated[
+        str,
+        Field(default="", description="One line saying what the value is."),
     ]
     dims: Annotated[
         list[str],
